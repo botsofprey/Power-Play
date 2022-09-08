@@ -1,9 +1,7 @@
-## NOTICE
-
-This repository contains the public FTC SDK for the Power Play (2022-2023) competition season.
-Made by the best software leader ever!
-
 ## Welcome!
+This is the Bots of Prey 2022-2023 Power Play code repository.  This is where you will find the
+code from the best team, future winners, and best software lead.
+
 This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot.  To use this SDK, download/clone the entire project to your local computer.
 
 ## Getting Started
@@ -29,6 +27,7 @@ If you are an Android Studio programmer, there are several ways to download this
 Once you have downloaded and uncompressed (if needed) your folder, you can use Android Studio to import the folder  ("Import project (Eclipse ADT, Gradle, etc.)").
 
 ## Getting Help
+
 ### User Documentation and Tutorials
 *FIRST* maintains online documentation with information and tutorials on how to use the *FIRST* Tech Challenge software and robot control system.  You can access this documentation using the following link:
 
