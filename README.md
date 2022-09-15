@@ -1,7 +1,8 @@
 ## Welcome!
 This is the Bots of Prey 2022-2023 Power Play code repository.  This is where you will find the
 code from the best team, future winners, and best software lead.
-
+hi, can you hear me?
+yes
 This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot.  To use this SDK, download/clone the entire project to your local computer.
 
 ## Getting Started
