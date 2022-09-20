@@ -1,7 +1,4 @@
 ## Welcome!
-This is the Bots of Prey 2022-2023 Power Play code repository.  This is where you will find the
-code from the best team, future winners, and best software lead.
-
 This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot.  To use this SDK, download/clone the entire project to your local computer.
 
 ## Getting Started
@@ -104,6 +101,7 @@ The readme.md file located in the [/TeamCode/src/main/java/org/firstinspires/ftc
 ## Version 7.2 (20220723-130006)
 
 ### Breaking Changes
+
 * Updates the build tooling.  For Android Studio users, this change requires Android Studio Chipmunk 2021.2.1.
 * Removes support for devices that are not competition legal, including Modern Robotics Core Control Modules, the Matrix Controller, and HiTechnic/NXT controllers and sensors.  Support remains for Modern Robotics I2C sensors.
 
