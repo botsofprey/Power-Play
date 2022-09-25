@@ -1,8 +1,14 @@
 package Subsystems;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import UtilityClasses.Point;
 
@@ -13,6 +19,10 @@ public class threeWheelOdometry {
     private int prevLeftPos = 0, prevRightPos = 0, prevAuxPos = 0;
 
     private Point positionPoint, targetPoint;
+
+    private BNO055IMU imu;
+    private Orientation lastAngles = new Orientation();
+    private double globalAngle;
 
     //Robot measurements in CM
     //***Set values later
@@ -46,6 +56,20 @@ public class threeWheelOdometry {
 
         //Set start point
         positionPoint = start;
+
+        //Set IMU parameters
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+
+        imu.initialize(parameters);
+
+        globalAngle = positionPoint.angle;
     }
 
     private void calculateChange(){
@@ -53,23 +77,37 @@ public class threeWheelOdometry {
             dx2 = currentRightPos - prevRightPos,
             dy = currentAuxPos - prevAuxPos;
 
-        if(dx1 == dx2 && dy == 0){ //Went Straight
+        // dx's != 0 and dy = 0 -- forward
+        //dx's = 0 and dy != 0 -- side
+        //dx's != 0 and dy !=0 -- diagonal
+        //dx's = opposites -- turn
+
+        if(equalAndNotZero(dx1, dx2) && dy == 0){ //Went Straight
             double cmTraveled = dx1 * CM_PER_TICK;
             positionPoint.add(cmTraveled, 0, 0);
-        } else if(dy != 0 && dx1 == dx2){ //Went Side to Side
+
+        } else if(dy != 0 && dx1 == dx2 && dx1 == 0){ //Went Side to Side
             double cmTraveled = dy * CM_PER_TICK;
             positionPoint.add(0, cmTraveled, 0);
-        } else{ //Turned
+
+        } else if(equalAndNotZero(-dx1, dx2) && dy != 0){ //diagonal
+            double cmX = dx1 * CM_PER_TICK,
+                   cmY = dy * CM_PER_TICK;
+            positionPoint.add(cmX,cmY,0);
+
+        }else if (!compare(lastAngles.firstAngle, globalAngle, 15)){ //Turned
             double cmTravaled = dy * CM_PER_TICK;
             double dt = (cmTravaled / ANGLE_CIRCUMFERENCE) * 360;
             positionPoint.add(0, 0, dt);
+        } else{ //Should not make it here
+            System.out.println("Oh no...");
         }
         //dx = x change
         //dy = y change
         //dt = delta theta
     }
 
-    public void moveTo(Point target){
+    public void setTargetPoint(Point target){
         targetPoint = target;
     }
 
@@ -102,4 +140,35 @@ public class threeWheelOdometry {
         return positionPoint.x + ", " + positionPoint.y + ", " + positionPoint.angle;
     }
 
+    public double getAngle()
+    {
+        Orientation angles = imu.getAngularOrientation
+                (AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        globalAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        if (globalAngle < -180)
+            globalAngle += 360;
+        else if (globalAngle > 180)
+            globalAngle -= 360;
+
+        return -globalAngle;
+    }
+
+    private boolean compare(double a, double b, double offset){
+        return Math.abs(a-b) <= offset;
+    }
+
+    private boolean equalAndNotZero(double a, double b){
+        return a == b && a != 0;
+    }
 }
