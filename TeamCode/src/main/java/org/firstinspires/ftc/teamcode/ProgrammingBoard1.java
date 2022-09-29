@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -24,9 +25,6 @@ public class ProgrammingBoard1 {
         motor.setPower(speed);
     }
 
-    public void setMotorSpeed(double speed) {
-        motor.setPower(speed);
-    }
 
     public double getMotorRotations() {
         return motor.getCurrentPosition() / ticksPerRotation;

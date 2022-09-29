@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.mechanisms.ProgrammingBoard4;
+import org.firstinspires.ftc.teamcode.ProgrammingBoard1;
 
 @TeleOp()
-public class MotorOpMode2 extends OpMode {
-    ProgrammingBoard4 board = new ProgrammingBoard4();
+public class MotorOpMode extends OpMode {
+    ProgrammingBoard1 board = new ProgrammingBoard1();
 
     @Override
     public void init() {
@@ -16,7 +16,11 @@ public class MotorOpMode2 extends OpMode {
 
     @Override
     public void loop() {
-        board.setMotorSpeed(0.5);
+        if (board.isTouchSensorPressed()) {
+            board.setMotorSpeed(0.5);
+        } else {
+            board.setMotorSpeed(0.0);
+        }
         telemetry.addData("Motor rotations", board.getMotorRotations());
     }
 }
