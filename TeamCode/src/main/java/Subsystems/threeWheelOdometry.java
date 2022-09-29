@@ -1,24 +1,31 @@
 package Subsystems;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-import UtilityClasses.Point;
+import DriveEngine.MecanumDrive;
+import DriveEngine.MeccanumBase;
+import UtilityClasses.Location;
 
 public class threeWheelOdometry {
+
+    private LinearOpMode opMode;
+
+    private MecanumDrive meccanumDrive;
 
     private DcMotor leftVert, rightVert, horizontal;
     private int currentLeftPos = 0, currentRightPos = 0, currentAuxPos = 0;
     private int prevLeftPos = 0, prevRightPos = 0, prevAuxPos = 0;
 
-    private Point positionPoint, targetPoint;
+    private Location positionLocation, targetLocation;
 
     private BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
@@ -30,14 +37,9 @@ public class threeWheelOdometry {
     public final static double ANGLE_CIRCUMFERENCE = DISTANCE_FROM_MIDPOINT * 2 * Math.PI;
     public final static double CM_PER_TICK;
 
-    enum MOVEMENT_STATE {
-        MOVING,
-        TURNING,
-        STATIONARY
-    }
-    private MOVEMENT_STATE currentState;
+    public threeWheelOdometry (HardwareMap hardwareMap, Location start, LinearOpMode op){
+        meccanumDrive = new MecanumDrive(hardwareMap);
 
-    public threeWheelOdometry (HardwareMap hardwareMap, Point start){
         leftVert = hardwareMap.get(DcMotor.class, "verticalLeft");
         rightVert = hardwareMap.get(DcMotor.class, "verticalRight");
         horizontal = hardwareMap.get(DcMotor.class, "horizontal");
@@ -45,17 +47,13 @@ public class threeWheelOdometry {
         leftVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         horizontal.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //Don't use encoder
-        leftVert.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightVert.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        horizontal.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //When power = 0, brake
         leftVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         horizontal.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //Set start point
-        positionPoint = start;
+        positionLocation = start;
 
         //Set IMU parameters
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -69,7 +67,9 @@ public class threeWheelOdometry {
 
         imu.initialize(parameters);
 
-        globalAngle = positionPoint.angle;
+        globalAngle = positionLocation.angle;
+
+        this.opMode = op;
     }
 
     private void calculateChange(){
@@ -84,21 +84,21 @@ public class threeWheelOdometry {
 
         if(equalAndNotZero(dx1, dx2) && dy == 0){ //Went Straight
             double cmTraveled = dx1 * CM_PER_TICK;
-            positionPoint.add(cmTraveled, 0, 0);
+            positionLocation.add(cmTraveled, 0, 0);
 
         } else if(dy != 0 && dx1 == dx2 && dx1 == 0){ //Went Side to Side
             double cmTraveled = dy * CM_PER_TICK;
-            positionPoint.add(0, cmTraveled, 0);
+            positionLocation.add(0, cmTraveled, 0);
 
         } else if(equalAndNotZero(-dx1, dx2) && dy != 0){ //diagonal
             double cmX = dx1 * CM_PER_TICK,
                    cmY = dy * CM_PER_TICK;
-            positionPoint.add(cmX,cmY,0);
+            positionLocation.add(cmX,cmY,0);
 
-        }else if (!compare(lastAngles.firstAngle, globalAngle, 15)){ //Turned
+        }else if (!compare(getAngle(), lastAngles.firstAngle, 15)){ //Turned
             double cmTravaled = dy * CM_PER_TICK;
-            double dt = (cmTravaled / ANGLE_CIRCUMFERENCE) * 360;
-            positionPoint.add(0, 0, dt);
+            double dt = (cmTravaled / ANGLE_CIRCUMFERENCE) * 360; //Calculate angle
+            positionLocation.add(0, 0, dt);
         } else{ //Should not make it here
             System.out.println("Oh no...");
         }
@@ -107,22 +107,27 @@ public class threeWheelOdometry {
         //dt = delta theta
     }
 
-    public void setTargetPoint(Point target){
-        targetPoint = target;
+    public void setTargetPoint(Location target){
+        targetLocation = target;
     }
 
     public void update(){
         //Check if at target position and heading
         //***Add movement
-        /*
-        if(!positionPoint.compareAll(targetPoint, 2.5, 15)){
-            if(!positionPoint.comparePosition(targetPoint, 2.5)){ //Not in target position
-
+        if(!positionLocation.compareAll(targetLocation, 2.5, 15)){
+            if(!positionLocation.comparePosition(targetLocation, 2.5)){ //Not in target position
+                Location cmNeeded = positionLocation.difference(targetLocation);
+                if(Math.abs(cmNeeded.x) > 2.5) { //Needs to move forward or backward
+                    double motorPower = .5 * Range.clip(cmNeeded.x, -1, 1);
+                    meccanumDrive.move(motorPower,motorPower,motorPower,motorPower);
+                }else{ //Needs to move side to side
+                    double motorPower = .5 * Range.clip(cmNeeded.y, -1, 1);
+                    meccanumDrive.move(motorPower,-motorPower,-motorPower,motorPower);
+                }
             }else { //Not in target rotation
-
+                meccanumDrive.move(-.5, -.5, .5, .5);
             }
         }
-         */
 
         //Update previous & current position
         prevRightPos = currentRightPos;
@@ -137,7 +142,7 @@ public class threeWheelOdometry {
     }
 
     public String getPoint(){
-        return positionPoint.x + ", " + positionPoint.y + ", " + positionPoint.angle;
+        return positionLocation.x + ", " + positionLocation.y + ", " + positionLocation.angle;
     }
 
     public double getAngle()

@@ -84,7 +84,7 @@ The readme.md file located in the [/TeamCode/src/main/java/org/firstinspires/ftc
 
 ### Bug fixes
 * Fixes [issue #316](https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/316) (MatrixF.inverted() returned an incorrectly-sized matrix for 1x1 and 2x2 matrixes).
-* Self inspect now allows for Driver Station and Robot Controller compatibility between point releases.
+* Self inspect now allows for Driver Station and Robot Controller compatibility between location releases.
 * Fixes bug where if the same `RumbleEffect` object instance was queued for multiple gamepads, it
   could happen that both rumble commands would be sent to just one gamepad.
 * Fixes bug in Driver Station where on the Driver Hub, if Advanced Gamepad Features was disabled and
@@ -156,7 +156,7 @@ The readme.md file located in the [/TeamCode/src/main/java/org/firstinspires/ftc
     * Reading the unique serial number also provides the ability to configure the DS to assign gamepads to a certain position by default (so no need to do start+a/b at all).
     * The LED ring on the Xbox360 gamepad and the RGB LED bar on the PS4 gamepad is used to indicate the driver position the gamepad is bound to.
     * The rumble motors on the Xbox360, PS4, and Etpark gamepads can be controlled from OpModes.
-    * The 2-point touchpad on the PS4 gamepad can be read from OpModes.
+    * The 2-location touchpad on the PS4 gamepad can be read from OpModes.
     * The "back" and "guide" buttons on the gamepad can now be safely bound to robot controls (Previously, on many devices, Android would intercept these buttons as home button presses and close the app).
     * Advanced Gamepad features are enabled by default, but may be disabled through the settings menu in order to revert to gamepad support provided natively by Android.
 * Improves accuracy of ping measurement.
@@ -487,7 +487,7 @@ Version 5.5 requires Android Studio 4.0 or later.
     PIDF vs PID closed loop control on these motors.  This should provide more responsive, yet stable, speed control.
     PIDF adds Feedforward control to the basic PID control loop.
     Feedforward is useful when controlling a motor's speed because it "anticipates" how much the control voltage
-    must change to achieve a new speed set-point, rather than requiring the integrated error to change sufficiently.
+    must change to achieve a new speed set-location, rather than requiring the integrated error to change sufficiently.
     The PIDF values were chosen to provide responsive, yet stable, speed control on a lightly loaded motor.
     The more heavily a motor is loaded (drag or friction), the more noticable the PIDF improvement will be.
 * Fixes startup crash on Android 10
