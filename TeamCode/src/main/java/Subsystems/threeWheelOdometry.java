@@ -83,16 +83,33 @@ public class threeWheelOdometry {
 
         if(equalAndNotZero(dx1, dx2) && dy == 0){ //Went Straight
             double cmTraveled = dx1 * CM_PER_TICK;
-            positionLocation.add(cmTraveled, 0, 0);
+
+            //Calculate x and y
+            double x = Math.cos(positionLocation.angle) * cmTraveled,
+                    y = Math.sin(positionLocation.angle) * cmTraveled;
+
+            positionLocation.add(x, y, 0);
 
         } else if(dy != 0 && dx1 == dx2 && dx1 == 0){ //Went Side to Side
             double cmTraveled = dy * CM_PER_TICK;
-            positionLocation.add(0, cmTraveled, 0);
+
+            double x = Math.cos(90 - positionLocation.angle) * cmTraveled,
+                    y = Math.sin(90 - positionLocation.angle) * cmTraveled;
+
+            positionLocation.add(x, y, 0);
 
         } else if(equalAndNotZero(-dx1, dx2) && dy != 0){ //diagonal
             double cmX = dx1 * CM_PER_TICK,
-                   cmY = dy * CM_PER_TICK;
-            positionLocation.add(cmX,cmY,0);
+                   cmY = dy * CM_PER_TICK,
+                    cmTraveled = Math.hypot(cmX, cmY); //Find distance traveled
+
+            //Find angle of diagonal movement
+            double movementAngle = Math.tanh(cmX/cmY);
+
+            double x = Math.cos(movementAngle) * cmTraveled,
+                    y = Math.sin(movementAngle) * cmTraveled;
+
+            positionLocation.add(x,y,0);
 
         }else if (!compare(getAngle(), lastAngles.firstAngle, 15)){ //Turned
             double cmTravaled = dy * CM_PER_TICK;
@@ -112,7 +129,7 @@ public class threeWheelOdometry {
 
     public void update(){
         //Check if at target position and heading
-        //***Add movement
+        /*
         if(!positionLocation.compareAll(targetLocation, 2.5, 15)){
             if(!positionLocation.comparePosition(targetLocation, 2.5)){ //Not in target position
                 Location cmNeeded = positionLocation.difference(targetLocation);
@@ -124,9 +141,10 @@ public class threeWheelOdometry {
                     meccanumDrive.move(motorPower,-motorPower,-motorPower,motorPower);
                 }
             }else { //Not in target rotation
-                meccanumDrive.move(-.5, -.5, .5, .5);
+                meccanumDrive.rotate(-.5, .5);
             }
         }
+        */
 
         //Update previous & current position
         prevRightPos = currentRightPos;

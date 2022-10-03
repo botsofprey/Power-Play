@@ -70,6 +70,18 @@ public class MecanumDrive {
             motors[i].setDirection(directions[i]);
         }
     }
+    public MecanumDrive(HardwareMap hw, LinearOpMode m){
+        for(int i = 0; i < motors.length; i++){
+            motors[i] = hw.get(DcMotor.class, MOTOR_NAMES[i]);
+            motors[i].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motors[i].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motors[i].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motors[i].setDirection(directions[i]);
+        }
+
+        mode = m;
+    }
+
     @Deprecated
     /*
     public MecanumDrive(HardwareMap hw, String configFileName,
@@ -310,6 +322,23 @@ public class MecanumDrive {
         motors[1].setPower(bl);
         motors[2].setPower(br);
         motors[3].setPower(fr);
+    }
+
+    public void move(double power){
+        for(DcMotor m : motors){
+            m.setPower(power);
+        }
+    }
+
+    public void rotate(double left, double right){
+        motors[0].setPower(left);
+        motors[1].setPower(left);
+        motors[2].setPower(right);
+        motors[3].setPower(right);
+    }
+
+    public void rotateTowardsLocation(Location target){
+
     }
 }
 

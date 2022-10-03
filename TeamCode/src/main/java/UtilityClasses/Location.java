@@ -37,7 +37,7 @@ public class Location {
     }
 
     public void add(double x, double y, double angle){
-        changePoint(this.x + x, this.y = y, this.angle + angle);
+        changePoint(this.x + x, this.y = y, (this.angle + angle));
     }
 
     public boolean compareAll(Location location, double cmOffset, double angleOffset){
