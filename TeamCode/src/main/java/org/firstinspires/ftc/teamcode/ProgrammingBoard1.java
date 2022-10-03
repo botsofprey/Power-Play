@@ -29,9 +29,5 @@ public class ProgrammingBoard1 {
     public double getMotorRotations() {
         return motor.getCurrentPosition() / ticksPerRotation;
     }
-    public void setZeroPowerBehavior(double zeroBehavior) {
-        if(gamepad1.a(true)){
-        set.ZeroPowerBehavior(BRAKE)
-        }
-    }
+
 }

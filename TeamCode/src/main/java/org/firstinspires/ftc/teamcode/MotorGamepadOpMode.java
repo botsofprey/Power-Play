@@ -14,6 +14,14 @@ public class MotorGamepadOpMode extends OpMode {
         board.init(hardwareMap);
     }
 
+    double squareInputWithSign(double input) {
+        double output = input * input;
+        if (input < 0) {
+            output = output * -1;
+        }
+        return output;
+    }
+
     @Override
     public void loop() {
         double motorSpeed = gamepad1.left_stick_y;
