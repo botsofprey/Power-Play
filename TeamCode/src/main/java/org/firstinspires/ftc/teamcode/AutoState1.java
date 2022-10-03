@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.mechanisms.ProgrammingBoard1;
+import org.firstinspires.ftc.teamcode.ProgrammingBoard1;
 
 @Autonomous()
 
 public class AutoState1 extends OpMode {
-    ProgrammingBoard8 board = new ProgrammingBoard8();
+    ProgrammingBoard1 board = new ProgrammingBoard1();
     int state;
 
     @Override
