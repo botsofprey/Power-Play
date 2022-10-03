@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +10,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class ProgrammingBoard1 {
@@ -19,6 +25,7 @@ public class ProgrammingBoard1 {
     private AnalogInput pot;
     private ColorSensor colorSensor;
     private DistanceSensor distanceSensor;
+    private BNO055IMU imu;
 
     public void init(HardwareMap hwMap) {
         touchSensor = hwMap.get(DigitalChannel.class, "touch_sensor");
@@ -30,6 +37,9 @@ public class ProgrammingBoard1 {
         pot = hwMap.get(AnalogInput.class, "pot");
         colorSensor = hwMap.get(ColorSensor.class, "sensor_color_distance");
         distanceSensor = hwMap.get(DistanceSensor.class, "sensor_color_distance");
+        imu = hwMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters params = new BNO055IMU.Parameters();
+        imu.initialize(params);
     }
 
     public boolean isTouchSensorPressed() {
@@ -60,10 +70,19 @@ public class ProgrammingBoard1 {
     public int getAmountRed() {
         return colorSensor.red();
     }
+
     public int getAmountBlue() {
         return colorSensor.blue();
     }
+
     public double getDistance(DistanceUnit du) {
         return distanceSensor.getDistance(du);
     }
+
+
+    public double getHeading(AngleUnit angleUnit) {
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
+        return angles.firstAngle;
+    }
+
 }
