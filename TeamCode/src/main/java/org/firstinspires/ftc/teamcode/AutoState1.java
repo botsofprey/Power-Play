@@ -6,10 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.ProgrammingBoard1;
 
 @Autonomous()
-
 public class AutoState1 extends OpMode {
+    enum State {START, WAIT_FOR_SENSOR_RELEASE, WAIT_FOR_POT_TURN, STOP, DONE}
+
     ProgrammingBoard1 board = new ProgrammingBoard1();
-    int state;
+    State state = State.START;
 
     @Override
     public void init() {
@@ -18,33 +19,38 @@ public class AutoState1 extends OpMode {
 
     @Override
     public void start() {
-        state = 0;
+        state = State.START;
     }
 
     @Override
     public void loop() {
         telemetry.addData("State", state);
-        if (state == 0) {
-            board.setServoPosition(0.5);
-            if (board.isTouchSensorPressed()) {
-                state = 1;
-            }
-        } else if (state == 1) {
-            board.setServoPosition(0.0);
-            if (!board.isTouchSensorPressed()) {
-                state = 2;
-            }
-        } else if (state == 2) {
-            board.setServoPosition(1.0);
-            board.setMotorSpeed(0.5);
-            if (board.getPotAngle() > 90) {
-                state = 3;
-            }
-        } else if (state == 3) {
-            board.setMotorSpeed(0.0);
-            state = 4;
-        } else {
-            telemetry.addData("Auto", "Finished");
+        switch (state) {
+            case START:
+                board.setServoPosition(0.5);
+                if (board.isTouchSensorPressed()) {
+                    state = State.WAIT_FOR_SENSOR_RELEASE;
+                }
+                break;
+            case WAIT_FOR_SENSOR_RELEASE:
+                board.setServoPosition(0.0);
+                if (!board.isTouchSensorPressed()) {
+                    state = State.WAIT_FOR_POT_TURN;
+                }
+                break;
+            case WAIT_FOR_POT_TURN:
+                board.setServoPosition(1.0);
+                board.setMotorSpeed(0.5);
+                if (board.getPotAngle() > 90) {
+                    state = State.STOP;
+                }
+                break;
+            case STOP:
+                board.setMotorSpeed(0.0);
+                state = State.DONE;
+                break;
+            default:
+                telemetry.addData("Auto", "Finished");
         }
     }
 }
