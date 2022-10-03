@@ -19,7 +19,7 @@ public class GyroOpMode extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("Our Heading (Degrees)", board.getHeading(AngleUnit.DEGREES));
-        telemetry.addData("Our Heading (Raidians)", board.getHeading(AngleUnit.RADIANS));
+        telemetry.addData("Our Heading (Radians)", board.getHeading(AngleUnit.RADIANS));
     }
 
 }
