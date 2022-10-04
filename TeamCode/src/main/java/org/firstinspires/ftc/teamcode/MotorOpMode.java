@@ -13,12 +13,6 @@ public class MotorOpMode extends OpMode{
 
     @Override
     public void loop() {
-        if(board.isTouchSensorPressed()) {
-            board.setMotorSpeed(0.5);
-        }
-        else{
-            board.setMotorSpeed(0);
-        }
-        telemetry.addData("Motor rotations", board.getMotorRotations());
+        board.setMotorSpeed(0.5);
     }
 }
