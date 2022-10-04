@@ -1,7 +1,12 @@
-package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+public class TurboButtonOpMode {
+}
+package org.firstinspires.ftc.teamcode;
+
+        import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+        import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp
 public class TurboButton extends OpMode {
@@ -20,4 +25,3 @@ public class TurboButton extends OpMode {
         telemetry.addData("Forward speed", fwdSpeed);
     }
 }
-

@@ -4,14 +4,15 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp
-public class IfOpMode2 extends OpMode {
+public class UsingString extends OpMode {
     @Override
-    public void init(){
+    public void init() {
+        String myName = "Natalia Bernardo";
+
+        telemetry.addData("Hi", myName);
     }
     @Override
-    public void loop(){
-        if(gamepad1.a){
-            telemetry.addData("A Button","pressed");
-        }
+    public void loop() {
+
     }
 }

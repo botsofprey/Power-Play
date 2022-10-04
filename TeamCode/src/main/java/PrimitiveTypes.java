@@ -21,11 +21,3 @@ public class PrimitiveTypes extends OpMode {
     public void loop() {
     }
 }
-
-
-
-
-
-
-
-

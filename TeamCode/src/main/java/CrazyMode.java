@@ -24,3 +24,4 @@ public class CrazyMode extends OpMode {
         telemetry.addData("speed of y", SpeedY);
     }
 }
+

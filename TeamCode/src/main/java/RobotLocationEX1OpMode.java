@@ -23,4 +23,3 @@ public class RobotLocationEX1OpMode extends OpMode {
         telemetry.addData("Angle", robotLocationEX1.getAngle());
     }
 }
-

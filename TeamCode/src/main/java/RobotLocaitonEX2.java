@@ -9,14 +9,14 @@ public class RobotLocationEX2 {//extends OpMode idk maybe not??
     public double RobotLocationEX1(double angle) {
         this.angle = angle;
 
-            while (angle > 180) {
-                angle -= 360;
-            }
+        while (angle > 180) {
+            angle -= 360;
+        }
 
-            while (angle < 180) {
-                angle += 360;
-            }
-            return angle;
+        while (angle < 180) {
+            angle += 360;
+        }
+        return angle;
     }
     @Override
     public String toString(){
