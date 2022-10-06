@@ -4,21 +4,22 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.DrawRectanglePipeline;
+import org.firstinspires.ftc.teamcode.FirstPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 @Autonomous()
-public class OpenCV_opmode extends OpMode {
+public class OpenCVDetect_opmode extends OpMode {
     OpenCvWebcam webcam;
+    FirstPipeline cvPipeline = new FirstPipeline();
 
     @Override
     public void init() {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId" , "id" , hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        webcam.setPipeline(new DrawRectanglePipeline());
+        webcam.setPipeline(cvPipeline);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
@@ -27,6 +28,7 @@ public class OpenCV_opmode extends OpMode {
 
             @Override
             public void onError(int errorCode) {
+
             }
         });
     }
@@ -38,6 +40,6 @@ public class OpenCV_opmode extends OpMode {
 
     @Override
     public void loop() {
-
+        telemetry.addData("Selected Rectangle", cvPipeline.selectedRect);
     }
 }
