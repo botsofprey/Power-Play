@@ -17,6 +17,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+import java.util.ArrayList;
+
 public class ProgrammingBoard1 {
     private DigitalChannel touchSensor;
     private DcMotor motor;
@@ -85,4 +87,10 @@ public class ProgrammingBoard1 {
         return angles.firstAngle;
     }
 
+    public ArrayList<TestItem> getTests() {
+        ArrayList<TestItem> tests = new ArrayList<>();
+        tests.add(new TestMotor("PB Motor", 0.5, motor));
+        tests.add(new TestAnalogInput("PB Pot", pot, 0, 270));
+        return tests;
+    }
 }
