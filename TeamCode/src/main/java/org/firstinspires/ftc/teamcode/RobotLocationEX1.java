@@ -20,7 +20,9 @@ public class RobotLocationEX1 {
     }
     public double setAngle (double angle) {
         this.angle = angle;
+        return angle;
     }
+
     public double getAngle() {
         return angle;
         //just want to return angle
@@ -29,4 +31,3 @@ public class RobotLocationEX1 {
     public void setAngle(int i) {
     }
 }
-

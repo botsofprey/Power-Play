@@ -15,4 +15,3 @@ public class IfOpMode2 extends OpMode {
         }
     }
 }
-

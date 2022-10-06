@@ -4,18 +4,16 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp
-public class IfElseOpMode extends OpMode {
+public class MathOpMode extends OpMode {
     @Override
     public void init(){
     }
+
     @Override
     public void loop(){
-        if (gamepad1.left_stick_y < 0){
-            telemetry.addData("Left stick"," is negative");
-        }
-        else{
-            telemetry.addData("Left stick", " is positive");
-        }
+        double speedForward = -gamepad1.left_stick_y / 2.0;
         telemetry.addData("Left stick y", gamepad1.left_stick_y);
+        telemetry.addData("Speed forward", speedForward);
     }
 }
+

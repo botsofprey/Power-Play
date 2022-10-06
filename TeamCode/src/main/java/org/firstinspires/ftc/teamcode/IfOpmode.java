@@ -4,17 +4,16 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp
-public class ClassMemberOpMode extends OpMode{
-    boolean initDone;
-
+class IfOpMode extends OpMode {
     @Override
     public void init(){
-        telemetry.addData("init Done", initDone);
-        initDone = true;
     }
     @Override
     public void loop(){
-        telemetry.addData("init Done", initDone);
+        if(gamepad1.left_stick_y < 0){
+            telemetry.addData("Left stick"," is negative");
+        }
+        telemetry.addData("Left stick y", gamepad1.left_stick_y);
     }
 }
 

@@ -9,8 +9,6 @@ public class UsingStringEx extends OpMode {
     public void init() {
         String myName = "Natalia Bernardo";
         String myGrade = "10th grade";
-
-        telemetry.addData("The user ", myName, " is in ", myGrade,".");
     }
     @Override
     public void loop() {
