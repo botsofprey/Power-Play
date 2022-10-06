@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp
-public class RobotLocationsRadians {
+public class RobotLocationsRadians extends OpMode {
     double angleRadians;
 
     public RobotLocationsRadians(double angleDegrees){
@@ -25,5 +26,15 @@ public class RobotLocationsRadians {
     }
     public void setAngle(double angleDegrees) {
         this.angleRadians = Math.toRadians(angleDegrees);
+    }
+
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void loop() {
+
     }
 }

@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp
-public class RobotLocationEX2  { //extends OpMode{ //idk maybe not??
+public class RobotLocationEX2  extends OpMode { //idk maybe not??
 
     double angle;
     double x;
@@ -50,5 +51,15 @@ public class RobotLocationEX2  { //extends OpMode{ //idk maybe not??
     }
 
     public void changeY(double v) {
+    }
+
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void loop() {
+
     }
 }
