@@ -18,6 +18,7 @@ public class ProgrammingBoard5 {
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         ticksPerRotation = motor.getMotorType().getTicksPerRev();
         servo = hwMap.get(Servo.class,"servo");
+        servo.setDirection(Servo.Direction.REVERSE);
     }
     public boolean isTouchSensorPressed(){
         return !touchSensor.getState();
