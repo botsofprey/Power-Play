@@ -7,7 +7,7 @@ public class Claw {
     private Servo claw;
 
     public Claw(HardwareMap hardwareMap){
-        claw = hardwareMap.get(Servo.class, "Claw");
+        claw = hardwareMap.get(Servo.class, "claw");
     }
 
     public void setPosition(double position){

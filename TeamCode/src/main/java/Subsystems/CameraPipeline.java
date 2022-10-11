@@ -44,9 +44,26 @@ public class CameraPipeline extends OpenCvPipeline{
             }
         }
 
+        switch (data){
+            case "flowcode.com/p/yvA9cOb4I?fc=0":
+                parking = 0;
+                break;
+            case "flowcode.com/p/yvAB5ZOnv?fc=0":
+                parking = 1;
+                break;
+            case "flowcode.com/p/yvABUjyTs?fc=0":
+                parking = 2;
+                break;
+            default:
+                break;
+        }
+
         return image;
     }
 
+    public String getLink(){
+        return data;
+    }
     public int getParking(){
         return parking;
     }

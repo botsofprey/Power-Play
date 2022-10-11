@@ -26,18 +26,14 @@ public class threeWheelOdometry {
 
     private Location positionLocation, targetLocation;
 
-    private BNO055IMU imu;
-    private Orientation lastAngles = new Orientation();
-    private double globalAngle;
-
     //Robot measurements in CM
     //***Set values later
-    public final static double DISTANCE_FROM_MIDPOINT;
+    public final static double DISTANCE_FROM_MIDPOINT = 3;
     public final static double ANGLE_CIRCUMFERENCE = DISTANCE_FROM_MIDPOINT * 2 * Math.PI;
-    public final static double CM_PER_TICK;
+    public final static double CM_PER_TICK = .1;
 
     public threeWheelOdometry (HardwareMap hardwareMap, Location start, LinearOpMode op){
-        meccanumDrive = new MecanumDrive(hardwareMap);
+        meccanumDrive = new MecanumDrive(hardwareMap, op, start.angle);
 
         leftVert = hardwareMap.get(DcMotor.class, "verticalLeft");
         rightVert = hardwareMap.get(DcMotor.class, "verticalRight");
@@ -53,20 +49,6 @@ public class threeWheelOdometry {
 
         //Set start point
         positionLocation = start;
-
-        //Set IMU parameters
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-
-        parameters.mode = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled = false;
-
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-
-        imu.initialize(parameters);
-
-        globalAngle = positionLocation.angle;
 
         this.opMode = op;
     }
@@ -111,7 +93,7 @@ public class threeWheelOdometry {
 
             positionLocation.add(x,y,0);
 
-        }else if (!compare(getAngle(), lastAngles.firstAngle, 15)){ //Turned
+        }else if (!compare(meccanumDrive.getAngle(), meccanumDrive.lastAngles.firstAngle, 15)){ //Turned
             double cmTravaled = dy * CM_PER_TICK;
             double dt = (cmTravaled / ANGLE_CIRCUMFERENCE) * 360; //Calculate angle
             positionLocation.add(0, 0, dt);
@@ -129,22 +111,14 @@ public class threeWheelOdometry {
 
     public void update(){
         //Check if at target position and heading
-        /*
         if(!positionLocation.compareAll(targetLocation, 2.5, 15)){
-            if(!positionLocation.comparePosition(targetLocation, 2.5)){ //Not in target position
-                Location cmNeeded = positionLocation.difference(targetLocation);
-                if(Math.abs(cmNeeded.x) > 2.5) { //Needs to move forward or backward
-                    double motorPower = .5 * Range.clip(cmNeeded.x, -1, 1);
-                    meccanumDrive.move(motorPower,motorPower,motorPower,motorPower);
-                }else{ //Needs to move side to side
-                    double motorPower = .5 * Range.clip(cmNeeded.y, -1, 1);
-                    meccanumDrive.move(motorPower,-motorPower,-motorPower,motorPower);
-                }
-            }else { //Not in target rotation
-                meccanumDrive.rotate(-.5, .5);
-            }
+            Location diff = positionLocation.difference(targetLocation);
+            meccanumDrive.movewithPower(
+                    diff.x + diff.y + diff.angle,
+                    diff.x - diff.y + diff.angle,
+                    diff.x + diff.y - diff.angle,
+                    diff.x - diff.y - diff.angle);
         }
-        */
 
         //Update previous & current position
         prevRightPos = currentRightPos;
@@ -158,33 +132,11 @@ public class threeWheelOdometry {
         calculateChange();
     }
 
-    public String getPoint(){
+    public String getLocation(){
         return positionLocation.x + ", " + positionLocation.y + ", " + positionLocation.angle;
     }
 
-    public double getAngle()
-    {
-        Orientation angles = imu.getAngularOrientation
-                (AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
-        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
-
-        if (deltaAngle < -180)
-            deltaAngle += 360;
-        else if (deltaAngle > 180)
-            deltaAngle -= 360;
-
-        globalAngle += deltaAngle;
-
-        lastAngles = angles;
-
-        if (globalAngle < -180)
-            globalAngle += 360;
-        else if (globalAngle > 180)
-            globalAngle -= 360;
-
-        return -globalAngle;
-    }
 
     private boolean compare(double a, double b, double offset){
         return Math.abs(a-b) <= offset;
