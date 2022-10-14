@@ -78,7 +78,7 @@ public class MecanumDrive {
 
     // for config file, see RobotConfig.json
     // track width and track length change based on width and length of the robot
-    public MecanumDrive(HardwareMap hw /*, String configFileName,
+    public MecanumDrive(HardwareMap hw, double startAngle /*, String configFileName,
                         Location startLocation, LinearOpMode m */ ) {
    //     this(hw, configFileName, startLocation.getAsOldLocation(), m);
 
@@ -89,6 +89,20 @@ public class MecanumDrive {
             motors[i].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             motors[i].setDirection(directions[i]);
         }
+        //Set IMU parameters
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
+
+        imu = hw.get(BNO055IMU.class, "imu");
+
+        imu.initialize(parameters);
+
+        globalAngle = startAngle;
+        driverAngle=startAngle;
 
         currentSpeed = slowSpeed;
     }
@@ -362,6 +376,8 @@ public class MecanumDrive {
 
        double newPower;
 
+       
+
        if(angleDiff == 0){
            //do nothing
 
@@ -395,17 +411,17 @@ public class MecanumDrive {
            bl *= angleDiff < 0 ? newPower : -1;
        }
 
-       movewithPower(fl, fr, br, bl);
+       moveWithPower(fl, bl, br, fr);
     }
 
-    public void movewithPower(double fl, double bl, double br, double fr){
+    public void moveWithPower(double fl, double bl, double br, double fr){
         motors[0].setPower(Range.clip(fl, -1, 1) * currentSpeed);
         motors[1].setPower(Range.clip(bl, -1, 1) * currentSpeed);
         motors[2].setPower(Range.clip(br, -1, 1) * currentSpeed);
         motors[3].setPower(Range.clip(fr, -1, 1) * currentSpeed);
     }
 
-    public void movewithPower(double power){
+    public void moveWithPower(double power){
         for(DcMotor m : motors){
             m.setPower(power * currentSpeed);
         }

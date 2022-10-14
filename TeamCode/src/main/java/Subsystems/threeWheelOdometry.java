@@ -20,7 +20,7 @@ public class threeWheelOdometry {
 
     private MecanumDrive meccanumDrive;
 
-    private DcMotor leftVert, rightVert, horizontal;
+    private DcMotor leftVert, /*rightVert,*/ horizontal;
     private int currentLeftPos = 0, currentRightPos = 0, currentAuxPos = 0;
     private int prevLeftPos = 0, prevRightPos = 0, prevAuxPos = 0;
 
@@ -36,15 +36,15 @@ public class threeWheelOdometry {
         meccanumDrive = new MecanumDrive(hardwareMap, op, start.angle);
 
         leftVert = hardwareMap.get(DcMotor.class, "verticalLeft");
-        rightVert = hardwareMap.get(DcMotor.class, "verticalRight");
+        //rightVert = hardwareMap.get(DcMotor.class, "verticalRight");
         horizontal = hardwareMap.get(DcMotor.class, "horizontal");
         //Reset encoders to 0 ticks
         leftVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //rightVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         horizontal.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //When power = 0, brake
         leftVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //rightVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         horizontal.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //Set start point
@@ -55,7 +55,7 @@ public class threeWheelOdometry {
 
     private void calculateChange(){
         int dx1 = currentLeftPos - prevLeftPos,
-            dx2 = currentRightPos - prevRightPos,
+            //dx2 = currentRightPos - prevRightPos,
             dy = currentAuxPos - prevAuxPos;
 
         // dx's != 0 and dy = 0 -- forward
@@ -63,6 +63,7 @@ public class threeWheelOdometry {
         //dx's != 0 and dy !=0 -- diagonal
         //dx's = opposites -- turn
 
+        /*
         if(equalAndNotZero(dx1, dx2) && dy == 0){ //Went Straight
             double cmTraveled = dx1 * CM_PER_TICK;
 
@@ -100,6 +101,8 @@ public class threeWheelOdometry {
         } else{ //Should not make it here
             System.out.println("Oh no...");
         }
+        */
+
         //dx = x change
         //dy = y change
         //dt = delta theta
@@ -113,7 +116,7 @@ public class threeWheelOdometry {
         //Check if at target position and heading
         if(!positionLocation.compareAll(targetLocation, 2.5, 15)){
             Location diff = positionLocation.difference(targetLocation);
-            meccanumDrive.movewithPower(
+            meccanumDrive.moveWithPower(
                     diff.x + diff.y + diff.angle,
                     diff.x - diff.y + diff.angle,
                     diff.x + diff.y - diff.angle,
@@ -124,7 +127,7 @@ public class threeWheelOdometry {
         prevRightPos = currentRightPos;
         prevLeftPos = currentLeftPos;
         prevAuxPos = currentAuxPos;
-        currentRightPos = rightVert.getCurrentPosition();
+        //currentRightPos = rightVert.getCurrentPosition();
         currentLeftPos = leftVert.getCurrentPosition();
         currentAuxPos = horizontal.getCurrentPosition();
 

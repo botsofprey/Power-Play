@@ -21,7 +21,6 @@ public class MecanumTele extends LinearOpMode {
     private Claw claw;
     private Lift lift;
 
-    private double closePos = 1, openPos = 0;
     private threeWheelOdometry odometry;
 
     private Location startLoc = new Location(4,0,4);
@@ -30,9 +29,9 @@ public class MecanumTele extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         controller1 = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
-        drive = new MecanumDrive(hardwareMap);
+        drive = new MecanumDrive(hardwareMap, -90);
         claw = new Claw(hardwareMap);
-        odometry = new threeWheelOdometry(hardwareMap, startLoc, this);
+        //odometry = new threeWheelOdometry(hardwareMap, startLoc, this);
         lift = new Lift(hardwareMap);
 
         while(!isStarted() && !isStopRequested()){
@@ -77,7 +76,8 @@ public class MecanumTele extends LinearOpMode {
 
             //Driver 1 controls claw
             if(controller1.aPressed){
-                claw.setPosition(claw.getPosition() != closePos ? closePos : openPos);
+                claw.setPosition(claw.getPosition() != claw.CLOSE_POSITION ?
+                        claw.CLOSE_POSITION : claw.OPEN_POSITION);
             }
             telemetry.addData("Claw Pos", claw.getPosition());
 
@@ -91,7 +91,10 @@ public class MecanumTele extends LinearOpMode {
             }
             telemetry.addData("Lift Position", lift.getPosition());
 
-            telemetry.addData("Robot position", odometry.getLocation());
+            //odometry.update();
+            lift.update();
+
+          //  telemetry.addData("Robot position", odometry.getLocation());
             telemetry.update();
         }
     }

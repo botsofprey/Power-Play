@@ -17,16 +17,15 @@ public class Camera {
     public Camera(HardwareMap hw, OpenCvPipeline pipeline) {
         WebcamName webcamName = hw.get(WebcamName.class, "webcam");
         int cameraMonitorViewId = hw.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hw.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hw.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName);
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hw.get(WebcamName.class, "webcam"), cameraMonitorViewId);
 
-        camera.setPipeline(pipeline);
+        System.out.println("Camera pipeline camera: " + camera);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                camera.startStreaming(1280, 960, OpenCvCameraRotation.UPRIGHT);
+                camera.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
                 open = true;
             }
 

@@ -6,6 +6,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.QRCodeDetector;
 import org.openftc.easyopencv.OpenCvPipeline;
@@ -18,7 +19,7 @@ public class CameraPipeline extends OpenCvPipeline{
     private String[] qrOutput = {
     };
 
-    private QRCodeDetector detector = new QRCodeDetector();
+    private QRCodeDetector detector;
     private Mat points = new Mat();
     private Mat image = new Mat();
 
@@ -28,9 +29,16 @@ public class CameraPipeline extends OpenCvPipeline{
 
     @Override
     public Mat processFrame(Mat input) {
-        Core.rotate(input, image, Core.ROTATE_90_COUNTERCLOCKWISE);
+        System.out.println("1 I did this");
+
+
+        //Core.rotate(input, image, Core.ROTATE_90_COUNTERCLOCKWISE);
         points = new Mat();
+        detector  = new QRCodeDetector();
+
+        Imgproc.cvtColor(input, image, Imgproc.COLOR_BGR2GRAY);
         data = detector.detectAndDecode(image, points);
+        System.out.println("2 I did this");
 
         if (!points.empty()) {
             //prints out qr code data
@@ -40,9 +48,11 @@ public class CameraPipeline extends OpenCvPipeline{
             for (int i = 0; i < points.cols(); i++) {
                 Point pt1 = new Point(points.get(0, i));
                 Point pt2 = new Point(points.get(0, (i + 1) % 4));
-                Imgproc.line(image, pt1, pt2, new Scalar(255, 0, 0), 3);
+                Imgproc.line(input, pt1, pt2, new Scalar(255, 0, 0), 3);
             }
         }
+
+        System.out.println("3 I did this");
 
         switch (data){
             case "flowcode.com/p/yvA9cOb4I?fc=0":
@@ -58,7 +68,10 @@ public class CameraPipeline extends OpenCvPipeline{
                 break;
         }
 
-        return image;
+
+        System.out.println("4 I did this");
+
+        return input;
     }
 
     public String getLink(){
