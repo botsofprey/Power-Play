@@ -1,0 +1,287 @@
+{
+  "locations": {
+    "floor-junctions": {
+      "top-left": [
+        "x",
+        "y",
+        "h"
+      ],
+      "top-mid": [
+        "x",
+        "y",
+        "h"
+      ],
+      "top-right": [
+        "x",
+        "y",
+        "h"
+      ],
+      "mid-left": [
+        "x",
+        "y",
+        "h"
+      ],
+      "mid-mid": [
+        "x",
+        "y",
+        "h"
+      ],
+      "mid-right": [
+        "x",
+        "y",
+        "h"
+      ],
+      "bot-left": [
+        "x",
+        "y",
+        "h"
+      ],
+      "bot-mid": [
+        "x",
+        "y",
+        "h"
+      ],
+      "bot-right": [
+        "x",
+        "y",
+        "h"
+      ]
+    },
+    "low-junctions": {
+      "top-left": [
+        "x",
+        "y",
+        "h"
+      ],
+      "top-mid": [
+        "x",
+        "y",
+        "h"
+      ],
+      "top-right": [
+        "x",
+        "y",
+        "h"
+      ],
+      "mid-left": [
+        "x",
+        "y",
+        "h"
+      ],
+      "mid-mid": [
+        "x",
+        "y",
+        "h"
+      ],
+      "mid-right": [
+        "x",
+        "y",
+        "h"
+      ],
+      "bot-left": [
+        "x",
+        "y",
+        "h"
+      ],
+      "bot-mid": [
+        "x",
+        "y",
+        "h"
+      ],
+      "bot-right": [
+        "x",
+        "y",
+        "h"
+      ]
+    },
+    "mid-junctions": {
+      "top-left": [
+        "x",
+        "y",
+        "h"
+      ],
+      "top-mid": [
+        "x",
+        "y",
+        "h"
+      ],
+      "top-right": [
+        "x",
+        "y",
+        "h"
+      ],
+      "mid-left": [
+        "x",
+        "y",
+        "h"
+      ],
+      "mid-mid": [
+        "x",
+        "y",
+        "h"
+      ],
+      "mid-right": [
+        "x",
+        "y",
+        "h"
+      ],
+      "bot-left": [
+        "x",
+        "y",
+        "h"
+      ],
+      "bot-mid": [
+        "x",
+        "y",
+        "h"
+      ],
+      "bot-right": [
+        "x",
+        "y",
+        "h"
+      ]
+    },
+    "high-junctions": {
+      "top-left": [
+        "x",
+        "y",
+        "h"
+      ],
+      "top-mid": [
+        "x",
+        "y",
+        "h"
+      ],
+      "top-right": [
+        "x",
+        "y",
+        "h"
+      ],
+      "mid-left": [
+        "x",
+        "y",
+        "h"
+      ],
+      "mid-mid": [
+        "x",
+        "y",
+        "h"
+      ],
+      "mid-right": [
+        "x",
+        "y",
+        "h"
+      ],
+      "bot-left": [
+        "x",
+        "y",
+        "h"
+      ],
+      "bot-mid": [
+        "x",
+        "y",
+        "h"
+      ],
+      "bot-right": [
+        "x",
+        "y",
+        "h"
+      ]
+    },
+    "blue": {
+      "cone-station": [
+        "x",
+        "y",
+        "h"
+      ],
+      "terminal-alliance": [
+        "x",
+        "y",
+        "h"
+      ],
+      "terminal-opponent": [
+        "x",
+        "y",
+        "h"
+      ],
+      "r-parking 1": [
+        "x",
+        "y",
+        "h"
+      ],
+      "r-parking 2": [
+        "x",
+        "y",
+        "h"
+      ],
+      "r-parking 3": [
+        "x",
+        "y",
+        "h"
+      ],
+      "l-parking 1": [
+        "x",
+        "y",
+        "h"
+      ],
+      "l-parking 2": [
+        "x",
+        "y",
+        "h"
+      ],
+      "l-parking 3": [
+        "x",
+        "y",
+        "h"
+      ]
+    },
+    "red": {
+      "cone-station": [
+        "x",
+        "y",
+        "h"
+      ],
+      "terminal-alliance": [
+        "x",
+        "y",
+        "h"
+      ],
+      "terminal-opponent": [
+        "x",
+        "y",
+        "h"
+      ],
+      "r-parking 1": [
+        "x",
+        "y",
+        "h"
+      ],
+      "r-parking 2": [
+        "x",
+        "y",
+        "h"
+      ],
+      "r-parking 3": [
+        "x",
+        "y",
+        "h"
+      ],
+      "l-parking 1": [
+        "x",
+        "y",
+        "h"
+      ],
+      "l-parking 2": [
+        "x",
+        "y",
+        "h"
+      ],
+      "l-parking 3": [
+        "x",
+        "y",
+        "h"
+      ]
+    },
+    "comments":"junction names are based on position of the audience"
+  }
+}

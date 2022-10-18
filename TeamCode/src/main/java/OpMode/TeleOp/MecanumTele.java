@@ -64,12 +64,12 @@ public class MecanumTele extends LinearOpMode {
             Vector2D leftInput = controller1.leftStick,
                      rightInput = controller1.rightStick;
 
-            drive.moveTrueNorth(
+            drive.moveWithPower(
                     leftInput.x + leftInput.y + rightInput.x,
                     leftInput.x - leftInput.y + rightInput.x,
                     leftInput.x + leftInput.y - rightInput.x,
-                    leftInput.x - leftInput.y - rightInput.x,
-                    leftInput.angle);
+                    leftInput.x - leftInput.y - rightInput.x
+                    );
             telemetry.addData("left Angle", leftInput.angle);
 
           //  odometry.update();

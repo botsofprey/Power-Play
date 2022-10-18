@@ -1,8 +1,10 @@
 package Subsystems;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.ConceptTensorFlowObjectDetection;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -10,6 +12,10 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.QRCodeDetector;
 import org.openftc.easyopencv.OpenCvPipeline;
+import org.tensorflow.lite.task.vision.detector.ObjectDetector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CameraPipeline extends OpenCvPipeline{
@@ -19,7 +25,9 @@ public class CameraPipeline extends OpenCvPipeline{
     private String[] qrOutput = {
     };
 
-    private QRCodeDetector detector;
+    //x - colors
+    //y - bounds
+
     private Mat points = new Mat();
     private Mat image = new Mat();
 
@@ -34,10 +42,10 @@ public class CameraPipeline extends OpenCvPipeline{
 
         //Core.rotate(input, image, Core.ROTATE_90_COUNTERCLOCKWISE);
         points = new Mat();
-        detector  = new QRCodeDetector();
 
-        Imgproc.cvtColor(input, image, Imgproc.COLOR_BGR2GRAY);
-        data = detector.detectAndDecode(image, points);
+        Imgproc.cvtColor(input, image, Imgproc.COLOR_BGR2HSV);
+        image = findCone(input);
+
         System.out.println("2 I did this");
 
         if (!points.empty()) {
@@ -54,24 +62,25 @@ public class CameraPipeline extends OpenCvPipeline{
 
         System.out.println("3 I did this");
 
-        switch (data){
-            case "flowcode.com/p/yvA9cOb4I?fc=0":
-                parking = 0;
-                break;
-            case "flowcode.com/p/yvAB5ZOnv?fc=0":
-                parking = 1;
-                break;
-            case "flowcode.com/p/yvABUjyTs?fc=0":
-                parking = 2;
-                break;
-            default:
-                break;
-        }
-
-
         System.out.println("4 I did this");
 
-        return input;
+        return image;
+    }
+
+    private Mat findCone(Mat input){
+        //Filter out everything that isn't red
+        Scalar minRed = new Scalar(255, 0, 0), maxRed = new Scalar(255, 115, 115);
+        Core.inRange(input, minRed, maxRed, input);
+
+        //Filter out noise
+        Mat hierarchy = new Mat();
+        List<MatOfPoint> matPoints = new ArrayList<>();
+        Imgproc.findContours(input, matPoints, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+
+       Imgproc.drawContours(input, matPoints, -1, new Scalar(0, 255,0), 2);
+
+       return input;
+       
     }
 
     public String getLink(){
@@ -81,4 +90,6 @@ public class CameraPipeline extends OpenCvPipeline{
         return parking;
     }
 }
+
+
 
