@@ -92,7 +92,7 @@ public class MecanumTele extends LinearOpMode {
             telemetry.addData("Lift Position", lift.getPosition());
 
             //odometry.update();
-            lift.update();
+            lift.update(hardwareMap);
 
           //  telemetry.addData("Robot position", odometry.getLocation());
             telemetry.update();

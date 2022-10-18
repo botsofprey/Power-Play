@@ -1,7 +1,11 @@
 package Subsystems;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.ProgrammingBoard7;
 
 public class Lift {
     private DcMotor liftMotor;
@@ -41,7 +45,9 @@ public class Lift {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void update(){
-
+    public void update(HardwareMap hwMap) {
+        ProgrammingBoard7 board = new ProgrammingBoard7();
+        telemetry.addData("Touch Sensor", board.getClass());
+        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 }
