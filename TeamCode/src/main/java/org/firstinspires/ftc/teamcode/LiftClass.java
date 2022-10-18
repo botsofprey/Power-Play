@@ -16,12 +16,6 @@ public class LiftClass extends OpMode {
 
     @Override
     public void loop() {
-        if (gamepad1.x) {
-            resetStartTime();
-            while (getRuntime() < 5) {
-                lift.setPower(0.5);
-            }
-            lift.setPower(0);
-        }
+        lift.setPower(gamepad1.right_trigger - gamepad1.left_trigger);
     }
 }
