@@ -28,6 +28,8 @@ public class CameraPipeline extends OpenCvPipeline{
     //x - colors
     //y - bounds
 
+    QRCodeDetector detector = new QRCodeDetector();
+
     private Mat points = new Mat();
     private Mat image = new Mat();
 
@@ -39,12 +41,10 @@ public class CameraPipeline extends OpenCvPipeline{
     public Mat processFrame(Mat input) {
         System.out.println("1 I did this");
 
-
         //Core.rotate(input, image, Core.ROTATE_90_COUNTERCLOCKWISE);
         points = new Mat();
 
-        Imgproc.cvtColor(input, image, Imgproc.COLOR_BGR2HSV);
-        image = findCone(input);
+        data = detector.detectAndDecode(input, points);
 
         System.out.println("2 I did this");
 
@@ -56,7 +56,7 @@ public class CameraPipeline extends OpenCvPipeline{
             for (int i = 0; i < points.cols(); i++) {
                 Point pt1 = new Point(points.get(0, i));
                 Point pt2 = new Point(points.get(0, (i + 1) % 4));
-                Imgproc.line(input, pt1, pt2, new Scalar(255, 0, 0), 3);
+                Imgproc.line(image, pt1, pt2, new Scalar(255, 0, 0), 3);
             }
         }
 

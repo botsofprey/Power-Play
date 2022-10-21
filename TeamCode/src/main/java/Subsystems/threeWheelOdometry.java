@@ -55,7 +55,7 @@ public class threeWheelOdometry {
 
     private void calculateChange(){
         int dx1 = currentLeftPos - prevLeftPos,
-            //dx2 = currentRightPos - prevRightPos,
+            dx2 = currentRightPos - prevRightPos,
             dy = currentAuxPos - prevAuxPos;
 
         // dx's != 0 and dy = 0 -- forward
@@ -63,7 +63,6 @@ public class threeWheelOdometry {
         //dx's != 0 and dy !=0 -- diagonal
         //dx's = opposites -- turn
 
-        /*
         if(equalAndNotZero(dx1, dx2) && dy == 0){ //Went Straight
             double cmTraveled = dx1 * CM_PER_TICK;
 
@@ -98,10 +97,9 @@ public class threeWheelOdometry {
             double cmTravaled = dy * CM_PER_TICK;
             double dt = (cmTravaled / ANGLE_CIRCUMFERENCE) * 360; //Calculate angle
             positionLocation.add(0, 0, dt);
-        } else{ //Should not make it here
+        } else { //Should not make it here
             System.out.println("Oh no...");
         }
-        */
 
         //dx = x change
         //dy = y change

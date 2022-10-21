@@ -417,8 +417,8 @@ public class MecanumDrive {
     public void moveWithPower(double fl, double bl, double br, double fr){
         motors[0].setPower(Range.clip(fl, -1, 1) * currentSpeed);
         motors[1].setPower(Range.clip(bl, -1, 1) * currentSpeed);
-        motors[2].setPower(Range.clip(br, -1, 1) * currentSpeed);
-        motors[3].setPower(Range.clip(fr, -1, 1) * currentSpeed);
+        motors[2].setPower(Range.clip(fr, -1, 1) * currentSpeed);
+        motors[3].setPower(Range.clip(br, -1, 1) * currentSpeed);
     }
 
     public void moveWithPower(double power){
@@ -434,12 +434,36 @@ public class MecanumDrive {
         motors[3].setPower(right * currentSpeed);
     }
 
-    public void moveCenti(double centimeters){
+    public static final String
+            LEFT = "LEFT",
+            RIGHT = "RIGHT",
+            FORWARD = "FORWARD",
+            BACKWARD = "BACKWARD";
+    private static final String[] MOTOR_NAMES = {
+            "frontLeftDriveMotor",
+            "backLeftDriveMotor",
+            "frontRightDriveMotor",
+            "backRightDriveMotor"
+    };
+    public void moveCenti(double centimeters, String direction){
         for(DcMotor m : motors){
             m.setTargetPosition((int)(centimeters * TICKS_PER_CENTI) + m.getCurrentPosition());
             m.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             m.setPower(.5);
         }
+
+        switch (direction){
+            case LEFT:
+
+                break;
+            case RIGHT:
+                break;
+            case FORWARD:
+                break;
+            case BACKWARD:
+                break;
+        }
+
         while(isBusy()){
             mode.telemetry.addData("Position in Ticks", getPosition());
             mode.telemetry.addData("Position in Centi", getPosition() / TICKS_PER_CENTI);
