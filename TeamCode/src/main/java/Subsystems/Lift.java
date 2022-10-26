@@ -18,10 +18,8 @@ public class Lift {
     }
 
     public void setPower(double power){
-        if(liftMotor.getCurrentPosition() <= 15 && power < 0) {
             liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             liftMotor.setPower(power);
-        }
     }
 
     public void setPosition(int position, double power){

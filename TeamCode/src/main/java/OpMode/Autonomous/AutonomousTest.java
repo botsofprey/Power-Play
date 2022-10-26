@@ -20,18 +20,19 @@ public class AutonomousTest extends LinearOpMode {
         CameraPipeline cameraPipeline = new CameraPipeline();
         Camera camera = new Camera(hardwareMap, cameraPipeline);
 
-        //drive = new MecanumDrive(hardwareMap, this, -90);
+        drive = new MecanumDrive(hardwareMap, this, -90);
         //odometry = new threeWheelOdometry(hardwareMap, new Location(0,0), this);
 
         while (!isStarted() && !isStopRequested()) {
             telemetry.addData("QR Code", cameraPipeline.getParking());
             telemetry.addData("QR Code Link", cameraPipeline.getLink());
+            telemetry.addData("Color Seen", cameraPipeline.getColor());
             telemetry.update();
         }
         camera.stop();
 
         while(opModeIsActive()){
-            int parking = cameraPipeline.getParking();
+            /*int parking = cameraPipeline.getParking();
 
             drive.moveWithPower(.5);
             sleep(2500);
@@ -46,7 +47,10 @@ public class AutonomousTest extends LinearOpMode {
                 sleep(2500);
             }
 
-            telemetry.update();
+            telemetry.update();*/
+
+            drive.moveCenti(15, MecanumDrive.FORWARD);
+            sleep(5000);
         }
     }
 }

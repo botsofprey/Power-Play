@@ -12,7 +12,6 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.QRCodeDetector;
 import org.openftc.easyopencv.OpenCvPipeline;
-import org.tensorflow.lite.task.vision.detector.ObjectDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +27,8 @@ public class CameraPipeline extends OpenCvPipeline{
     //x - colors
     //y - bounds
 
+    QRCodeDetector detector = new QRCodeDetector();
+
     private Mat points = new Mat();
     private Mat image = new Mat();
 
@@ -35,18 +36,22 @@ public class CameraPipeline extends OpenCvPipeline{
 
     private int parking = -1;
 
+    private Rect rect = new Rect(160, 42, 40, 40);
+    private Scalar colorVision = new Scalar(0,255,0);
+
     @Override
     public Mat processFrame(Mat input) {
-        System.out.println("1 I did this");
 
+        if(input.empty())
+            return null;
 
         //Core.rotate(input, image, Core.ROTATE_90_COUNTERCLOCKWISE);
         points = new Mat();
+        image = new Mat();
 
-        Imgproc.cvtColor(input, image, Imgproc.COLOR_BGR2HSV);
-        image = findCone(input);
+        System.out.println("1 I did this");
 
-        System.out.println("2 I did this");
+        data = detector.detectAndDecode(input, points);
 
         if (!points.empty()) {
             //prints out qr code data
@@ -56,13 +61,18 @@ public class CameraPipeline extends OpenCvPipeline{
             for (int i = 0; i < points.cols(); i++) {
                 Point pt1 = new Point(points.get(0, i));
                 Point pt2 = new Point(points.get(0, (i + 1) % 4));
-                Imgproc.line(input, pt1, pt2, new Scalar(255, 0, 0), 3);
+                Imgproc.line(image, pt1, pt2, new Scalar(255, 0, 0), 3);
             }
+
+            System.out.println("2 I did this");
         }
 
         System.out.println("3 I did this");
 
         System.out.println("4 I did this");
+
+        if(image.empty())
+            return input;
 
         return image;
     }
@@ -88,6 +98,10 @@ public class CameraPipeline extends OpenCvPipeline{
     }
     public int getParking(){
         return parking;
+    }
+
+    public String getColor(){
+        return colorVision.val[0] + ", " +colorVision.val[1] + ", " + colorVision.val[2];
     }
 }
 
