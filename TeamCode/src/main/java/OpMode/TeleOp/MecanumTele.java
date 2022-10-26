@@ -25,6 +25,9 @@ public class MecanumTele extends LinearOpMode {
 
     private Location startLoc = new Location(4,0,4);
 
+    private boolean slowModeOn = true;
+    private boolean overrideDrivers = false;
+
     @Override
     public void runOpMode() throws InterruptedException {
         controller1 = new Controller(gamepad1);
@@ -55,22 +58,36 @@ public class MecanumTele extends LinearOpMode {
            controller1.update();
            controller2.update();
 
+           //Check that override can be stopped
+            if(drive.getPower() == 0){
+                overrideDrivers = false;
+            }
+
+            if(controller1.leftPressed || controller2.leftPressed){
+                drive.next90degrees(-1);
+            } else if(controller2.rightPressed || controller1.rightPressed){
+                drive.next90degrees(1);
+            }
 
            if(controller1.startPressed){
                drive.slowMode();
+               slowModeOn = !slowModeOn;
            }
+           drive.slowMode(controller1.leftTriggerHeld && !slowModeOn);
 
         //Driver 1 uses joysticks for movement, duh
-            Vector2D leftInput = controller1.leftStick,
-                     rightInput = controller1.rightStick;
+            if(!overrideDrivers){
+                Vector2D leftInput = controller1.leftStick,
+                         rightInput = controller1.rightStick;
 
-            drive.moveWithPower(
-                    leftInput.y + leftInput.x + rightInput.x,
-                    leftInput.y - leftInput.x + rightInput.x,
-                    leftInput.y + leftInput.x - rightInput.x,
-                    leftInput.y - leftInput.x - rightInput.x
-                    );
-            telemetry.addData("left Angle", leftInput.angle);
+                drive.moveWithPower(
+                        leftInput.y + leftInput.x + rightInput.x,
+                        leftInput.y - leftInput.x + rightInput.x,
+                        leftInput.y + leftInput.x - rightInput.x,
+                        leftInput.y - leftInput.x - rightInput.x
+                        );
+                telemetry.addData("left Angle", leftInput.angle);
+            }
 
           //  odometry.update();
 
@@ -90,6 +107,8 @@ public class MecanumTele extends LinearOpMode {
                 lift.brake();
             }
             telemetry.addData("Lift Position", lift.getPosition());
+
+
 
             //odometry.update();
             lift.update();

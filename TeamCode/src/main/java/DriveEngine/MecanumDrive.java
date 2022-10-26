@@ -53,8 +53,9 @@ public class MecanumDrive {
     public Orientation lastAngles = new Orientation();
     private double globalAngle;
     private double driverAngle;
+    private double targetAngle;
 
-    public final static double TICKS_PER_CENTI = (5281.1 / 9 * Math.PI);
+    public final static double TICKS_PER_CENTI = (5281.1 / (9 * Math.PI));
 
     private double Kt;
     private double R;
@@ -354,6 +355,13 @@ public class MecanumDrive {
     public void update() {
         //updateLocation();
         oldRawMove(0, 0, 0);
+
+        if(targetAngle != -1000){
+            if(compare(targetAngle, getAngle(), 15)){
+                brake();
+                targetAngle = -1000;
+            }
+        }
     }
 
     /*
@@ -439,12 +447,6 @@ public class MecanumDrive {
             RIGHT = "RIGHT",
             FORWARD = "FORWARD",
             BACKWARD = "BACKWARD";
-    private static final String[] MOTOR_NAMES = {
-            "frontLeftDriveMotor",
-            "backLeftDriveMotor",
-            "frontRightDriveMotor",
-            "backRightDriveMotor"
-    };
     public void moveCenti(double centimeters, String direction){
         for(DcMotor m : motors){
             m.setTargetPosition((int)(centimeters * TICKS_PER_CENTI) + m.getCurrentPosition());
@@ -454,13 +456,18 @@ public class MecanumDrive {
 
         switch (direction){
             case LEFT:
-
+                motors[0].setTargetPosition(-motors[0].getTargetPosition());
+                motors[1].setTargetPosition(-motors[0].getTargetPosition());
                 break;
             case RIGHT:
-                break;
-            case FORWARD:
+                motors[2].setTargetPosition(-motors[0].getTargetPosition());
+                motors[3].setTargetPosition(-motors[0].getTargetPosition());
                 break;
             case BACKWARD:
+                motors[0].setTargetPosition(-motors[0].getTargetPosition());
+                motors[1].setTargetPosition(-motors[0].getTargetPosition());
+                motors[2].setTargetPosition(-motors[0].getTargetPosition());
+                motors[3].setTargetPosition(-motors[0].getTargetPosition());
                 break;
         }
 
@@ -472,6 +479,10 @@ public class MecanumDrive {
         }
 
         brake();
+    }
+
+    public double getPower(){
+        return motors[0].getPower();
     }
 
     public double getAngle()
@@ -509,6 +520,13 @@ public class MecanumDrive {
         currentSpeed = currentSpeed == slowSpeed ? maxSpeed : slowSpeed;
     }
 
+    public void slowMode(boolean slow){
+        if (slow)
+            currentSpeed = slowSpeed;
+        else
+            currentSpeed = maxSpeed;
+    }
+
     public boolean isBusy(){
         return motors[0].isBusy();
     }
@@ -519,6 +537,44 @@ public class MecanumDrive {
 
     public int getTarget(){
         return motors[0].getTargetPosition();
+    }
+
+    public void next90degrees(int negPos){
+        if(negPos != -1 && negPos != 1)
+            return;
+
+        double angle = getAngle() + (negPos * 90),
+        abs = Math.abs(angle);
+
+        if(abs > 0 && abs <= 45){
+            angle = 0;
+        } else if(abs > 45 && abs <= 135){
+            angle = 90;
+        } else if(abs > 135 && abs <= 225){
+            angle = 180;
+        } else {
+            angle = 0;
+        }
+        rotateToAngle(angle);
+    }
+
+    public void rotateToAngle(double angle){
+        targetAngle = angle;
+        if(targetAngle < getAngle()){
+            motors[0].setPower(-1);
+            motors[1].setPower(-1);
+            motors[2].setPower(1);
+            motors[3].setPower(1);
+        } else {
+            motors[0].setPower(1);
+            motors[1].setPower(1);
+            motors[2].setPower(-1);
+            motors[3].setPower(-1);
+        }
+    }
+
+    private boolean compare(double a, double b, double diff){
+        return Math.abs(a-b) <= diff;
     }
 }
 
