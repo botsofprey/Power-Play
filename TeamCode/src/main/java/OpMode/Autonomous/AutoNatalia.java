@@ -16,6 +16,17 @@ public class AutoNatalia extends LinearOpMode {
 
     }
     @Override
-    public void loop()
-    board.init(hardwareMap)
-}
+    public void loop() {
+        board.init(hardwareMap);
+    }
+    while(opModeIsActive()){
+        drive.moveCenti(120, MecanumDrive.LEFT);
+        drive.moveCenti(480, MecanumDrive.FORWARD);
+        //pick up cone
+        drive.rotateToAngle(135);
+        //repeat if time allows
+
+        //no clue how to do the claw or lift
+    }
+
+    }
