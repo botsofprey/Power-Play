@@ -8,10 +8,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 /** This is the combination of all of our teleop codes into one */
 @TeleOp()
-public class EveryThing extends OpMode {
+public class Everything extends OpMode {
     /** Used so the driver doesn't have to hold the right bumper for slow mode */
     boolean slowModeAlreadyOn = false;
-    /** Used the same as the last, but this time for speed mode*/
+    /** Used so the driver doesn't have to hold the left bumper for speed mode*/
     boolean speedModeAlreadyOn = false;
     DcMotor motorFrontRight;
     DcMotor motorBackRight;
@@ -19,7 +19,7 @@ public class EveryThing extends OpMode {
     DcMotor motorFrontLeft;
     DcMotor lift;
     private Servo claw;
-    /** The double is used as a way to alter the servo's position */
+    /** Used as a way to alter the servo's position */
     double clawPosition;
 
     @Override
@@ -53,11 +53,11 @@ public class EveryThing extends OpMode {
         double frontRightPower = (y - x - rx) / denominator;
         double backRightPower = (y + x - rx) / denominator;
 
-        lift.setPower(gamepad1.right_trigger - gamepad1.left_trigger);
+        lift.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
 
-        if (gamepad1.a) {
+        if (gamepad2.a) {
             clawPosition += 0.001;
-        } else if (gamepad1.b) {
+        } else if (gamepad2.b) {
             clawPosition -= 0.001;
         }
         claw.setPosition(clawPosition);
