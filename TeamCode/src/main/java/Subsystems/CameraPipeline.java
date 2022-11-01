@@ -1,4 +1,6 @@
 package Subsystems;
+import android.provider.ContactsContract;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.ConceptTensorFlowObjectDetection;
@@ -39,8 +41,18 @@ public class CameraPipeline extends OpenCvPipeline{
     private Rect rect = new Rect(160, 42, 40, 40);
     private Scalar colorVision = new Scalar(0,255,0);
 
+    private double startTime;
+    private int frames;
+    public int FRAMES_PER_SECOND;
+
+    public CameraPipeline(){
+        startTime = System.currentTimeMillis();
+    }
+
     @Override
     public Mat processFrame(Mat input) {
+
+        System.out.println("Matrixes: " + input.empty() + ", " + image.empty());
 
         if(input.empty())
             return null;
@@ -51,7 +63,12 @@ public class CameraPipeline extends OpenCvPipeline{
 
         System.out.println("1 I did this");
 
-        data = detector.detectAndDecode(input, points);
+        //image = input.submat(rect);
+        data = detector.detectAndDecode(image, points);
+
+        colorVision = Core.mean(image);
+
+        Imgproc.rectangle(image, rect, new Scalar(255,0,0));
 
         if (!points.empty()) {
             //prints out qr code data
@@ -70,6 +87,13 @@ public class CameraPipeline extends OpenCvPipeline{
         System.out.println("3 I did this");
 
         System.out.println("4 I did this");
+
+        frames++;
+        if(System.currentTimeMillis() - startTime >= 1000){
+            FRAMES_PER_SECOND = frames;
+            frames = 0;
+            startTime = System.currentTimeMillis();
+        }
 
         if(image.empty())
             return input;
