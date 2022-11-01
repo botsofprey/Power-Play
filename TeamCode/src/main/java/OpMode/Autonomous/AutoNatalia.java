@@ -9,7 +9,7 @@ import DriveEngine.MecanumDrive;
 
 @Autonomous(name="Auto Test", group = "Autonomous")
 public class AutoNatalia extends LinearOpMode {
-    ProgrammingBoard7 board = new ProgrammingBoard7()
+    ProgrammingBoard7 board = new ProgrammingBoard7();
     private MecanumDrive drive;
 
     public void runOpMode() throws InterruptedException {
@@ -19,7 +19,7 @@ public class AutoNatalia extends LinearOpMode {
     public void loop() {
         board.init(hardwareMap);
     }
-    while(opModeIsActive()){
+    while(opModeIsActive(){
         drive.moveCenti(120, MecanumDrive.LEFT);
         drive.moveCenti(480, MecanumDrive.FORWARD);
         //pick up cone
