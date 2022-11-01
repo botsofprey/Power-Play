@@ -6,9 +6,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+/** This is the combination of all of our teleop codes into one */
 @TeleOp()
 public class EveryThing extends OpMode {
+    /** Used so the driver doesn't have to hold the right bumper for slow mode */
     boolean slowModeAlreadyOn = false;
+    /** Used the same as the last, but this time for speed mode*/
     boolean speedModeAlreadyOn = false;
     DcMotor motorFrontRight;
     DcMotor motorBackRight;
@@ -16,6 +19,7 @@ public class EveryThing extends OpMode {
     DcMotor motorFrontLeft;
     DcMotor lift;
     private Servo claw;
+    /** The double is used as a way to alter the servo's position */
     double clawPosition;
 
     @Override
