@@ -83,7 +83,7 @@ public class EveryThing extends OpMode {
             if (slowModeAlreadyOn) {
                 slowModeAlreadyOn = false;
             }
-        } else if ((gamepad1.y) || ((!speedModeAlreadyOn) && (!slowModeAlreadyOn))) {
+        } else {
             motorFrontLeft.setPower(frontLeftPower / 2);
             motorBackLeft.setPower(backLeftPower / 2);
             motorFrontRight.setPower(frontRightPower / 2);
