@@ -63,11 +63,11 @@ public class EncodedEverything extends OpMode {
         double backRightPower = (y + x - rx) / denominator;
 
         if (lift.getCurrentPosition() <= 1650) {
-            lift.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
+            lift.setPower((gamepad2.right_trigger - gamepad2.left_trigger) / 2);
         } else if (lift.getCurrentPosition() >= 0) {
-            lift.setPower(-gamepad2.left_trigger);
+            lift.setPower(gamepad2.right_trigger / 2);
         } else {
-            lift.setPower(gamepad2.right_trigger);
+            lift.setPower(-gamepad2.left_trigger / 2);
         }
 
         if (gamepad2.a) {
