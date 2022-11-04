@@ -20,7 +20,7 @@ public class threeWheelOdometry {
 
     private MecanumDrive meccanumDrive;
 
-    private DcMotor leftVert, /*rightVert,*/ horizontal;
+    private DcMotor leftVert, rightVert, horizontal;
     private int currentLeftPos = 0, currentRightPos = 0, currentAuxPos = 0;
     private int prevLeftPos = 0, prevRightPos = 0, prevAuxPos = 0;
 
@@ -36,15 +36,15 @@ public class threeWheelOdometry {
         meccanumDrive = new MecanumDrive(hardwareMap, op, start.angle);
 
         leftVert = hardwareMap.get(DcMotor.class, "verticalLeft");
-        //rightVert = hardwareMap.get(DcMotor.class, "verticalRight");
+        rightVert = hardwareMap.get(DcMotor.class, "verticalRight");
         horizontal = hardwareMap.get(DcMotor.class, "horizontal");
         //Reset encoders to 0 ticks
         leftVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //rightVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         horizontal.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //When power = 0, brake
         leftVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //rightVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         horizontal.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //Set start point
@@ -67,16 +67,16 @@ public class threeWheelOdometry {
             double cmTraveled = dx1 * CM_PER_TICK;
 
             //Calculate x and y
-            double x = Math.cos(positionLocation.angle) * cmTraveled,
-                    y = Math.sin(positionLocation.angle) * cmTraveled;
+            double x = Math.sin(positionLocation.angle) * cmTraveled,
+                    y = Math.cos(positionLocation.angle) * cmTraveled;
 
             positionLocation.add(x, y, 0);
 
         } else if(dy != 0 && dx1 == dx2 && dx1 == 0){ //Went Side to Side
             double cmTraveled = dy * CM_PER_TICK;
 
-            double x = Math.cos(90 - positionLocation.angle) * cmTraveled,
-                    y = Math.sin(90 - positionLocation.angle) * cmTraveled;
+            double x = Math.sin(90 - positionLocation.angle) * cmTraveled,
+                    y = Math.cos(90 - positionLocation.angle) * cmTraveled;
 
             positionLocation.add(x, y, 0);
 
@@ -125,7 +125,7 @@ public class threeWheelOdometry {
         prevRightPos = currentRightPos;
         prevLeftPos = currentLeftPos;
         prevAuxPos = currentAuxPos;
-        //currentRightPos = rightVert.getCurrentPosition();
+        currentRightPos = rightVert.getCurrentPosition();
         currentLeftPos = leftVert.getCurrentPosition();
         currentAuxPos = horizontal.getCurrentPosition();
 

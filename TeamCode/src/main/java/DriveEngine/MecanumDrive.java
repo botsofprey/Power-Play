@@ -54,8 +54,13 @@ public class MecanumDrive {
     private double globalAngle;
     private double driverAngle;
     private double targetAngle;
+    private boolean rotating;
 
     public final static double TICKS_PER_CENTI = (5281.1 / (9 * Math.PI));
+
+    private int[] startPos = new int[4],
+    endPos = new int[4],
+    distanceTraveled = new int[4];
 
     private double Kt;
     private double R;
@@ -356,10 +361,25 @@ public class MecanumDrive {
         //updateLocation();
         oldRawMove(0, 0, 0);
 
-        if(targetAngle != -1000){
+        if(currentlyMoving){
+            for(DcMotor m : motors){
+
+            }
+        }
+        if(rotating){
+            double angleError = getAngle() - targetAngle;
+            int negate=1;
+            if(angleError / 180 > 1){
+                negate = -1;
+                angleError %= 180;
+            }
+
+			double newPower = negate*(angleError / 360);
+            rotatewithPower(-newPower, newPower);
+
             if(compare(targetAngle, getAngle(), 15)){
                 brake();
-                targetAngle = -1000;
+                rotating = false;
             }
         }
     }
@@ -454,7 +474,7 @@ public class MecanumDrive {
             m.setPower(.5);
         }
 
-        switch (direction){
+        switch (direction) {
             case LEFT:
                 motors[0].setTargetPosition(-motors[0].getTargetPosition());
                 motors[1].setTargetPosition(-motors[0].getTargetPosition());
@@ -470,15 +490,6 @@ public class MecanumDrive {
                 motors[3].setTargetPosition(-motors[0].getTargetPosition());
                 break;
         }
-
-        while(isBusy()){
-            mode.telemetry.addData("Position in Ticks", getPosition());
-            mode.telemetry.addData("Position in Centi", getPosition() / TICKS_PER_CENTI);
-            mode.telemetry.addData("Target", getTarget());
-            mode.telemetry.update();
-        }
-
-        brake();
     }
 
     public double getPower(){
@@ -555,11 +566,14 @@ public class MecanumDrive {
         } else {
             angle = 0;
         }
+
+        angle *= negPos;
         rotateToAngle(angle);
     }
 
     public void rotateToAngle(double angle){
         targetAngle = angle;
+        rotating = true;
         if(targetAngle < getAngle()){
             motors[0].setPower(-1);
             motors[1].setPower(-1);

@@ -38,7 +38,7 @@ public class CameraPipeline extends OpenCvPipeline{
 
     private int parking = -1;
 
-    private Rect rect = new Rect(160, 42, 40, 40);
+    private Rect rect = new Rect(160, 42, 100, 100);
     private Scalar colorVision = new Scalar(0,255,0);
 
     private double startTime;
@@ -59,16 +59,15 @@ public class CameraPipeline extends OpenCvPipeline{
 
         //Core.rotate(input, image, Core.ROTATE_90_COUNTERCLOCKWISE);
         points = new Mat();
-        image = new Mat();
+        image = input;
 
         System.out.println("1 I did this");
 
         //image = input.submat(rect);
-        data = detector.detectAndDecode(image, points);
+        if(detector.detect(image, points))
+            data = detector.decode(image, points);
 
         colorVision = Core.mean(image);
-
-        Imgproc.rectangle(image, rect, new Scalar(255,0,0));
 
         if (!points.empty()) {
             //prints out qr code data
@@ -79,6 +78,18 @@ public class CameraPipeline extends OpenCvPipeline{
                 Point pt1 = new Point(points.get(0, i));
                 Point pt2 = new Point(points.get(0, (i + 1) % 4));
                 Imgproc.line(image, pt1, pt2, new Scalar(255, 0, 0), 3);
+            }
+
+            switch (data) {
+                case "1":
+                    parking = 0;
+                    break;
+                case "2":
+                    parking = 1;
+                    break;
+                case "3":
+                    parking =2;
+                    break;
             }
 
             System.out.println("2 I did this");
@@ -94,6 +105,23 @@ public class CameraPipeline extends OpenCvPipeline{
             frames = 0;
             startTime = System.currentTimeMillis();
         }
+
+        double blueAmount = 0;
+        Rect bluest = null;
+
+        for(int x = 0; x < 16; x++){
+            for(int y = 0; y < 16; y++){
+                Rect r = new Rect(x * 40, y * 30, 40, 30);
+                Mat sub = input.submat(r);
+
+                if(Core.mean(sub).val[0] > blueAmount){
+                    blueAmount = Core.mean(sub).val[0];
+                    bluest = r;
+                }
+            }
+        }
+
+        Imgproc.rectangle(image, rect, new Scalar(0, 0, 255));
 
         if(image.empty())
             return input;
