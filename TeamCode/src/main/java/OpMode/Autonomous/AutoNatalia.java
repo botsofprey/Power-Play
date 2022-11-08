@@ -15,7 +15,9 @@ public class AutoNatalia extends LinearOpMode {
     private MecanumDrive drive;
 
     private Servo servo;
+    private Servo claw;
     private DcMotor motor;
+    private DcMotor liftMotor;
     public void runOpMode() throws InterruptedException {
 
     }
@@ -23,19 +25,23 @@ public class AutoNatalia extends LinearOpMode {
     public void loop() {
         board.init(hardwareMap);
     }
-    while(opModeIsActive(){
-        drive.moveCenti(120, MecanumDrive.LEFT);
-        servo.setPosition(1);
-        drive.moveCenti(480, MecanumDrive.FORWARD);
 
-        //pick up cone
+    {
+        new AutoNatalia();
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        claw.setPosition(0);
+        drive.moveCenti(160, MecanumDrive.RIGHT);
+        drive.moveCenti(60 , MecanumDrive.FORWARD);
+        claw.setPosition(0);
         drive.rotateToAngle(135);
+        claw.setPosition(1);
+
         //repeat if time allows
         servo.setPosition(0);
 
-        motor.setMode();
-
         //no clue how to do the claw or lift
+        //call claw:
+        //call lift:
     }
 
 }
