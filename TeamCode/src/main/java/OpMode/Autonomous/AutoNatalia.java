@@ -28,7 +28,7 @@ public class AutoNatalia extends LinearOpMode {
 
     {
         new AutoNatalia();
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setMode(DcMotor.RunxMode.RUN_TO_POSITION);
         claw.setPosition(0);
         drive.moveCenti(160, MecanumDrive.RIGHT);
         drive.moveCenti(60 , MecanumDrive.FORWARD);
