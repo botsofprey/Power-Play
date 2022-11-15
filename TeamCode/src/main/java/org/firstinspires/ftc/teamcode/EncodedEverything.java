@@ -39,7 +39,7 @@ public class EncodedEverything extends OpMode {
         double frontRightPower = (y - x - rx) / denominator;
         double backRightPower = (y + x - rx) / denominator;
 
-        if (1650 >= board.getLift()) {
+        if (board.getLift() <= 1650) {
             board.setLift((gamepad2.right_trigger - gamepad2.left_trigger) / 2);
         } else if (board.getLift() >= 0) {
             board.setLift(gamepad2.right_trigger / 2);
