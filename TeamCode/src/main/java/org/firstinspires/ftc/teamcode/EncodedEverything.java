@@ -2,15 +2,14 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.teamcode.HardwareMechanisms;
 
 /**
  * This is the combination of all of our TeleOp codes into one
  */
 @TeleOp()
 public class EncodedEverything extends OpMode {
+    HardwareMechanisms board = new HardwareMechanisms();
     /**
      * Used so the driver doesn't have to hold the right bumper for slow mode
      */
@@ -19,12 +18,6 @@ public class EncodedEverything extends OpMode {
      * Used so the driver doesn't have to hold the left bumper for speed mode
      */
     boolean speedModeAlreadyOn = false;
-    DcMotor motorFrontRight;
-    DcMotor motorBackRight;
-    DcMotor motorBackLeft;
-    DcMotor motorFrontLeft;
-    DcMotor lift;
-    private Servo claw;
     /**
      * Used as a way to alter the servo's position
      */
@@ -32,22 +25,7 @@ public class EncodedEverything extends OpMode {
 
     @Override
     public void init() {
-        motorFrontRight = hardwareMap.dcMotor.get("motorFrontRight");
-        motorBackRight = hardwareMap.dcMotor.get("motorBackRight");
-        motorBackLeft = hardwareMap.dcMotor.get("motorBackLeft");
-        motorFrontLeft = hardwareMap.dcMotor.get("motorFrontLeft");
-
-        motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift = hardwareMap.dcMotor.get("lift");
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        claw = hardwareMap.servo.get("claw");
-        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        board.init(hardwareMap);
     }
 
     @Override
@@ -62,12 +40,12 @@ public class EncodedEverything extends OpMode {
         double frontRightPower = (y - x - rx) / denominator;
         double backRightPower = (y + x - rx) / denominator;
 
-        if (lift.getCurrentPosition() <= 1650) {
-            lift.setPower((gamepad2.right_trigger - gamepad2.left_trigger) / 2);
-        } else if (lift.getCurrentPosition() >= 0) {
-            lift.setPower(gamepad2.right_trigger / 2);
+        if (1650 >= board.getLift()) {
+            board.setLift((gamepad2.right_trigger - gamepad2.left_trigger) / 2);
+        } else if (board.getLift() >= 0) {
+            board.setLift(gamepad2.right_trigger / 2);
         } else {
-            lift.setPower(-gamepad2.left_trigger / 2);
+            board.setLift(-gamepad2.left_trigger / 2);
         }
 
         if (gamepad2.a) {
