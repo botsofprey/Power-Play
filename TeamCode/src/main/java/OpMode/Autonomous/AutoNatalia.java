@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.ProgrammingBoard7;
 
+import java.lang.reflect.Member;
+
 import DriveEngine.MecanumDrive;
 
 @Autonomous(name="Auto Test", group = "Autonomous")
@@ -18,17 +20,22 @@ public class AutoNatalia extends LinearOpMode {
     private Servo claw;
     private DcMotor motor;
     private DcMotor liftMotor;
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() throws InterruptedException
+    {}
 
-    }
     @Override
-    public void loop() {
-        board.init(hardwareMap);
+    public void waitForStart() {
+        super.waitForStart();
     }
+
+    //void loop() {
+    //    board.init(hardwareMap);
+    //}
 
     {
         new AutoNatalia();
-        liftMotor.setMode(DcMotor.RunxMode.RUN_TO_POSITION);
+                    /*
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         claw.setPosition(0);
         drive.moveCenti(160, MecanumDrive.RIGHT);
         drive.moveCenti(60 , MecanumDrive.FORWARD);
@@ -42,6 +49,29 @@ public class AutoNatalia extends LinearOpMode {
         //no clue how to do the claw or lift
         //call claw:
         //call lift:
+                    */
+
+        //starting over
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        claw.setPosition(1);
+        drive.moveCenti(210,MecanumDrive.RIGHT);
+        drive.moveCenti(90, MecanumDrive.FORWARD);
+        drive.rotateToAngle(-90);
+        drive.moveCenti(60,MecanumDrive.FORWARD);
+        drive.rotateToAngle(45);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        claw.setPosition(0);
+        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        drive.rotateToAngle(-45);
+        drive.moveCenti(60, MecanumDrive.BACKWARD);
+        drive.rotateToAngle(90);
+        drive.moveCenti(90, MecanumDrive.BACKWARD);
+        drive.brake();
+
+        //another one
+        //figure out true north
+        private void moveTrueNorth(double x, double y, double h) {
+
     }
 
 }
