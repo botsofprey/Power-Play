@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.HardwareMechanisms;
 
 /**
  * This is the combination of all of our TeleOp codes into one
@@ -53,34 +52,34 @@ public class EncodedEverything extends OpMode {
         } else if (gamepad2.b) {
             clawPosition -= 0.001;
         }
-        claw.setPosition(clawPosition);
+        board.setClaw(clawPosition);
 
 
         if (((gamepad1.right_bumper) || (slowModeAlreadyOn)) && (!gamepad1.left_bumper) && (!gamepad1.y)) {
-            motorFrontLeft.setPower(frontLeftPower / 4);
-            motorBackLeft.setPower(backLeftPower / 4);
-            motorFrontRight.setPower(frontRightPower / 4);
-            motorBackRight.setPower(backRightPower / 4);
+            board.motorFrontLeft.setPower(frontLeftPower / 4);
+            board.motorBackLeft.setPower(backLeftPower / 4);
+            board.motorFrontRight.setPower(frontRightPower / 4);
+            board.motorBackRight.setPower(backRightPower / 4);
             telemetry.addData("Mode", "Slow");
             slowModeAlreadyOn = true;
             if (speedModeAlreadyOn) {
                 speedModeAlreadyOn = false;
             }
         } else if (((gamepad1.left_bumper) || (speedModeAlreadyOn)) && (!gamepad1.y)) {
-            motorFrontLeft.setPower(frontLeftPower);
-            motorBackLeft.setPower(backLeftPower);
-            motorFrontRight.setPower(frontRightPower);
-            motorBackRight.setPower(backRightPower);
+            board.motorFrontLeft.setPower(frontLeftPower);
+            board.motorBackLeft.setPower(backLeftPower);
+            board.motorFrontRight.setPower(frontRightPower);
+            board.motorBackRight.setPower(backRightPower);
             telemetry.addData("Mode", "Speed");
             speedModeAlreadyOn = true;
             if (slowModeAlreadyOn) {
                 slowModeAlreadyOn = false;
             }
         } else {
-            motorFrontLeft.setPower(frontLeftPower / 2);
-            motorBackLeft.setPower(backLeftPower / 2);
-            motorFrontRight.setPower(frontRightPower / 2);
-            motorBackRight.setPower(backRightPower / 2);
+            board.motorFrontLeft.setPower(frontLeftPower / 2);
+            board.motorBackLeft.setPower(backLeftPower / 2);
+            board.motorFrontRight.setPower(frontRightPower / 2);
+            board.motorBackRight.setPower(backRightPower / 2);
             telemetry.addData("Mode", "Normal");
             if (slowModeAlreadyOn) {
                 slowModeAlreadyOn = false;

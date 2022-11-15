@@ -32,11 +32,19 @@ public class HardwareMechanisms {
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public DcMotor getLift() {
-        return lift;
+    public double getLift() {
+        return lift.getCurrentPosition();
     }
 
     public void setLift(double liftSpeed) {
         lift.setPower(liftSpeed);
+    }
+
+    public Servo getClaw() {
+        return claw;
+    }
+
+    public void setClaw(double clawPosit) {
+        claw.setPosition(clawPosit);
     }
 }
