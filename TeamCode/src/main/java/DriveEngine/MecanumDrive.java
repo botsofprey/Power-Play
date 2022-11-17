@@ -231,24 +231,6 @@ public class MecanumDrive {
         }
     }
 
-    private void moveTrueNorth(double x, double y, double h) {
-       // moveTrueNorth(x, y, h, 1.0);
-    }
-   /* private void moveTrueNorth(double x, double y, double h, double speed) {
-        Matrix vec = new Matrix(new double[][]{ { x }, { y } });
-        double heading = -Math.toRadians(odometry.getAngle());
-        double sin = Math.sin(heading);
-        double cos = Math.cos(heading);
-        Matrix rotation = new Matrix(new double[][]{
-                { cos, sin },
-                { -sin,  cos }
-        });
-        double[] result = rotation.mul(vec).transpose().getData()[0];
-        oldRawMove(result[0], result[1], h, speed);
-
-
-    }*/
-
     public void moveToLocation(double x, double y, double h) {
         moveToLocation(new Location(x, y, h));
     }
@@ -257,19 +239,6 @@ public class MecanumDrive {
        // moveToLocation(targetLocation.getAsOldLocation());
 
     }
-
-    /*
-    @Deprecated
-    public void moveToLocation(OldLocationClass targetLocation) {
-        moveToLocation(targetLocation, 1);
-    }
-
-    public void moveToLocation(Location targetLocation, double speed) {
-        moveToLocation(targetLocation.getAsOldLocation(), speed);
-    }
-
-
-     */
 
     /**
      * This function implements the underlying movement logic for the drive base.
@@ -384,62 +353,24 @@ public class MecanumDrive {
         }
     }
 
-    /*
-    public Location getCurrentLocation() { return new Location(currentLocation); }
+    public void moveTrueNorth(double forward, double right, double rotate){
+       Orientation curOrient =
+               imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
 
-    public void setCurrentLocation(OldLocationClass location) {
-        localizer.setCurrentLocation(location);
-    }
-    public void setCurrentLocation(Location location) {
-        localizer.setCurrentLocation(location.getAsOldLocation());
-    }
+       double theta = Math.atan2(forward, right);
+       double r = Math.hypot(forward, right);
 
+       theta = AngleUnit.normalizeRadians(theta-curOrient.firstAngle);
 
+       double newForward = r * Math.sin(theta);
+       double newRight = r * Math.cos(theta);
 
-     */
-
-    public void moveTrueNorth(double fl, double bl, double br, double fr, double joystickAngle){
-       double curAngle = getAngle(),
-       angleDiff = curAngle - joystickAngle;
-
-       double newPower;
-
-       
-
-       if(angleDiff == 0){
-           //do nothing
-
-       }else if(angleDiff <= 45 && angleDiff >= -45){
-            newPower = Range.clip(1 - (angleDiff/45), -1, 1);
-
-            fl *= angleDiff > 0 ? newPower : 1;
-            fr *= angleDiff < 0 ? newPower : 1;
-            br *= angleDiff < 0 ? newPower : 1;
-            bl *= angleDiff > 0 ? newPower : 1;
-       }else if(angleDiff <= 90 && angleDiff >= -90){
-            newPower = -Range.clip(0 - (angleDiff % 45 /45), -1, 1);
-
-           fl *= angleDiff > 0 ? newPower : 1;
-           fr *= angleDiff < 0 ? newPower : 1;
-           br *= angleDiff < 0 ? newPower : 1;
-           bl *= angleDiff > 0 ? newPower : 1;
-       }else if(angleDiff <= 135 && angleDiff >= 135){
-            newPower = Range.clip(1 - (angleDiff % 45 / 45), -1, 1);
-
-           fl *= angleDiff < 0 ? newPower : -1;
-           fr *= angleDiff > 0 ? newPower : -1;
-           br *= angleDiff > 0 ? newPower : -1;
-           bl *= angleDiff < 0 ? newPower : -1;
-       }else if(angleDiff <= 180 && angleDiff >= 180 ) {
-           newPower =  Range.clip(0 - (angleDiff % 45 / 45), -1, 1);
-
-           fl *= angleDiff < 0 ? newPower : -1;
-           fr *= angleDiff > 0 ? newPower : -1;
-           br *= angleDiff > 0 ? newPower : -1;
-           bl *= angleDiff < 0 ? newPower : -1;
-       }
-
-       moveWithPower(fl, bl, br, fr);
+       moveWithPower(
+                newForward + newRight + rotate,
+                newForward - newRight + rotate,
+               newForward + newRight - rotate,
+               newForward - newRight - rotate
+       );
     }
 
     public void moveWithPower(double fl, double bl, double br, double fr){

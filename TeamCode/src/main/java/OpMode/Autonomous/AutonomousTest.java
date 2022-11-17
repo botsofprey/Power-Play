@@ -2,6 +2,11 @@ package OpMode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.robotcore.internal.network.ApChannel;
+import org.firstinspires.ftc.robotcore.internal.network.ControlHubApChannelManager;
+import org.firstinspires.ftc.robotcore.internal.network.InvalidNetworkSettingException;
 
 import DriveEngine.MecanumDrive;
 import Subsystems.CameraPipeline;
@@ -13,58 +18,54 @@ import UtilityClasses.Location;
 public class AutonomousTest extends LinearOpMode {
 
     private MecanumDrive drive;
-    //private threeWheelOdometry odometry;
+    private threeWheelOdometry odometry;
+
+    private Location[] parkingLocations = {
+            new Location(60, 60), //parking spot 1
+            new Location(0, 60), //2
+            new Location(-60, 60), //3
+            new Location(-75, 0) //terminal, when qr code is not found
+    };
 
     @Override
     public void runOpMode() throws InterruptedException {
         CameraPipeline cameraPipeline = new CameraPipeline();
         Camera camera = new Camera(hardwareMap, cameraPipeline);
 
-        //drive = new MecanumDrive(hardwareMap, this, -90);
-        //odometry = new threeWheelOdometry(hardwareMap, new Location(0,0), this);
-
-        double startTime = System.currentTimeMillis();
-        int frames=0, fps=0;
+        drive = new MecanumDrive(hardwareMap, this, -90);
+        odometry = new threeWheelOdometry(hardwareMap, new Location(0,0), this);
 
         while (!isStarted() && !isStopRequested()) {
-            telemetry.addData("QR Code", cameraPipeline.getParking());
-            telemetry.addData("QR Code Link", cameraPipeline.getLink());
-            telemetry.addData("Color Seen", cameraPipeline.getColor());
-            telemetry.addData("FPS Camera", cameraPipeline.FRAMES_PER_SECOND);
-
-            frames++;
-            if(System.currentTimeMillis()-startTime >= 1000){
-                fps = frames;
-                frames = 0;
-                startTime = System.currentTimeMillis();
-            }
-            telemetry.addData("Frames Tele", fps);
-
+            telemetry.addData("QR Code Found", cameraPipeline.getParking() != 3);
+            if(cameraPipeline.getParking() != 3)
+                telemetry.addData("Parking Spot", cameraPipeline.getParking()+1);
+            odometry.update();
+            telemetry.addData("left", odometry.getCurrentLeftPos());
+            telemetry.addData("right", odometry.getCurrentRightPos());
+            telemetry.addData("aux", odometry.getCurrentAuxPos());
+            telemetry.addData("Position", odometry.getLocation());
             telemetry.update();
         }
         camera.stop();
 
 
-        while(opModeIsActive()){
-            /*int parking = cameraPipeline.getParking();
+        int parking = cameraPipeline.getParking();
+        odometry.setTargetPoint(parkingLocations[parking]);
+        while(opModeIsActive() && !odometry.atTarget()){
+            odometry.update();
+            drive.update();
 
-            drive.moveWithPower(.5);
-            sleep(2500);
+            telemetry.addData("Position", odometry.getLocation());
+            telemetry.update();
+        }
 
-            if(parking == 0){
-                drive.moveWithPower(-.5, .5, -.5, .5);
-                sleep(2500);
-            }else if(parking == 1){
+        sleep(5000);
 
-            }else if(parking == 2){
-                drive.moveWithPower(.5, -.5, .5, -.5);
-                sleep(2500);
-            }
+        while (opModeIsActive()){
+            odometry.update();
 
-            telemetry.update();*/
-
-            drive.moveCenti(15, MecanumDrive.FORWARD);
-            sleep(5000);
+            telemetry.addData("Position", odometry.getLocation());
+            telemetry.update();
         }
     }
 }

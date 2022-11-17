@@ -36,7 +36,7 @@ public class CameraPipeline extends OpenCvPipeline{
 
     public volatile String data;
 
-    private int parking = -1;
+    private int parking = 3;
 
     private Rect rect = new Rect(160, 42, 100, 100);
     private Scalar colorVision = new Scalar(0,255,0);
@@ -67,8 +67,6 @@ public class CameraPipeline extends OpenCvPipeline{
         if(detector.detect(image, points))
             data = detector.decode(image, points);
 
-        colorVision = Core.mean(image);
-
         if (!points.empty()) {
             //prints out qr code data
             System.out.println("Decoded data: " + data);
@@ -95,54 +93,10 @@ public class CameraPipeline extends OpenCvPipeline{
             System.out.println("2 I did this");
         }
 
-        System.out.println("3 I did this");
-
-        System.out.println("4 I did this");
-
-        frames++;
-        if(System.currentTimeMillis() - startTime >= 1000){
-            FRAMES_PER_SECOND = frames;
-            frames = 0;
-            startTime = System.currentTimeMillis();
-        }
-
-        double blueAmount = 0;
-        Rect bluest = null;
-
-        for(int x = 0; x < 16; x++){
-            for(int y = 0; y < 16; y++){
-                Rect r = new Rect(x * 40, y * 30, 40, 30);
-                Mat sub = input.submat(r);
-
-                if(Core.mean(sub).val[0] > blueAmount){
-                    blueAmount = Core.mean(sub).val[0];
-                    bluest = r;
-                }
-            }
-        }
-
-        Imgproc.rectangle(image, rect, new Scalar(0, 0, 255));
-
         if(image.empty())
             return input;
 
         return image;
-    }
-
-    private Mat findCone(Mat input){
-        //Filter out everything that isn't red
-        Scalar minRed = new Scalar(255, 0, 0), maxRed = new Scalar(255, 115, 115);
-        Core.inRange(input, minRed, maxRed, input);
-
-        //Filter out noise
-        Mat hierarchy = new Mat();
-        List<MatOfPoint> matPoints = new ArrayList<>();
-        Imgproc.findContours(input, matPoints, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-
-       Imgproc.drawContours(input, matPoints, -1, new Scalar(0, 255,0), 2);
-
-       return input;
-       
     }
 
     public String getLink(){
@@ -152,9 +106,6 @@ public class CameraPipeline extends OpenCvPipeline{
         return parking;
     }
 
-    public String getColor(){
-        return colorVision.val[0] + ", " +colorVision.val[1] + ", " + colorVision.val[2];
-    }
 }
 
 

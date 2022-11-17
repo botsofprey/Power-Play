@@ -58,10 +58,15 @@ public class MecanumTele extends LinearOpMode {
            controller1.update();
            controller2.update();
 
-           //Check that override can be stopped
-            if(drive.getPower() == 0){
+            //Check that override can be stopped
+            if(drive.getPower() == 0) {
                 overrideDrivers = false;
             }
+
+           if(controller1.upPressed){
+               odometry.moveToOpenSpace(0,0,0, true);
+               overrideDrivers = true;
+           }
 
             if(controller1.leftPressed || controller2.leftPressed){
                 drive.next90degrees(-1);
@@ -80,13 +85,7 @@ public class MecanumTele extends LinearOpMode {
                 Vector2D leftInput = controller1.leftStick,
                          rightInput = controller1.rightStick;
 
-                drive.moveWithPower(
-                        leftInput.y + leftInput.x + rightInput.x,
-                        leftInput.y - leftInput.x + rightInput.x,
-                        leftInput.y + leftInput.x - rightInput.x,
-                        leftInput.y - leftInput.x - rightInput.x
-                        );
-                telemetry.addData("left Angle", leftInput.angle);
+                drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
             }
 
           //  odometry.update();
