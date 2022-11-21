@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 /**
  * This is the combination of all of our TeleOp codes into one
  */
+
 @TeleOp()
 public class EncodedEverything extends OpMode {
 
