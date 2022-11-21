@@ -8,18 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  */
 @TeleOp()
 public class EncodedEverything extends OpMode {
+
     HardwareMechanisms board = new HardwareMechanisms();
-    /**
-     * Used so the driver doesn't have to hold the right bumper for slow mode
-     */
-    boolean slowModeAlreadyOn = false;
-    /**
-     * Used so the driver doesn't have to hold the left bumper for speed mode
-     */
-    boolean speedModeAlreadyOn = false;
-    /**
-     * Used as a way to alter the servo's position
-     */
     double clawPosition;
 
     @Override
@@ -55,38 +45,24 @@ public class EncodedEverything extends OpMode {
         board.setClaw(clawPosition);
 
 
-        if (((gamepad1.right_bumper) || (slowModeAlreadyOn)) && (!gamepad1.left_bumper) && (!gamepad1.y)) {
+        if (gamepad1.right_bumper) {
             board.motorFrontLeft.setPower(frontLeftPower / 4);
             board.motorBackLeft.setPower(backLeftPower / 4);
             board.motorFrontRight.setPower(frontRightPower / 4);
             board.motorBackRight.setPower(backRightPower / 4);
             telemetry.addData("Mode", "Slow");
-            slowModeAlreadyOn = true;
-            if (speedModeAlreadyOn) {
-                speedModeAlreadyOn = false;
-            }
-        } else if (((gamepad1.left_bumper) || (speedModeAlreadyOn)) && (!gamepad1.y)) {
+        } else if (gamepad1.left_bumper) {
             board.motorFrontLeft.setPower(frontLeftPower);
             board.motorBackLeft.setPower(backLeftPower);
             board.motorFrontRight.setPower(frontRightPower);
             board.motorBackRight.setPower(backRightPower);
             telemetry.addData("Mode", "Speed");
-            speedModeAlreadyOn = true;
-            if (slowModeAlreadyOn) {
-                slowModeAlreadyOn = false;
-            }
         } else {
             board.motorFrontLeft.setPower(frontLeftPower / 2);
             board.motorBackLeft.setPower(backLeftPower / 2);
             board.motorFrontRight.setPower(frontRightPower / 2);
             board.motorBackRight.setPower(backRightPower / 2);
             telemetry.addData("Mode", "Normal");
-            if (slowModeAlreadyOn) {
-                slowModeAlreadyOn = false;
-            }
-            if (speedModeAlreadyOn) {
-                speedModeAlreadyOn = false;
-            }
         }
     }
 }
