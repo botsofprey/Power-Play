@@ -18,6 +18,8 @@ public class HardwareMechanisms {
         motorBackRight = hwMap.dcMotor.get("motorBackRight");
         motorBackLeft = hwMap.dcMotor.get("motorBackLeft");
         motorFrontLeft = hwMap.dcMotor.get("motorFrontLeft");
+        lift = hwMap.dcMotor.get("lift");
+        claw = hwMap.servo.get("claw");
 
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -26,9 +28,8 @@ public class HardwareMechanisms {
         motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift = hwMap.dcMotor.get("lift");
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        claw = hwMap.servo.get("claw");
+
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
