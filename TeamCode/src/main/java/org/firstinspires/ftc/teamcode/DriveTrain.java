@@ -43,7 +43,7 @@ public class DriveTrain extends OpMode {
         double backRightPower = (y + x - rx) / denominator;
 
 
-        if (((gamepad1.right_bumper) || (slowModeAlreadyOn)) && (!gamepad1.left_bumper) && (!gamepad1.y)) {
+        if (gamepad1.right_bumper) {
             motorFrontLeft.setPower(frontLeftPower / 4);
             motorBackLeft.setPower(backLeftPower / 4);
             motorFrontRight.setPower(frontRightPower / 4);
@@ -53,7 +53,7 @@ public class DriveTrain extends OpMode {
             if (speedModeAlreadyOn) {
                 speedModeAlreadyOn = false;
             }
-        } else if (((gamepad1.left_bumper) || (speedModeAlreadyOn)) && (!gamepad1.y)) {
+        } else if (gamepad1.left_bumper) {
             motorFrontLeft.setPower(frontLeftPower);
             motorBackLeft.setPower(backLeftPower);
             motorFrontRight.setPower(frontRightPower);
@@ -63,7 +63,7 @@ public class DriveTrain extends OpMode {
             if (slowModeAlreadyOn) {
                 slowModeAlreadyOn = false;
             }
-        } else if ((gamepad1.y) || ((!speedModeAlreadyOn) && (!slowModeAlreadyOn))) {
+        } else {
             motorFrontLeft.setPower(frontLeftPower / 2);
             motorBackLeft.setPower(backLeftPower / 2);
             motorFrontRight.setPower(frontRightPower / 2);

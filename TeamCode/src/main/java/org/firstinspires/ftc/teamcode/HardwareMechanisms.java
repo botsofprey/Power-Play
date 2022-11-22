@@ -53,6 +53,7 @@ public class HardwareMechanisms {
         tests.add(new TestMotor("FrontLeft", 0.5, motorFrontLeft));
         tests.add(new TestMotor("BackRight", 0.5, motorBackRight));
         tests.add(new TestMotor("BackLeft", 0.5, motorBackLeft));
+        tests.add(new TestMotor("Lift",0.5, lift));
         tests.add(new TestServo("Claw", claw, 0.0, 1.0));
         return tests;
     }
