@@ -1,0 +1,14 @@
+{
+  "frontLeftDriveMotorName": "flMotor",
+  "frontRightDriveMotorName": "frMotor",
+  "backRightDriveMotorName": "brMotor",
+  "backLeftDriveMotorName": "blMotor",
+  "frontLeftDriveMotorDirection": "reverse",
+  "frontRightDriveMotorDirection": "forward",
+  "backRightDriveMotorDirection": "forward",
+  "backLeftDriveMotorDirection": "reverse",
+  "driveMotorFile": "DriveMotor.json",
+  "trackWidth": 10.75,
+  "trackLength": 11.25,
+  "maxDriveTorque": 1.824
+}
