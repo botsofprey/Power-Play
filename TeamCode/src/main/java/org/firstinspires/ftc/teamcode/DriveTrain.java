@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp
 public class DriveTrain extends OpMode {
-    boolean slowModeAlreadyOn = false;
-    boolean speedModeAlreadyOn = false;
     DcMotor motorFrontRight;
     DcMotor motorBackRight;
     DcMotor motorBackLeft;
@@ -49,32 +47,19 @@ public class DriveTrain extends OpMode {
             motorFrontRight.setPower(frontRightPower / 4);
             motorBackRight.setPower(backRightPower / 4);
             telemetry.addData("Mode", "Slow");
-            slowModeAlreadyOn = true;
-            if (speedModeAlreadyOn) {
-                speedModeAlreadyOn = false;
-            }
+
         } else if (gamepad1.left_bumper) {
             motorFrontLeft.setPower(frontLeftPower);
             motorBackLeft.setPower(backLeftPower);
             motorFrontRight.setPower(frontRightPower);
             motorBackRight.setPower(backRightPower);
             telemetry.addData("Mode", "Speed");
-            speedModeAlreadyOn = true;
-            if (slowModeAlreadyOn) {
-                slowModeAlreadyOn = false;
-            }
         } else {
             motorFrontLeft.setPower(frontLeftPower / 2);
             motorBackLeft.setPower(backLeftPower / 2);
             motorFrontRight.setPower(frontRightPower / 2);
             motorBackRight.setPower(backRightPower / 2);
             telemetry.addData("Mode", "Normal");
-            if (slowModeAlreadyOn) {
-                slowModeAlreadyOn = false;
-            }
-            if (speedModeAlreadyOn) {
-                speedModeAlreadyOn = false;
-            }
         }
     }
 }
