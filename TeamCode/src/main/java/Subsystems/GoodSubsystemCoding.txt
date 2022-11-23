@@ -1,0 +1,23 @@
+You should create one subsystem class per system on the robot.
+Each subsystem class should have an update method in it.
+Assume that the update method will be called once per frame.
+In a tele-op class, all subsystems should have their update methods called at the end of the frame.
+In an autonomous class, a subsystem's update method should be called if the subsystem is expecting
+it to be called. It does not necessarily have to be called continuously. Use discretion.
+The update method should call the update methods of all objects in the subsystem that need update
+called, such as motors with automatic limit switches.
+The other methods in the subsystem should not hold up code execution. ex: no calls to mode.sleep
+If a method needs to affect the robot after the method is initially called, it should update a
+variable in the subsystem that tells the update method to handle the later behavior.
+ex:
+When the drop freight button is pressed, the subsystem records the time the button was pressed, and
+sets the freightDropped variable to true.
+If the update method sees that the freightDropped variable is true, it checks if more time has
+passed than is given for the process of dropping freight.
+If more time has passed, the method sets the dropped time to the current time and turns on a flag
+telling the update method to reset the servo at the right time. It then sets the freightDropped
+variable to false. A later part of the update method follows a similar process.
+If not enough time has passed, the method linearly interpolates between the start and stop time to
+get the position the servo should be at. It then sets the servo to this position, so that the servo
+will move slower than it normally would.
+See the update method of Delilah's Lift class for the code in this example.
