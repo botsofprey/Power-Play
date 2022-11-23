@@ -2,10 +2,10 @@ package DriveEngine.RoadRunner.trajectorysequence;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
-import DriveEngine.RoadRunner.trajectorysequence.sequencesegment.SequenceSegment;
-
 import java.util.Collections;
 import java.util.List;
+
+import DriveEngine.RoadRunner.trajectorysequence.sequencesegment.SequenceSegment;
 
 public class TrajectorySequence {
     private final List<SequenceSegment> sequenceList;
