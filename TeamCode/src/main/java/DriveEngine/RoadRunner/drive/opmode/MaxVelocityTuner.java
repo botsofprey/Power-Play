@@ -10,10 +10,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.Objects;
-
 import DriveEngine.RoadRunner.drive.DriveConstants;
 import DriveEngine.RoadRunner.drive.SampleMecanumDrive;
+
+import java.util.Objects;
 
 /**
  * This routine is designed to calculate the maximum velocity your bot can achieve under load. It
@@ -26,7 +26,7 @@ import DriveEngine.RoadRunner.drive.SampleMecanumDrive;
 @Config
 @Autonomous(group = "drive")
 public class MaxVelocityTuner extends LinearOpMode {
-    public static double RUNTIME = 1.5;
+    public static double RUNTIME = 2.0;
 
     private ElapsedTime timer;
     private double maxVelocity = 0.0;

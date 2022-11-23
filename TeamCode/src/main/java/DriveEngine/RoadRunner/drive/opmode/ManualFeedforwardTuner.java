@@ -13,6 +13,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import DriveEngine.RoadRunner.drive.SampleMecanumDrive;
+
 import java.util.Objects;
 
 import static DriveEngine.RoadRunner.drive.DriveConstants.MAX_ACCEL;
@@ -21,8 +23,6 @@ import static DriveEngine.RoadRunner.drive.DriveConstants.RUN_USING_ENCODER;
 import static DriveEngine.RoadRunner.drive.DriveConstants.kA;
 import static DriveEngine.RoadRunner.drive.DriveConstants.kStatic;
 import static DriveEngine.RoadRunner.drive.DriveConstants.kV;
-
-import DriveEngine.RoadRunner.drive.SampleMecanumDrive;
 
 /*
  * This routine is designed to tune the open-loop feedforward coefficients. Although it may seem unnecessary,

@@ -16,16 +16,16 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker;
 import com.acmerobotics.roadrunner.util.NanoClock;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
 import DriveEngine.RoadRunner.trajectorysequence.sequencesegment.SequenceSegment;
 import DriveEngine.RoadRunner.trajectorysequence.sequencesegment.TrajectorySegment;
 import DriveEngine.RoadRunner.trajectorysequence.sequencesegment.TurnSegment;
 import DriveEngine.RoadRunner.trajectorysequence.sequencesegment.WaitSegment;
 import DriveEngine.RoadRunner.util.DashboardUtil;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 @Config
 public class TrajectorySequenceRunner {

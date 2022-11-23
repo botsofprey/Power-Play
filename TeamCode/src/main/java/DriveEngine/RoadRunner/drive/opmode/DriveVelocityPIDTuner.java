@@ -13,6 +13,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import DriveEngine.RoadRunner.drive.SampleMecanumDrive;
+
 import java.util.List;
 
 import static DriveEngine.RoadRunner.drive.DriveConstants.MAX_ACCEL;
@@ -20,8 +22,6 @@ import static DriveEngine.RoadRunner.drive.DriveConstants.MAX_VEL;
 import static DriveEngine.RoadRunner.drive.DriveConstants.MOTOR_VELO_PID;
 import static DriveEngine.RoadRunner.drive.DriveConstants.RUN_USING_ENCODER;
 import static DriveEngine.RoadRunner.drive.DriveConstants.kV;
-
-import DriveEngine.RoadRunner.drive.SampleMecanumDrive;
 
 /*
  * This routine is designed to tune the PID coefficients used by the REV Expansion Hubs for closed-

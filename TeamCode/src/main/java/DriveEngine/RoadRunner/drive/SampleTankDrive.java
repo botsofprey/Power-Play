@@ -26,6 +26,11 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
+import DriveEngine.RoadRunner.trajectorysequence.TrajectorySequence;
+import DriveEngine.RoadRunner.trajectorysequence.TrajectorySequenceBuilder;
+import DriveEngine.RoadRunner.trajectorysequence.TrajectorySequenceRunner;
+import DriveEngine.RoadRunner.util.LynxModuleUtil;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,11 +45,6 @@ import static DriveEngine.RoadRunner.drive.DriveConstants.encoderTicksToInches;
 import static DriveEngine.RoadRunner.drive.DriveConstants.kA;
 import static DriveEngine.RoadRunner.drive.DriveConstants.kStatic;
 import static DriveEngine.RoadRunner.drive.DriveConstants.kV;
-
-import DriveEngine.RoadRunner.trajectorysequence.TrajectorySequence;
-import DriveEngine.RoadRunner.trajectorysequence.TrajectorySequenceBuilder;
-import DriveEngine.RoadRunner.trajectorysequence.TrajectorySequenceRunner;
-import DriveEngine.RoadRunner.util.LynxModuleUtil;
 
 /*
  * Simple tank drive hardware implementation for REV hardware.
