@@ -1,6 +1,5 @@
 package UtilityClasses.HardwareWrappers;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -8,14 +7,28 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.Objects;
 
+/**
+ * This class is a wrapper for a motor.
+ * It provides easy initialization and automatic limit switch handling.
+ * Built in limit switch handling is optional.
+ * If you do not have any limit switches being handled by this class,
+ * you do not need to call the update function.
+ * If you do give this class limit switches to handle, you must call the update function
+ * every frame or otherwise call the update function a few times per second.
+ * If the class detects an activated limit switch and it is moving in the direction
+ * of the limit switch, it will automatically set the motor's power to zero to protect the robot.
+ * Make sure the limit switch is set to the correct start/end variable.
+ * If it is set to the wrong one, the class will not work and the motor will not function properly.
+ * The automatic limit switch functionality of this class has not been
+ * extensively tested, and may need some debugging before it works.
+ * Feel free to add methods to this class as needed.
+ *
+ * @author Alex Prichard
+ */
 public class MotorController {
 	private DcMotorEx motor;
 	private LimitSwitch start = null;
 	private LimitSwitch end = null;
-
-	public MotorController(HardwareMap hw, String motorName, LinearOpMode m, boolean errors) {
-		motor = hw.get(DcMotorEx.class, motorName);
-	}
 
 	public MotorController(HardwareMap hw, String motorName) {
 		motor = hw.get(DcMotorEx.class, motorName);
@@ -100,6 +113,10 @@ public class MotorController {
 		if (end != null && !end.getState() && getPower() > 0) {
 			motor.setPower(0);
 		}
+	}
+
+	protected DcMotorEx getMotor() {
+		return motor;
 	}
 
 
