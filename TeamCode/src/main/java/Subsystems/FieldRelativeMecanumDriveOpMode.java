@@ -40,7 +40,11 @@ public class FieldRelativeMecanumDriveOpMode extends OpMode {
         double forward = -gamepad1.left_stick_y;
         double right = gamepad1.left_stick_x;
         double rotate = gamepad1.right_stick_x;
-
+        telemetry.addData("rotate", rotate);
+        telemetry.addData("forward", forward);
+        telemetry.addData("right", right);
         driveFieldRelative(forward, right, rotate);
+
+        telemetry.update();
     }
 }
