@@ -44,7 +44,6 @@ public class FieldRelativeMecanumDriveOpMode extends OpMode {
         telemetry.addData("forward", forward);
         telemetry.addData("right", right);
         driveFieldRelative(forward, right, rotate);
-
         telemetry.update();
     }
 }

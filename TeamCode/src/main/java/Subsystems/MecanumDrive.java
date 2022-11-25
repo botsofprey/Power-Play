@@ -19,15 +19,15 @@ public class MecanumDrive {
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     private void setPowers(double frontLeftPower, double frontRightPower, double
             backLeftPower, double backRightPower) {
-        double maxSpeed = 0.25;
+        double maxSpeed = 1.0;
         maxSpeed = Math.max(maxSpeed, Math.abs(frontLeftPower));
         maxSpeed = Math.max(maxSpeed, Math.abs(frontRightPower));
         maxSpeed = Math.max(maxSpeed, Math.abs(backLeftPower));
@@ -38,10 +38,10 @@ public class MecanumDrive {
         backRightPower /= maxSpeed;
         backLeftPower /= maxSpeed;
 
-        frontLeftMotor.setPower(frontLeftPower);
-        frontRightMotor.setPower(frontRightPower);
-        backLeftMotor.setPower(backLeftPower);
-        backRightMotor.setPower((backRightPower));
+        frontLeftMotor.setPower(frontLeftPower/5);
+        frontRightMotor.setPower(frontRightPower/5);
+        backLeftMotor.setPower(backLeftPower/5);
+        backRightMotor.setPower((backRightPower/5));
     }
 
     public void drive(double forward, double right, double rotate) {
