@@ -24,9 +24,10 @@ public class MecanumDrive {
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    private void setPowers(double frontLeftPower, double frontRightPower,double
+
+    private void setPowers(double frontLeftPower, double frontRightPower, double
             backLeftPower, double backRightPower) {
-        double maxSpeed = 1.0;
+        double maxSpeed = 0.5;
         maxSpeed = Math.max(maxSpeed, Math.abs(frontLeftPower));
         maxSpeed = Math.max(maxSpeed, Math.abs(frontRightPower));
         maxSpeed = Math.max(maxSpeed, Math.abs(backLeftPower));
@@ -42,15 +43,12 @@ public class MecanumDrive {
         backLeftMotor.setPower(backLeftPower);
         backRightMotor.setPower((backRightPower));
     }
-        /*public void drive(double forward, double right, double rotate) {
-            double frontLeftPower = forward + right + rotate;
-            double frontRightPower = forward - right - rotate;
-            double backRightPower = forward + right - rotate;
-            double backLeftPower = forward - right + rotate;
-        setPowers(frontLeftPower, frontRightPower, backRightPower, backLeftPower);
-        }
-    }*/
 
     public void drive(double forward, double right, double rotate) {
+        double frontLeftPower = forward + right + rotate;
+        double frontRightPower = forward - right - rotate;
+        double backRightPower = forward + right - rotate;
+        double backLeftPower = forward - right + rotate;
+        setPowers(frontLeftPower, frontRightPower, backRightPower, backLeftPower);
     }
 }
