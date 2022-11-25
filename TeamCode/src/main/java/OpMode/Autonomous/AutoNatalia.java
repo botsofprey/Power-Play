@@ -11,7 +11,7 @@ import java.lang.reflect.Member;
 
 import DriveEngine.MecanumDrive;
 
-@Autonomous(name="Auto Test", group = "Autonomous")
+@Autonomous(name="Auto2 Test", group = "Autonomous")
 public class AutoNatalia extends LinearOpMode {
     ProgrammingBoard7 board = new ProgrammingBoard7();
     private MecanumDrive drive;
@@ -70,7 +70,7 @@ public class AutoNatalia extends LinearOpMode {
 
         //another one
         //figure out true north
-        private void moveTrueNorth(double x, double y, double h) {
+        //private void moveTrueNorth(double x, double y, double h) {
 
     }
 
