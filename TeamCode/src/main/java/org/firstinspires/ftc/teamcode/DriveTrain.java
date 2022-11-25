@@ -40,6 +40,7 @@ public class DriveTrain extends OpMode {
         double x = gamepad1.left_stick_x * 1.1;
         double rx = gamepad1.right_stick_x;
         double changeX = x - lastX;
+
         if (gamepad1.left_bumper) {
             if (Math.abs(changeX) > limitPowerChangeFast) {
                 changeX = Math.signum(changeX) * limitPowerChangeFast;
@@ -88,6 +89,16 @@ public class DriveTrain extends OpMode {
         double frontRightPower = (y - x - rx) / denominator;
         double backRightPower = (y + x - rx) / denominator;
 
+        double maxSpeed = 1.0;
+        maxSpeed = Math.max(maxSpeed, Math.abs(frontLeftPower));
+        maxSpeed = Math.max(maxSpeed, Math.abs(frontRightPower));
+        maxSpeed = Math.max(maxSpeed, Math.abs(backLeftPower));
+        maxSpeed = Math.max(maxSpeed, Math.abs(backRightPower));
+
+        frontLeftPower /= maxSpeed;
+        frontRightPower /= maxSpeed;
+        backLeftPower /= maxSpeed;
+        backRightPower /= maxSpeed;
 
         if (gamepad1.right_bumper) {
             motorFrontLeft.setPower(frontLeftPower / 4);

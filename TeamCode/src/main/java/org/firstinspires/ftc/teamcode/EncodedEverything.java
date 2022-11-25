@@ -77,38 +77,49 @@ public class EncodedEverything extends OpMode {
         double frontRightPower = (y - x - rx) / denominator;
         double backRightPower = (y + x - rx) / denominator;
 
-        if (board.getLift() <= 1650) {
-            board.setLift((gamepad2.right_trigger - gamepad2.left_trigger) / 2);
-        } else if (board.getLift() >= 0) {
-            board.setLift(gamepad2.right_trigger / 2);
-        } else {
-            board.setLift(-gamepad2.left_trigger / 2);
-        }
+        double maxSpeed = 1.0;
+         maxSpeed = Math.max(maxSpeed, Math.abs(frontLeftPower));
+         maxSpeed = Math.max(maxSpeed, Math.abs(frontRightPower));
+         maxSpeed = Math.max(maxSpeed, Math.abs(backLeftPower));
+         maxSpeed = Math.max(maxSpeed, Math.abs(backRightPower));
 
-        if (gamepad2.a) {
-            clawPosition += 0.001;
-        } else if (gamepad2.b) {
-            clawPosition -= 0.001;
-        }
-        board.setClaw(clawPosition);
+         frontLeftPower /= maxSpeed;
+         frontRightPower /= maxSpeed;
+         backLeftPower /= maxSpeed;
+         backRightPower /= maxSpeed;
+
+//        if (board.getLift() <= 1650) {
+//            board.setLift((gamepad2.right_trigger - gamepad2.left_trigger) / 2);
+//        } else if (board.getLift() >= 0) {
+//            board.setLift(gamepad2.right_trigger / 2);
+//        } else {
+//            board.setLift(-gamepad2.left_trigger / 2);
+//        }
+//
+//        if (gamepad2.a) {
+//            clawPosition += 0.001;
+//        } else if (gamepad2.b) {
+//            clawPosition -= 0.001;
+//        }
+//        board.setClaw(clawPosition);
 
         if (gamepad1.right_bumper) {
-            board.motorFrontLeft.setPower(frontLeftPower / 4);
-            board.motorBackLeft.setPower(backLeftPower / 4);
-            board.motorFrontRight.setPower(frontRightPower / 4);
-            board.motorBackRight.setPower(backRightPower / 4);
+            board.drive.motorFrontLeft.setPower(frontLeftPower / 4);
+            board.drive.motorBackLeft.setPower(backLeftPower / 4);
+            board.drive.motorFrontRight.setPower(frontRightPower / 4);
+            board.drive.motorBackRight.setPower(backRightPower / 4);
             telemetry.addData("Mode", "Slow");
         } else if (gamepad1.left_bumper) {
-            board.motorFrontLeft.setPower(frontLeftPower);
-            board.motorBackLeft.setPower(backLeftPower);
-            board.motorFrontRight.setPower(frontRightPower);
-            board.motorBackRight.setPower(backRightPower);
+            board.drive.motorFrontLeft.setPower(frontLeftPower);
+            board.drive.motorBackLeft.setPower(backLeftPower);
+            board.drive.motorFrontRight.setPower(frontRightPower);
+            board.drive.motorBackRight.setPower(backRightPower);
             telemetry.addData("Mode", "Speed");
         } else {
-            board.motorFrontLeft.setPower(frontLeftPower / 2);
-            board.motorBackLeft.setPower(backLeftPower / 2);
-            board.motorFrontRight.setPower(frontRightPower / 2);
-            board.motorBackRight.setPower(backRightPower / 2);
+            board.drive.motorFrontLeft.setPower(frontLeftPower / 2);
+            board.drive.motorBackLeft.setPower(backLeftPower / 2);
+            board.drive.motorFrontRight.setPower(frontRightPower / 2);
+            board.drive.motorBackRight.setPower(backRightPower / 2);
             telemetry.addData("Mode", "Normal");
         }
     }
