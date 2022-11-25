@@ -28,7 +28,7 @@ import UtilityClasses.Location;
  * @author Alex Prichard
  */
 public class MecanumDrive {
-    private DcMotor[] motors = new DcMotor[4];
+    public DcMotor[] motors = new DcMotor[4];
     private static final String[] MOTOR_NAMES = {
             "frontLeftDriveMotor",
             "backLeftDriveMotor",
@@ -47,15 +47,18 @@ public class MecanumDrive {
 
     private LinearOpMode mode;
 
-    private threeWheelOdometry odometry;
-
     private BNO055IMU imu;
     public Orientation lastAngles = new Orientation();
-    private double globalAngle;
+    private double globalAngle, prevAngle;
     private double driverAngle;
     private double targetAngle;
+    private boolean rotating;
 
     public final static double TICKS_PER_CENTI = (5281.1 / (9 * Math.PI));
+
+    private int[] startPos = new int[4],
+    endPos = new int[4],
+    distanceTraveled = new int[4];
 
     private double Kt;
     private double R;
@@ -138,112 +141,6 @@ public class MecanumDrive {
         driverAngle=startAngle;
     }
 
-    @Deprecated
-    /*
-    public MecanumDrive(HardwareMap hw, String configFileName,
-                        OldLocationClass startLocation, LinearOpMode m) {
-        mode = m;
-
-        initFromConfig(hw, configFileName);
-
-        localizer = new OldLocalizerClass(hw, configFileName, startLocation);
-
-        currentlyMoving = false;
-        currentLocation = startLocation;
-    }
-
-     */
-
-    private void initFromConfig(HardwareMap hw, String fileName) {
-        /*
-        JSONReader reader = new JSONReader(hw, fileName);
-        for (int i = 0; i < 4; i++) {
-            String motorName = reader.getString(MOTOR_NAMES[i] + "Name");
-            motors[i] = hw.get(DcMotor.class, motorName);
-            motors[i].setDirection(
-                    reader.getString(MOTOR_NAMES[i] + "Direction").equals("forward") ?
-                            DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE
-            );
-            motors[i].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motors[i].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            motors[i].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
-
-        JSONReader motorReader = new JSONReader(hw, reader.getString("driveMotorFile"));
-        double stallCurrent = motorReader.getDouble("stall_current");
-        Kt = motorReader.getDouble("stall_torque") / stallCurrent;
-        R = 12 / stallCurrent;
-        Kv = motorReader.getDouble("max_rpm") /
-                (12 - motorReader.getDouble("no_load_current") * R);
-
-         */
-    }
-
-    /*
-    public void updateLocation() {
-        localizer.updateLocation();
-        currentLocation = localizer.getCurrentLocation();
-    }
-
-     */
-
-    public void ram() {
-        oldRawMove(0, 1, 0);
-    }
-
-    //public void brake() {
-      //  oldRawMove(0, 0, 0);
-   // }
-
-    public void rawMove(double x, double y, double h) {
-        rawMove(x, y, h, 1);
-    }
-    public void rawMove(double x, double y, double h, double speed) {
-        oldRawMove(-y, +x, h, speed);
-
-    }
-
-    @Deprecated
-    public void oldRawMove(double x, double y, double h) {
-        oldRawMove(x, y, h, 1);
-    }
-    private void oldRawMove(double x, double y, double h, double speed) {
-        double[] powers = new double[]{
-                x + y - h,
-                -x + y - h,
-                x + y + h,
-                -x + y + h
-        };
-        double max = speed;
-        for (double power : powers) {
-            max = Math.max(max, Math.abs(power));
-        }
-        for (int i = 0; i < 4; i++) {
-            powers[i] /= max;
-        }
-        for (int i = 0; i < 4; i++) {
-            motors[i].setPower(powers[i]);
-        }
-    }
-
-    private void moveTrueNorth(double x, double y, double h) {
-       // moveTrueNorth(x, y, h, 1.0);
-    }
-   /* private void moveTrueNorth(double x, double y, double h, double speed) {
-        Matrix vec = new Matrix(new double[][]{ { x }, { y } });
-        double heading = -Math.toRadians(odometry.getAngle());
-        double sin = Math.sin(heading);
-        double cos = Math.cos(heading);
-        Matrix rotation = new Matrix(new double[][]{
-                { cos, sin },
-                { -sin,  cos }
-        });
-        double[] result = rotation.mul(vec).transpose().getData()[0];
-        oldRawMove(result[0], result[1], h, speed);
-
-
-    }*/
-
     public void moveToLocation(double x, double y, double h) {
         moveToLocation(new Location(x, y, h));
     }
@@ -252,19 +149,6 @@ public class MecanumDrive {
        // moveToLocation(targetLocation.getAsOldLocation());
 
     }
-
-    /*
-    @Deprecated
-    public void moveToLocation(OldLocationClass targetLocation) {
-        moveToLocation(targetLocation, 1);
-    }
-
-    public void moveToLocation(Location targetLocation, double speed) {
-        moveToLocation(targetLocation.getAsOldLocation(), speed);
-    }
-
-
-     */
 
     /**
      * This function implements the underlying movement logic for the drive base.
@@ -293,35 +177,6 @@ public class MecanumDrive {
      * @author Alex Prichard
      */
 
-    /*
-    private void moveToLocation(OldLocationClass targetLocation, double speed) {
-        xController.reset();
-        yController.reset();
-        hController.reset();
-        xController.setSP(targetLocation.getX());
-        yController.setSP(targetLocation.getY());
-        hController.setSP(targetLocation.getHeading());
-        long startTime = System.currentTimeMillis();
-        long endTime = 1000 + startTime + (long)(1000 *
-                Math.hypot(currentLocation.distanceToLocation(targetLocation) / MAX_SPEED,
-                        currentLocation.headingDifference(targetLocation) / MAX_ANGULAR));
-        while (mode.opModeIsActive()) {
-            updateLocation();
-            double x = xController.calculateResponse(currentLocation.getX());
-            double y = -yController.calculateResponse(currentLocation.getY());
-            double h = hController.calculateResponse(currentLocation.getHeading());
-            if (currentLocation.distanceToLocation(targetLocation) < 1
-                    && currentLocation.headingDifference(targetLocation) < 5
-                    || endTime <= System.currentTimeMillis()) {
-                oldRawMove(0, 0, 0);
-                break;
-            }
-            moveTrueNorth(x, y, h, speed);
-        }
-    }
-
-     */
-
     /**
      * This rotates the robot to the given heading.
      * It works pretty well and reliably.
@@ -330,96 +185,51 @@ public class MecanumDrive {
      * @author Alex Prichard
      */
 
-    /*
-    public void rotate(double angle) {
-        hController.reset();
-        hController.setSP(angle);
-        long startTime = System.currentTimeMillis();
-        long endTime = 1000 + startTime + (long)Math.abs(1000 *
-                currentLocation.headingDifference(angle) / MAX_ANGULAR);
-        while (mode.opModeIsActive()) {
-            updateLocation();
-            double h = hController.calculateResponse(currentLocation.getHeading());
-            if (Math.abs(currentLocation.headingDifference(angle)) < 2
-                    || endTime <= System.currentTimeMillis()) {
-                oldRawMove(0, 0, 0);
-                break;
-            }
-            moveTrueNorth(0, 0, h);
-        }
-    }
-
-     */
 
     // there's not much reason to use this method
     public void update() {
-        //updateLocation();
-        oldRawMove(0, 0, 0);
 
-        if(targetAngle != -1000){
+        if(currentlyMoving){
+            for(DcMotor m : motors){
+
+            }
+        }
+        if(rotating){
+            double angleError = getAngle() - targetAngle;
+            int negate=1;
+            if(angleError / 180 > 1){
+                negate = -1;
+                angleError %= 180;
+            }
+
+			double newPower = negate*(angleError / 360);
+            rotatewithPower(-newPower, newPower);
+
             if(compare(targetAngle, getAngle(), 15)){
                 brake();
-                targetAngle = -1000;
+                rotating = false;
             }
         }
     }
 
-    /*
-    public Location getCurrentLocation() { return new Location(currentLocation); }
+    public void moveTrueNorth(double forward, double right, double rotate){
+       Orientation curOrient =
+               imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
 
-    public void setCurrentLocation(OldLocationClass location) {
-        localizer.setCurrentLocation(location);
-    }
-    public void setCurrentLocation(Location location) {
-        localizer.setCurrentLocation(location.getAsOldLocation());
-    }
+       double theta = Math.atan2(forward, right);
+       double r = Math.hypot(forward, right);
 
+       theta = AngleUnit.normalizeRadians(theta-curOrient.firstAngle);
 
+       double newForward = r * Math.sin(theta);
+       double newRight = r * Math.cos(theta);
 
-     */
-
-    public void moveTrueNorth(double fl, double bl, double br, double fr, double joystickAngle){
-       double curAngle = getAngle(),
-       angleDiff = curAngle - joystickAngle;
-
-       double newPower;
-
-       
-
-       if(angleDiff == 0){
-           //do nothing
-
-       }else if(angleDiff <= 45 && angleDiff >= -45){
-            newPower = Range.clip(1 - (angleDiff/45), -1, 1);
-
-            fl *= angleDiff > 0 ? newPower : 1;
-            fr *= angleDiff < 0 ? newPower : 1;
-            br *= angleDiff < 0 ? newPower : 1;
-            bl *= angleDiff > 0 ? newPower : 1;
-       }else if(angleDiff <= 90 && angleDiff >= -90){
-            newPower = -Range.clip(0 - (angleDiff % 45 /45), -1, 1);
-
-           fl *= angleDiff > 0 ? newPower : 1;
-           fr *= angleDiff < 0 ? newPower : 1;
-           br *= angleDiff < 0 ? newPower : 1;
-           bl *= angleDiff > 0 ? newPower : 1;
-       }else if(angleDiff <= 135 && angleDiff >= 135){
-            newPower = Range.clip(1 - (angleDiff % 45 / 45), -1, 1);
-
-           fl *= angleDiff < 0 ? newPower : -1;
-           fr *= angleDiff > 0 ? newPower : -1;
-           br *= angleDiff > 0 ? newPower : -1;
-           bl *= angleDiff < 0 ? newPower : -1;
-       }else if(angleDiff <= 180 && angleDiff >= 180 ) {
-           newPower =  Range.clip(0 - (angleDiff % 45 / 45), -1, 1);
-
-           fl *= angleDiff < 0 ? newPower : -1;
-           fr *= angleDiff > 0 ? newPower : -1;
-           br *= angleDiff > 0 ? newPower : -1;
-           bl *= angleDiff < 0 ? newPower : -1;
-       }
-
-       moveWithPower(fl, bl, br, fr);
+       moveWithPower(
+                newForward + newRight + rotate,
+                newForward - newRight + rotate,
+               newForward + newRight - rotate,
+               newForward - newRight - rotate
+       );
     }
 
     public void moveWithPower(double fl, double bl, double br, double fr){
@@ -454,7 +264,7 @@ public class MecanumDrive {
             m.setPower(.5);
         }
 
-        switch (direction){
+        switch (direction) {
             case LEFT:
                 motors[0].setTargetPosition(-motors[0].getTargetPosition());
                 motors[1].setTargetPosition(-motors[0].getTargetPosition());
@@ -470,23 +280,24 @@ public class MecanumDrive {
                 motors[3].setTargetPosition(-motors[0].getTargetPosition());
                 break;
         }
-
-        while(isBusy()){
-            mode.telemetry.addData("Position in Ticks", getPosition());
-            mode.telemetry.addData("Position in Centi", getPosition() / TICKS_PER_CENTI);
-            mode.telemetry.addData("Target", getTarget());
-            mode.telemetry.update();
-        }
-
-        brake();
     }
 
     public double getPower(){
         return motors[0].getPower();
     }
 
+    public String getPowers(){
+        return motors[0].getPower() + ", " +
+                motors[1].getPower() + ", " +
+                motors[2].getPower() + ", " +
+                motors[3].getPower();
+    }
+
     public double getAngle()
     {
+        prevAngle = globalAngle;
+        System.out.println("IMU NULL???: " + imu.getAngularOrientation());
+        System.out.println("IMU NULL???: " + imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES));
         Orientation angles = imu.getAngularOrientation
                 (AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
@@ -539,27 +350,11 @@ public class MecanumDrive {
         return motors[0].getTargetPosition();
     }
 
-    public void next90degrees(int negPos){
-        if(negPos != -1 && negPos != 1)
-            return;
 
-        double angle = getAngle() + (negPos * 90),
-        abs = Math.abs(angle);
-
-        if(abs > 0 && abs <= 45){
-            angle = 0;
-        } else if(abs > 45 && abs <= 135){
-            angle = 90;
-        } else if(abs > 135 && abs <= 225){
-            angle = 180;
-        } else {
-            angle = 0;
-        }
-        rotateToAngle(angle);
-    }
 
     public void rotateToAngle(double angle){
         targetAngle = angle;
+        rotating = true;
         if(targetAngle < getAngle()){
             motors[0].setPower(-1);
             motors[1].setPower(-1);
@@ -575,6 +370,10 @@ public class MecanumDrive {
 
     private boolean compare(double a, double b, double diff){
         return Math.abs(a-b) <= diff;
+    }
+
+    public double getPrevAngle(){
+        return prevAngle;
     }
 }
 
