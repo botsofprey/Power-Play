@@ -11,7 +11,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class EncodedEverything extends OpMode {
 
     HardwareMechanisms board = new HardwareMechanisms();
+
     double clawPosition;
+    double limitPowerChange = 0.05;
+    double lastX;
+    double lastRx;
+    double lastY;
 
     @Override
     public void init() {
@@ -23,6 +28,27 @@ public class EncodedEverything extends OpMode {
         double y = -gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x * 1.1;
         double rx = gamepad1.right_stick_x;
+
+        double changeX = x - lastX;
+        if (Math.abs(changeX) > limitPowerChange) {
+            changeX = Math.signum(changeX) * limitPowerChange;
+        }
+        x = lastX + changeX;
+        lastX = x;
+
+        double changeRX = rx - lastRx;
+        if (Math.abs(changeRX) > limitPowerChange) {
+            changeRX = Math.signum(changeRX) * limitPowerChange;
+        }
+        rx = lastRx + changeRX;
+        lastRx = rx;
+
+        double changeY = y - lastY;
+        if (Math.abs(changeY) > limitPowerChange) {
+            changeY = Math.signum(changeY) * limitPowerChange;
+        }
+        y = lastY + changeY;
+        lastY = y;
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         double frontLeftPower = (y + x + rx) / denominator;
@@ -44,7 +70,6 @@ public class EncodedEverything extends OpMode {
             clawPosition -= 0.001;
         }
         board.setClaw(clawPosition);
-
 
         if (gamepad1.right_bumper) {
             board.motorFrontLeft.setPower(frontLeftPower / 4);
