@@ -46,8 +46,8 @@ public class MecanumDrive {
 
     public void drive(double forward, double right, double rotate) {
         double frontLeftPower = forward + right + rotate;
-        double frontRightPower = forward - right + rotate;
-        double backRightPower = forward - right - rotate;
+        double frontRightPower = forward - right - rotate;
+        double backRightPower = forward - right + rotate;
         double backLeftPower = forward + right - rotate;
 
         setPowers(frontLeftPower, frontRightPower, backLeftPower, backRightPower);

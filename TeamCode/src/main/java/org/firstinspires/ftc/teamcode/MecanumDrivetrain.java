@@ -16,8 +16,8 @@ public class MecanumDrivetrain extends OpMode {
 
     public void loop() {
         board.y = -gamepad1.left_stick_y;
-        board.x = gamepad1.left_stick_x;
-        board.rx = gamepad1.right_stick_x;
+        board.x = gamepad1.right_stick_x;
+        board.rx = gamepad1.left_stick_x;
 
         if (gamepad1.right_bumper) {
             board.driveFieldRelative(board.y / 4, board.x / 4, board.rx / 4);
