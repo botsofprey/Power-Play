@@ -14,7 +14,6 @@ public class EncodedEverything extends OpMode {
 
     double clawPosition;
 
-    @Override
     public void init() {
         board.init(hardwareMap);
     }
@@ -41,7 +40,7 @@ public class EncodedEverything extends OpMode {
         board.setClaw(clawPosition);
 
         if (gamepad1.right_bumper) {
-          board.driveFieldRelative(board.y / 4, board.x / 4, board.rx /4);
+            board.driveFieldRelative(board.y / 4, board.x / 4, board.rx / 4);
             telemetry.addData("Mode", "Slow");
         } else if (gamepad1.left_bumper) {
             board.driveFieldRelative(board.y, board.x, board.rx);
