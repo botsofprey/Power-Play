@@ -4,14 +4,14 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import org.opencv.core.Mat;
 
 public class opencvPipeline extends OpenCvPipeline {
-    Mat submat;
 
     @Override
-    public void init(Mat initFrame) {
-        submat = initFrame.submat();
+    public void init(Mat firstFrame) {
+
     }
+
     @Override
     public Mat processFrame(Mat input) {
-        return submat;
+        return input;
     }
 }
