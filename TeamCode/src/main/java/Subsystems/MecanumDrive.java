@@ -1,9 +1,11 @@
 package Subsystems;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+@TeleOp
 public class MecanumDrive {
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
@@ -42,6 +44,7 @@ public class MecanumDrive {
         frontRightMotor.setPower(frontRightPower/5);
         backLeftMotor.setPower(backLeftPower/5);
         backRightMotor.setPower((backRightPower/5));
+
     }
 
     public void drive(double forward, double right, double rotate) {
