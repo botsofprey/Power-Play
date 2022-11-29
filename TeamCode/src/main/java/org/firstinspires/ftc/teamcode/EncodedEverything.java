@@ -10,6 +10,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp()
 public class EncodedEverything extends OpMode {
 
+    double limitPowerChange = 0.05;
+    double limitPowerChangeFast = 0.01;
+    double lastX;
+    double lastRx;
+    double lastY;
+
     HardwareMechanisms board = new HardwareMechanisms();
 
     double clawPosition;
@@ -23,6 +29,49 @@ public class EncodedEverything extends OpMode {
         board.y = -gamepad1.left_stick_y;
         board.x = gamepad1.left_stick_x;
         board.rx = gamepad1.right_stick_x;
+
+        double changeX = board.x - lastX;
+        if (gamepad1.left_bumper) {
+            if (Math.abs(changeX) > limitPowerChangeFast) {
+                changeX = Math.signum(changeX) * limitPowerChangeFast;
+            }
+            board.x = lastX + changeX;
+            lastX = board.x;
+
+            double changeRX = board.rx - lastRx;
+            if (Math.abs(changeRX) > limitPowerChangeFast) {
+                changeRX = Math.signum(changeRX) * limitPowerChangeFast;
+            }
+            board.rx = lastRx + changeRX;
+            lastRx = board.rx;
+
+            double changeY = board.y - lastY;
+            if (Math.abs(changeY) > limitPowerChangeFast) {
+                changeY = Math.signum(changeY) * limitPowerChangeFast;
+            }
+            board.y = lastY + changeY;
+            lastY = board.y;
+        } else {
+            if (Math.abs(changeX) > limitPowerChange) {
+                changeX = Math.signum(changeX) * limitPowerChange;
+            }
+            board.x = lastX + changeX;
+            lastX = board.x;
+
+            double changeRX = board.rx - lastRx;
+            if (Math.abs(changeRX) > limitPowerChange) {
+                changeRX = Math.signum(changeRX) * limitPowerChange;
+            }
+            board.rx = lastRx + changeRX;
+            lastRx = board.rx;
+
+            double changeY = board.y - lastY;
+            if (Math.abs(changeY) > limitPowerChange) {
+                changeY = Math.signum(changeY) * limitPowerChange;
+            }
+            board.y = lastY + changeY;
+            lastY = board.y;
+        }
 
         if (board.getLift() <= 1650) {
             board.setLift((gamepad2.right_trigger - gamepad2.left_trigger) / 2);
