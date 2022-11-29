@@ -9,15 +9,16 @@ import org.firstinspires.ftc.teamcode.mechanisms.motorProgrammingBoard;
 @TeleOp()
 public class teleop extends OpMode{
 
+    motorProgrammingBoard pb1 = new motorProgrammingBoard();
+    driveBaseMovement teleDriveBase = new driveBaseMovement();
     double[] moveRobotReturn = new double[4];
 
     @Override
     public void init() {
-        motorProgrammingBoard pb1 = new motorProgrammingBoard();
         pb1.init(hardwareMap);
-        driveBaseMovement.driveSpeed = 2;
-        driveBaseMovement.setDriveMode("normal");
-        pb1.setMotorSpeed((double)(driveBaseMovement.driveMode));
+        teleDriveBase.driveSpeed = 2;
+        teleDriveBase.setDriveMode("normal");
+        pb1.setMotorSpeed((double)(teleDriveBase.driveMode));
     }
     @Override
     public void loop() {
@@ -34,8 +35,8 @@ public class teleop extends OpMode{
         else
             LSYforward = leftStickY/10;
 
-        degreesARG = (rightStickX * driveBaseMovement.driveSpeed) * 3.6;
+        degreesARG = (rightStickX * teleDriveBase.driveSpeed) * 3.6;
 
-        moveRobotReturn = driveBaseMovement.moveRobot(degreesARG, LSYforward, LSYbackward,0,0 );
+        moveRobotReturn = teleDriveBase.moveRobot(degreesARG, LSYforward, LSYbackward,0,0 );
     }
 }

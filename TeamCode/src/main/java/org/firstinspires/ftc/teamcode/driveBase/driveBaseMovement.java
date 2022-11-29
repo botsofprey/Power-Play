@@ -3,17 +3,17 @@ package org.firstinspires.ftc.teamcode.driveBase;
 import org.firstinspires.ftc.teamcode.misc.logger;
 
 public class driveBaseMovement {
-    public static int driveMode;
-    public static int driveSpeed;
-    public static int fastMode;
+    public int driveMode;
+    public int driveSpeed;
+    public int fastMode;
 
     //set fastMode to double drive speed;
-    public static void setFastMode() {
+    public void setFastMode() {
         fastMode = driveSpeed * 2;
     }
 
     //set drive speed mode
-    public static void setDriveMode(String mode) {
+    public void setDriveMode(String mode) {
         if (mode == "normal")
             driveMode = driveSpeed;
         else if (mode == "fast")
@@ -21,7 +21,7 @@ public class driveBaseMovement {
     }
 
     //move robot completely
-    public static double[] moveRobot(double degrees, double forward,
+    public double[] moveRobot(double degrees, double forward,
                                 double backward, double strafeRight, double strafeLeft) {
         double frontLeftMotor = 0.0;
         double frontRightMotor = 0.0;
