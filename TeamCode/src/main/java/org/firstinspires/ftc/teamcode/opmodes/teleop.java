@@ -9,16 +9,16 @@ import org.firstinspires.ftc.teamcode.mechanisms.motorProgrammingBoard;
 @TeleOp()
 public class teleop extends OpMode{
 
-    motorProgrammingBoard pb1 = new motorProgrammingBoard();
+    motorProgrammingBoard mpb = new motorProgrammingBoard();
     driveBaseMovement teleDriveBase = new driveBaseMovement();
     double[] moveRobotReturn = new double[4];
 
     @Override
     public void init() {
-        pb1.init(hardwareMap);
+        mpb.init(hardwareMap);
         teleDriveBase.driveSpeed = 2;
+        teleDriveBase.setFastMode();
         teleDriveBase.setDriveMode("normal");
-        pb1.setMotorSpeed((double)(teleDriveBase.driveMode));
     }
     @Override
     public void loop() {
@@ -28,15 +28,23 @@ public class teleop extends OpMode{
 
         double LSYbackward = 0.0;
         double LSYforward = 0.0;
+        double LSXbackward = 0.0;
+        double LSXforward = 0.0;
         double degreesARG;
 
         if (leftStickY < 0.0)
-            LSYbackward = -leftStickY/10;
+            LSYbackward = -leftStickY;
         else
-            LSYforward = leftStickY/10;
+            LSYforward = leftStickY;
 
-        degreesARG = (rightStickX * teleDriveBase.driveSpeed) * 3.6;
+        degreesARG = (rightStickX * teleDriveBase.driveMode) * 3.6;
 
         moveRobotReturn = teleDriveBase.moveRobot(degreesARG, LSYforward, LSYbackward,0,0 );
+
+        mpb.motorFrontLeft.setPower(moveRobotReturn[0]);
+        mpb.motorFrontRight.setPower(moveRobotReturn[1]);
+        mpb.motorBackLeft.setPower(moveRobotReturn[2]);
+        mpb.motorBackRight.setPower(moveRobotReturn[3]);
+
     }
 }
