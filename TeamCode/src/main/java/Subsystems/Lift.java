@@ -28,6 +28,12 @@ public class Lift {
         liftMotor.setPower(power);
     }
 
+    /*public void setAPosition(double position, double power) {
+        liftMotor.setTargetPosition(position);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(power);
+    }*/
+
     public int getPosition(){
         return liftMotor.getCurrentPosition();
     }
@@ -47,5 +53,34 @@ public class Lift {
         ProgrammingBoard7 board = new ProgrammingBoard7();
         telemetry.addData("Touch Sensor", board.getClass());
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+    //here goes set positions
+    public void Bottom (int position, double power) {
+        liftMotor.setTargetPosition(0);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(0.75);
+    }
+    public void Quarter (int position, double power) {
+        liftMotor.setTargetPosition(0.25);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(0.75);
+    }
+
+    public void Half  (int position, double power) {
+        liftMotor.setTargetPosition(0.5);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(0.75);
+    }
+
+    public void ThreeQuarters (int position, double power){
+        liftMotor.setTargetPosition(0.75);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(0.75);
+    }
+
+    public void Top (int position, double power) {
+        liftMotor.setTargetPosition(1);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(0.75);
     }
 }
