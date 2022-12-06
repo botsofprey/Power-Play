@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class LiftClass extends OpMode {
     DcMotor lift;
     double targetPosition;
-    double lowJunction;
-    double midJunction;
-    double highJunction;
+    double lowJunction = 0; //dummy numbers
+    double midJunction = 1;
+    double highJunction = 2;
 
     @Override
     public void init() {

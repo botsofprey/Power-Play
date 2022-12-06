@@ -49,6 +49,11 @@ public class HardwareMechanisms {
         claw.setPosition(clawPosit);
     }
 
+    public double getHeading(AngleUnit angleUnit){
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
+        return angles.firstAngle;
+    }
+
     public ArrayList<TestItem> getTests() {
         ArrayList<TestItem> tests = new ArrayList<>();
         tests.add(new TestMotor("FrontRight", 0.5, drive.motorFrontRight));
