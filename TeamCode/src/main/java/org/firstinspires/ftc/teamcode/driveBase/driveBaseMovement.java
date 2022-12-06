@@ -27,10 +27,8 @@ public class driveBaseMovement {
         double frontRightMotor = 0.0;
         double backLeftMotor = 0.0;
         double backRightMotor = 0.0;
-        double forback, strafe;
+        double forback, strafe, POWturnRobot;
         double[] error = new double[0];
-
-        double[] finalCalc = {frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
 
         //error checking
         if (forward < 0 || backward < 0 || strafeRight < 0 || strafeLeft < 0) {
@@ -42,26 +40,31 @@ public class driveBaseMovement {
             return error;
         }
 
-        forback = (forward == 0) ? backward : forward;
+        //decide if which direction robot moves based on input
+        forback = (forward == 0) ? -backward : forward;
         strafe = (strafeRight == 0) ? strafeLeft : strafeRight;
 
         //POW in POWturnRobot means 'part of whole'
-        double POWturnRobot = degrees < 0 ? -degrees/360 : degrees/360;
+        POWturnRobot = (degrees < 0) ? -degrees/360 : degrees/360;
 
         //Counterclockwise turning
         if (degrees < 0) {
+            frontLeftMotor -= (POWturnRobot * driveMode);
             frontRightMotor += (POWturnRobot * driveMode);
             backLeftMotor -= (POWturnRobot * driveMode);
+            backRightMotor += (POWturnRobot * driveMode);
         }
         //Clockwise turning
         else {
-            frontLeftMotor -= (POWturnRobot * driveMode);
-            backRightMotor += (POWturnRobot * driveMode);
+            frontLeftMotor += (POWturnRobot * driveMode);
+            frontRightMotor -= (POWturnRobot * driveMode);
+            backLeftMotor += (POWturnRobot * driveMode);
+            backRightMotor -= (POWturnRobot * driveMode);
         }
 
         //Move backward
         if (forback == backward) {
-            backLeftMotor -= (forback * driveMode);
+            backLeftMotor = backLeftMotor - (forback * driveMode);
             backRightMotor -= (forback * driveMode);
             frontLeftMotor -= (forback * driveMode);
             frontRightMotor -= (forback * driveMode);
@@ -74,13 +77,23 @@ public class driveBaseMovement {
             backRightMotor += (forback * driveMode);
         }
 
+        //Strafe Left
         if (strafe < 0) {
-
+            frontLeftMotor -= (strafe * driveMode);
+            frontRightMotor += (strafe * driveMode);
+            backLeftMotor += (strafe * driveMode);
+            backRightMotor -= (strafe * driveMode);
         }
+
+        //Strafe Right
         else {
-
+            frontLeftMotor += (strafe * driveMode);
+            frontRightMotor -= (strafe * driveMode);
+            backLeftMotor -= (strafe * driveMode);
+            backRightMotor += (strafe * driveMode);
         }
 
-        return finalCalc;
+        //return calculation results from pipeline for use in code
+        return new double[]{frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
     }
 }
