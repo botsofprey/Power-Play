@@ -1,22 +1,13 @@
 package Subsystems;
-import android.provider.ContactsContract;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.ConceptTensorFlowObjectDetection;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.QRCodeDetector;
 import org.openftc.easyopencv.OpenCvPipeline;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class CameraPipeline extends OpenCvPipeline{
@@ -52,20 +43,20 @@ public class CameraPipeline extends OpenCvPipeline{
     @Override
     public Mat processFrame(Mat input) {
 
-        System.out.println("Matrixes: " + input.empty() + ", " + image.empty());
-
         if(input.empty())
             return null;
 
-        //Core.rotate(input, image, Core.ROTATE_90_COUNTERCLOCKWISE);
         points = new Mat();
         image = input;
 
+
         System.out.println("1 I did this");
 
-        //image = input.submat(rect);
-        if(detector.detect(image, points))
+        Imgproc.rectangle(image, rect, colorVision);
+
+        if(detector.detect(image, points)) {
             data = detector.decode(image, points);
+        }
 
         if (!points.empty()) {
             //prints out qr code data
@@ -97,6 +88,21 @@ public class CameraPipeline extends OpenCvPipeline{
             return input;
 
         return image;
+    }
+
+    public void processLast(){
+        data = detector.detectAndDecode(image, points);
+        switch (data) {
+            case "1":
+                parking = 0;
+                break;
+            case "2":
+                parking = 1;
+                break;
+            case "3":
+                parking = 2;
+                break;
+        }
     }
 
     public String getLink(){
