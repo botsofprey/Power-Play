@@ -16,7 +16,7 @@ public class teleop extends OpMode{
     @Override
     public void init() {
         mpb.init(hardwareMap);
-        teleDriveBase.driveSpeed = 2;
+        teleDriveBase.normalMode = 2;
         teleDriveBase.setFastMode();
         teleDriveBase.setDriveMode("normal");
     }
@@ -32,25 +32,12 @@ public class teleop extends OpMode{
         telemetry.addData("Left Stick Y", gamepad1.left_stick_y);
         telemetry.addData("Turn (Right Stick X)",gamepad1.right_stick_x);
 
-        //set up local variables for mini pipeline to make inputs absolute
-        double LSYbackward = 0.0;
-        double LSYforward = 0.0;
-        double LSXbackward = 0.0;
-        double LSXforward = 0.0;
-        double degreesARG;
-
-        //check whether left stick on y axis is moving forward or backward
-        if (leftStickY < 0.0)
-            LSYbackward = -leftStickY;
-        else
-            LSYforward = leftStickY;
-
         //convert right stick's x axis input into usable input for moveRobot  function
-        degreesARG = (rightStickX * teleDriveBase.driveMode) * 3.6;
+        double degreesARG = (rightStickX * teleDriveBase.driveMode) * 3.6;
 
         //send control of movement calculation to moveRobot and set return array of function equal
         //to moveRobotReturn
-        moveRobotReturn = teleDriveBase.moveRobot(degreesARG, LSYforward, LSYbackward,0,0 );
+        moveRobotReturn = teleDriveBase.moveRobot(degreesARG, leftStickY, leftStickX);
 
         //set returned values in moveRobotReturn as power values for motors
         mpb.motorFrontLeft.setPower(moveRobotReturn[0]);

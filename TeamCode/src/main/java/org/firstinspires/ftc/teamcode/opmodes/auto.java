@@ -12,10 +12,10 @@ import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 
 @TeleOp()
 public class auto extends OpMode{
-    cameraControl cameraInit = new cameraControl();
+    cameraControl autocam = new cameraControl();
     @Override
     public void init() {
-        cameraInit.createCameraInstance();
+        autocam.createCameraInstance();
 
     }
 
@@ -25,7 +25,6 @@ public class auto extends OpMode{
     }
 
     @Override
-    public void stop() {
-        cameraInit.destroyCameraInstance();
+    public void stop() {autocam.destroyCameraInstance();
     }
 }
