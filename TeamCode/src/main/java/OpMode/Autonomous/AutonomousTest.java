@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.internal.network.ControlHubApChannelManag
 import org.firstinspires.ftc.robotcore.internal.network.InvalidNetworkSettingException;
 
 import DriveEngine.MecanumDrive;
+import Subsystems.AprilTagCamera;
 import Subsystems.CameraPipeline;
 import Subsystems.threeWheelOdometry;
 import UtilityClasses.Camera;
@@ -32,8 +33,9 @@ public class AutonomousTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        CameraPipeline cameraPipeline = new CameraPipeline();
-        Camera camera = new Camera(hardwareMap, cameraPipeline);
+        //CameraPipeline cameraPipeline = new CameraPipeline();
+       // Camera camera = new Camera(hardwareMap, cameraPipeline);
+        AprilTagCamera camera = new AprilTagCamera(hardwareMap);
 
         Controller con = new Controller(gamepad1);
 
@@ -43,9 +45,6 @@ public class AutonomousTest extends LinearOpMode {
         //odometry = new threeWheelOdometry(hardwareMap, new Location(0,0), this, drive);
 
         while (!isStarted() && !isStopRequested()) {
-            telemetry.addData("QR Code Found", cameraPipeline.getParking() != 3);
-            if(cameraPipeline.getParking() != 3)
-                telemetry.addData("Parking Spot", cameraPipeline.getParking());
             //odometry.update();
             //telemetry.addData("left", odometry.getCurrentLeftPos());
            // telemetry.addData("right", odometry.getCurrentRightPos());
@@ -62,7 +61,10 @@ public class AutonomousTest extends LinearOpMode {
             } else if(con.bPressed){
                 parking = 2;
             }
-            telemetry.addData("Parking", parking+1);
+            telemetry.addData("Tag found", camera.tagFound());
+            if(camera.tagFound()){
+                telemetry.addData("Parking", camera.getParking()+1);
+            }
             telemetry.addLine();
 
             //telemetry.addData("Right Distance", odometry.getRightDistance());
@@ -74,28 +76,24 @@ public class AutonomousTest extends LinearOpMode {
         while(opModeIsActive());
 
         //If camera is too far away to see qr, robot gets closer
-        if(cameraPipeline.getParking() == 3){
+        if(!camera.tagFound()){
             odometry.setTargetPoint(parkingLocations[1]);
 
-            while(!odometry.atTarget() && cameraPipeline.getParking() == 3){
+            while(!odometry.atTarget() && !camera.tagFound()){
                 odometry.update();
 
-                telemetry.addData("QR Code Found", cameraPipeline.getParking() != 3);
-                if(cameraPipeline.getParking() != 3)
-                    telemetry.addData("Parking Spot", cameraPipeline.getParking()+1);
+                telemetry.addData("QR Code Found", camera.tagFound());
+                if(camera.tagFound())
+                    telemetry.addData("Parking Spot", camera.getParking()+1);
                 telemetry.update();
             }
-            if(odometry.atTarget()){
-                cameraPipeline.processLast();
-            }
-
             drive.brake();
         }
 
         camera.stop();
 
         //Sets target to parking spot
-        parking = cameraPipeline.getParking();
+        parking = camera.getParking();
         odometry.setTargetPoint(parkingLocations[parking]);
         while(opModeIsActive() && !odometry.atTarget()){
             odometry.update();
@@ -121,7 +119,7 @@ public class AutonomousTest extends LinearOpMode {
             odometry.update();
 
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Parking Spot", cameraPipeline.getParking()+1);
+            telemetry.addData("Parking Spot", camera.getParking()+1);
             telemetry.update();
         }
 
