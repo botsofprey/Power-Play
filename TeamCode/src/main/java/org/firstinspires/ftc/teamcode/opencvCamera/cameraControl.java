@@ -7,13 +7,14 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 //general imports
-import org.firstinspires.ftc.teamcode.opmodes.auto;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 /* This is the camera initialization class. It sets out how the webcam for the robot is to be
 ** set up for use. No pipelining is used here, this class only sets up and destroys camera instances
 */
 
-public class cameraControl extends auto{
+public class cameraControl{
     //create necessary variables
     WebcamName webcamName;
     OpenCvCamera camera;
