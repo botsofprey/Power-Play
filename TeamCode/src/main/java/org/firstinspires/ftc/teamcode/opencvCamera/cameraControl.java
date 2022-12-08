@@ -10,7 +10,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.firstinspires.ftc.teamcode.opmodes.auto;
 
 /* This is the camera initialization class. It sets out how the webcam for the robot is to be
-** set up for use. No pipelining is used here. Instead,
+** set up for use. No pipelining is used here, this class only sets up and destroys camera instances
 */
 
 public class cameraControl extends auto{
