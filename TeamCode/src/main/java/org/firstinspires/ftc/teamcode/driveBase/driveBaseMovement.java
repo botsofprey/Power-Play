@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.misc.logger;
 
 public class driveBaseMovement {
     public int driveMode;
-    public int normalMode;
+    public int normalMode = 1;
     public int fastMode;
 
     //set fastMode to double drive speed;
@@ -21,20 +21,17 @@ public class driveBaseMovement {
     }
 
     //move robot completely
-    public double[] moveRobot(double degrees, double forback, double strafe) {
+    public double[] moveRobot(double turn, double forback, double strafe) {
         double frontLeftMotor = 0.0;
         double frontRightMotor = 0.0;
         double backLeftMotor = 0.0;
         double backRightMotor = 0.0;
 
-        //POW in POWturnRobot means 'part of whole'
-        double POWturnRobot = degrees/360;
-
         //turn robot
-            frontLeftMotor -= (POWturnRobot * driveMode);
-            frontRightMotor += (POWturnRobot * driveMode);
-            backLeftMotor -= (POWturnRobot * driveMode);
-            backRightMotor += (POWturnRobot * driveMode);
+            frontLeftMotor -= (turn * driveMode);
+            frontRightMotor += (turn * driveMode);
+            backLeftMotor -= (turn * driveMode);
+            backRightMotor += (turn * driveMode);
 
         //Move forward or backward
             frontLeftMotor += (forback * driveMode);

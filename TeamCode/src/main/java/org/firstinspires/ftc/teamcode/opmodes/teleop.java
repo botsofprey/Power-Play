@@ -32,12 +32,9 @@ public class teleop extends OpMode{
         telemetry.addData("Left Stick Y", gamepad1.left_stick_y);
         telemetry.addData("Turn (Right Stick X)",gamepad1.right_stick_x);
 
-        //convert right stick's x axis input into usable input for moveRobot  function
-        double degreesARG = (rightStickX * teleDriveBase.driveMode) * 3.6;
-
         //send control of movement calculation to moveRobot and set return array of function equal
         //to moveRobotReturn
-        moveRobotReturn = teleDriveBase.moveRobot(degreesARG, leftStickY, leftStickX);
+        moveRobotReturn = teleDriveBase.moveRobot(rightStickX, leftStickY, leftStickX);
 
         //set returned values in moveRobotReturn as power values for motors
         mpb.motorFrontLeft.setPower(moveRobotReturn[0]);
