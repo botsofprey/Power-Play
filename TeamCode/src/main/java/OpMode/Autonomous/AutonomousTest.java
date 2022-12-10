@@ -33,26 +33,24 @@ public class AutonomousTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //CameraPipeline cameraPipeline = new CameraPipeline();
-       // Camera camera = new Camera(hardwareMap, cameraPipeline);
         AprilTagCamera camera = new AprilTagCamera(hardwareMap);
 
         Controller con = new Controller(gamepad1);
 
         int parking = 3;
 
-        //drive = new MecanumDrive(hardwareMap, this, 0);
-        //odometry = new threeWheelOdometry(hardwareMap, new Location(0,0), this, drive);
+        drive = new MecanumDrive(hardwareMap, this, 0);
+        odometry = new threeWheelOdometry(hardwareMap, new Location(0,0), this, drive);
 
         while (!isStarted() && !isStopRequested()) {
-            //odometry.update();
-            //telemetry.addData("left", odometry.getCurrentLeftPos());
-           // telemetry.addData("right", odometry.getCurrentRightPos());
-            //telemetry.addData("aux", odometry.getCurrentAuxPos());
-            //telemetry.addData("Position", odometry.getLocation());
+            odometry.update();
+            telemetry.addData("left", odometry.getCurrentLeftPos());
+            telemetry.addData("right", odometry.getCurrentRightPos());
+            telemetry.addData("aux", odometry.getCurrentAuxPos());
+            telemetry.addData("Position", odometry.getLocation());
             telemetry.addLine();
 
-
+            //For testing purposes, setting parking without needing cone
             con.update();
             if(con.xPressed){
                 parking = 0;
@@ -73,6 +71,9 @@ public class AutonomousTest extends LinearOpMode {
             telemetry.update();
         }
 
+        //Resets position and encoders
+        odometry.resetEncoders();
+
         while(opModeIsActive());
 
         //If camera is too far away to see qr, robot gets closer
@@ -90,6 +91,7 @@ public class AutonomousTest extends LinearOpMode {
             drive.brake();
         }
 
+        //Turns camera off
         camera.stop();
 
         //Sets target to parking spot
@@ -97,7 +99,6 @@ public class AutonomousTest extends LinearOpMode {
         odometry.setTargetPoint(parkingLocations[parking]);
         while(opModeIsActive() && !odometry.atTarget()){
             odometry.update();
-            //drive.update();
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());

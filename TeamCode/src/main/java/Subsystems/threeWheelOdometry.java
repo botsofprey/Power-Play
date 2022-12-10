@@ -1,6 +1,7 @@
 package Subsystems;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
@@ -65,6 +66,7 @@ public class threeWheelOdometry {
     }
 
     private void calculateChange(){
+        /*
         int dx1 = currentLeftPos - prevLeftPos,
             dx2 = currentRightPos - prevRightPos,
             dy = currentAuxPos - prevAuxPos;
@@ -79,11 +81,30 @@ public class threeWheelOdometry {
         positionLocation.add(x * CM_PER_TICK, y * CM_PER_TICK, 0);
         positionLocation.angle = meccanumDrive.getAngle();
 
+         */
+
+        int dx1 = currentLeftPos - prevLeftPos,
+                dx2 = currentRightPos - prevRightPos,
+                dy = currentAuxPos - prevAuxPos;
+        double theta = (dx2-dx1)/(28);
+
+        double r0 = (((dx2*currentLeftPos)-(dx1*currentRightPos))/(28)/2) / theta,
+                r1 = (dy-(currentAuxPos*theta)) / theta;
+        double relX = (r0 * Math.sin(theta)) - (r1 * (1 - Math.cos(theta))),
+                relY = (r1 * Math.sin(theta)) + (r0 * (1 - Math.cos(theta)));
+
+        double deltaX = (relX * Math.cos(theta)) - (relY * Math.sin(theta)),
+                deltaY = (relY * Math.cos(theta)) + (relX * Math.sin(theta));
+
+        positionLocation.add(deltaX * CM_PER_TICK, deltaY * CM_PER_TICK, 0);
+        positionLocation.angle = meccanumDrive.getAngle();
+
         //dx = x change
         //dy = y change
         //dt = delta theta
     }
 
+    //Sets target
     public void setTargetPoint(Location target){
         targetLocation = target;
         moving = true;
@@ -91,6 +112,7 @@ public class threeWheelOdometry {
         moveTowards(positionLocation.difference(targetLocation));
     }
 
+    //Rounds robot's rotation to the nearest 90 degrees and adds/subtracts 90
     public void next90degrees(int negPos){
         Location target = new Location(positionLocation.x, positionLocation.y);
 
@@ -115,6 +137,7 @@ public class threeWheelOdometry {
         setTargetPoint(target);
     }
 
+    //Robot move towards target
     private void moveTowards(Location diff){
         /*
         if((!compare(diff.x, 0, 10) && currentMovement != direction.y && currentMovement != direction.angle) ||
@@ -169,6 +192,18 @@ public class threeWheelOdometry {
     }
 
     public void update(){
+
+        //Update previous & current position
+        prevRightPos = currentRightPos;
+        prevLeftPos = currentLeftPos;
+        prevAuxPos = currentAuxPos;
+        currentRightPos = -meccanumDrive.motors[3].getCurrentPosition();
+        currentLeftPos = meccanumDrive.motors[0].getCurrentPosition();
+        currentAuxPos = meccanumDrive.motors[1].getCurrentPosition();
+
+        //Update current point values
+        calculateChange();
+
         leftDisSensor.update();
         rightDisSensor.update();
 
@@ -182,19 +217,25 @@ public class threeWheelOdometry {
             currentMovement = direction.stationary;
             meccanumDrive.brake();
         }
-
-        //Update previous & current position
-        prevRightPos = currentRightPos;
-        prevLeftPos = currentLeftPos;
-        prevAuxPos = currentAuxPos;
-        currentRightPos = -meccanumDrive.motors[3].getCurrentPosition();
-        currentLeftPos = meccanumDrive.motors[0].getCurrentPosition();
-        currentAuxPos = meccanumDrive.motors[1].getCurrentPosition();
-
-        //Update current point values
-        calculateChange();
     }
 
+    public void resetEncoders(){
+        meccanumDrive.motors[3].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        meccanumDrive.motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        meccanumDrive.motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        prevRightPos = 0;
+        prevLeftPos = 0;
+        prevAuxPos = 0;
+        currentRightPos = 0;
+        currentLeftPos = 0;
+        currentAuxPos = 0;
+
+        positionLocation = new Location(0,0);
+    }
+
+
+    //Moves the robot to the center of tile
     public void moveToOpenSpace(double x, double y, double r, boolean slowMode){
         /*if (slowMode)
             meccanumDrive.moveTrueNorth(x, y, r);
@@ -228,8 +269,8 @@ public class threeWheelOdometry {
     }
 
     public String getLocation(){
-        return Math.round(positionLocation.x) + " cm , " +
-                Math.round(positionLocation.y) + " cm , " +
+        return Math.round(positionLocation.x) + " cm, " +
+                Math.round(positionLocation.y) + " cm, " +
                 Math.round(positionLocation.angle) + "°";
     }
 
@@ -265,5 +306,9 @@ public class threeWheelOdometry {
         return Math.round(targetLocation.x) + " cm , " +
                 Math.round(targetLocation.y) + " cm , " +
                 Math.round(targetLocation.angle) + "°";
+    }
+
+    public boolean isMoving(){
+        return moving;
     }
 }
