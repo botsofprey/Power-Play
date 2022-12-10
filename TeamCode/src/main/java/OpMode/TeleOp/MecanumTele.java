@@ -32,7 +32,7 @@ public class MecanumTele extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         controller1 = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
-        drive = new MecanumDrive(hardwareMap, -90);
+        drive = new MecanumDrive(hardwareMap, this, -90);
         claw = new Claw(hardwareMap);
         odometry = new threeWheelOdometry(hardwareMap, startLoc, this, drive);
         lift = new Lift(hardwareMap);
