@@ -53,7 +53,8 @@ public class Location {
     }
 
     public boolean compareHeading(Location location, double angleOffset){
-        return Math.abs(location.angle - this.angle) < angleOffset;
+        return Math.abs(location.angle - this.angle) < angleOffset
+                || Math.abs(location.angle - this.angle) > (360 - angleOffset);
     }
 
 }
