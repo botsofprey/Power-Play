@@ -84,8 +84,7 @@ public class Lift {
         liftMotor.setPower(0.75);
     }
 
-    public void setMotorZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
-        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    public void update () {
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 }
