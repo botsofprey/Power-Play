@@ -82,20 +82,19 @@ public class MecanumTele extends LinearOpMode {
            }
            drive.slowMode(controller1.leftTriggerHeld && !slowModeOn);
 
-            //Driver 1 uses joysticks for movement, duh
-            Vector2D leftInput = controller1.leftStick,
-                    rightInput = controller1.rightStick;
+        //Driver 1 uses joysticks for movement, duh
+            if(!overrideDrivers){
+                Vector2D leftInput = controller1.leftStick,
+                         rightInput = controller1.rightStick;
 
-            drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
-
-
+            drive.moveTrueNorth(leftInput.y, -leftInput.x, rightInput.x);
 
             //Driver 1 controls claw
             if(controller1.aPressed){
                 claw.setPosition(claw.getPosition() != claw.CLOSE_POSITION ?
                         claw.CLOSE_POSITION : claw.OPEN_POSITION);
             }
-           telemetry.addData("Claw Pos", claw.getPosition());
+            telemetry.addData("Claw Pos", claw.getPosition());
 
             //Driver 2 uses triggers to control lift
             if(controller2.rightTriggerHeld){
