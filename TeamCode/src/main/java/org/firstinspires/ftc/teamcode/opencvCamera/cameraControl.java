@@ -7,8 +7,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 //general imports
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /* This is the camera initialization class. It sets out how the webcam for the robot is to be
 ** set up for use. No pipelining is used here, this class only sets up and destroys camera instances
@@ -16,16 +16,16 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.tel
 
 public class cameraControl{
     //create necessary variables
-    WebcamName webcamName;
-    OpenCvCamera camera;
+    public WebcamName webcamName;
+    public OpenCvCamera camera;
 
-    public void createCameraInstance() {
+    public void createCameraInstance(HardwareMap hwmap, Telemetry telem) {
         //initialize live viewport
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-            "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = hwmap.appContext.getResources().getIdentifier(
+            "cameraMonitorViewId", "id", hwmap.appContext.getPackageName());
 
         //create webcam name variable (used to specify name of webcam)
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam");
+        webcamName = hwmap.get(WebcamName.class, "Webcam");
 
         //use camera factory to create OpenCvCamera webcam instance
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName,
@@ -42,7 +42,7 @@ public class cameraControl{
                 //error return code
                 @Override
                 public void onError(int errorCode) {
-                    telemetry.addData("webcam","could not be opened");
+                    telem.addData("error", "webcam could not be found");
                 }
             }
         );

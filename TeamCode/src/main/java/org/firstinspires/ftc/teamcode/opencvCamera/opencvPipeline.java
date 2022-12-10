@@ -2,14 +2,11 @@ package org.firstinspires.ftc.teamcode.opencvCamera;
 
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.opencv.core.Mat;
+import org.opencv.core.CvType;
 
 public class opencvPipeline extends OpenCvPipeline {
-    Mat wholeScreen;
-
-    @Override
-    public void init(Mat firstFrame) {
-        //wholescreen
-    }
+    public Mat wholeScreen;
+    public Mat subWholeScreenMat;
 
     @Override
     public Mat processFrame(Mat input) {

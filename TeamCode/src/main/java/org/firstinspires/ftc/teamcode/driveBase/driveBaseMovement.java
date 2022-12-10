@@ -6,10 +6,16 @@ public class driveBaseMovement {
     public int driveMode;
     public int normalMode = 1;
     public int fastMode;
+    public int slowMode;
 
-    //set fastMode to double drive speed;
+    //set fastMode to double normalMode;
     public void setFastMode() {
         fastMode = normalMode * 2;
+    }
+
+    //set slowMode to half normalMode
+    public void setSlowMode() {
+        slowMode = normalMode / 2;
     }
 
     //set drive speed mode
@@ -18,6 +24,8 @@ public class driveBaseMovement {
             driveMode = normalMode;
         else if (mode == "fast")
             driveMode = fastMode;
+        else if (mode == "slow")
+            driveMode = slowMode;
     }
 
     //move robot completely

@@ -26,6 +26,7 @@ public class teleop extends OpMode{
         double leftStickX = gamepad1.left_stick_x;
         double leftStickY = gamepad1.left_stick_y;
         double rightStickX = gamepad1.right_stick_x;
+        boolean a = gamepad1.a
 
         //track the inputs of the controller
         telemetry.addData("Left Stick X", gamepad1.left_stick_x);

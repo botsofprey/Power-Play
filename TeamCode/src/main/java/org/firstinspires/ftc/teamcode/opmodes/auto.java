@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 //general imports
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //easyopencv imports
 //teamcode imports
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
@@ -10,19 +10,19 @@ import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 **  section of a match.
 */
 
-@TeleOp()
-public class auto extends OpMode{
-    cameraControl autocam = new cameraControl();
+@Autonomous()
+public class auto extends OpMode {
+    cameraControl autocam;
     @Override
     public void init() {
+        autocam = new cameraControl();
         //call createCameraInstance
-        autocam.createCameraInstance();
-
+        autocam.createCameraInstance(hardwareMap, telemetry);
     }
 
     @Override
     public void loop() {
-
+        autocam.camera.getFps();
     }
 
     @Override
