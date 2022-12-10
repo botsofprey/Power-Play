@@ -351,7 +351,6 @@ public class MecanumDrive {
     }
 
 
-
     public void rotateToAngle(double angle){
         targetAngle = angle;
         rotating = true;

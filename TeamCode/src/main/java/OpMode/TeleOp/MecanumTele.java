@@ -106,7 +106,7 @@ public class MecanumTele extends LinearOpMode {
             }
             telemetry.addData("Lift Position", lift.getPosition());
 
-
+            telemetry.addData("Powers", drive.getPowers());
 
             odometry.update();
             lift.update();

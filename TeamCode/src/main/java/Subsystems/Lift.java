@@ -86,5 +86,6 @@ public class Lift {
                 liftMotor.setPower(0);
             }
         }
+
     }
 }
