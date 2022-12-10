@@ -64,7 +64,7 @@ public class MecanumTele extends LinearOpMode {
             }*/
 
            if(controller1.upPressed){
-               odometry.moveToOpenSpace(0,0,0, true);
+               //odometry.moveToOpenSpace(0,0,0, true);
                overrideDrivers = true;
            }
 
@@ -87,7 +87,7 @@ public class MecanumTele extends LinearOpMode {
                 Vector2D leftInput = controller1.leftStick,
                          rightInput = controller1.rightStick;
 
-            drive.moveTrueNorth(leftInput.y, -leftInput.x, rightInput.x);
+            //drive.moveTrueNorth(leftInput.y, -leftInput.x, rightInput.x);
 
             //Driver 1 controls claw
             if(controller1.aPressed){
