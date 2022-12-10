@@ -1,22 +1,14 @@
 package Subsystems;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.opencv.core.Mat;
 
 import DriveEngine.MecanumDrive;
+import UtilityClasses.AverageDistanceSensor;
 import UtilityClasses.Location;
 import UtilityClasses.PidController;
 
@@ -32,10 +24,10 @@ public class threeWheelOdometry {
 
     private Location positionLocation, targetLocation;
 
-    private DistanceSensor leftDisSensor, rightDisSensor;
+    private AverageDistanceSensor leftDisSensor, rightDisSensor;
     private DistanceUnit distanceUnit = DistanceUnit.CM;
 
-    private boolean moving=false;
+    private boolean moving=false, maintain = false;
     private enum direction {
         x,
         y,
@@ -53,8 +45,14 @@ public class threeWheelOdometry {
     public threeWheelOdometry (HardwareMap hardwareMap, Location start, LinearOpMode op, MecanumDrive drive){
         meccanumDrive = drive;
 
-        //leftDisSensor = hardwareMap.get(DistanceSensor.class, "leftDistance");
-        //rightDisSensor = hardwareMap.get(DistanceSensor.class, "rightDistance");
+        leftDisSensor = new AverageDistanceSensor(
+                hardwareMap.get(DistanceSensor.class, "leftDistance"),
+                        DistanceUnit.CM,
+                        25);
+        rightDisSensor = new AverageDistanceSensor(
+                hardwareMap.get(DistanceSensor.class, "rightDistance"),
+                DistanceUnit.CM,
+                25);
 
         //Set start point
         positionLocation = start;
@@ -62,7 +60,8 @@ public class threeWheelOdometry {
         this.opMode = op;
 
         currentMovement = direction.stationary;
-        movePID = new PidController(.625, 0, .5);
+        movePID = new PidController(.0625, 0, .125);
+        headingPID = new PidController(.75, 0, 0);
     }
 
     private void calculateChange(){
@@ -76,8 +75,6 @@ public class threeWheelOdometry {
         double theta = Math.toRadians(angleDiff),
                 x = (dx1 * Math.cos(theta)) - (dy * Math.sin(theta)),
                 y = (dx1 * Math.sin(theta)) + (dy * Math.cos(theta));
-
-        //
 
         positionLocation.add(x * CM_PER_TICK, y * CM_PER_TICK, 0);
         positionLocation.angle = meccanumDrive.getAngle();
@@ -110,7 +107,7 @@ public class threeWheelOdometry {
         } else if(abs > 135 && abs <= 225){
             angle = 180;
         } else {
-            angle = 0;
+            angle = 270;
         }
 
         angle *= negPos;
@@ -119,9 +116,10 @@ public class threeWheelOdometry {
     }
 
     private void moveTowards(Location diff){
-        if(!compare(diff.x, 0, 15)){
-            double power = movePID.calculateResponse(diff.x);
-
+        /*
+        if((!compare(diff.x, 0, 10) && currentMovement != direction.y && currentMovement != direction.angle) ||
+            !compare(diff.x, 0, 20)){
+            double power = movePID.calculateResponse(diff.x)/2;
             meccanumDrive.moveWithPower(power);
 
             if(currentMovement != direction.x){
@@ -129,17 +127,19 @@ public class threeWheelOdometry {
             }
             currentMovement = direction.x;
 
-        }else if(!compare(diff.y, 0, 15)){
-            double power = movePID.calculateResponse(diff.y);
-
+        }else if((!compare(diff.y, 0, 10) && currentMovement != direction.x && currentMovement != direction.angle) ||
+                    !compare(diff.y, 0, 20)){
+            double power = movePID.calculateResponse(diff.y)/2;
             meccanumDrive.moveWithPower(power, -power, power, -power);
+
             if(currentMovement != direction.y){
                 System.out.println("Current state change: y at " + getLocation());
             }
             currentMovement = direction.y;
 
-        }else if (!compare(diff.angle, 0, 10)){
-            double power = diff.angle / 90;
+        }else if ((!compare(diff.angle, 0, 10) && currentMovement != direction.y && currentMovement != direction.x) ||
+                  !compare(diff.angle, 0, 20)){
+            double power = headingPID.calculateResponse(diff.angle);
             power = Range.clip(power, -1, 1);
 
             meccanumDrive.moveWithPower(-power,-power,power,power);
@@ -150,12 +150,30 @@ public class threeWheelOdometry {
         } else {
             currentMovement = direction.stationary;
             moving = false;
+            meccanumDrive.brake();
         }
+
+         */
+
+        double robotMovementAngle = Math.toDegrees(Math.atan2(diff.x, diff.y));
+        double x = Math.sin(Math.toRadians(robotMovementAngle)),
+        y = -Math.cos(Math.toRadians(robotMovementAngle)),
+        h = robotMovementAngle * Math.toRadians(diff.angle);
+
+        meccanumDrive.moveWithPower(
+                x + y + h,
+                x - y + h,
+                x + y - h,
+                x - y - h
+        );
     }
 
     public void update(){
+        leftDisSensor.update();
+        rightDisSensor.update();
+
         //Check if at target position and heading
-        if(moving && !atTarget()){
+        if((moving || maintain) && !atTarget()){
             Location diff = positionLocation.difference(targetLocation);
             moveTowards(diff);
 
@@ -169,8 +187,8 @@ public class threeWheelOdometry {
         prevRightPos = currentRightPos;
         prevLeftPos = currentLeftPos;
         prevAuxPos = currentAuxPos;
-        currentRightPos = meccanumDrive.motors[3].getCurrentPosition();
-        currentLeftPos = -meccanumDrive.motors[0].getCurrentPosition();
+        currentRightPos = -meccanumDrive.motors[3].getCurrentPosition();
+        currentLeftPos = meccanumDrive.motors[0].getCurrentPosition();
         currentAuxPos = meccanumDrive.motors[1].getCurrentPosition();
 
         //Update current point values
@@ -201,6 +219,13 @@ public class threeWheelOdometry {
         moving = true;
     }
 
+    public double getLeftDistance(){
+        return leftDisSensor.getDistance();
+    }
+
+    public double getRightDistance(){
+        return rightDisSensor.getDistance();
+    }
 
     public String getLocation(){
         return Math.round(positionLocation.x) + " cm , " +
@@ -241,5 +266,4 @@ public class threeWheelOdometry {
                 Math.round(targetLocation.y) + " cm , " +
                 Math.round(targetLocation.angle) + "°";
     }
-
 }
