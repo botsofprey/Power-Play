@@ -13,7 +13,7 @@ import UtilityClasses.Controller;
 import UtilityClasses.Location;
 import UtilityClasses.Vector2D;
 
-@TeleOp(name="Basic TeelOp", group="TeleOp")
+@TeleOp(name="Basic TeleOp", group="TeleOp")
 public class MecanumTele extends LinearOpMode {
 
     private MecanumDrive drive;
@@ -33,9 +33,9 @@ public class MecanumTele extends LinearOpMode {
         controller1 = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
         drive = new MecanumDrive(hardwareMap, -90);
-        //claw = new Claw(hardwareMap);
+        claw = new Claw(hardwareMap);
         odometry = new threeWheelOdometry(hardwareMap, startLoc, this, drive);
-        //lift = new Lift(hardwareMap);
+        lift = new Lift(hardwareMap);
 
         while(!isStarted() && !isStopRequested()){
             controller2.update();
@@ -45,7 +45,7 @@ public class MecanumTele extends LinearOpMode {
             } else if(controller2.leftTriggerHeld){
                 lift.setPower(-controller2.leftTrigger);
             } else {
-                //lift.brake();
+                lift.brake();
             }
 
             if(controller2.xPressed){
@@ -82,28 +82,20 @@ public class MecanumTele extends LinearOpMode {
            }
            drive.slowMode(controller1.leftTriggerHeld && !slowModeOn);
 
-        //Driver 1 uses joysticks for movement, duh
-            if(!overrideDrivers){
-                Vector2D leftInput = controller1.leftStick,
-                         rightInput = controller1.rightStick;
+            //Driver 1 uses joysticks for movement, duh
+            Vector2D leftInput = controller1.leftStick,
+                    rightInput = controller1.rightStick;
 
-                drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
-                /*drive.moveWithPower(
-                        leftInput.y + leftInput.x + rightInput.x,
-                        leftInput.y - leftInput.x + rightInput.x,
-                        leftInput.y + leftInput.x - rightInput.x,
-                        leftInput.y - leftInput.x - rightInput.x
-                );
+            drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
 
-                 */
-            }
+
 
             //Driver 1 controls claw
             if(controller1.aPressed){
                 claw.setPosition(claw.getPosition() != claw.CLOSE_POSITION ?
                         claw.CLOSE_POSITION : claw.OPEN_POSITION);
             }
-           // telemetry.addData("Claw Pos", claw.getPosition());
+           telemetry.addData("Claw Pos", claw.getPosition());
 
             //Driver 2 uses triggers to control lift
             if(controller2.rightTriggerHeld){
@@ -111,14 +103,14 @@ public class MecanumTele extends LinearOpMode {
             } else if(controller2.leftTriggerHeld){
                 lift.setPower(-controller2.leftTrigger);
             } else {
-                //lift.brake();
+                lift.brake();
             }
-          //  telemetry.addData("Lift Position", lift.getPosition());
+            telemetry.addData("Lift Position", lift.getPosition());
 
 
 
             odometry.update();
-            //lift.update();
+            lift.update();
 
             telemetry.addData("Robot position", odometry.getLocation());
             telemetry.update();

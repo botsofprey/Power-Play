@@ -79,12 +79,12 @@ public class Lift {
         liftMotor.setPower(0.75);
     }
 
-    public void update(HardwareMap hwMap) {
-        ProgrammingBoard7 board = new ProgrammingBoard7();
-        telemetry.addData("Touch Sensor", board.getClass());
-        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    public void update() {;
         if (limitSwitch.isPressed()) {
             zeroLift();
+            if(liftMotor.getPower() < 0){
+                liftMotor.setPower(0);
+            }
         }
     }
 }
