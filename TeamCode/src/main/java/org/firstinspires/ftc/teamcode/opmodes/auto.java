@@ -15,6 +15,7 @@ public class auto extends OpMode{
     cameraControl autocam = new cameraControl();
     @Override
     public void init() {
+        //call createCameraInstance
         autocam.createCameraInstance();
 
     }
