@@ -23,13 +23,13 @@ public class MecanumTele extends LinearOpMode {
 
     private threeWheelOdometry odometry;
 
-    private Location startLoc = new Location(4,0,4);
+    private final Location startLoc = new Location(4,0,4);
 
     private boolean slowModeOn = true;
     private boolean overrideDrivers = false;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         controller1 = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
         drive = new MecanumDrive(hardwareMap, this, -90);
@@ -59,9 +59,9 @@ public class MecanumTele extends LinearOpMode {
            controller2.update();
 
             //Check that override can be stopped
-            if(drive.getPower() == 0) {
+            /*if(drive.getPower() == 0) {
                 overrideDrivers = false;
-            }
+            }*/
 
            if(controller1.upPressed){
                odometry.moveToOpenSpace(0,0,0, true);
@@ -91,8 +91,8 @@ public class MecanumTele extends LinearOpMode {
 
             //Driver 1 controls claw
             if(controller1.aPressed){
-                claw.setPosition(claw.getPosition() != claw.CLOSE_POSITION ?
-                        claw.CLOSE_POSITION : claw.OPEN_POSITION);
+                claw.setPosition(claw.getPosition() != Claw.CLOSE_POSITION ?
+                        Claw.CLOSE_POSITION : Claw.OPEN_POSITION);
             }
             telemetry.addData("Claw Pos", claw.getPosition());
 
