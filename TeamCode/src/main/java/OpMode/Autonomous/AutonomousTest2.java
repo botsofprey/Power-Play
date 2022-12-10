@@ -88,8 +88,6 @@ public class AutonomousTest2 extends LinearOpMode {
             telemetry.update();
         }
 
-        while(opModeIsActive());
-
         //If camera is too far away to see qr, robot gets closer
         if(!camera.tagFound()){
             odometry.setTargetPoint(parkingLocations[1]);
