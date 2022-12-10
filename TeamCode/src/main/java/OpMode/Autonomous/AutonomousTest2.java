@@ -34,9 +34,17 @@ public class AutonomousTest2 extends LinearOpMode {
     private Location[] coneLocations = {
             new Location(120, 0, 0), //cone park location 1 (starting location)
             new Location(120, 0, 90), //cone park location 2 (turns to face cone)
-            new Location(120, 60), //cone park location 3 (pick up cone location)
-            new Location(120, 0, -45)
+            new Location(120, 60), //cone park location 3 (where the cones are at)
+            new Location(120, 0, -45) //cone park location 4 (facing large pole)
     };
+
+    public void setconelocation(int x) {
+        odometry.setTargetPoint(coneLocations[x]);
+        while (!odometry.atTarget())
+            odometry.update();
+        drive.brake();
+        sleep(1000);
+    }
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -134,22 +142,12 @@ public class AutonomousTest2 extends LinearOpMode {
         int conesDropped = 0;
         while(opModeIsActive() && timer.seconds() < 25 && conesDropped != 5){
             for (int i = 0; i < 3; i++) {
-                odometry.setTargetPoint(coneLocations[i]);
-                while (!odometry.atTarget())
-                    odometry.update();
-                drive.brake();
-                sleep(1000);
+                setconelocation(i);
             }
 
             //pick up
-            sleep(1000);
-            odometry.setTargetPoint(coneLocations[0]);
-            while(!odometry.atTarget())
-                odometry.update();
-            odometry.setTargetPoint(coneLocations[3]);
-            while(!odometry.atTarget())
-                odometry.update();
-            sleep(1000);
+            setconelocation(0);
+            setconelocation(3);
 
             //Lift, drop, reset lift
             conesDropped++;
