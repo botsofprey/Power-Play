@@ -12,9 +12,15 @@ public abstract class CornerPark extends LinearOpMode {
     private MecanumDrive drive;
     private threeWheelOdometry odometry;
     private DcMotor motor;
-        public void moveCenti(double centimeters, String direction){
+    public void runOpMode (){
+        if(opModeIsActive()){
+            drive.moveCenti(36, MecanumDrive.FORWARD);
+            while(opModeIsActive() && drive.isBusy()
+            ) {
 
-
-         drive.moveCenti(36, MecanumDrive.FORWARD);
-    }}
+            }
+            sleep(5000);
+        }
+    }
+}
 
