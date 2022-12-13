@@ -73,12 +73,12 @@ public class EncodedEverything extends OpMode {
             lastY = board.y;
         }
 
-        if (board.getLift() <= 1650) {
+        if (board.getLift() <= 10000) {
             board.setLift((gamepad2.right_trigger - gamepad2.left_trigger) / 2);
         } else if (board.getLift() >= 0) {
-            board.setLift(gamepad2.right_trigger / 2);
-        } else {
             board.setLift(-gamepad2.left_trigger / 2);
+        } else {
+            board.setLift(-gamepad2.right_trigger / 2);
         }
 
         if (gamepad2.a) {
