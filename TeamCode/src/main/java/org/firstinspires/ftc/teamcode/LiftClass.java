@@ -7,16 +7,18 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @TeleOp()
 public class LiftClass extends OpMode {
     DcMotor lift;
-    double targetPosition;
-    double lowJunction = 0; //dummy numbers to be replaced
-    double midJunction = 1;
-    double highJunction = 2;
+    int targetPosition = 0;
+    int lowJunction = 2500; //dummy numbers to be replaced
+    int midJunction = 5000;
+    int highJunction = 10000;
 
     @Override
     public void init() {
         lift = hardwareMap.dcMotor.get("lift");
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lift.setTargetPosition(targetPosition);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     @Override
@@ -34,14 +36,13 @@ public class LiftClass extends OpMode {
                 targetPosition = midJunction;
             } else if (targetPosition == midJunction) {
                 targetPosition = lowJunction;
-            } else if(targetPosition == lowJunction){
+            } else if (targetPosition == lowJunction) {
                 targetPosition = 0;
             }
         }
-        if(lift.getCurrentPosition() < targetPosition){
-            lift.setPower(0.5);
-        } else if(lift.getCurrentPosition() > targetPosition){
-            lift.setPower(-0.5);
+        lift.setTargetPosition(targetPosition);
+        lift.setPower(0.08);
+        telemetry.addData("position", lift.getCurrentPosition());
+        telemetry.addData("target position", targetPosition);
         }
     }
-}
