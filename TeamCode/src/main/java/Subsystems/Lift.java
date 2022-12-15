@@ -25,12 +25,14 @@ public class Lift {
     public void setPower(double power) {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftMotor.setPower(power);
+        braking = false;
     }
 
     public void setPosition(int position, double power) {
         liftMotor.setTargetPosition(position);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(power);
+        braking = false;
     }
 
     public int getPosition() {
@@ -38,9 +40,12 @@ public class Lift {
     }
 
     public void brake() {
-        liftMotor.setTargetPosition(liftMotor.getCurrentPosition());
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(.5);
+        if(!braking) {
+            liftMotor.setTargetPosition(liftMotor.getCurrentPosition());
+            liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            liftMotor.setPower(1);
+            braking = true;
+        }
     }
 
     public void zeroLift() {
@@ -53,30 +58,35 @@ public class Lift {
         liftMotor.setTargetPosition(0);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
+        braking = false;
     }
 
     public void Quarter(int position, double power) {
         liftMotor.setTargetPosition(6);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
+        braking = false;
     }
 
     public void Half(int position, double power) {
         liftMotor.setTargetPosition(12);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
+        braking = false;
     }
 
     public void ThreeQuarters(int position, double power) {
         liftMotor.setTargetPosition(27);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
+        braking = false;
     }
 
     public void Top(int position, double power) {
         liftMotor.setTargetPosition(36);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
+        braking = false;
     }
 
     public void update() {;

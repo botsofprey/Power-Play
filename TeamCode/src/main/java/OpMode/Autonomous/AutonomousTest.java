@@ -1,4 +1,4 @@
-package OpMode.Autonomous;
+/*package OpMode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -152,3 +152,5 @@ public class AutonomousTest extends LinearOpMode {
 
     }
 }
+
+ */

@@ -9,8 +9,8 @@ import DriveEngine.MecanumDrive;
 import Subsystems.threeWheelOdometry;
 import UtilityClasses.Location;
 
-@Autonomous(name="Auto Test2", group = "Autonomous")
-public abstract class CornerPark extends LinearOpMode {
+@Autonomous(name="WORKING AUTO", group = "Autonomous")
+public class CornerPark extends LinearOpMode {
     private MecanumDrive drive;
     private threeWheelOdometry odometry;
 
@@ -18,14 +18,11 @@ public abstract class CornerPark extends LinearOpMode {
         drive = new MecanumDrive(hardwareMap,0);
         odometry = new threeWheelOdometry (hardwareMap, new Location(0,0), this, drive);
 
-        if(opModeIsActive()){
-            drive.moveCenti(65, MecanumDrive.FORWARD);
-            while(opModeIsActive() && drive.isBusy()
-            ) {
+        while(!isStarted() && !isStopRequested());
 
-            }
-            sleep(5000);
-        }
+        drive.moveWithPower(.5);
+        sleep(1500);
+        drive.brake();
     }
 }
 

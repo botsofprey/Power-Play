@@ -51,6 +51,8 @@ public class AutonomousTest2 extends LinearOpMode {
         //CameraPipeline cameraPipeline = new CameraPipeline();
         // Camera camera = new Camera(hardwareMap, cameraPipeline);
         AprilTagCamera camera = new AprilTagCamera(hardwareMap);
+        drive = new MecanumDrive(hardwareMap, 0);
+        odometry = new threeWheelOdometry(hardwareMap, new Location(0,0), this, drive);
 
         Controller con = new Controller(gamepad1);
 

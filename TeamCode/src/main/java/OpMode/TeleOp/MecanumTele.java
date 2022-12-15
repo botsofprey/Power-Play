@@ -79,8 +79,9 @@ public class MecanumTele extends LinearOpMode {
            if(controller1.startPressed){
                drive.slowMode();
                slowModeOn = !slowModeOn;
+           }else{
+               drive.slowMode(controller1.leftTriggerHeld && !slowModeOn);
            }
-           drive.slowMode(controller1.leftTriggerHeld && !slowModeOn);
 
         //Driver 1 uses joysticks for movement, duh
             if(!overrideDrivers){

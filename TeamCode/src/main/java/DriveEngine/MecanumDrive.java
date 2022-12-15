@@ -108,7 +108,7 @@ public class MecanumDrive {
         globalAngle = startAngle;
         driverAngle=startAngle;
 
-        currentSpeed = slowSpeed;
+        currentSpeed = maxSpeed;
     }
     public MecanumDrive(HardwareMap hw, LinearOpMode m, double startAngle){
         for(int i = 0; i < motors.length; i++){
