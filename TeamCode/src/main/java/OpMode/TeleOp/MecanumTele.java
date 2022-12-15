@@ -2,8 +2,6 @@ package OpMode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import DriveEngine.MecanumDrive;
 import Subsystems.Claw;
@@ -113,6 +111,49 @@ public class MecanumTele extends LinearOpMode {
             } else {
                 lift.brake();
             }
+
+            int liftpreset = 0;
+            if(controller2.rightBumperPressed) {
+                liftpreset += 1;
+            }
+            if(controller2.leftBumperPressed) {
+                liftpreset = 5;
+            }
+            while(liftpreset != 0) {
+                if(controller2.rightBumperPressed) {
+                    liftpreset += 1;
+                }
+                if(controller2.leftBumperPressed) {
+                    liftpreset -= 1;
+                }
+                if(liftpreset == 1) {
+                    lift.Bottom();
+                } else if(liftpreset == 2) {
+                    lift.Quarter();
+                } else if(liftpreset == 3) {
+                    lift.Half();
+                } else if(liftpreset == 4) {
+                    lift.ThreeQuarters();
+                } else if(liftpreset == 5) {
+                    lift.Top();
+                } else if(liftpreset == 6) {
+                    liftpreset = 0;
+                }
+                telemetry.addData("Lift preset", liftpreset);
+            }
+
+            /*
+            if(controller2.downPressed) {
+                lift.Bottom();
+            } else if(controller2.leftPressed) {
+                lift.Quarter();
+            } else if(controller2.upPressed) {
+                lift.Half();
+            } else if(controller2.rightPressed) {
+                lift.Top();
+            }
+            */
+
             telemetry.addData("Lift Position", lift.getPosition());
 
             telemetry.addData("Powers", drive.getPowers());
