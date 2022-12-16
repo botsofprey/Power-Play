@@ -15,11 +15,11 @@ public class LiftClass extends OpMode {
     }
     public void loop(){
         if (lift.getCurrentPosition() <= 10000) {
-            lift.setPower((gamepad2.right_trigger - gamepad2.left_trigger) / 2);
-        } else if (lift.getCurrentPosition() >= 0) {
-            lift.setPower(-gamepad2.left_trigger / 2);
+            lift.setPower((gamepad2.right_trigger - gamepad2.left_trigger) / 1.5);
+        } else if (lift.getCurrentPosition() > 0) {
+            lift.setPower(-gamepad2.left_trigger / 1.5);
         } else {
-            lift.setPower(gamepad2.left_trigger / 2);
+            lift.setPower(gamepad2.right_trigger / 1.5);
         }
     }
 }
