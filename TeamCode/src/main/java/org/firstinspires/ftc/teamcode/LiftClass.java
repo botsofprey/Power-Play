@@ -14,12 +14,18 @@ public class LiftClass extends OpMode {
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     public void loop(){
-        if (lift.getCurrentPosition() <= 10000) {
-            lift.setPower((gamepad2.right_trigger - gamepad2.left_trigger) / 1.5);
-        } else if (lift.getCurrentPosition() > 0) {
-            lift.setPower(-gamepad2.left_trigger / 1.5);
-        } else {
+        //right trigger goes up, left trigger goes down
+        if (lift.getCurrentPosition() <= 0) {
             lift.setPower(gamepad2.right_trigger / 1.5);
+        }else if (lift.getCurrentPosition() <= 10000) {
+            lift.setPower((gamepad2.right_trigger - gamepad2.left_trigger) / 1.5);
+        } else {
+            lift.setPower(-gamepad2.left_trigger / 1.5);
         }
+        if(lift.getCurrentPosition() < 0){
+            lift.setTargetPosition(0);
+            lift.setPower(0.05);
+        }
+        telemetry.addData("position", lift.getCurrentPosition());
     }
 }

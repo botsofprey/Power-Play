@@ -73,12 +73,17 @@ public class EncodedEverything extends OpMode {
             lastY = board.y;
         }
 
-        if (board.getLift() <= 10000) {
-            board.setLift((gamepad2.right_trigger - gamepad2.left_trigger) / 2);
-        } else if (board.getLift() >= 0) {
-            board.setLift(-gamepad2.left_trigger / 2);
+        //right trigger goes up, left trigger goes down
+        if (board.getLift() <= 0) {
+            board.setLift(gamepad2.right_trigger / 1.5);
+        }else if (board.getLift() <= 10000) {
+            board.setLift((gamepad2.right_trigger - gamepad2.left_trigger) / 1.5);
         } else {
-            board.setLift(-gamepad2.right_trigger / 2);
+            board.setLift(-gamepad2.left_trigger / 1.5);
+        }
+        if(board.getLift() < 0){
+            board.lift.setTargetPosition(0);
+            board.lift.setPower(0.05);
         }
 
         if (gamepad2.a) {
@@ -89,13 +94,13 @@ public class EncodedEverything extends OpMode {
         board.setClaw(clawPosition);
 
         if (gamepad1.right_bumper) {
-            board.driveFieldRelative(board.y / 4, board.x / 4, board.rx / 4);
+            board.driveFieldRelative(board.y / 4, board.x / 4, board.rx / 4); //slow mode
             telemetry.addData("Mode", "Slow");
         } else if (gamepad1.left_bumper) {
-            board.driveFieldRelative(board.y, board.x, board.rx);
+            board.driveFieldRelative(board.y, board.x, board.rx); //speed mode
             telemetry.addData("Mode", "Speed");
         } else {
-            board.driveFieldRelative(board.y / 2, board.x / 2, board.rx / 2);
+            board.driveFieldRelative(board.y / 2, board.x / 2, board.rx / 2); //normal mode
             telemetry.addData("Mode", "Normal");
         }
     }
