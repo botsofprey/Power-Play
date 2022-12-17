@@ -18,8 +18,6 @@ public class EncodedEverything extends OpMode {
 
     HardwareMechanisms board = new HardwareMechanisms();
 
-    double clawPosition;
-
     public void init() {
         board.init(hardwareMap);
     }
@@ -86,12 +84,11 @@ public class EncodedEverything extends OpMode {
             board.lift.setPower(0.05);
         }
 
-        if (gamepad2.a) {
-            clawPosition += 0.001;
-        } else if (gamepad2.b) {
-            clawPosition -= 0.001;
+        if(gamepad2.a) {
+            board.setClaw(0);
+        } else if(gamepad2.b){
+            board.setClaw(0.25);
         }
-        board.setClaw(clawPosition);
 
         if (gamepad1.right_bumper) {
             board.driveFieldRelative(board.y / 4, board.x / 4, board.rx / 4); //slow mode

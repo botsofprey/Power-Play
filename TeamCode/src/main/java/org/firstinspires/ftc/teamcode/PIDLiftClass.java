@@ -11,8 +11,8 @@ public class PIDLiftClass extends OpMode {
     int lowJunction = 2500; //dummy numbers to be replaced
     int midJunction = 5000;
     int highJunction = 10000;
-    boolean aPressed = false;
-    boolean bPressed = false;
+    boolean upPressed = false;
+    boolean downPressed = false;
 
     @Override
     public void init() {
@@ -25,20 +25,20 @@ public class PIDLiftClass extends OpMode {
 
     @Override
     public void loop() {
-        if (gamepad2.a) {
+        if (gamepad2.dpad_up) {
             if (targetPosition == 0) {
                 targetPosition = lowJunction;
-            } else if ((targetPosition == lowJunction) && !aPressed) {
+            } else if ((targetPosition == lowJunction) && !upPressed) {
                 targetPosition = midJunction;
-            } else if ((targetPosition == midJunction) && !aPressed) {
+            } else if ((targetPosition == midJunction) && !upPressed) {
                 targetPosition = highJunction;
             }
-        } else if (gamepad2.b) {
+        } else if (gamepad2.dpad_down) {
             if (targetPosition == highJunction) {
                 targetPosition = midJunction;
-            } else if ((targetPosition == midJunction) && !bPressed) {
+            } else if ((targetPosition == midJunction) && !downPressed) {
                 targetPosition = lowJunction;
-            } else if ((targetPosition == lowJunction) && !bPressed) {
+            } else if ((targetPosition == lowJunction) && !downPressed) {
                 targetPosition = 0;
             }
         }
@@ -46,7 +46,7 @@ public class PIDLiftClass extends OpMode {
         lift.setPower(0.05);
         telemetry.addData("position", lift.getCurrentPosition());
         telemetry.addData("target position", targetPosition);
-        aPressed = gamepad2.a;
-       bPressed = gamepad2.b;
+        upPressed = gamepad2.dpad_up;
+       downPressed = gamepad2.dpad_down;
         }
     }
