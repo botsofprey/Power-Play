@@ -43,13 +43,14 @@ public class Lift {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    // Change target positions
+
     public void Bottom() {
         liftMotor.setTargetPosition(0);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
     }
 
-    // int position, double power
     public void Quarter() {
         liftMotor.setTargetPosition(6);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

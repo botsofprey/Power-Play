@@ -112,34 +112,37 @@ public class MecanumTele extends LinearOpMode {
                 lift.brake();
             }
 
-            int liftpreset = 0;
+            int liftPreset = 0;
             if(controller2.rightBumperPressed) {
-                liftpreset += 1;
+                liftPreset = 1;
             }
             if(controller2.leftBumperPressed) {
-                liftpreset = 5;
+                liftPreset = 5;
             }
-            while(liftpreset != 0) {
+            while(liftPreset != 0) {
                 if(controller2.rightBumperPressed) {
-                    liftpreset += 1;
+                    liftPreset += 1;
                 }
                 if(controller2.leftBumperPressed) {
-                    liftpreset -= 1;
+                    liftPreset -= 1;
                 }
-                if(liftpreset == 1) {
+                if(controller2.leftTriggerPressed || controller2.rightTriggerPressed) {
+                    liftPreset = 0;
+                }
+                if(liftPreset == 1) {
                     lift.Bottom();
-                } else if(liftpreset == 2) {
+                } else if(liftPreset == 2) {
                     lift.Quarter();
-                } else if(liftpreset == 3) {
+                } else if(liftPreset == 3) {
                     lift.Half();
-                } else if(liftpreset == 4) {
+                } else if(liftPreset == 4) {
                     lift.ThreeQuarters();
-                } else if(liftpreset == 5) {
+                } else if(liftPreset == 5) {
                     lift.Top();
-                } else if(liftpreset == 6) {
-                    liftpreset = 0;
+                } else if(liftPreset == 6) {
+                    liftPreset = 0;
                 }
-                telemetry.addData("Lift preset", liftpreset);
+                telemetry.addData("Lift preset", liftPreset);
             }
 
             /*
