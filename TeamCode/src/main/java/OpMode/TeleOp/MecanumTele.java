@@ -18,7 +18,7 @@ public class MecanumTele extends LinearOpMode {
     private Controller controller1, controller2;
     private Claw claw;
     private Lift lift;
-    private int liftpreset = 0;
+    private int liftPreset = 0;
 
     private threeWheelOdometry odometry;
 
@@ -106,14 +106,14 @@ public class MecanumTele extends LinearOpMode {
             telemetry.addData("Claw Pos", claw.getPosition());
 
             if (controller2.rightBumperPressed) {
-                liftpreset += 1;
+                liftPreset += 1;
             }
             if (controller2.leftBumperPressed) {
-                liftpreset -= 1;
+                liftPreset -= 1;
             }
 
             //Driver 2 uses triggers to control lift
-            if(liftpreset == 0) {
+            if(liftPreset == 0) {
                 if (controller2.rightTriggerHeld) {
                     lift.setPower(controller2.rightTrigger);
                 } else if (controller2.leftTriggerHeld) {
@@ -123,25 +123,27 @@ public class MecanumTele extends LinearOpMode {
                 }
             }
 
-            if(liftpreset != 0) {
+            if(liftPreset != 0) {
                 if (controller2.leftTriggerPressed || controller2.rightTriggerPressed) {
-                    liftpreset = 0;
+                    liftPreset = 0;
                 }
-                if (liftpreset == 1) {
-                    lift.Bottom();
-                } else if (liftpreset == 2) {
+                if (liftPreset == 1) {
+                    lift.Ground();
+                } else if (liftPreset == 2) {
                     lift.Quarter();
-                } else if (liftpreset == 3) {
+                } else if (liftPreset == 3) {
                     lift.ljunction();
-                } else if (liftpreset == 4) {
+                } else if (liftPreset == 4) {
                     lift.mjunction();
-                } else if (liftpreset == 5) {
+                } else if (liftPreset == 5) {
                     lift.hjunction();
-                } else if (liftpreset == 6) {
-                    liftpreset = 0;
+                } else if (liftPreset == 6) {
+                    liftPreset = 0;
+                } else if (liftPreset == -1) {
+                    liftPreset = 5;
                 }
             }
-            telemetry.addData("Lift preset", liftpreset);
+            telemetry.addData("Lift preset", liftPreset);
 
             /*
             if(controller2.downPressed) {

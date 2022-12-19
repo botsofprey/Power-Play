@@ -51,7 +51,7 @@ public class Lift {
         liftMotor.setPower(0.75);
     }
 
-    public void Bottom() {
+    public void Ground() {
         liftMotor.setTargetPosition(0);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
