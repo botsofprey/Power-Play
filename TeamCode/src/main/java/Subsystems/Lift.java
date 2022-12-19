@@ -83,4 +83,8 @@ public class Lift {
         }
 
     }
+
+    public boolean isBusy(){
+        return liftMotor.isBusy();
+    }
 }

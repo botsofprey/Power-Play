@@ -81,20 +81,21 @@ public class MecanumTele extends LinearOpMode {
            drive.slowMode(controller1.leftTriggerHeld && !slowModeOn);
 
         //Driver 1 uses joysticks for movement, duh
-            if(!overrideDrivers){
+            if(!overrideDrivers) {
                 Vector2D leftInput = controller1.leftStick,
-                         rightInput = controller1.rightStick;
+                        rightInput = controller1.rightStick;
 
                 double newForward = controller1.leftStick.y;
-                double newRight = -controller1.leftStick.x;
+                double newRight = controller1.leftStick.x;
                 double rotate = controller1.rightStick.x;
-                drive.moveWithPower(
+                /*drive.moveWithPower(
                         newForward + newRight + rotate,
                         newForward - newRight + rotate,
                         newForward + newRight - rotate,
                         newForward - newRight - rotate
-                );
-            //drive.moveTrueNorth(leftInput.y, -leftInput.x, rightInput.x);
+                ); */
+                drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
+            }
 
             //Driver 1 controls claw
             if(controller1.aPressed){
@@ -119,7 +120,6 @@ public class MecanumTele extends LinearOpMode {
             if(controller2.leftBumperPressed) {
                 liftpreset = 5;
             }
-            while(liftpreset != 0) {
                 if(controller2.rightBumperPressed) {
                     liftpreset += 1;
                 }
@@ -140,7 +140,6 @@ public class MecanumTele extends LinearOpMode {
                     liftpreset = 0;
                 }
                 telemetry.addData("Lift preset", liftpreset);
-            }
 
             /*
             if(controller2.downPressed) {
@@ -163,6 +162,5 @@ public class MecanumTele extends LinearOpMode {
 
             telemetry.addData("Robot position", odometry.getLocation());
             telemetry.update();
-        }
     }
 }}
