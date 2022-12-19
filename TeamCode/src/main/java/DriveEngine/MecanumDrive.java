@@ -374,5 +374,9 @@ public class MecanumDrive {
     public double getPrevAngle(){
         return prevAngle;
     }
+
+    public double getRadians() {
+        return Math.toRadians(getAngle());
+    }
 }
 
