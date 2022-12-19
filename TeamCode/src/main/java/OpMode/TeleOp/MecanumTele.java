@@ -19,6 +19,7 @@ public class MecanumTele extends LinearOpMode {
     private Claw claw;
     private Lift lift;
     private int liftPreset = 0;
+    private int coneNum = 5;
 
     private threeWheelOdometry odometry;
 
@@ -130,7 +131,7 @@ public class MecanumTele extends LinearOpMode {
                 if (liftPreset == 1) {
                     lift.Ground();
                 } else if (liftPreset == 2) {
-                    lift.Quarter();
+                    lift.coneStack(coneNum);
                 } else if (liftPreset == 3) {
                     lift.ljunction();
                 } else if (liftPreset == 4) {
@@ -144,18 +145,6 @@ public class MecanumTele extends LinearOpMode {
                 }
             }
             telemetry.addData("Lift preset", liftPreset);
-
-            /*
-            if(controller2.downPressed) {
-                lift.Bottom();
-            } else if(controller2.leftPressed) {
-                lift.Quarter();
-            } else if(controller2.upPressed) {
-                lift.Half();
-            } else if(controller2.rightPressed) {
-                lift.Top();
-            }
-            */
 
             telemetry.addData("Lift Position", lift.getPosition());
 
