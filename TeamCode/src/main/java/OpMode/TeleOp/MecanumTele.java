@@ -112,9 +112,10 @@ public class MecanumTele extends LinearOpMode {
                 lift.brake();
             }
 
+            // Driver 2 uses bumpers to control lift presets (may change)
             int liftpreset = 0;
             if(controller2.rightBumperPressed) {
-                liftpreset += 1;
+                liftpreset = 1;
             }
             if(controller2.leftBumperPressed) {
                 liftpreset = 5;
@@ -125,6 +126,9 @@ public class MecanumTele extends LinearOpMode {
                 }
                 if(controller2.leftBumperPressed) {
                     liftpreset -= 1;
+                }
+                if(controller2.leftTriggerPressed || controller2.rightTriggerPressed) {
+                    liftpreset = 0;
                 }
                 if(liftpreset == 1) {
                     lift.Bottom();
