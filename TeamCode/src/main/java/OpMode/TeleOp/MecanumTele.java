@@ -125,11 +125,11 @@ public class MecanumTele extends LinearOpMode {
             } else if(liftpreset == 2) {
                 lift.Quarter();
             } else if(liftpreset == 3) {
-                lift.Half();
+                lift.ljunction();
             } else if(liftpreset == 4) {
-                lift.ThreeQuarters();
+                lift.mjunction();
             } else if(liftpreset == 5) {
-                lift.Top();
+                lift.hjunction();
             } else if(liftpreset == 6) {
                 liftpreset = 0;
             }

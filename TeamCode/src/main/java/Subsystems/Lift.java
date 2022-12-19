@@ -63,19 +63,19 @@ public class Lift {
         liftMotor.setPower(0.75);
     }
 
-    public void Half() {
+    public void ljunction() {
         liftMotor.setTargetPosition(1000);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
     }
 
-    public void ThreeQuarters() {
+    public void mjunction() {
         liftMotor.setTargetPosition(1600);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
     }
 
-    public void Top() {
+    public void hjunction() {
         liftMotor.setTargetPosition(2150);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
