@@ -45,6 +45,12 @@ public class Lift {
 
     // Change target positions
 
+    public void coneStack(int coneNum) {
+        liftMotor.setTargetPosition(coneNum);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(0.75);
+    }
+
     public void Bottom() {
         liftMotor.setTargetPosition(0);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

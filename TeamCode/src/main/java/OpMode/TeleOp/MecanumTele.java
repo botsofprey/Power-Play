@@ -50,7 +50,7 @@ public class MecanumTele extends LinearOpMode {
                 lift.zeroLift();
             }
         }
-
+        int liftpreset = 0;
         while(opModeIsActive()){
             //Checks for new inputs
            controller1.update();
@@ -103,60 +103,49 @@ public class MecanumTele extends LinearOpMode {
             }
             telemetry.addData("Claw Pos", claw.getPosition());
 
-            //Driver 2 uses triggers to control lift
-            if(controller2.rightTriggerHeld){
-                lift.setPower(controller2.rightTrigger);
-            } else if(controller2.leftTriggerHeld){
-                lift.setPower(-controller2.leftTrigger);
-            } else {
-                lift.brake();
-            }
-
-            // Driver 2 uses bumpers to control lift presets (may change)
-            int liftpreset = 0;
             if(controller2.rightBumperPressed) {
                 liftpreset = 1;
             }
             if(controller2.leftBumperPressed) {
                 liftpreset = 5;
             }
-            while(liftpreset != 0) {
-                if(controller2.rightBumperPressed) {
+            //Driver 2 uses triggers to control lift
+            if(liftpreset == 0) {
+                if (controller2.rightTriggerHeld) {
+                    lift.setPower(controller2.rightTrigger);
+                } else if (controller2.leftTriggerHeld) {
+                    lift.setPower(-controller2.leftTrigger);
+                } else {
+                    lift.brake();
+                }
+            }
+
+            // Driver 2 uses bumpers to control lift presets (may change)
+            if(liftpreset != 0) {
+                if (controller2.rightBumperPressed) {
                     liftpreset += 1;
                 }
-                if(controller2.leftBumperPressed) {
+                if (controller2.leftBumperPressed) {
                     liftpreset -= 1;
                 }
-                if(controller2.leftTriggerPressed || controller2.rightTriggerPressed) {
+                if (controller2.leftTriggerPressed || controller2.rightTriggerPressed) {
                     liftpreset = 0;
                 }
-                if(liftpreset == 1) {
+                if (liftpreset == 1) {
                     lift.Bottom();
-                } else if(liftpreset == 2) {
+                } else if (liftpreset == 2) {
                     lift.Quarter();
-                } else if(liftpreset == 3) {
+                } else if (liftpreset == 3) {
                     lift.Half();
-                } else if(liftpreset == 4) {
+                } else if (liftpreset == 4) {
                     lift.ThreeQuarters();
-                } else if(liftpreset == 5) {
+                } else if (liftpreset == 5) {
                     lift.Top();
-                } else if(liftpreset == 6) {
+                } else if (liftpreset == 6) {
                     liftpreset = 0;
                 }
                 telemetry.addData("Lift preset", liftpreset);
             }
-
-            /*
-            if(controller2.downPressed) {
-                lift.Bottom();
-            } else if(controller2.leftPressed) {
-                lift.Quarter();
-            } else if(controller2.upPressed) {
-                lift.Half();
-            } else if(controller2.rightPressed) {
-                lift.Top();
-            }
-            */
 
             telemetry.addData("Lift Position", lift.getPosition());
 
