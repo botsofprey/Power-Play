@@ -237,7 +237,7 @@ public class threeWheelOdometry {
             Location diff = positionLocation.difference(targetLocation);
             moveTowards(diff);
 
-        }else{
+        }else if(moving || maintain){
             moving = false;
             currentMovement = direction.stationary;
             meccanumDrive.brake();
