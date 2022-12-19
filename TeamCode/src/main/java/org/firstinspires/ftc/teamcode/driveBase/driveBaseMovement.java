@@ -8,15 +8,12 @@ public class driveBaseMovement {
     public int fastMode;
     public int slowMode;
 
-    public int TICKS_PER_REV;
-    public double BLOCK_LENGTH;
-
-    public driveBaseMovement() {
-        //set the ticks per revolution
-        final int TICKS_PER_REV = this.TICKS_PER_REV;
-        //set the block length in centimeters (should be 60.69 or 24 inches
-        final double BLOCK_LENGTH = this.BLOCK_LENGTH;
-    }
+    //amount of ticks in a single full revolution of the wheel
+    public final int TICKS_PER_REV = 0;
+    //the length of the 24x24 inch foam tiles on the field in ticks
+    public final double BLOCK_LENGTH = 0;
+    //the amount of wheel turns required to fully turn the robot
+    public final double COMPLETE_TURN_ROTS = 0;
 
     //set fastMode to double normalMode;
     public void setFastMode() {
@@ -68,32 +65,33 @@ public class driveBaseMovement {
     }
 
     public double[] moveRobotAUTO(double turnDEG, double forbackBLOCK, double strafeBLOCK) {
-        double frontLeftMotor = 0.0;
-        double frontRightMotor = 0.0;
-        double backLeftMotor = 0.0;
-        double backRightMotor = 0.0;
+        double frontLeftMotorTICKS = 0.0;
+        double frontRightMotorTICKS = 0.0;
+        double backLeftMotorTICKS = 0.0;
+        double backRightMotorTICKS = 0.0;
 
-        turnDEG =
+        //convert degrees into parts of a whole turn
+        turnDEG = (turnDEG / 360) * (TICKS_PER_REV * COMPLETE_TURN_ROTS);
 
         //turn robot a certain amount of degrees
-            frontLeftMotor -= (turnDEG * BLOCK_LENGTH * TICKS_PER_REV);
-            frontRightMotor += (turnDEG * BLOCK_LENGTH * TICKS_PER_REV);
-            backLeftMotor -= (turnDEG * BLOCK_LENGTH * TICKS_PER_REV);
-            backRightMotor += (turnDEG * driveMode * BLOCK_LENGTH * TICKS_PER_REV);
+            frontLeftMotorTICKS -= (turnDEG * driveMode);
+            frontRightMotorTICKS += (turnDEG * driveMode);
+            backLeftMotorTICKS -= (turnDEG * driveMode);
+            backRightMotorTICKS += (turnDEG * driveMode);
 
         //Move forward or backward a certain amount of blocks
-            frontLeftMotor += (forbackBLOCK * BLOCK_LENGTH * TICKS_PER_REV);
-            frontRightMotor += (forbackBLOCK * BLOCK_LENGTH * TICKS_PER_REV);
-            backLeftMotor += (forbackBLOCK * BLOCK_LENGTH * TICKS_PER_REV);
-            backRightMotor += (forbackBLOCK * BLOCK_LENGTH * TICKS_PER_REV);
+            frontLeftMotorTICKS += (forbackBLOCK * driveMode * BLOCK_LENGTH * TICKS_PER_REV);
+            frontRightMotorTICKS += (forbackBLOCK * driveMode * BLOCK_LENGTH * TICKS_PER_REV);
+            backLeftMotorTICKS += (forbackBLOCK * driveMode * BLOCK_LENGTH * TICKS_PER_REV);
+            backRightMotorTICKS += (forbackBLOCK * driveMode * BLOCK_LENGTH * TICKS_PER_REV);
 
         //Strafe a certain amount of blocks
-            frontLeftMotor -= (strafeBLOCK * BLOCK_LENGTH * TICKS_PER_REV);
-            frontRightMotor += (strafeBLOCK * BLOCK_LENGTH * TICKS_PER_REV);
-            backLeftMotor += (strafeBLOCK * BLOCK_LENGTH * TICKS_PER_REV);
-            backRightMotor -= (strafeBLOCK * BLOCK_LENGTH * TICKS_PER_REV);
+            frontLeftMotorTICKS -= (strafeBLOCK * driveMode * BLOCK_LENGTH * TICKS_PER_REV);
+            frontRightMotorTICKS += (strafeBLOCK * driveMode * BLOCK_LENGTH * TICKS_PER_REV);
+            backLeftMotorTICKS += (strafeBLOCK * driveMode * BLOCK_LENGTH * TICKS_PER_REV);
+            backRightMotorTICKS -= (strafeBLOCK * driveMode * BLOCK_LENGTH * TICKS_PER_REV);
 
         //return calculation results from pipeline for use in code
-        return new double[]{frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
+        return new double[]{frontLeftMotorTICKS, frontRightMotorTICKS, backLeftMotorTICKS, backRightMotorTICKS};
     }
 }

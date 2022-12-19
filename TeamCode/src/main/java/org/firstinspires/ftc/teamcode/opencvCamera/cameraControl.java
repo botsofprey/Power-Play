@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 ** set up for use. No pipelining is used here, this class only sets up and destroys camera instances
 */
 
-public class cameraControl{
+public class  cameraControl{
     //create necessary variables
     public WebcamName webcamName;
     public OpenCvCamera camera;

@@ -16,7 +16,9 @@ public class autoTEMP extends OpMode {
     cameraControl autocam;
     AprilTagPipelineEXAMPLECOPY apriltagpipelineEXAMPLE;
     //set the variable that holds the tag ID of interest
-    AprilTagDetection tagOfInterest;
+    int tagOfInterest;
+    //show extra tag data
+    AprilTagDetection tagData;
     //set size of tag in meters
     double tagsize = 0.166;
     //lens intrinsics
@@ -42,21 +44,24 @@ public class autoTEMP extends OpMode {
 
     @Override
     public void loop() {
-        tagOfInterest = null;
+        tagData = null;
         ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
 
         if(currentDetections.size() != 0) {
             for (AprilTagDetection tag : currentDetections) {
                 if (tag.id >= 17 || tag.id <= 19) {
                     tagFound = true;
-                    tagOfInterest = tag;
+                    tagOfInterest = tag.id;
+                    tagData = tag;
                     break;
                 }
             }
         }
-        if(tagFound)
+        if(tagFound) {
             telemetry.addData("Tag of interest", tagOfInterest);
-        else if(tagOfInterest == null)
+            telemetry.addData("Tag data", tagData);
+        }
+        else
             telemetry.addLine("No tag found.");
     }
 
