@@ -61,7 +61,7 @@ public class AprilTagPipelineEXAMPLE extends opencvPipeline{
         nativeApriltagPtr = AprilTagDetectorJNI.createApriltagDetector(AprilTagDetectorJNI.TagFamily.TAG_36h11.string, 3, 3);
     }
 
-    @Override
+    /*@Override
     public void finalize()
     {
         // Might be null if createApriltagDetector() threw an exception
@@ -75,7 +75,7 @@ public class AprilTagPipelineEXAMPLE extends opencvPipeline{
         {
             System.out.println("AprilTagDetectionPipeline.finalize(): nativeApriltagPtr was NULL");
         }
-    }
+    }*/
 
     @Override
     public Mat processFrame(Mat input)

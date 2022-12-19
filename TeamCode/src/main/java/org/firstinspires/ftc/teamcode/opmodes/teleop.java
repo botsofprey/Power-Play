@@ -26,12 +26,16 @@ public class teleop extends OpMode{
         double leftStickX = gamepad1.left_stick_x;
         double leftStickY = gamepad1.left_stick_y;
         double rightStickX = gamepad1.right_stick_x;
-        boolean a = gamepad1.a
+        boolean a = gamepad1.a;
+        boolean leftbumper = gamepad1.left_bumper;
+        boolean rightbumper = gamepad1.right_bumper;
 
         //track the inputs of the controller
-        telemetry.addData("Left Stick X", gamepad1.left_stick_x);
-        telemetry.addData("Left Stick Y", gamepad1.left_stick_y);
-        telemetry.addData("Turn (Right Stick X)",gamepad1.right_stick_x);
+        telemetry.addData("Left Stick X",leftStickX);
+        telemetry.addData("Left Stick Y",leftStickY);
+        telemetry.addData("Turn (Right Stick X)",rightStickX);
+        telemetry.addData("A button",a);
+        telemetry.addData("Left Bumper",leftbumper);
 
         //send control of movement calculation to moveRobot and set return array of function equal
         //to moveRobotReturn
@@ -43,5 +47,20 @@ public class teleop extends OpMode{
         mpb.motorBackLeft.setPower(moveRobotReturn[2]);
         mpb.motorBackRight.setPower(moveRobotReturn[3]);
 
+        //return positionf of robot and other data
+        telemetry.addData("front left motor position", mpb.motorFrontLeft.getCurrentPosition());
+        telemetry.addData("front right motor position", mpb.motorFrontRight.getCurrentPosition());
+        telemetry.addData("back left motor position", mpb.motorBackLeft.getCurrentPosition());
+        telemetry.addData("back right motor position", mpb.motorBackLeft.getCurrentPosition());
+
+        telemetry.addData("front motor left ticks per rev", mpb.motorFrontLeft.getMotorType().getTicksPerRev());
+        telemetry.addData("front motor right ticks per rev", mpb.motorFrontRight.getMotorType().getTicksPerRev());
+        telemetry.addData("back motor left ticks per rev", mpb.motorBackLeft.getMotorType().getTicksPerRev());
+        telemetry.addData("back motor right ticks per rev", mpb.motorBackRight.getMotorType().getTicksPerRev());
+
+        telemetry.addData("front motor left rotations", (mpb.motorFrontLeft.getMotorType().getTicksPerRev() / mpb.motorFrontLeft.getCurrentPosition()));
+        telemetry.addData("front motor right rotations", (mpb.motorFrontRight.getMotorType().getTicksPerRev() / mpb.motorFrontRight.getCurrentPosition()));
+        telemetry.addData("back motor left rotations", (mpb.motorBackLeft.getMotorType().getTicksPerRev() / mpb.motorFrontLeft.getCurrentPosition()));
+        telemetry.addData("back motor right rotations", (mpb.motorBackRight.getMotorType().getTicksPerRev() / mpb.motorFrontRight.getCurrentPosition()));
     }
 }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -12,10 +13,9 @@ import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLE;
 
 import java.util.ArrayList;
 
-@TeleOp
-public class AprilTagOpModeEXAMPLE extends LinearOpMode
-{
-    OpenCvCamera camera;
+@Autonomous()
+public class AprilTagOpModeEXAMPLE extends OpMode {
+
     AprilTagPipelineEXAMPLE aprilTagDetectionPipeline;
 
     static final double FEET_PER_METER = 3.28084;
@@ -32,129 +32,89 @@ public class AprilTagOpModeEXAMPLE extends LinearOpMode
     // UNITS ARE METERS
     double tagsize = 0.166;
 
-    int ID_TAG_OF_INTEREST = 18; // Tag ID 18 from the 36h11 family
-
     AprilTagDetection tagOfInterest = null;
 
     @Override
-    public void runOpMode()
-    {
+    public void init() {
+        ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
-        telemetry.setMsTransmissionInterval(50);
-
-        /*
-         * The INIT-loop:
-         * This REPLACES waitForStart!
-         */
-        while (!isStarted() && !isStopRequested())
-        {
-            ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
-
-            if(currentDetections.size() != 0)
-            {
-                boolean tagFound = false;
-
-                for(AprilTagDetection tag : currentDetections)
-                {
-                    if(tag.id == ID_TAG_OF_INTEREST)
-                    {
-                        tagOfInterest = tag;
-                        tagFound = true;
-                        break;
-                    }
+        if(currentDetections.size() != 0) {
+            boolean tagFound = false;
+            for(AprilTagDetection tag : currentDetections) {
+                if(tag.id >= 17 || tag.id <= 19) {
+                    tagFound = true;
+                    tagOfInterest = tag;
+                    break;
                 }
-
-                if(tagFound)
-                {
-                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
-                    tagToTelemetry(tagOfInterest);
-                }
-                else
-                {
-                    telemetry.addLine("Don't see tag of interest :(");
-
-                    if(tagOfInterest == null)
-                    {
-                        telemetry.addLine("(The tag has never been seen)");
-                    }
-                    else
-                    {
-                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
-                        tagToTelemetry(tagOfInterest);
-                    }
-                }
-
             }
-            else
-            {
+            if(tagFound) {
+                telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
+                tagToTelemetry(tagOfInterest);
+            }
+            else {
                 telemetry.addLine("Don't see tag of interest :(");
 
-                if(tagOfInterest == null)
-                {
+                if(tagOfInterest == null) {
                     telemetry.addLine("(The tag has never been seen)");
                 }
-                else
-                {
+                else {
                     telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                     tagToTelemetry(tagOfInterest);
                 }
-
             }
-
-            telemetry.update();
-            sleep(20);
         }
+        else {
+            telemetry.addLine("Don't see tag of interest :(");
 
+            if(tagOfInterest == null) {
+                telemetry.addLine("(The tag has never been seen)");
+            }
+            else {
+                telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                tagToTelemetry(tagOfInterest);
+            }
+        }
+    }
+    @Override
+    public void loop() {
         /*
          * The START command just came in: now work off the latest snapshot acquired
          * during the init loop.
          */
 
         /* Update the telemetry */
-        if(tagOfInterest != null)
-        {
+        if(tagOfInterest != null) {
             telemetry.addLine("Tag snapshot:\n");
             tagToTelemetry(tagOfInterest);
             telemetry.update();
         }
-        else
-        {
+        else {
             telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
             telemetry.update();
         }
-
         /* Actually do something useful */
-        if(tagOfInterest == null)
-        {
+        if(tagOfInterest == null) {
             /*
              * Insert your autonomous code here, presumably running some default configuration
              * since the tag was never sighted during INIT
              */
         }
-        else
-        {
+        else {
             /*
              * Insert your autonomous code here, probably using the tag pose to decide your configuration.
              */
 
             // e.g.
-            if(tagOfInterest.pose.x <= 20)
-            {
+            if(tagOfInterest.pose.x <= 20) {
                 // do something
             }
-            else if(tagOfInterest.pose.x >= 20 && tagOfInterest.pose.x <= 50)
-            {
+            else if(tagOfInterest.pose.x >= 20 && tagOfInterest.pose.x <= 50) {
                 // do something else
             }
-            else if(tagOfInterest.pose.x >= 50)
-            {
+            else if(tagOfInterest.pose.x >= 50) {
                 // do something else
             }
         }
-
-
-        /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
-        while (opModeIsActive()) {sleep(20);}
     }
 
     void tagToTelemetry(AprilTagDetection detection)
