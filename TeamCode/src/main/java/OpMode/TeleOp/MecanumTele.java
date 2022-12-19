@@ -105,33 +105,41 @@ public class MecanumTele extends LinearOpMode {
             }
             telemetry.addData("Claw Pos", claw.getPosition());
 
-            //Driver 2 uses triggers to control lift
-            if(controller2.rightTriggerHeld){
-                lift.setPower(controller2.rightTrigger);
-            } else if(controller2.leftTriggerHeld){
-                lift.setPower(-controller2.leftTrigger);
-            } else {
-                lift.brake();
-            }
-
-            if(controller2.rightBumperPressed) {
+            if (controller2.rightBumperPressed) {
                 liftpreset += 1;
             }
-            if(controller2.leftBumperPressed) {
+            if (controller2.leftBumperPressed) {
                 liftpreset -= 1;
             }
-            if(liftpreset == 1) {
-                lift.Bottom();
-            } else if(liftpreset == 2) {
-                lift.Quarter();
-            } else if(liftpreset == 3) {
-                lift.ljunction();
-            } else if(liftpreset == 4) {
-                lift.mjunction();
-            } else if(liftpreset == 5) {
-                lift.hjunction();
-            } else if(liftpreset == 6) {
-                liftpreset = 0;
+
+            //Driver 2 uses triggers to control lift
+            if(liftpreset == 0) {
+                if (controller2.rightTriggerHeld) {
+                    lift.setPower(controller2.rightTrigger);
+                } else if (controller2.leftTriggerHeld) {
+                    lift.setPower(-controller2.leftTrigger);
+                } else {
+                    lift.brake();
+                }
+            }
+
+            if(liftpreset != 0) {
+                if (controller2.leftTriggerPressed || controller2.rightTriggerPressed) {
+                    liftpreset = 0;
+                }
+                if (liftpreset == 1) {
+                    lift.Bottom();
+                } else if (liftpreset == 2) {
+                    lift.Quarter();
+                } else if (liftpreset == 3) {
+                    lift.ljunction();
+                } else if (liftpreset == 4) {
+                    lift.mjunction();
+                } else if (liftpreset == 5) {
+                    lift.hjunction();
+                } else if (liftpreset == 6) {
+                    liftpreset = 0;
+                }
             }
             telemetry.addData("Lift preset", liftpreset);
 
@@ -151,7 +159,7 @@ public class MecanumTele extends LinearOpMode {
 
             telemetry.addData("Powers", drive.getPowers());
 
-            odometry.update();
+            // odometry.update();
             lift.update();
 
             telemetry.addData("Robot position", odometry.getLocation());
