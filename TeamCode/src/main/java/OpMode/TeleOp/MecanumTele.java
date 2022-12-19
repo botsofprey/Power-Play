@@ -95,7 +95,7 @@ public class MecanumTele extends LinearOpMode {
                         newForward - newRight - rotate
                 );
             //drive.moveTrueNorth(leftInput.y, -leftInput.x, rightInput.x);
-
+            }
             //Driver 1 controls claw
             if(controller1.aPressed){
                 claw.setPosition(claw.getPosition() != Claw.CLOSE_POSITION ?
@@ -104,10 +104,16 @@ public class MecanumTele extends LinearOpMode {
             telemetry.addData("Claw Pos", claw.getPosition());
 
             if(controller2.rightBumperPressed) {
-                liftpreset = 1;
+                liftpreset += 1;
             }
             if(controller2.leftBumperPressed) {
+                liftpreset -= 1;
+            }
+            if(liftpreset == -1) {
                 liftpreset = 5;
+            }
+            if(liftpreset == 6) {
+                liftpreset = 0;
             }
             //Driver 2 uses triggers to control lift
             if(liftpreset == 0) {
@@ -122,12 +128,6 @@ public class MecanumTele extends LinearOpMode {
 
             // Driver 2 uses bumpers to control lift presets (may change)
             if(liftpreset != 0) {
-                if (controller2.rightBumperPressed) {
-                    liftpreset += 1;
-                }
-                if (controller2.leftBumperPressed) {
-                    liftpreset -= 1;
-                }
                 if (controller2.leftTriggerPressed || controller2.rightTriggerPressed) {
                     liftpreset = 0;
                 }
@@ -141,8 +141,6 @@ public class MecanumTele extends LinearOpMode {
                     lift.ThreeQuarters();
                 } else if (liftpreset == 5) {
                     lift.Top();
-                } else if (liftpreset == 6) {
-                    liftpreset = 0;
                 }
                 telemetry.addData("Lift preset", liftpreset);
             }
@@ -158,4 +156,4 @@ public class MecanumTele extends LinearOpMode {
             telemetry.update();
         }
     }
-}}
+}
