@@ -74,20 +74,20 @@ public class EncodedEverything extends OpMode {
         //right trigger goes up, left trigger goes down
         if (board.getLift() <= 0) {
             board.setLift(gamepad2.right_trigger / 1.5);
-        }else if (board.getLift() <= 10000) {
+        } else if (board.getLift() <= 10100) {
             board.setLift((gamepad2.right_trigger - gamepad2.left_trigger) / 1.5);
         } else {
             board.setLift(-gamepad2.left_trigger / 1.5);
         }
-        if(board.getLift() < 0){
+        if (board.getLift() < 0) {
             board.lift.setTargetPosition(0);
             board.lift.setPower(0.05);
         }
 
-        if(gamepad2.a) {
+        if (gamepad2.a) {
             board.setClaw(0);
-        } else if(gamepad2.b){
-            board.setClaw(0.25);
+        } else if (gamepad2.b) {
+            board.setClaw(0.43);
         }
 
         if (gamepad1.right_bumper) {

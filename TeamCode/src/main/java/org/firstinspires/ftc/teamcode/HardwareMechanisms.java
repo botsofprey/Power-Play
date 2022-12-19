@@ -17,7 +17,7 @@ public class HardwareMechanisms {
     MecanumDrive drive = new MecanumDrive();
 
     DcMotor lift;
-    private Servo claw;
+    Servo claw;
     BNO055IMU imu;
     double y;
     double x;
@@ -49,7 +49,7 @@ public class HardwareMechanisms {
         claw.setPosition(clawPosit);
     }
 
-    public double getHeading(AngleUnit angleUnit){
+    public double getHeading(AngleUnit angleUnit) {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
         return angles.firstAngle;
     }

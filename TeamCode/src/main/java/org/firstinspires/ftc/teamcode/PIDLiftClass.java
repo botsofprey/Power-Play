@@ -47,6 +47,6 @@ public class PIDLiftClass extends OpMode {
         telemetry.addData("position", lift.getCurrentPosition());
         telemetry.addData("target position", targetPosition);
         upPressed = gamepad2.dpad_up;
-       downPressed = gamepad2.dpad_down;
-        }
+        downPressed = gamepad2.dpad_down;
     }
+}
