@@ -25,9 +25,9 @@ public class AutonomousTest extends LinearOpMode {
     private threeWheelOdometry odometry;
 
     private Location[] parkingLocations = {
-            new Location(60, 60), //parking spot 1
+            new Location(60, -60), //parking spot 1
             new Location(60, 0), //2
-            new Location(60, -60), //3
+            new Location(60, 60), //3
             new Location(0, 90) //terminal, when qr code is not found
     };
 
@@ -47,6 +47,7 @@ public class AutonomousTest extends LinearOpMode {
             telemetry.addData("left", odometry.getCurrentLeftPos());
             telemetry.addData("right", odometry.getCurrentRightPos());
             telemetry.addData("aux", odometry.getCurrentAuxPos());
+            telemetry.addData("other", odometry.getother());
             telemetry.addData("Position", odometry.getLocation());
             telemetry.addLine();
 

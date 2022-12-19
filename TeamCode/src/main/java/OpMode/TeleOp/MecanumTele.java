@@ -18,6 +18,7 @@ public class MecanumTele extends LinearOpMode {
     private Controller controller1, controller2;
     private Claw claw;
     private Lift lift;
+    private int liftpreset = 0;
 
     private threeWheelOdometry odometry;
 
@@ -85,16 +86,16 @@ public class MecanumTele extends LinearOpMode {
                 Vector2D leftInput = controller1.leftStick,
                         rightInput = controller1.rightStick;
 
-                double newForward = controller1.leftStick.y;
+                double newForward = -controller1.leftStick.y;
                 double newRight = controller1.leftStick.x;
                 double rotate = controller1.rightStick.x;
-                /*drive.moveWithPower(
+                drive.moveWithPower(
                         newForward + newRight + rotate,
                         newForward - newRight + rotate,
                         newForward + newRight - rotate,
                         newForward - newRight - rotate
-                ); */
-                drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
+                );
+               // drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
             }
 
             //Driver 1 controls claw
@@ -113,7 +114,6 @@ public class MecanumTele extends LinearOpMode {
                 lift.brake();
             }
 
-            int liftpreset = 0;
             if(controller2.rightBumperPressed) {
                 liftpreset += 1;
             }
@@ -157,7 +157,7 @@ public class MecanumTele extends LinearOpMode {
 
             telemetry.addData("Powers", drive.getPowers());
 
-            //odometry.update();
+            odometry.update();
             lift.update();
 
             telemetry.addData("Robot position", odometry.getLocation());
