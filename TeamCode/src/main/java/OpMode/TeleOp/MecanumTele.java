@@ -106,6 +106,7 @@ public class MecanumTele extends LinearOpMode {
             }
             telemetry.addData("Claw Pos", claw.getPosition());
 
+            // Changes lift preset once bumper pressed (may change to a different button)
             if (controller2.rightBumperPressed) {
                 liftPreset += 1;
             }
@@ -124,7 +125,9 @@ public class MecanumTele extends LinearOpMode {
                 }
             }
 
+            // Checks lift preset and sets the preset
             if(liftPreset != 0) {
+                // If trigger is pressed, it will switch from presets to manual
                 if (controller2.leftTriggerPressed || controller2.rightTriggerPressed) {
                     liftPreset = 0;
                 }
@@ -132,6 +135,11 @@ public class MecanumTele extends LinearOpMode {
                     lift.Ground();
                 } else if (liftPreset == 2) {
                     lift.coneStack(coneNum);
+                    if (controller2.upPressed) {
+                        coneNum += 1;
+                    } else if (controller2.downPressed) {
+                        coneNum -= 1;
+                    }
                 } else if (liftPreset == 3) {
                     lift.ljunction();
                 } else if (liftPreset == 4) {
