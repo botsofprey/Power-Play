@@ -64,19 +64,19 @@ public class Lift {
     }
 
     public void Half() {
-        liftMotor.setTargetPosition(12);
+        liftMotor.setTargetPosition(1000);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
     }
 
     public void ThreeQuarters() {
-        liftMotor.setTargetPosition(27);
+        liftMotor.setTargetPosition(1600);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
     }
 
     public void Top() {
-        liftMotor.setTargetPosition(36);
+        liftMotor.setTargetPosition(2150);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
     }
