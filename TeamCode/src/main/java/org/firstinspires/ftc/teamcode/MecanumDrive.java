@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+/**
+ * This class is for our four drivetrain motors and provides the basis to drive the robot
+ */
 public class MecanumDrive {
 
     DcMotor motorFrontRight;
@@ -26,6 +29,14 @@ public class MecanumDrive {
         motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
+    /**
+     * The method used to set the motors' powers, it is used in the drive method and acts as the basis of all of our driving
+     *
+     * @param frontLeftPower  The power the front left motor is set to
+     * @param frontRightPower The power the front right motor is set to
+     * @param backLeftPower   The power the back left motor is set to
+     * @param backRightPower  The power the back right motor is set to
+     */
     private void setPowers(double frontLeftPower, double frontRightPower, double backLeftPower, double backRightPower) {
         double maxSpeed = 1.0;
         maxSpeed = Math.max(maxSpeed, Math.abs(frontLeftPower));
@@ -44,6 +55,13 @@ public class MecanumDrive {
         motorBackRight.setPower(backRightPower);
     }
 
+    /**
+     * A method to calculate the motors' powers and implement them using the setPowers method
+     *
+     * @param forward Controls forwards and backwards movement
+     * @param right   Controls strafing, which is the robot moving left or right without turning
+     * @param rotate  Controls turning
+     */
     public void drive(double forward, double right, double rotate) {
         double frontLeftPower = forward + right + rotate;
         double frontRightPower = forward - right - rotate;
