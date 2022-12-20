@@ -52,6 +52,9 @@ public class EncodedEverything extends OpMode {
      *A boolean made in order to make it so that up on the dpad on gamepad 2 has to be released before being counted again
      */
     boolean downPressed = false;
+    /**
+     *A boolean used to track whether the lift is manually controlled or uses preset heights
+     */
     boolean presetLift = false;
 
     HardwareMechanisms board = new HardwareMechanisms();

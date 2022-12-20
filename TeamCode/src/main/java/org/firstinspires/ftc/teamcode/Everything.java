@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-/** This is the combination of all of our teleop codes into one */
+/**This is the combination of all of our TeleOp codes into one (now outdated) */
 @TeleOp()
 public class Everything extends OpMode {
     /** Used so the driver doesn't have to hold the right bumper for slow mode */
