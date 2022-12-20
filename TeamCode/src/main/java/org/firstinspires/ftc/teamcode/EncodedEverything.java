@@ -15,6 +15,13 @@ public class EncodedEverything extends OpMode {
     double lastX;
     double lastRx;
     double lastY;
+    int targetPosition = 0;
+    int lowJunction = 2500; //dummy numbers to be replaced
+    int midJunction = 5000;
+    int highJunction = 10100;
+    boolean upPressed = false;
+    boolean downPressed = false;
+    boolean presetLift = false;
 
     HardwareMechanisms board = new HardwareMechanisms();
 
@@ -71,18 +78,53 @@ public class EncodedEverything extends OpMode {
             lastY = board.y;
         }
 
-        //right trigger goes up, left trigger goes down
-        if (board.getLift() <= 0) {
-            board.setLift(gamepad2.right_trigger / 1.5);
-        } else if (board.getLift() <= 10100) {
-            board.setLift((gamepad2.right_trigger - gamepad2.left_trigger) / 1.5);
+        if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
+            presetLift = false;
+        } else if (gamepad2.dpad_up || gamepad2.dpad_down) {
+            presetLift = true;
+        }
+
+        if (!presetLift) {
+            //right trigger goes up, left trigger goes down
+            if (board.getLift() <= 0) {
+                board.setLift(gamepad2.right_trigger / 1.5);
+            } else if (board.getLift() <= 10100) {
+                board.setLift((gamepad2.right_trigger - gamepad2.left_trigger) / 1.5);
+            } else {
+                board.setLift(-gamepad2.left_trigger / 1.5);
+            }
+            if (board.getLift() < 0) {
+                board.lift.setTargetPosition(0);
+                board.lift.setPower(0.05);
+            }
+            telemetry.addData("lift mode", "manual");
+            telemetry.addData("target position", "null");
         } else {
-            board.setLift(-gamepad2.left_trigger / 1.5);
-        }
-        if (board.getLift() < 0) {
-            board.lift.setTargetPosition(0);
+            if (gamepad2.dpad_up) {
+                if (targetPosition == 0) {
+                    targetPosition = lowJunction;
+                } else if ((targetPosition == lowJunction) && !upPressed) {
+                    targetPosition = midJunction;
+                } else if ((targetPosition == midJunction) && !upPressed) {
+                    targetPosition = highJunction;
+                }
+            } else if (gamepad2.dpad_down) {
+                if (targetPosition == highJunction) {
+                    targetPosition = midJunction;
+                } else if ((targetPosition == midJunction) && !downPressed) {
+                    targetPosition = lowJunction;
+                } else if ((targetPosition == lowJunction) && !downPressed) {
+                    targetPosition = 0;
+                }
+            }
+            board.lift.setTargetPosition(targetPosition);
             board.lift.setPower(0.05);
+            telemetry.addData("lift mode", "preset heights");
+            telemetry.addData("target position", targetPosition);
+            upPressed = gamepad2.dpad_up;
+            downPressed = gamepad2.dpad_down;
         }
+        telemetry.addData("position", board.getLift());
 
         if (gamepad2.a) {
             board.setClaw(0);
