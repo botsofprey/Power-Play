@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.ArrayList;
 
 /**
- * This class is designed to test if our hardware has any problems or is working in an unexpected way
+ *This class is designed to test if our hardware has any problems or is working in an unexpected way
  */
 @TeleOp()
 public class TestWiring extends OpMode {

@@ -4,21 +4,53 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 /**
- * This is the combination of all of our TeleOp codes into one
+ *This is the combination of all of our TeleOp codes into one
  */
 @TeleOp()
 public class EncodedEverything extends OpMode {
-
+    /**
+     *A double used to make sure the acceleration isn't too high
+     */
     double limitPowerChange = 0.05;
+    /**
+     *A double used to make sure the acceleration isn't too high, specifically for the speed mode
+     */
     double limitPowerChangeFast = 0.01;
+    /**
+     *A double used to track the previous x value in order to limit acceleration
+     */
     double lastX;
+    /**
+     *A double used to track the previous rx value in order to limit acceleration
+     */
     double lastRx;
+    /**
+     *A double used to track the previous y value in order to limit acceleration
+     */
     double lastY;
+    /**
+     *An int used for tracking the target position of the lift, which changes between 0, lowJunction, midJunction, and highJunction
+     */
     int targetPosition = 0;
+    /**
+     *An int used to represent the tic value of the lift at the height of the low junction, it is subject to change based off of the lift
+     */
     int lowJunction = 2500; //dummy numbers to be replaced
+    /**
+     *An int used to represent the tic value of the lift at the height of the medium junction, it is subject to change based off of the lift
+     */
     int midJunction = 5000;
+    /**
+     *An int used to represent the tic value of the lift at the height of the high junction, it is subject to change based off of the lift
+     */
     int highJunction = 10100;
+    /**
+     *A boolean made in order to make it so that up on the dpad on gamepad 2 has to be released before being counted again
+     */
     boolean upPressed = false;
+    /**
+     *A boolean made in order to make it so that up on the dpad on gamepad 2 has to be released before being counted again
+     */
     boolean downPressed = false;
     boolean presetLift = false;
 

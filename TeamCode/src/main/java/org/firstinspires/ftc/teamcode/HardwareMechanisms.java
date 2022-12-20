@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import java.util.ArrayList;
 
 /**
- * This class acts as a common way for our codes to access to interact with the robot's hardware
+ *This class acts as a common way for our codes to access to interact with the robot's hardware
  */
 public class HardwareMechanisms {
 
@@ -23,15 +23,15 @@ public class HardwareMechanisms {
     Servo claw;
     BNO055IMU imu;
     /**
-     * The variable used to represent the amount forward, implemented as gamepad1.left_stick_y
+     *The variable used to represent the amount forward, implemented as gamepad1.left_stick_y
      */
     double y;
     /**
-     * The variable used to represent the amount right, implemented as gamepad1.left_stick_x
+     *The variable used to represent the amount right, implemented as gamepad1.left_stick_x
      */
     double x;
     /**
-     * The variable used to represent turning, implemented as gamepad1.right_stick_x
+     *The variable used to represent turning, implemented as gamepad1.right_stick_x
      */
     double rx;
 
@@ -61,15 +61,19 @@ public class HardwareMechanisms {
         claw.setPosition(clawPosit);
     }
 
+    /**
+     *A method that obtains the imu's heading
+     *@param angleUnit Determines which angle unit is used
+     *@return The imu's heading in the chosen angle
+     */
     public double getHeading(AngleUnit angleUnit) {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
         return angles.firstAngle;
     }
 
     /**
-     * The method used in our TestWiring class, it builds off the TestItem, TestMotor, and TestServo classes
-     *
-     * @return The values applicable to the test listed, such as name and position
+     *The method used in our TestWiring class, it builds off the TestItem, TestMotor, and TestServo classes
+     *@return The values applicable to the test listed, such as name and position
      */
     public ArrayList<TestItem> getTests() {
         ArrayList<TestItem> tests = new ArrayList<>();
@@ -83,7 +87,7 @@ public class HardwareMechanisms {
     }
 
     /**
-     * The method used for our driving, driving field relative is also known as true north driving, it allow us to drive in any direction with the robot facing any direction
+     *The method used for our driving, driving field relative is also known as true north driving, it allow us to drive in any direction with the robot facing any direction
      */
     public void driveFieldRelative(double y, double x, double rx) {
         Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
