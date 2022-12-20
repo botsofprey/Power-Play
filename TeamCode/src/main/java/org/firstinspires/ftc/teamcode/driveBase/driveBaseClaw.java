@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.driveBase;
 
-import org.firstinspires.ftc.teamcode.misc.logger;
-
 public class driveBaseClaw {
     public static int clawPercent;
 

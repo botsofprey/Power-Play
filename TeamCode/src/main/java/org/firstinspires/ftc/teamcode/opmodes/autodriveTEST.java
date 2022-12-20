@@ -22,11 +22,17 @@ public class autodriveTEST extends OpMode{
         mpb.init(hardwareMap);
         autoDriveBase.normalMode = 2;
         autoDriveBase.setFastMode();
+        autoDriveBase.setSlowMode();
         autoDriveBase.setDriveMode("normal");
+        // remember: System.currentTimeMillis();
     }
     @Override
     public void loop() {
-
+        double[] moveReturn = autoDriveBase.moveRobotAUTO(180,0,0);
+        mpb.motorFrontLeft.setTargetPosition((int)(moveReturn[0]));
+        mpb.motorFrontRight.setTargetPosition((int)(moveReturn[1]));
+        mpb.motorBackLeft.setTargetPosition((int)(moveReturn[2]));
+        mpb.motorBackRight.setTargetPosition((int)(moveReturn[3]));
     }
 }
 

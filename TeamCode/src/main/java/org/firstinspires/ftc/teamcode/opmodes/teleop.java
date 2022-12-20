@@ -46,21 +46,5 @@ public class teleop extends OpMode{
         mpb.motorFrontRight.setPower(moveRobotReturn[1]);
         mpb.motorBackLeft.setPower(moveRobotReturn[2]);
         mpb.motorBackRight.setPower(moveRobotReturn[3]);
-
-        //return positionf of robot and other data
-        telemetry.addData("front left motor position", mpb.motorFrontLeft.getCurrentPosition());
-        telemetry.addData("front right motor position", mpb.motorFrontRight.getCurrentPosition());
-        telemetry.addData("back left motor position", mpb.motorBackLeft.getCurrentPosition());
-        telemetry.addData("back right motor position", mpb.motorBackLeft.getCurrentPosition());
-
-        telemetry.addData("front motor left ticks per rev", mpb.motorFrontLeft.getMotorType().getTicksPerRev());
-        telemetry.addData("front motor right ticks per rev", mpb.motorFrontRight.getMotorType().getTicksPerRev());
-        telemetry.addData("back motor left ticks per rev", mpb.motorBackLeft.getMotorType().getTicksPerRev());
-        telemetry.addData("back motor right ticks per rev", mpb.motorBackRight.getMotorType().getTicksPerRev());
-
-        telemetry.addData("front motor left rotations", (mpb.motorFrontLeft.getMotorType().getTicksPerRev() / mpb.motorFrontLeft.getCurrentPosition()));
-        telemetry.addData("front motor right rotations", (mpb.motorFrontRight.getMotorType().getTicksPerRev() / mpb.motorFrontRight.getCurrentPosition()));
-        telemetry.addData("back motor left rotations", (mpb.motorBackLeft.getMotorType().getTicksPerRev() / mpb.motorFrontLeft.getCurrentPosition()));
-        telemetry.addData("back motor right rotations", (mpb.motorBackRight.getMotorType().getTicksPerRev() / mpb.motorFrontRight.getCurrentPosition()));
     }
 }
