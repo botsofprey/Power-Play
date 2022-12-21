@@ -137,10 +137,10 @@ public class MecanumTele extends LinearOpMode {
                 if (liftPreset == 1) {
                     lift.Ground();
                 } else if (liftPreset == 2) {
-                    lift.coneStack(coneNum);
-                    if (controller2.upPressed) {
+                    lift.coneStack(coneNum); // May change back to up/down
+                    if (controller2.aPressed) {
                         coneNum += 1;
-                    } else if (controller2.downPressed) {
+                    } else if (controller2.bPressed) {
                         coneNum -= 1;
                     }
                 } else if (liftPreset == 3) {
