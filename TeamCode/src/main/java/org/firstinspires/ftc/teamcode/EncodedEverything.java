@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * This is the combination of all of our TeleOp codes into one
@@ -119,6 +120,7 @@ public class EncodedEverything extends OpMode {
         }
 
         if (!presetLiftHeightsMode) {
+            board.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             //right trigger goes up, left trigger goes down
             if (board.getLift() <= 0) {
                 board.setLift(gamepad2.right_trigger / 1.5);
@@ -128,8 +130,9 @@ public class EncodedEverything extends OpMode {
                 board.setLift(-gamepad2.left_trigger / 1.5);
             }
             if (board.getLift() < 0) {
+                board.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 board.lift.setTargetPosition(0);
-                board.lift.setPower(0.05);
+                board.lift.setPower(0.1);
             }
             telemetry.addData("lift mode", "manual");
             telemetry.addData("target position", "null");
@@ -151,6 +154,7 @@ public class EncodedEverything extends OpMode {
                     targetPosition = 0;
                 }
             }
+            board.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             board.lift.setTargetPosition(targetPosition);
             board.lift.setPower(0.1);
             telemetry.addData("lift mode", "preset heights");
