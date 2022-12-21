@@ -1,13 +1,8 @@
 package Subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-
-import org.firstinspires.ftc.teamcode.ProgrammingBoard7;
 
 public class Lift {
     private DcMotor liftMotor;
@@ -53,37 +48,38 @@ public class Lift {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    //here goes set positions
-    public void Bottom(int position, double power) {
+    // Change target positions
+
+    public void coneStack(int coneNum) {
+        liftMotor.setTargetPosition(coneNum*400);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(0.75);
+        braking = false;
+    }
+
+    public void Ground() {
         liftMotor.setTargetPosition(0);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
         braking = false;
     }
 
-    public void Quarter(int position, double power) {
-        liftMotor.setTargetPosition(6);
+    public void ljunction() {
+        liftMotor.setTargetPosition(1000);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
         braking = false;
     }
 
-    public void Half(int position, double power) {
-        liftMotor.setTargetPosition(12);
+    public void mjunction() {
+        liftMotor.setTargetPosition(1600);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
         braking = false;
     }
 
-    public void ThreeQuarters(int position, double power) {
-        liftMotor.setTargetPosition(27);
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(0.75);
-        braking = false;
-    }
-
-    public void Top(int position, double power) {
-        liftMotor.setTargetPosition(36);
+    public void hjunction() {
+        liftMotor.setTargetPosition(2150);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.75);
         braking = false;
@@ -97,5 +93,9 @@ public class Lift {
             }
         }
 
+    }
+
+    public boolean isBusy(){
+        return liftMotor.isBusy();
     }
 }

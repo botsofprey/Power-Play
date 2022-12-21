@@ -14,6 +14,10 @@ public class Location {
         this.angle = 0;
     }
 
+    public double getRadians(){
+        return Math.toRadians(angle);
+    }
+
     public Location difference(Location otherLo){
         return new Location(otherLo.x - x, otherLo.y - y, otherLo.angle - angle);
     }

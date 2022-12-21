@@ -59,7 +59,7 @@ public class AutonomousTest2 extends LinearOpMode {
         int parking = 3;
 
         //drive = new MecanumDrive(hardwareMap, this, 0);
-        //odometry = new threeWheelOdometry(hardwareMap, new Location(0,0), this, drive);
+        odometry = new threeWheelOdometry(hardwareMap, new Location(19,13), this, drive);
 
         while (!isStarted() && !isStopRequested()) {
             //odometry.update();

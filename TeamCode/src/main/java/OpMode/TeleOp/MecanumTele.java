@@ -2,8 +2,6 @@ package OpMode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import DriveEngine.MecanumDrive;
 import Subsystems.Claw;
@@ -20,6 +18,8 @@ public class MecanumTele extends LinearOpMode {
     private Controller controller1, controller2;
     private Claw claw;
     private Lift lift;
+    private int liftPreset = 0;
+    private int coneNum = 5;
 
     private threeWheelOdometry odometry;
 
@@ -84,12 +84,12 @@ public class MecanumTele extends LinearOpMode {
            }
 
         //Driver 1 uses joysticks for movement, duh
-            if(!overrideDrivers){
+            if(!overrideDrivers) {
                 Vector2D leftInput = controller1.leftStick,
-                         rightInput = controller1.rightStick;
+                        rightInput = controller1.rightStick;
 
-                double newForward = controller1.leftStick.y;
-                double newRight = -controller1.leftStick.x;
+                double newForward = -controller1.leftStick.y;
+                double newRight = controller1.leftStick.x;
                 double rotate = controller1.rightStick.x;
                 drive.moveWithPower(
                         newForward + newRight + rotate,
@@ -97,7 +97,8 @@ public class MecanumTele extends LinearOpMode {
                         newForward + newRight - rotate,
                         newForward - newRight - rotate
                 );
-            //drive.moveTrueNorth(leftInput.y, -leftInput.x, rightInput.x);
+               // drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
+            }
 
             //Driver 1 controls claw
             if(controller1.aPressed){
@@ -106,23 +107,62 @@ public class MecanumTele extends LinearOpMode {
             }
             telemetry.addData("Claw Pos", claw.getPosition());
 
-            //Driver 2 uses triggers to control lift
-            if(controller2.rightTriggerHeld){
-                lift.setPower(controller2.rightTrigger);
-            } else if(controller2.leftTriggerHeld){
-                lift.setPower(-controller2.leftTrigger);
-            } else {
-                lift.brake();
+            // Changes lift preset once bumper pressed (may change to a different button)
+            if (controller2.rightBumperPressed) {
+                liftPreset += 1;
             }
+            if (controller2.leftBumperPressed) {
+                liftPreset -= 1;
+            }
+
+            //Driver 2 uses triggers to control lift
+            if(liftPreset == 0) {
+                if (controller2.rightTriggerHeld) {
+                    lift.setPower(controller2.rightTrigger);
+                } else if (controller2.leftTriggerHeld) {
+                    lift.setPower(-controller2.leftTrigger);
+                } else {
+                    lift.brake();
+                }
+            }
+
+            // Checks lift preset and sets the preset
+            if(liftPreset != 0) {
+                // If trigger is pressed, it will switch from presets to manual
+                if (controller2.leftTriggerPressed || controller2.rightTriggerPressed) {
+                    liftPreset = 0;
+                }
+                if (liftPreset == 1) {
+                    lift.Ground();
+                } else if (liftPreset == 2) {
+                    lift.coneStack(coneNum);
+                    if (controller2.upPressed) {
+                        coneNum += 1;
+                    } else if (controller2.downPressed) {
+                        coneNum -= 1;
+                    }
+                } else if (liftPreset == 3) {
+                    lift.ljunction();
+                } else if (liftPreset == 4) {
+                    lift.mjunction();
+                } else if (liftPreset == 5) {
+                    lift.hjunction();
+                } else if (liftPreset == 6) {
+                    liftPreset = 0;
+                } else if (liftPreset == -1) {
+                    liftPreset = 5;
+                }
+            }
+            telemetry.addData("Lift preset", liftPreset);
+
             telemetry.addData("Lift Position", lift.getPosition());
 
             telemetry.addData("Powers", drive.getPowers());
 
-            //odometry.update();
+            odometry.update();
             lift.update();
 
             telemetry.addData("Robot position", odometry.getLocation());
             telemetry.update();
-        }
     }
 }}
