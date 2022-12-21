@@ -75,19 +75,9 @@ public class threeWheelOdometry {
         int dx1 = currentLeftPos - prevLeftPos,
                 dx2 = currentRightPos - prevRightPos,
                 dy = currentAuxPos - prevAuxPos;
-/*
-        double angleDiff = meccanumDrive.getAngle() - positionLocation.angle;
-        positionLocation.angle = meccanumDrive.getAngle();
-        double theta = Math.toRadians(meccanumDrive.getAngle()),
-                x = (dx1 * Math.cos(theta)) - (dy * Math.sin(theta)),
-                y = (dx1 * Math.sin(theta)) + (dy * Math.cos(theta));
-        positionLocation.add(x * CM_PER_TICK, y * CM_PER_TICK, 0);
-        positionLocation.angle = meccanumDrive.getAngle();
 
-
-        */
-        double //theta = Math.toRadians((dx2-dx1)/(15.24*2)),
-                theta = Math.toRadians(meccanumDrive.getRadians() - positionLocation.getRadians()),
+        double theta = Math.toRadians((dx2-dx1)/(15.24*2)),
+                //theta = Math.toRadians(meccanumDrive.getRadians() - positionLocation.getRadians()),
                 fwd = ((dx2 * LEFT_DISTANCE_FROM_MID) - (dx1 * RIGHT_DISTANCE_FROM_MID)) / LENGETH_BETWEEN_VERTS,
                 str = dy - (DISTANCE_FROM_MIDPOINT * theta);
 
@@ -204,7 +194,7 @@ public class threeWheelOdometry {
         x = Math.cos(h);// * movePID.calculateResponse(diff.x);
         y = Math.sin(h);//  * movePID.calculateResponse(diff.y);
         double rotate = positionLocation.compareHeading(targetLocation, 10) ?
-                0 : headingPID.calculateResponse(diff.angle);
+                0 : headingPID.calculateResponse(diff.angle)/2.0;
 
         if (Math.abs(diff.x) < 5 && Math.abs(diff.y) < 5) {
             x = 0;
@@ -212,10 +202,10 @@ public class threeWheelOdometry {
         }
 
         meccanumDrive.moveWithPower(
-                x + y + rotate,
-                x - y + rotate,
-                x + y - rotate,
-                x - y - rotate
+                ((x + y)/2.0) + rotate,
+                ((x - y)/2.0) + rotate,
+                ((x + y)/2.0) - rotate,
+                ((x - y)/2.0) - rotate
         );
     }
 
