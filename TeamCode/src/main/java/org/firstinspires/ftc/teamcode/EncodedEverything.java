@@ -167,7 +167,7 @@ public class EncodedEverything extends OpMode {
         if (gamepad2.a) {
             board.setClaw(0);
         } else if (gamepad2.b) {
-            board.setClaw(0.43);
+            board.setClaw(0.40);
         }
 
         if (gamepad1.right_bumper) {

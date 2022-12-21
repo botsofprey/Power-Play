@@ -20,6 +20,7 @@ public class HardwareMechanisms {
     MecanumDrive drive = new MecanumDrive();
 
     DcMotor lift;
+
     Servo claw;
     BNO055IMU imu;
     /**
@@ -55,6 +56,10 @@ public class HardwareMechanisms {
 
     public void setLift(double liftSpeed) {
         lift.setPower(liftSpeed);
+    }
+
+    public double getClaw() {
+        return claw.getPosition();
     }
 
     public void setClaw(double clawPosit) {
