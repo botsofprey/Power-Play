@@ -44,7 +44,7 @@ public class threeWheelOdometry {
 
     //Robot measurements in mm
     public final static double DISTANCE_FROM_MIDPOINT = 6.8;
-    public final static double LENGETH_BETWEEN_VERTS = 292, LEFT_DISTANCE_FROM_MID = 13.5, RIGHT_DISTANCE_FROM_MID = 10.4;
+    public final static double LENGETH_BETWEEN_VERTS = 29.2, LEFT_DISTANCE_FROM_MID = 13.5, RIGHT_DISTANCE_FROM_MID = 10.4;
     public final static double ANGLE_CIRCUMFERENCE = DISTANCE_FROM_MIDPOINT * Math.PI * 2;
     public final static double CM_PER_TICK = (3.5 * Math.PI) / 1977;
 
@@ -224,9 +224,9 @@ public class threeWheelOdometry {
         prevRightPos = currentRightPos;
         prevLeftPos = currentLeftPos;
         prevAuxPos = currentAuxPos;
-        currentRightPos = -meccanumDrive.motors[0].getCurrentPosition();
+        currentRightPos = meccanumDrive.motors[0].getCurrentPosition();
         currentLeftPos = meccanumDrive.motors[3].getCurrentPosition();
-        currentAuxPos = -meccanumDrive.motors[2].getCurrentPosition();
+        currentAuxPos = meccanumDrive.motors[2].getCurrentPosition();
         other = meccanumDrive.motors[1].getCurrentPosition();
 
         //Update current point values
