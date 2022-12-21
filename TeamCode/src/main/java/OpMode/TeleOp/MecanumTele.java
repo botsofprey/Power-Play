@@ -88,16 +88,18 @@ public class MecanumTele extends LinearOpMode {
                 Vector2D leftInput = controller1.leftStick,
                         rightInput = controller1.rightStick;
 
-                double newForward = -controller1.leftStick.y;
+                double newForward = controller1.leftStick.y;
                 double newRight = controller1.leftStick.x;
                 double rotate = controller1.rightStick.x;
-                drive.moveWithPower(
+                /*drive.moveWithPower(
                         newForward + newRight + rotate,
                         newForward - newRight + rotate,
                         newForward + newRight - rotate,
                         newForward - newRight - rotate
                 );
-               // drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
+
+                 */
+                drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
             }
 
             //Driver 1 controls claw

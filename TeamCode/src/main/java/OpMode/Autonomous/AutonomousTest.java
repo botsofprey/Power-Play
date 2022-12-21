@@ -1,22 +1,16 @@
-/*package OpMode.Autonomous;
+package OpMode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.internal.network.ApChannel;
-import org.firstinspires.ftc.robotcore.internal.network.ControlHubApChannelManager;
-import org.firstinspires.ftc.robotcore.internal.network.InvalidNetworkSettingException;
 
 import DriveEngine.MecanumDrive;
 import Subsystems.AprilTagCamera;
-import Subsystems.CameraPipeline;
 import Subsystems.threeWheelOdometry;
-import UtilityClasses.Camera;
 import UtilityClasses.Controller;
 import UtilityClasses.Location;
+import UtilityClasses.Vector2D;
 
 @Autonomous (name="Auto Test", group = "Autonomous")
 public class AutonomousTest extends LinearOpMode {
@@ -72,10 +66,42 @@ public class AutonomousTest extends LinearOpMode {
             telemetry.update();
         }
 
+        double fps=0, frameCounter = 0;
+        double startTime = System.currentTimeMillis();
+
+        odometry.setTargetPoint(new Location(60, 0));
+
+        while(opModeIsActive()){
+            telemetry.addData("Positon", odometry.getLocation());
+            telemetry.addData("Target", odometry.getTargetLocation());
+            telemetry.addLine();
+
+            telemetry.addData("x movement", odometry.x);
+            telemetry.addData("y movement", odometry.y);
+            telemetry.addData("angle of movement", Math.toDegrees(odometry.h));
+            telemetry.update();
+
+            if(System.currentTimeMillis() - startTime >= 1){
+                fps = frameCounter;
+                frameCounter = 0;
+                startTime = System.currentTimeMillis();
+            }
+            frameCounter++;
+
+            if(fps == 0)
+                continue;
+
+            con.update();
+            double deltaTime = 1/fps;
+
+            Vector2D movement = con.leftStick;
+
+            odometry.positionLocation.add(movement.x * deltaTime, movement.y * deltaTime, 0);
+            odometry.update();
+        }
+
         //Resets position and encoders
         odometry.resetEncoders();
-
-        while(opModeIsActive());
 
         //If camera is too far away to see qr, robot gets closer
         if(!camera.tagFound()){
@@ -150,8 +176,9 @@ public class AutonomousTest extends LinearOpMode {
         while(opModeIsActive() && !odometry.atTarget())
             odometry.update();
 
+        while(!isStopRequested());
+
 
     }
 }
 
- */
