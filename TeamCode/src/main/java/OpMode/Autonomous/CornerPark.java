@@ -16,7 +16,7 @@ public class CornerPark extends LinearOpMode {
 
     public void runOpMode (){
         drive = new MecanumDrive(hardwareMap,0);
-        odometry = new threeWheelOdometry (hardwareMap, new Location(0,0), this, drive);
+        odometry = new threeWheelOdometry (hardwareMap, new Location(0,0),this, drive);
 
         if(opModeIsActive()){
             drive.moveCenti(65, MecanumDrive.FORWARD);

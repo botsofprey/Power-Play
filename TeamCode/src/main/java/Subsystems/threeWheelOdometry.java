@@ -24,7 +24,8 @@ public class threeWheelOdometry {
     private int currentLeftPos = 0, currentRightPos = 0, currentAuxPos = 0, other;
     private int prevLeftPos = 0, prevRightPos = 0, prevAuxPos = 0;
 
-    private Location positionLocation, targetLocation;
+    public Location positionLocation;
+    private Location targetLocation;
 
     private AverageDistanceSensor leftDisSensor, rightDisSensor;
     private DistanceUnit distanceUnit = DistanceUnit.CM;
@@ -88,7 +89,7 @@ public class threeWheelOdometry {
         double //theta = Math.toRadians((dx2-dx1)/(15.24*2)),
                 theta = Math.toRadians(meccanumDrive.getRadians() - positionLocation.getRadians()),
                 fwd = ((dx2 * LEFT_DISTANCE_FROM_MID) - (dx1 * RIGHT_DISTANCE_FROM_MID)) / LENGETH_BETWEEN_VERTS,
-                str = dy - (7.5 * theta); //100
+                str = dy - (DISTANCE_FROM_MIDPOINT * theta);
 
         if (theta != 0) {
 
@@ -103,8 +104,7 @@ public class threeWheelOdometry {
             double deltaX = (relX * Math.cos(angle)) - (relY * Math.sin(angle)),
                     deltaY = (relY * Math.cos(angle)) + (relX * Math.sin(angle));
 
-            System.out.println(deltaX + ", " + -deltaY);
-            positionLocation.add(deltaX * CM_PER_TICK, deltaY * CM_PER_TICK, Math.toDegrees(theta));
+            positionLocation.add(deltaX * CM_PER_TICK * (60.0/22.0), deltaY * CM_PER_TICK, Math.toDegrees(theta));
         } else {
             double relX = fwd, //500
                     relY = str; //100
@@ -155,6 +155,8 @@ public class threeWheelOdometry {
         setTargetPoint(target);
     }
 
+    public double x, y, h;
+
     //Robot move towards target
     private void moveTowards(Location diff) {
         /*
@@ -195,7 +197,6 @@ public class threeWheelOdometry {
         }
 
          */
-        double x, y, h;
 
         double robotMovementAngle = Math.atan2(diff.y, diff.x);
         h = robotMovementAngle - meccanumDrive.getRadians();
@@ -211,7 +212,7 @@ public class threeWheelOdometry {
         }
 
         meccanumDrive.moveWithPower(
-                x + y + rotate, //
+                x + y + rotate,
                 x - y + rotate,
                 x + y - rotate,
                 x - y - rotate
