@@ -152,7 +152,7 @@ public class EncodedEverything extends OpMode {
                 }
             }
             board.lift.setTargetPosition(targetPosition);
-            board.lift.setPower(0.05);
+            board.lift.setPower(0.1);
             telemetry.addData("lift mode", "preset heights");
             telemetry.addData("target position", targetPosition);
             upPressed = gamepad2.dpad_up;
