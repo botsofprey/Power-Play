@@ -29,29 +29,32 @@ public class threeWheelOdometry {
     private AverageDistanceSensor leftDisSensor, rightDisSensor;
     private DistanceUnit distanceUnit = DistanceUnit.CM;
 
-    private boolean moving=false, maintain = false;
+    private boolean moving = false, maintain = false;
+
     private enum direction {
         x,
         y,
         angle,
         stationary
-    };
+    }
+
+    ;
     private direction currentMovement;
     public PidController movePID, headingPID;
 
-    //Robot measurements in C
-    public final static double DISTANCE_FROM_MIDPOINT = 7.5;
-    public final static double LENGETH_BETWEEN_VERTS = 27, LEFT_DISTANCE_FROM_MID = 13.5 , RIGHT_DISTANCE_FROM_MID = 13.5;
+    //Robot measurements in mm
+    public final static double DISTANCE_FROM_MIDPOINT = 6.8;
+    public final static double LENGETH_BETWEEN_VERTS = 292, LEFT_DISTANCE_FROM_MID = 13.5, RIGHT_DISTANCE_FROM_MID = 10.4;
     public final static double ANGLE_CIRCUMFERENCE = DISTANCE_FROM_MIDPOINT * Math.PI * 2;
     public final static double CM_PER_TICK = (3.5 * Math.PI) / 1977;
 
-    public threeWheelOdometry (HardwareMap hardwareMap, Location start, LinearOpMode op, MecanumDrive drive){
+    public threeWheelOdometry(HardwareMap hardwareMap, Location start, LinearOpMode op, MecanumDrive drive) {
         meccanumDrive = drive;
 
         leftDisSensor = new AverageDistanceSensor(
                 hardwareMap.get(DistanceSensor.class, "leftDistance"),
-                        DistanceUnit.CM,
-                        25);
+                DistanceUnit.CM,
+                25);
         rightDisSensor = new AverageDistanceSensor(
                 hardwareMap.get(DistanceSensor.class, "rightDistance"),
                 DistanceUnit.CM,
@@ -67,7 +70,7 @@ public class threeWheelOdometry {
         headingPID = new PidController(.75, 0, .125);
     }
 
-    private void calculateChange(){
+    private void calculateChange() {
         int dx1 = currentLeftPos - prevLeftPos,
                 dx2 = currentRightPos - prevRightPos,
                 dy = currentAuxPos - prevAuxPos;
@@ -83,11 +86,11 @@ public class threeWheelOdometry {
 
         */
         double //theta = Math.toRadians((dx2-dx1)/(15.24*2)),
-                theta = Math.toRadians(meccanumDrive.getRadians()-positionLocation.getRadians()),
+                theta = Math.toRadians(meccanumDrive.getRadians() - positionLocation.getRadians()),
                 fwd = ((dx2 * LEFT_DISTANCE_FROM_MID) - (dx1 * RIGHT_DISTANCE_FROM_MID)) / LENGETH_BETWEEN_VERTS,
                 str = dy - (7.5 * theta); //100
 
-        if(theta != 0) {
+        if (theta != 0) {
 
             double r0 = fwd / theta,
                     r1 = str / theta;
@@ -102,7 +105,7 @@ public class threeWheelOdometry {
 
             System.out.println(deltaX + ", " + -deltaY);
             positionLocation.add(deltaX * CM_PER_TICK, deltaY * CM_PER_TICK, Math.toDegrees(theta));
-        }else {
+        } else {
             double relX = fwd, //500
                     relY = str; //100
 
@@ -119,7 +122,7 @@ public class threeWheelOdometry {
     }
 
     //Sets target
-    public void setTargetPoint(Location target){
+    public void setTargetPoint(Location target) {
         targetLocation = target;
         moving = true;
         movePID.reset();
@@ -128,20 +131,20 @@ public class threeWheelOdometry {
     }
 
     //Rounds robot's rotation to the nearest 90 degrees and adds/subtracts 90
-    public void next90degrees(int negPos){
+    public void next90degrees(int negPos) {
         Location target = new Location(positionLocation.x, positionLocation.y);
 
-        if(negPos != -1 && negPos != 1)
+        if (negPos != -1 && negPos != 1)
             return;
 
         double angle = meccanumDrive.getAngle() + (negPos * 90),
                 abs = Math.abs(angle);
 
-        if(abs > 0 && abs <= 45){
+        if (abs > 0 && abs <= 45) {
             angle = 0;
-        } else if(abs > 45 && abs <= 135){
+        } else if (abs > 45 && abs <= 135) {
             angle = 90;
-        } else if(abs > 135 && abs <= 225){
+        } else if (abs > 135 && abs <= 225) {
             angle = 180;
         } else {
             angle = 270;
@@ -153,7 +156,7 @@ public class threeWheelOdometry {
     }
 
     //Robot move towards target
-    private void moveTowards(Location diff){
+    private void moveTowards(Location diff) {
         /*
         if((!compare(diff.x, 0, 10) && currentMovement != direction.y && currentMovement != direction.angle) ||
             !compare(diff.x, 0, 20)){
@@ -202,7 +205,7 @@ public class threeWheelOdometry {
         double rotate = positionLocation.compareHeading(targetLocation, 10) ?
                 0 : headingPID.calculateResponse(diff.angle);
 
-        if(Math.abs(diff.x) < 5 && Math.abs(diff.y) < 5){
+        if (Math.abs(diff.x) < 5 && Math.abs(diff.y) < 5) {
             x = 0;
             y = 0;
         }
@@ -215,7 +218,7 @@ public class threeWheelOdometry {
         );
     }
 
-    public void update(){
+    public void update() {
 
         //Update previous & current position
         prevRightPos = currentRightPos;
@@ -233,18 +236,18 @@ public class threeWheelOdometry {
         rightDisSensor.update();
 
         //Check if at target position and heading
-        if((moving || maintain) && !atTarget()){
+        if ((moving || maintain) && !atTarget()) {
             Location diff = positionLocation.difference(targetLocation);
             moveTowards(diff);
 
-        }else if(moving || maintain){
+        } else if (moving || maintain) {
             moving = false;
             currentMovement = direction.stationary;
             meccanumDrive.brake();
         }
     }
 
-    public void resetEncoders(){
+    public void resetEncoders() {
         meccanumDrive.motors[3].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         meccanumDrive.motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         meccanumDrive.motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -256,15 +259,15 @@ public class threeWheelOdometry {
         currentLeftPos = 0;
         currentAuxPos = 0;
 
-        positionLocation = new Location(0,0);
+        positionLocation = new Location(0, 0);
     }
 
-    public double getother(){
+    public double getother() {
         return other;
     }
 
     //Moves the robot to the center of tile
-    public void moveToOpenSpace(double x, double y, double r, boolean slowMode){
+    public void moveToOpenSpace(double x, double y, double r, boolean slowMode) {
         /*if (slowMode)
             meccanumDrive.moveTrueNorth(x, y, r);
 
@@ -276,67 +279,67 @@ public class threeWheelOdometry {
         //29.845
 
         int newX = (int) Math.round(positionLocation.x / 29.845),
-            newY = (int) Math.round(positionLocation.y / 29.845);
+                newY = (int) Math.round(positionLocation.y / 29.845);
 
         newX = newX == 0 ? 1 : newX;
         newY = newY == 0 ? 1 : newY;
 
         double newPosX = ((newX + 1) * 29.845) + (newX * 59.69),
-               newPosY = ((newY + 1) * 29.845) + (newY * 59.69);
+                newPosY = ((newY + 1) * 29.845) + (newY * 59.69);
 
         setTargetPoint(new Location(newPosX, newPosY));
         moving = true;
     }
 
-    public double getLeftDistance(){
+    public double getLeftDistance() {
         return leftDisSensor.getDistance();
     }
 
-    public double getRightDistance(){
+    public double getRightDistance() {
         return rightDisSensor.getDistance();
     }
 
-    public String getLocation(){
+    public String getLocation() {
         return Math.round(positionLocation.x) + " cm, " +
                 Math.round(positionLocation.y) + " cm, " +
                 Math.round(positionLocation.angle) + "°";
     }
 
-    public boolean atTarget(){
+    public boolean atTarget() {
         return positionLocation.compareAll(targetLocation, 15, 10);
     }
 
-    private boolean compare(double a, double b, double offset){
-        return Math.abs(a-b) <= offset;
+    private boolean compare(double a, double b, double offset) {
+        return Math.abs(a - b) <= offset;
     }
 
-    private boolean equalAndNotZero(double a, double b){
+    private boolean equalAndNotZero(double a, double b) {
         return compare(a, b, 2.5) && a != 0;
     }
 
-    public int getCurrentLeftPos(){
+    public int getCurrentLeftPos() {
         return currentLeftPos;
     }
 
-    public int getCurrentRightPos(){
+    public int getCurrentRightPos() {
         return currentRightPos;
     }
 
-    public int getCurrentAuxPos(){
+    public int getCurrentAuxPos() {
         return currentAuxPos;
     }
 
-    public direction getCurrentMovement(){
+    public direction getCurrentMovement() {
         return currentMovement;
     }
 
-    public String getTargetLocation(){
+    public String getTargetLocation() {
         return Math.round(targetLocation.x) + " cm , " +
                 Math.round(targetLocation.y) + " cm , " +
                 Math.round(targetLocation.angle) + "°";
     }
 
-    public boolean isMoving(){
+    public boolean isMoving() {
         return moving;
     }
 }
