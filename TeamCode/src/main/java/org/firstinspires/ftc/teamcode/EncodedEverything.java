@@ -121,7 +121,7 @@ public class EncodedEverything extends OpMode {
 
         if (!presetLiftHeightsMode) { //manual lift
             board.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            //right trigger goes up, left trigger goes down
+            //the right trigger makes the lift go up and the left trigger makes the lift go down
             if (board.getLift() <= 0) {
                 board.setLift(gamepad2.right_trigger / 1.5);
             } else if (board.getLift() <= 10100) {
@@ -129,7 +129,7 @@ public class EncodedEverything extends OpMode {
             } else {
                 board.setLift(-gamepad2.left_trigger / 1.5);
             }
-            if (board.getLift() < 0) {
+            if (board.getLift() < 0) { //a way to keep the lift from going below 0
                 board.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 board.lift.setTargetPosition(0);
                 board.lift.setPower(0.1);
