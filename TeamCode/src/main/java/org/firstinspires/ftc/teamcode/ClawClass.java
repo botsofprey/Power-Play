@@ -21,7 +21,7 @@ public class ClawClass extends OpMode {
             targetClaw += 0.001;
         }
         board.setClaw(targetClaw);
-        telemetry.addData("claw position", board.claw.getPosition());
+        telemetry.addData("claw position", board.getClaw());
     }
 
 }
