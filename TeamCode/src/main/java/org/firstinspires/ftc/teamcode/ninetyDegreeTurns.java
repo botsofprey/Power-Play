@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 @TeleOp
 public class ninetyDegreeTurns extends OpMode {
     double limitPowerChange = 0.05;
@@ -31,6 +32,7 @@ public class ninetyDegreeTurns extends OpMode {
             } else {
                 turningRx = 0;
             }
+            telemetry.addData("turning to", 0);
         } else if (gamepad1.dpad_right) {
             if (!(board.getHeading(AngleUnit.DEGREES) == 90)) {
                 if (board.getHeading(AngleUnit.DEGREES) > 90) {
@@ -41,6 +43,7 @@ public class ninetyDegreeTurns extends OpMode {
             } else {
                 turningRx = 0;
             }
+            telemetry.addData("turning to", 90);
         } else if (gamepad1.dpad_down) {
             if (!(board.getHeading(AngleUnit.DEGREES) == 180)) {
                 if (board.getHeading(AngleUnit.DEGREES) > 180) {
@@ -48,6 +51,7 @@ public class ninetyDegreeTurns extends OpMode {
                 } else if (board.getHeading(AngleUnit.DEGREES) < 180) {
                     turningRx = 0.5;
                 }
+                telemetry.addData("turning to", 180);
             } else {
                 turningRx = 0;
             }
@@ -60,6 +64,7 @@ public class ninetyDegreeTurns extends OpMode {
             } else {
                 turningRx = 0;
             }
+            telemetry.addData("turning to", 270);
         }
         board.y = -gamepad1.left_stick_y;
         board.x = gamepad1.left_stick_x;
