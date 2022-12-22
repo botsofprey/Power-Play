@@ -59,8 +59,7 @@ public class ninetyDegreeTurns extends OpMode {
             if (!(board.getHeading(AngleUnit.DEGREES) == 270)) {
                 if (board.getHeading(AngleUnit.DEGREES) > 270) {
                     turningRx = -0.5;
-                } else if (board.getHeading(AngleUnit.DEGREES) < 270)
-                    turningRx = 0.5;
+                } else if (board.getHeading(AngleUnit.DEGREES) < 270) turningRx = 0.5;
             } else {
                 turningRx = 0;
             }
