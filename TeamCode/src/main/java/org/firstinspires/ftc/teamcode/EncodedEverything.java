@@ -36,15 +36,15 @@ public class EncodedEverything extends OpMode {
     /**
      * An int used to represent the tic value of the lift at the height of the low junction, it is subject to change based off of the lift
      */
-    int lowJunction = 2408; //placeholder value
+    int lowJunction = 2408;
     /**
      * An int used to represent the tic value of the lift at the height of the medium junction, it is subject to change based off of the lift
      */
-    int midJunction = 4009; //placeholder value
+    int midJunction = 4009;
     /**
      * An int used to represent the tic value of the lift at the height of the high junction, it is subject to change based off of the lift
      */
-    int highJunction = 5797; //placeholder value
+    int highJunction = 5797;
     /**
      * A boolean made in order to make it so that up on the dpad on gamepad 2 has to be released before being counted again
      */
