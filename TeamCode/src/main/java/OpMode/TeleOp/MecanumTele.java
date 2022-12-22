@@ -68,10 +68,10 @@ public class MecanumTele extends LinearOpMode {
                overrideDrivers = true;
            }
 
-            if(controller1.leftPressed || controller2.leftPressed){
+            if(controller1.leftPressed){
                 odometry.next90degrees(-1);
                 overrideDrivers = true;
-            } else if(controller2.rightPressed || controller1.rightPressed){
+            } else if(controller1.rightPressed){
                 odometry.next90degrees(1);
                 overrideDrivers = true;
             }
@@ -156,6 +156,8 @@ public class MecanumTele extends LinearOpMode {
                 }
             }
             telemetry.addData("Lift preset", liftPreset);
+
+            telemetry.addData("Cones", coneNum);
 
             telemetry.addData("Lift Position", lift.getPosition());
 
