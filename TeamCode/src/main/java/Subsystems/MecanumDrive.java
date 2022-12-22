@@ -12,6 +12,9 @@ public class MecanumDrive {
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
 
+    public MecanumDrive(HardwareMap hardwareMap) {
+    }
+
     public void init(HardwareMap hardwareMap) {
         frontLeftMotor = hardwareMap.dcMotor.get("frontLeftDriveMotor");
         frontRightMotor = hardwareMap.dcMotor.get("frontRightDriveMotor");
@@ -53,5 +56,8 @@ public class MecanumDrive {
         double backRightPower = forward + right - rotate;
         double backLeftPower = forward - right + rotate;
         setPowers(frontLeftPower, frontRightPower, backRightPower, backLeftPower);
+    }
+
+    public void setMode(DcMotor.RunMode runWithoutEncoder) {
     }
 }
