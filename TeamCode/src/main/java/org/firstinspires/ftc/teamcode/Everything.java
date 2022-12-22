@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 /**This is the combination of all of our TeleOp codes into one (now outdated) */
 @TeleOp()
+@Disabled()
 public class Everything extends OpMode {
     /** Used so the driver doesn't have to hold the right bumper for slow mode */
     boolean slowModeAlreadyOn = false;
