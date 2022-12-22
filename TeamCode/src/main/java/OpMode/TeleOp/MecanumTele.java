@@ -68,10 +68,10 @@ public class MecanumTele extends LinearOpMode {
                overrideDrivers = true;
            }
 
-            if(controller1.leftPressed || controller2.leftPressed){
+            if(controller1.leftPressed){
                 odometry.next90degrees(-1);
                 overrideDrivers = true;
-            } else if(controller2.rightPressed || controller1.rightPressed){
+            } else if(controller1.rightPressed){
                 odometry.next90degrees(1);
                 overrideDrivers = true;
             }
@@ -137,10 +137,10 @@ public class MecanumTele extends LinearOpMode {
                 if (liftPreset == 1) {
                     lift.Ground();
                 } else if (liftPreset == 2) {
-                    lift.coneStack(coneNum); // May change back to up/down
-                    if (controller2.aPressed) {
+                    lift.coneStack(coneNum);
+                    if (controller2.upPressed) {
                         coneNum += 1;
-                    } else if (controller2.bPressed) {
+                    } else if (controller2.downPressed) {
                         coneNum -= 1;
                     }
                 } else if (liftPreset == 3) {
