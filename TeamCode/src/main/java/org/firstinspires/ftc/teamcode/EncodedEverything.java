@@ -36,15 +36,15 @@ public class EncodedEverything extends OpMode {
     /**
      * An int used to represent the tic value of the lift at the height of the low junction, it is subject to change based off of the lift
      */
-    int lowJunction = 2500; //placeholder value
+    int lowJunction = 2408; //placeholder value
     /**
      * An int used to represent the tic value of the lift at the height of the medium junction, it is subject to change based off of the lift
      */
-    int midJunction = 5000; //placeholder value
+    int midJunction = 4009; //placeholder value
     /**
      * An int used to represent the tic value of the lift at the height of the high junction, it is subject to change based off of the lift
      */
-    int highJunction = 10100; //placeholder value
+    int highJunction = 5797; //placeholder value
     /**
      * A boolean made in order to make it so that up on the dpad on gamepad 2 has to be released before being counted again
      */
@@ -120,19 +120,19 @@ public class EncodedEverything extends OpMode {
         }
 
         if (!presetLiftHeightsMode) { //manual lift
-            board.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            board.lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             //the right trigger makes the lift go up and the left trigger makes the lift go down
             if (board.getLift() <= 0) {
-                board.setLift(gamepad2.right_trigger / 1.5);
-            } else if (board.getLift() <= 10100) {
-                board.setLift((gamepad2.right_trigger - gamepad2.left_trigger) / 1.5);
+                board.setLift(gamepad2.right_trigger);
+            } else if (board.getLift() <= 5797) {
+                board.setLift(gamepad2.right_trigger - gamepad2.left_trigger);
             } else {
-                board.setLift(-gamepad2.left_trigger / 1.5);
+                board.setLift(-gamepad2.left_trigger);
             }
             if (board.getLift() < 0) { //a way to keep the lift from going below 0
                 board.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 board.lift.setTargetPosition(0);
-                board.lift.setPower(0.1);
+                board.lift.setPower(1);
             }
             telemetry.addData("lift mode", "manual");
             telemetry.addData("target position", "n/a");
@@ -156,7 +156,7 @@ public class EncodedEverything extends OpMode {
             }
             board.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             board.lift.setTargetPosition(targetPosition);
-            board.lift.setPower(0.1);
+            board.lift.setPower(1);
             telemetry.addData("lift mode", "preset heights");
             telemetry.addData("target position", targetPosition);
             upPressed = gamepad2.dpad_up;

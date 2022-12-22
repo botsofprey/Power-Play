@@ -11,16 +11,16 @@ public class LiftClass extends OpMode {
         lift = hardwareMap.dcMotor.get("lift");
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     public void loop(){
         //right trigger goes up, left trigger goes down
         if (lift.getCurrentPosition() <= 0) {
-            lift.setPower(gamepad2.right_trigger / 1.5);
+            lift.setPower(gamepad2.right_trigger);
         }else if (lift.getCurrentPosition() <= 10000) {
-            lift.setPower((gamepad2.right_trigger - gamepad2.left_trigger) / 1.5);
+            lift.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
         } else {
-            lift.setPower(-gamepad2.left_trigger / 1.5);
+            lift.setPower(-gamepad2.left_trigger);
         }
         if(lift.getCurrentPosition() < 0){
             lift.setTargetPosition(0);
