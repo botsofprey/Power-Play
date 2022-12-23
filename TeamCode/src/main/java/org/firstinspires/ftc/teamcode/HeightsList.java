@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 /**
  * A class used to store heights in tics to more easily access them
  */
-public class HeightsList {
+public class HeightsList { //heights are all in tics
     /**
      * An int used to represent the tic value of the lift at the height of the low junction, it is subject to change based off of the lift
      */
