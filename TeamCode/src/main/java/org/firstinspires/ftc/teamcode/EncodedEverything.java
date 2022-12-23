@@ -37,22 +37,6 @@ public class EncodedEverything extends OpMode {
      */
     int targetPositionManualControl;
     /**
-     * An int used to represent the tic value of the lift at the height of the low junction, it is subject to change based off of the lift
-     */
-    int lowJunction = 553;
-    /**
-     * An int used to represent the tic value of the lift at the height of the medium junction, it is subject to change based off of the lift
-     */
-    int midJunction = 856;
-    /**
-     * An int used to represent the tic value of the lift at the height of the high junction, it is subject to change based off of the lift
-     */
-    int highJunction = 1151;
-    /**
-     * An int used to represent the tic value at the the height of the ground junction, it is subject to change based of the lift
-     */
-    int groundJunction = 65;
-    /**
      * A boolean made in order to make it so that up on the dpad on gamepad 2 has to be released before being counted again
      */
     boolean upPressed = false;
@@ -66,6 +50,7 @@ public class EncodedEverything extends OpMode {
     boolean presetLiftHeightsMode = false;
 
     HardwareMechanisms board = new HardwareMechanisms();
+    HeightsList heights = new HeightsList();
 
     public void init() {
         board.init(hardwareMap);
@@ -122,7 +107,7 @@ public class EncodedEverything extends OpMode {
 
         if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
             presetLiftHeightsMode = false;
-        } else if (gamepad2.dpad_up || gamepad2.dpad_down || gamepad2.dpad_right || gamepad2.dpad_left) {
+        } else if (gamepad2.dpad_up || gamepad2.dpad_down || gamepad2.dpad_right || gamepad2.dpad_left || gamepad2.right_bumper) {
             presetLiftHeightsMode = true;
         }
 
@@ -130,7 +115,7 @@ public class EncodedEverything extends OpMode {
             //the right trigger makes the lift go up and the left trigger makes the lift go down
             if (board.getLift() <= 0) {
                 targetPositionManualControl += (int) gamepad2.right_trigger * 15;
-            } else if (board.getLift() <= highJunction) {
+            } else if (board.getLift() <= heights.highJunction) {
                 targetPositionManualControl += (int) ((gamepad2.right_trigger - gamepad2.left_trigger) * 15);
             } else {
                 targetPositionManualControl -= (int) gamepad2.left_trigger * 15;
@@ -143,12 +128,12 @@ public class EncodedEverything extends OpMode {
             } else {
                 board.setLiftToRunToPosition(targetPositionManualControl, 1);
             }
-            if (Math.abs(board.getLift() - highJunction) < Math.abs(board.getLift() - midJunction)) {
-                targetPositionPresetHeights = highJunction;
-            } else if (Math.abs(board.getLift() - midJunction) < Math.abs(board.getLift() - lowJunction)) {
-                targetPositionPresetHeights = midJunction;
+            if (Math.abs(board.getLift() - heights.highJunction) < Math.abs(board.getLift() - heights.midJunction)) {
+                targetPositionPresetHeights = heights.highJunction;
+            } else if (Math.abs(board.getLift() - heights.midJunction) < Math.abs(board.getLift() - heights.lowJunction)) {
+                targetPositionPresetHeights = heights.midJunction;
             } else if (Math.abs(board.getLift()) < Math.abs(board.getLift())) {
-                targetPositionPresetHeights = lowJunction;
+                targetPositionPresetHeights = heights.lowJunction;
             } else {
                 targetPositionPresetHeights = 0;
             }
@@ -156,23 +141,23 @@ public class EncodedEverything extends OpMode {
             telemetry.addData("target position", "n/a");
         } else {
             if (gamepad2.dpad_up) { //lift uses preset heights
-                if (targetPositionPresetHeights == 0 || targetPositionPresetHeights == groundJunction) {
-                    targetPositionPresetHeights = lowJunction;
-                } else if ((targetPositionPresetHeights == lowJunction) && !upPressed) {
-                    targetPositionPresetHeights = midJunction;
-                } else if ((targetPositionPresetHeights == midJunction) && !upPressed) {
-                    targetPositionPresetHeights = highJunction;
+                if (targetPositionPresetHeights == 0 || targetPositionPresetHeights == heights.groundJunction) {
+                    targetPositionPresetHeights = heights.lowJunction;
+                } else if ((targetPositionPresetHeights == heights.lowJunction) && !upPressed) {
+                    targetPositionPresetHeights = heights.midJunction;
+                } else if ((targetPositionPresetHeights == heights.midJunction) && !upPressed) {
+                    targetPositionPresetHeights = heights.highJunction;
                 }
             } else if (gamepad2.dpad_down) {
-                if (targetPositionPresetHeights == highJunction) {
-                    targetPositionPresetHeights = midJunction;
-                } else if ((targetPositionPresetHeights == midJunction) && !downPressed) {
-                    targetPositionPresetHeights = lowJunction;
-                } else if ((targetPositionPresetHeights == lowJunction || targetPositionPresetHeights == groundJunction) && !downPressed) {
+                if (targetPositionPresetHeights == heights.highJunction) {
+                    targetPositionPresetHeights = heights.midJunction;
+                } else if ((targetPositionPresetHeights == heights.midJunction) && !downPressed) {
+                    targetPositionPresetHeights = heights.lowJunction;
+                } else if ((targetPositionPresetHeights == heights.lowJunction || targetPositionPresetHeights == heights.groundJunction) && !downPressed) {
                     targetPositionPresetHeights = 0;
                 }
             } else if (gamepad2.right_bumper) {
-                targetPositionPresetHeights = groundJunction;
+                targetPositionPresetHeights = heights.groundJunction;
             }
             if (board.getLift() < 500) {
                 board.setLiftToRunToPosition(targetPositionPresetHeights, 0.25);
