@@ -215,10 +215,10 @@ public class threeWheelOdometry {
         prevRightPos = currentRightPos;
         prevLeftPos = currentLeftPos;
         prevAuxPos = currentAuxPos;
-        currentRightPos = meccanumDrive.motors[0].getCurrentPosition();
-        currentLeftPos = meccanumDrive.motors[3].getCurrentPosition();
-        currentAuxPos = meccanumDrive.motors[2].getCurrentPosition();
-        other = meccanumDrive.motors[1].getCurrentPosition();
+        currentRightPos = meccanumDrive.getCurrentPositionMotor(0);
+        currentLeftPos = meccanumDrive.getCurrentPositionMotor(3);
+        currentAuxPos = meccanumDrive.getCurrentPositionMotor(2);
+        other = meccanumDrive.getCurrentPositionMotor(1);
 
         //Update current point values
         calculateChange();
@@ -239,9 +239,8 @@ public class threeWheelOdometry {
     }
 
     public void resetEncoders() {
-        meccanumDrive.motors[3].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        meccanumDrive.motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        meccanumDrive.motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        meccanumDrive.setModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        meccanumDrive.setModes(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         prevRightPos = 0;
         prevLeftPos = 0;
