@@ -45,7 +45,8 @@ public class HardwareMechanisms {
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        setLiftToRunToPosition(0, 1);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         imu.initialize(parameters);
@@ -55,8 +56,9 @@ public class HardwareMechanisms {
         return lift.getCurrentPosition();
     }
 
-    public void setLift(double liftSpeed) {
-        lift.setPower(liftSpeed);
+    public void setLiftToRunToPosition(int position, double power) {
+        lift.setTargetPosition(position);
+        lift.setPower(power);
     }
 
     public double getClaw() {

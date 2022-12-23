@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * This is the combination of all of our TeleOp codes into one
@@ -32,19 +31,20 @@ public class EncodedEverything extends OpMode {
     /**
      * An int used for tracking the target position of the lift, which changes between 0, lowJunction, midJunction, and highJunction
      */
-    int targetPosition = 0;
+    int targetPositionPresetHeights = 0;
+    int targetPositionManualControl;
     /**
      * An int used to represent the tic value of the lift at the height of the low junction, it is subject to change based off of the lift
      */
-    int lowJunction = 2408;
+    int lowJunction = 553;
     /**
      * An int used to represent the tic value of the lift at the height of the medium junction, it is subject to change based off of the lift
      */
-    int midJunction = 4009;
+    int midJunction = 856;
     /**
      * An int used to represent the tic value of the lift at the height of the high junction, it is subject to change based off of the lift
      */
-    int highJunction = 5797;
+    int highJunction = 1151;
     /**
      * A boolean made in order to make it so that up on the dpad on gamepad 2 has to be released before being counted again
      */
@@ -120,47 +120,44 @@ public class EncodedEverything extends OpMode {
         }
 
         if (!presetLiftHeightsMode) { //manual lift
-            board.lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             //the right trigger makes the lift go up and the left trigger makes the lift go down
             if (board.getLift() <= 0) {
-                board.setLift(gamepad2.right_trigger);
-            } else if (board.getLift() <= 5797) {
-                board.setLift(gamepad2.right_trigger - gamepad2.left_trigger);
+               targetPositionManualControl += (int)gamepad2.right_trigger * 15;
+            } else if (board.getLift() <= highJunction) {
+                targetPositionManualControl += (int)((gamepad2.right_trigger - gamepad2.left_trigger) * 15);
             } else {
-                board.setLift(-gamepad2.left_trigger);
+                targetPositionManualControl -= (int)gamepad2.left_trigger * 15;
             }
             if (board.getLift() < 0) { //a way to keep the lift from going below 0
-                board.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                board.lift.setTargetPosition(0);
-                board.lift.setPower(1);
-            }
-            telemetry.addData("lift mode", "manual");
+               targetPositionManualControl = 0;
+                }
+            board.setLiftToRunToPosition(targetPositionManualControl, 1);
+            telemetry.addData("lift mode", targetPositionManualControl);
             telemetry.addData("target position", "n/a");
         } else {
             if (gamepad2.dpad_up) { //lift uses preset heights
-                if (targetPosition == 0) {
-                    targetPosition = lowJunction;
-                } else if ((targetPosition == lowJunction) && !upPressed) {
-                    targetPosition = midJunction;
-                } else if ((targetPosition == midJunction) && !upPressed) {
-                    targetPosition = highJunction;
+                if (targetPositionPresetHeights == 0) {
+                    targetPositionPresetHeights = lowJunction;
+                } else if ((targetPositionPresetHeights == lowJunction) && !upPressed) {
+                    targetPositionPresetHeights = midJunction;
+                } else if ((targetPositionPresetHeights == midJunction) && !upPressed) {
+                    targetPositionPresetHeights = highJunction;
                 }
             } else if (gamepad2.dpad_down) {
-                if (targetPosition == highJunction) {
-                    targetPosition = midJunction;
-                } else if ((targetPosition == midJunction) && !downPressed) {
-                    targetPosition = lowJunction;
-                } else if ((targetPosition == lowJunction) && !downPressed) {
-                    targetPosition = 0;
+                if (targetPositionPresetHeights == highJunction) {
+                    targetPositionPresetHeights = midJunction;
+                } else if ((targetPositionPresetHeights == midJunction) && !downPressed) {
+                    targetPositionPresetHeights = lowJunction;
+                } else if ((targetPositionPresetHeights == lowJunction) && !downPressed) {
+                    targetPositionPresetHeights = 0;
                 }
             }
-            board.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            board.lift.setTargetPosition(targetPosition);
-            board.lift.setPower(1);
+           board.setLiftToRunToPosition(targetPositionPresetHeights, 1);
             telemetry.addData("lift mode", "preset heights");
-            telemetry.addData("target position", targetPosition);
+            telemetry.addData("target position", targetPositionPresetHeights);
             upPressed = gamepad2.dpad_up;
             downPressed = gamepad2.dpad_down;
+            targetPositionManualControl = (int)board.getLift();
         }
         telemetry.addData("position", board.getLift());
 
