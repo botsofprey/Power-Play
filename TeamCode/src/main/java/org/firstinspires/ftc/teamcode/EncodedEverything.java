@@ -29,9 +29,12 @@ public class EncodedEverything extends OpMode {
      */
     double lastY;
     /**
-     * An int used for tracking the target position of the lift, which changes between 0, lowJunction, midJunction, and highJunction
+     * An int used for tracking the target position of the lift during the preset heights mode, which changes between 0, groundJunction, lowJunction, midJunction, and highJunction
      */
     int targetPositionPresetHeights = 0;
+    /**
+     * An int used to control the lift while under manual control
+     */
     int targetPositionManualControl;
     /**
      * An int used to represent the tic value of the lift at the height of the low junction, it is subject to change based off of the lift
@@ -45,7 +48,9 @@ public class EncodedEverything extends OpMode {
      * An int used to represent the tic value of the lift at the height of the high junction, it is subject to change based off of the lift
      */
     int highJunction = 1151;
-
+    /**
+     * An int used to represent the tic value at the the height of the ground junction, it is subject to change based of the lift
+     */
     int groundJunction = 65;
     /**
      * A boolean made in order to make it so that up on the dpad on gamepad 2 has to be released before being counted again

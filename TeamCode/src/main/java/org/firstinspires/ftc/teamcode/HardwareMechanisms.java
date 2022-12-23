@@ -56,6 +56,11 @@ public class HardwareMechanisms {
         return lift.getCurrentPosition();
     }
 
+    /**
+     * A method used to control the lift using PID control
+     * @param position The target position
+     * @param power the lift's power
+     */
     public void setLiftToRunToPosition(int position, double power) {
         lift.setTargetPosition(position);
         lift.setPower(power);
