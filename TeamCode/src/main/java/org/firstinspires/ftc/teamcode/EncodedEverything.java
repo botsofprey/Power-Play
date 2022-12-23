@@ -185,9 +185,9 @@ public class EncodedEverything extends OpMode {
         if (gamepad2.a) {
             board.setClaw(0);
         } else if (gamepad2.b) {
-            board.setClaw(0.40);
+            board.setClaw(0.4);
         }
-        if (board.getClaw() == 0.40) {
+        if (board.getClaw() == 0.4) {
             telemetry.addData("claw state", "open");
         } else if (board.getClaw() == 0) {
             telemetry.addData("claw state", "closed");
