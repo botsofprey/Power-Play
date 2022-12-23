@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode;
+
 /**
  * A class used to store heights in tics to more easily access them
  */
