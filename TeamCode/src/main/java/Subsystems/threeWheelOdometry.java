@@ -31,6 +31,8 @@ public class threeWheelOdometry {
     private DistanceUnit distanceUnit = DistanceUnit.CM;
 
     private boolean moving = false, maintain = false;
+    private double startAngle = 0;
+    private double cmOffset = 5, angleOffset = 10;
 
     private enum direction {
         x,
@@ -117,6 +119,7 @@ public class threeWheelOdometry {
         moving = true;
         movePID.reset();
         headingPID.reset();
+        startAngle = meccanumDrive.getAngle();
         moveTowards(positionLocation.difference(targetLocation));
     }
 
@@ -149,45 +152,8 @@ public class threeWheelOdometry {
 
     //Robot move towards target
     private void moveTowards(Location diff) {
+
         /*
-        if((!compare(diff.x, 0, 10) && currentMovement != direction.y && currentMovement != direction.angle) ||
-            !compare(diff.x, 0, 20)){
-            double power = movePID.calculateResponse(diff.x)/2;
-            meccanumDrive.moveWithPower(power);
-
-            if(currentMovement != direction.x){
-                System.out.println("Current state change: x at " + getLocation());
-            }
-            currentMovement = direction.x;
-
-        }else if((!compare(diff.y, 0, 10) && currentMovement != direction.x && currentMovement != direction.angle) ||
-                    !compare(diff.y, 0, 20)){
-            double power = movePID.calculateResponse(diff.y)/2;
-            meccanumDrive.moveWithPower(power, -power, power, -power);
-
-            if(currentMovement != direction.y){
-                System.out.println("Current state change: y at " + getLocation());
-            }
-            currentMovement = direction.y;
-
-        }else if ((!compare(diff.angle, 0, 10) && currentMovement != direction.y && currentMovement != direction.x) ||
-                  !compare(diff.angle, 0, 20)){
-            double power = headingPID.calculateResponse(diff.angle);
-            power = Range.clip(power, -1, 1);
-
-            meccanumDrive.moveWithPower(-power,-power,power,power);
-            if(currentMovement != direction.angle){
-                System.out.println("Current state change: angle at " + getLocation());
-            }
-            currentMovement = direction.angle;
-        } else {
-            currentMovement = direction.stationary;
-            moving = false;
-            meccanumDrive.brake();
-        }
-
-         */
-
         double robotMovementAngle = Math.atan2(diff.y, diff.x);
         h = robotMovementAngle - meccanumDrive.getRadians();
 
@@ -207,6 +173,37 @@ public class threeWheelOdometry {
                 ((x + y)/2.0) - rotate,
                 ((x - y)/2.0) - rotate
         );
+
+         */
+        double robotMovementAngle = Math.atan2(diff.y, diff.x);
+        h = robotMovementAngle - meccanumDrive.getRadians();
+
+        if(Math.abs(diff.x) > cmOffset){
+            x = Math.cos(h) + movePID.calculateResponse(diff.x);
+            double rotate = Math.abs(diff.angle) < angleOffset ?
+                    0 : headingPID.calculateResponse(startAngle);
+            rotate = Range.clip(rotate, -1, 1);
+
+            meccanumDrive.moveWithPower(
+                    x + rotate,
+                    x + rotate,
+                    x - rotate,
+                    x - rotate
+            );
+        }else{
+            y = Math.sin(h) + movePID.calculateResponse(diff.y);
+            double rotate = Math.abs(diff.angle) < angleOffset ?
+                    0 : headingPID.calculateResponse(diff.angle);
+            rotate = Range.clip(rotate, -1, 1);
+
+            meccanumDrive.moveWithPower(
+                    y + rotate,
+                    -y + rotate,
+                    y - rotate,
+                    -y - rotate
+            );
+
+        }
     }
 
     public void update() {
@@ -296,15 +293,11 @@ public class threeWheelOdometry {
     }
 
     public boolean atTarget() {
-        return positionLocation.compareAll(targetLocation, 15, 10);
+        return positionLocation.compareAll(targetLocation, cmOffset, angleOffset);
     }
 
     private boolean compare(double a, double b, double offset) {
         return Math.abs(a - b) <= offset;
-    }
-
-    private boolean equalAndNotZero(double a, double b) {
-        return compare(a, b, 2.5) && a != 0;
     }
 
     public int getCurrentLeftPos() {

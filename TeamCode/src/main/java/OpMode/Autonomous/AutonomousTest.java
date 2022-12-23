@@ -108,6 +108,7 @@ public class AutonomousTest extends LinearOpMode {
         odometry.resetEncoders();
 
         //If camera is too far away to see qr, robot gets closer
+        /*
         if(!camera.tagFound()){
             odometry.setTargetPoint(parkingLocations[1]);
 
@@ -122,11 +123,13 @@ public class AutonomousTest extends LinearOpMode {
             drive.brake();
         }
 
+         */
+
         //Turns camera off
         camera.stop();
 
         //Sets target to parking spot
-        parking = camera.getParking();
+        //parking = camera.getParking();
         odometry.setTargetPoint(parkingLocations[parking]);
         while(opModeIsActive() && !odometry.atTarget()){
             odometry.update();
@@ -144,8 +147,6 @@ public class AutonomousTest extends LinearOpMode {
         }
 
         drive.brake();
-
-        sleep(5000);
 
         while (opModeIsActive()){
             odometry.update();
