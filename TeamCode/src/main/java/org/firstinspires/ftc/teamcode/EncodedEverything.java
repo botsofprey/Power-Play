@@ -122,15 +122,15 @@ public class EncodedEverything extends OpMode {
         if (!presetLiftHeightsMode) { //manual lift
             //the right trigger makes the lift go up and the left trigger makes the lift go down
             if (board.getLift() <= 0) {
-               targetPositionManualControl += (int)gamepad2.right_trigger * 15;
+                targetPositionManualControl += (int) gamepad2.right_trigger * 15;
             } else if (board.getLift() <= highJunction) {
-                targetPositionManualControl += (int)((gamepad2.right_trigger - gamepad2.left_trigger) * 15);
+                targetPositionManualControl += (int) ((gamepad2.right_trigger - gamepad2.left_trigger) * 15);
             } else {
-                targetPositionManualControl -= (int)gamepad2.left_trigger * 15;
+                targetPositionManualControl -= (int) gamepad2.left_trigger * 15;
             }
             if (board.getLift() < 0) { //a way to keep the lift from going below 0
-               targetPositionManualControl = 0;
-                }
+                targetPositionManualControl = 0;
+            }
             board.setLiftToRunToPosition(targetPositionManualControl, 1);
             telemetry.addData("lift mode", targetPositionManualControl);
             telemetry.addData("target position", "n/a");
@@ -152,12 +152,12 @@ public class EncodedEverything extends OpMode {
                     targetPositionPresetHeights = 0;
                 }
             }
-           board.setLiftToRunToPosition(targetPositionPresetHeights, 1);
+            board.setLiftToRunToPosition(targetPositionPresetHeights, 1);
             telemetry.addData("lift mode", "preset heights");
             telemetry.addData("target position", targetPositionPresetHeights);
             upPressed = gamepad2.dpad_up;
             downPressed = gamepad2.dpad_down;
-            targetPositionManualControl = (int)board.getLift();
+            targetPositionManualControl = (int) board.getLift();
         }
         telemetry.addData("position", board.getLift());
 
