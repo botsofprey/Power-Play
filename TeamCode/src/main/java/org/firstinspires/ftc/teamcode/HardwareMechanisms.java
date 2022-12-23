@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import java.util.ArrayList;
 
 /**
- * This class acts as a common way for our codes to access to interact with the robot's hardware
+ * This class acts as a common way for our codes to access and interact with the robot's hardware
  */
 public class HardwareMechanisms {
 
