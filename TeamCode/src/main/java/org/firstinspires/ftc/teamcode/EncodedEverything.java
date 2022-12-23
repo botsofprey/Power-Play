@@ -45,6 +45,8 @@ public class EncodedEverything extends OpMode {
      * An int used to represent the tic value of the lift at the height of the high junction, it is subject to change based off of the lift
      */
     int highJunction = 1151;
+
+    int groundJunction = 65;
     /**
      * A boolean made in order to make it so that up on the dpad on gamepad 2 has to be released before being counted again
      */
@@ -115,7 +117,7 @@ public class EncodedEverything extends OpMode {
 
         if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
             presetLiftHeightsMode = false;
-        } else if (gamepad2.dpad_up || gamepad2.dpad_down) {
+        } else if (gamepad2.dpad_up || gamepad2.dpad_down || gamepad2.dpad_right || gamepad2.dpad_left) {
             presetLiftHeightsMode = true;
         }
 
@@ -131,12 +133,25 @@ public class EncodedEverything extends OpMode {
             if (board.getLift() < 0) { //a way to keep the lift from going below 0
                 targetPositionManualControl = 0;
             }
-            board.setLiftToRunToPosition(targetPositionManualControl, 1);
-            telemetry.addData("lift mode", targetPositionManualControl);
+            if (board.getLift() < 500) {
+                board.setLiftToRunToPosition(targetPositionManualControl, 0.25);
+            } else {
+                board.setLiftToRunToPosition(targetPositionManualControl, 1);
+            }
+            if (Math.abs(board.getLift() - highJunction) < Math.abs(board.getLift() - midJunction)) {
+                targetPositionPresetHeights = highJunction;
+            } else if (Math.abs(board.getLift() - midJunction) < Math.abs(board.getLift() - lowJunction)) {
+                targetPositionPresetHeights = midJunction;
+            } else if (Math.abs(board.getLift()) < Math.abs(board.getLift())) {
+                targetPositionPresetHeights = lowJunction;
+            } else {
+                targetPositionPresetHeights = 0;
+            }
+            telemetry.addData("lift mode", "manual control");
             telemetry.addData("target position", "n/a");
         } else {
             if (gamepad2.dpad_up) { //lift uses preset heights
-                if (targetPositionPresetHeights == 0) {
+                if (targetPositionPresetHeights == 0 || targetPositionPresetHeights == groundJunction) {
                     targetPositionPresetHeights = lowJunction;
                 } else if ((targetPositionPresetHeights == lowJunction) && !upPressed) {
                     targetPositionPresetHeights = midJunction;
@@ -148,11 +163,17 @@ public class EncodedEverything extends OpMode {
                     targetPositionPresetHeights = midJunction;
                 } else if ((targetPositionPresetHeights == midJunction) && !downPressed) {
                     targetPositionPresetHeights = lowJunction;
-                } else if ((targetPositionPresetHeights == lowJunction) && !downPressed) {
+                } else if ((targetPositionPresetHeights == lowJunction || targetPositionPresetHeights == groundJunction) && !downPressed) {
                     targetPositionPresetHeights = 0;
                 }
+            } else if (gamepad2.right_bumper) {
+                targetPositionPresetHeights = groundJunction;
             }
-            board.setLiftToRunToPosition(targetPositionPresetHeights, 1);
+            if (board.getLift() < 500) {
+                board.setLiftToRunToPosition(targetPositionPresetHeights, 0.25);
+            } else {
+                board.setLiftToRunToPosition(targetPositionPresetHeights, 1);
+            }
             telemetry.addData("lift mode", "preset heights");
             telemetry.addData("target position", targetPositionPresetHeights);
             upPressed = gamepad2.dpad_up;
@@ -163,10 +184,13 @@ public class EncodedEverything extends OpMode {
 
         if (gamepad2.a) {
             board.setClaw(0);
-            telemetry.addData("claw state", "closed");
         } else if (gamepad2.b) {
             board.setClaw(0.40);
+        }
+        if (board.getClaw() == 0.40) {
             telemetry.addData("claw state", "open");
+        } else if (board.getClaw() == 0) {
+            telemetry.addData("claw state", "closed");
         }
 
         if (gamepad1.right_bumper) {
