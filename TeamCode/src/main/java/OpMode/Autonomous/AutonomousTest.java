@@ -66,6 +66,8 @@ public class AutonomousTest extends LinearOpMode {
             telemetry.update();
         }
 
+        /*
+
         double fps=0, frameCounter = 0;
         double startTime = System.currentTimeMillis();
 
@@ -99,6 +101,8 @@ public class AutonomousTest extends LinearOpMode {
             odometry.positionLocation.add(movement.x * deltaTime, movement.y * deltaTime, 0);
             odometry.update();
         }
+
+         */
 
         //Resets position and encoders
         odometry.resetEncoders();

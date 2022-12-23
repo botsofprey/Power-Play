@@ -72,9 +72,9 @@ public class threeWheelOdometry {
     }
 
     private void calculateChange() {
-        int dx1 = currentLeftPos - prevLeftPos,
-                dx2 = currentRightPos - prevRightPos,
-                dy = currentAuxPos - prevAuxPos;
+        int dx1 = currentLeftPos - prevLeftPos, // 5
+                dx2 = currentRightPos - prevRightPos, //5
+                dy = currentAuxPos - prevAuxPos;//0
 /*
         double angleDiff = meccanumDrive.getAngle() - positionLocation.angle;
         positionLocation.angle = meccanumDrive.getAngle();
@@ -86,10 +86,12 @@ public class threeWheelOdometry {
 
 
         */
+
+
         double //theta = Math.toRadians((dx2-dx1)/(15.24*2)),
-                theta = Math.toRadians(meccanumDrive.getRadians() - positionLocation.getRadians()),
-                fwd = ((dx2 * LEFT_DISTANCE_FROM_MID) - (dx1 * RIGHT_DISTANCE_FROM_MID)) / LENGETH_BETWEEN_VERTS,
-                str = dy - (DISTANCE_FROM_MIDPOINT * theta);
+                theta = Math.toRadians(meccanumDrive.getRadians() - positionLocation.getRadians()), // 0
+                fwd = ((dx2 * LEFT_DISTANCE_FROM_MID) - (dx1 * RIGHT_DISTANCE_FROM_MID)) / LENGETH_BETWEEN_VERTS, //5
+                str = dy - (DISTANCE_FROM_MIDPOINT * theta); //0
 
         if (theta != 0) {
 
@@ -104,18 +106,19 @@ public class threeWheelOdometry {
             double deltaX = (relX * Math.cos(angle)) - (relY * Math.sin(angle)),
                     deltaY = (relY * Math.cos(angle)) + (relX * Math.sin(angle));
 
-            positionLocation.add(deltaX * CM_PER_TICK * (60.0/22.0), deltaY * CM_PER_TICK, Math.toDegrees(theta));
+            positionLocation.add(deltaX * CM_PER_TICK * (60.0/8.0), deltaY * CM_PER_TICK, Math.toDegrees(theta));
         } else {
-            double relX = fwd, //500
-                    relY = str; //100
+            double relX = fwd,
+                    relY = str;
 
             double angle = meccanumDrive.getRadians();//0
-            double deltaX = (relX * Math.cos(angle)) - (relY * Math.sin(angle)), //500
+            double deltaX = (relX * Math.cos(angle)) - (relY * Math.sin(angle)),
                     deltaY = (relY * Math.cos(angle)) + (relX * Math.sin(angle)); //100
 
             System.out.println(deltaX + ", " + deltaY);
-            positionLocation.add(deltaX * CM_PER_TICK, deltaY * CM_PER_TICK, Math.toDegrees(theta));
+            positionLocation.add(deltaX * CM_PER_TICK * (60.0/8.0), deltaY * CM_PER_TICK, 0);
         }
+
         //dx = x change
         //dy = y change
         //dt = delta theta
@@ -204,7 +207,8 @@ public class threeWheelOdometry {
         x = Math.cos(h);// * movePID.calculateResponse(diff.x);
         y = Math.sin(h);//  * movePID.calculateResponse(diff.y);
         double rotate = positionLocation.compareHeading(targetLocation, 10) ?
-                0 : headingPID.calculateResponse(diff.angle);
+                0 : ((Math.abs(diff.angle)/diff.angle) + headingPID.calculateResponse(diff.angle)) * .5;
+        rotate = Range.clip(rotate, -1, 1);
 
         if (Math.abs(diff.x) < 5 && Math.abs(diff.y) < 5) {
             x = 0;
@@ -217,6 +221,9 @@ public class threeWheelOdometry {
                 x + y - rotate,
                 x - y - rotate
         );
+
+        System.out.println("Movement values: " + x + ", " + y + ", " + Math.toDegrees(h));
+        System.out.println("Position: " + getLocation());
     }
 
     public void update() {
@@ -225,10 +232,10 @@ public class threeWheelOdometry {
         prevRightPos = currentRightPos;
         prevLeftPos = currentLeftPos;
         prevAuxPos = currentAuxPos;
-        currentRightPos = meccanumDrive.motors[0].getCurrentPosition();
-        currentLeftPos = meccanumDrive.motors[3].getCurrentPosition();
-        currentAuxPos = meccanumDrive.motors[2].getCurrentPosition();
-        other = meccanumDrive.motors[1].getCurrentPosition();
+        currentRightPos = meccanumDrive.getCurrentPositionMotor(0);
+        currentLeftPos = meccanumDrive.getCurrentPositionMotor(3);
+        currentAuxPos = meccanumDrive.getCurrentPositionMotor(2);
+        other = meccanumDrive.getCurrentPositionMotor(1);
 
         //Update current point values
         calculateChange();
@@ -249,9 +256,8 @@ public class threeWheelOdometry {
     }
 
     public void resetEncoders() {
-        meccanumDrive.motors[3].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        meccanumDrive.motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        meccanumDrive.motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        meccanumDrive.setModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        meccanumDrive.setModes(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         prevRightPos = 0;
         prevLeftPos = 0;

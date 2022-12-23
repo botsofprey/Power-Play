@@ -28,7 +28,7 @@ import UtilityClasses.Location;
  * @author Alex Prichard
  */
 public class MecanumDrive {
-    public DcMotor[] motors = new DcMotor[4];
+    private DcMotor[] motors = new DcMotor[4];
     private static final String[] MOTOR_NAMES = {
             "frontLeftDriveMotor",
             "backLeftDriveMotor",
