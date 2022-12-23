@@ -17,6 +17,18 @@ public class EncodedEverything extends OpMode {
      */
     double limitPowerChangeFast = 0.01;
     /**
+     * The variable used to represent the amount forward, implemented as gamepad1.left_stick_y
+     */
+    double y;
+    /**
+     * The variable used to represent the amount right, implemented as gamepad1.left_stick_x
+     */
+    double x;
+    /**
+     * The variable used to represent turning, implemented as gamepad1.right_stick_x
+     */
+    double rx;
+    /**
      * A double used to track the previous x value in order to limit acceleration
      */
     double lastX;
@@ -58,51 +70,51 @@ public class EncodedEverything extends OpMode {
 
     @Override
     public void loop() {
-        board.y = -gamepad1.left_stick_y;
-        board.x = gamepad1.left_stick_x;
-        board.rx = gamepad1.right_stick_x;
+        y = -gamepad1.left_stick_y;
+        x = gamepad1.left_stick_x;
+        rx = gamepad1.right_stick_x;
 
-        double changeX = board.x - lastX;
+        double changeX = x - lastX;
         if (gamepad1.left_bumper) {
             if (Math.abs(changeX) > limitPowerChangeFast) {
                 changeX = Math.signum(changeX) * limitPowerChangeFast;
             }
-            board.x = lastX + changeX;
-            lastX = board.x;
+            x = lastX + changeX;
+            lastX = x;
 
-            double changeRX = board.rx - lastRx;
+            double changeRX = rx - lastRx;
             if (Math.abs(changeRX) > limitPowerChangeFast) {
                 changeRX = Math.signum(changeRX) * limitPowerChangeFast;
             }
-            board.rx = lastRx + changeRX;
-            lastRx = board.rx;
+            rx = lastRx + changeRX;
+            lastRx = rx;
 
-            double changeY = board.y - lastY;
+            double changeY = y - lastY;
             if (Math.abs(changeY) > limitPowerChangeFast) {
                 changeY = Math.signum(changeY) * limitPowerChangeFast;
             }
-            board.y = lastY + changeY;
-            lastY = board.y;
+            y = lastY + changeY;
+            lastY = y;
         } else {
             if (Math.abs(changeX) > limitPowerChange) {
                 changeX = Math.signum(changeX) * limitPowerChange;
             }
-            board.x = lastX + changeX;
-            lastX = board.x;
+            x = lastX + changeX;
+            lastX = x;
 
-            double changeRX = board.rx - lastRx;
+            double changeRX = rx - lastRx;
             if (Math.abs(changeRX) > limitPowerChange) {
                 changeRX = Math.signum(changeRX) * limitPowerChange;
             }
-            board.rx = lastRx + changeRX;
-            lastRx = board.rx;
+            rx = lastRx + changeRX;
+            lastRx = rx;
 
-            double changeY = board.y - lastY;
+            double changeY = y - lastY;
             if (Math.abs(changeY) > limitPowerChange) {
                 changeY = Math.signum(changeY) * limitPowerChange;
             }
-            board.y = lastY + changeY;
-            lastY = board.y;
+            y = lastY + changeY;
+            lastY = y;
         }
 
         if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
@@ -184,13 +196,13 @@ public class EncodedEverything extends OpMode {
         }
 
         if (gamepad1.right_bumper) {
-            board.driveFieldRelative(board.y / 4, board.x / 4, board.rx / 4); //slow mode
+            board.driveFieldRelative(y / 4, x / 4, rx / 4); //slow mode
             telemetry.addData("Mode", "Slow");
         } else if (gamepad1.left_bumper) {
-            board.driveFieldRelative(board.y, board.x, board.rx); //speed mode
+            board.driveFieldRelative(y, x, rx); //speed mode
             telemetry.addData("Mode", "Speed");
         } else {
-            board.driveFieldRelative(board.y / 2, board.x / 2, board.rx / 2); //normal mode
+            board.driveFieldRelative(y / 2, x / 2, rx / 2); //normal mode
             telemetry.addData("Mode", "Normal");
         }
     }

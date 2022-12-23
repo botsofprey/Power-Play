@@ -24,18 +24,6 @@ public class HardwareMechanisms {
     Servo claw;
 
     BNO055IMU imu;
-    /**
-     * The variable used to represent the amount forward, implemented as gamepad1.left_stick_y
-     */
-    double y;
-    /**
-     * The variable used to represent the amount right, implemented as gamepad1.left_stick_x
-     */
-    double x;
-    /**
-     * The variable used to represent turning, implemented as gamepad1.right_stick_x
-     */
-    double rx;
 
     public void init(HardwareMap hwMap) {
         drive.init(hwMap);
