@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class RecalibrateHeightsForConeStack extends OpMode {
     int coneStackHeight = 5;
     boolean aPressed = false;
+    int liftPosition;
     int fiveStackHeight;
     int fourStackHeight;
     int threeStackHeight;
@@ -23,6 +24,9 @@ public class RecalibrateHeightsForConeStack extends OpMode {
         if (gamepad1.a && !aPressed) {
             coneStackHeight -= 1;
         }
+
+        liftPosition += gamepad1.right_trigger - gamepad1.left_trigger;
+        board.setLiftToRunToPosition(liftPosition, 1);
 
         if (coneStackHeight == 5) {
             fiveStackHeight = (int) board.getLift();
