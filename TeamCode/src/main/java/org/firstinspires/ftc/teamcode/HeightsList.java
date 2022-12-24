@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
-/**
- * A class used to store heights in tics to more easily access them
- */
+
 public class HeightsList { //heights are all in tics
+
+    //junction heights:
     /**
      * An int used to represent the tic value of the lift at the height of the low junction, it is subject to change based off of the lift
      */
@@ -20,4 +20,11 @@ public class HeightsList { //heights are all in tics
      * An int used to represent the tic value at the the height of the ground junction, it is subject to change based of the lift
      */
     int groundJunction = 400;
+
+    //cone stack heights:
+    int fiveConeStack = 355;
+    int fourConeStack = 341;
+    int threeConeStack = 310;
+    int twoConeStack = 230;
+    int oneConeStack = 195;
 }
