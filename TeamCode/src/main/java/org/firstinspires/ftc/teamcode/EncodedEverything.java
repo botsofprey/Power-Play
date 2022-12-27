@@ -74,6 +74,7 @@ public class EncodedEverything extends OpMode {
         x = gamepad1.left_stick_x;
         rx = gamepad1.right_stick_x;
 
+        //from about line 78 to 119 is code to limit acceleration
         double changeX = x - lastX;
         if (gamepad1.left_bumper) {
             if (Math.abs(changeX) > limitPowerChangeFast) {
@@ -135,7 +136,7 @@ public class EncodedEverything extends OpMode {
             if (board.getLift() < 0) { //a way to keep the lift from going below 0
                 targetPositionManualControl = 0;
             }
-            if (board.getLift() < 500) {
+            if (board.getLift() < 500) { //used to prevent crashing the slides when going down
                 board.setLiftToRunToPosition(targetPositionManualControl, 0.25);
             } else {
                 board.setLiftToRunToPosition(targetPositionManualControl, 1);
@@ -171,7 +172,7 @@ public class EncodedEverything extends OpMode {
             } else if (gamepad2.right_bumper) {
                 targetPositionPresetHeights = heights.groundJunction;
             }
-            if (board.getLift() < 500) {
+            if (board.getLift() < 500) { //used to prevent crashing the slides when going down
                 board.setLiftToRunToPosition(targetPositionPresetHeights, 0.25);
             } else {
                 board.setLiftToRunToPosition(targetPositionPresetHeights, 1);
