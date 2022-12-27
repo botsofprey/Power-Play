@@ -45,6 +45,10 @@ public class driveBaseMovement {
     // wheel turn, divided by the wheel circumference 30.159 cm, the robot
     //takes about 4.54 wheel rotations for a full 360 degree turn.)
     public final double COMPLETE_TURN_ROTS = 4.54;
+    //
+    public final double TICKS_PER_REV_ODOM = 0;
+    //
+    public final double COMPLETE_TURN_ROTS_ODOM = 0;
 
     public void setSlowMode() {
         slowMode = normalMode / 2;
@@ -125,8 +129,12 @@ public class driveBaseMovement {
         return new double[]{frontLeftMotorTICKS, frontRightMotorTICKS, backLeftMotorTICKS, backRightMotorTICKS};
     }
 
-    //odometry position checking
-    public void checkOdometry() {
-
+    //odometry position checking and setting
+    public double[] odomToMotorConvert(double[] motorTICKS, ) {
+        motorTICKS = new double[]{};
+        double frontLeftMotorTICKS = motorTICKS[0];
+        double frontRightMotorTICKS = motorTICKS[1];
+        double backLeftMotorTICKS = motorTICKS[2];
+        double backRightMotorTICKS = motorTICKS[3];
     }
 }
