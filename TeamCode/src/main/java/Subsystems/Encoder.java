@@ -1,19 +1,21 @@
-package Subsystems;
+/*package Subsystems;
 
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.Base64;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 class Encoder extends Base64.Encoder {
 
-    public Encoder(DcMotor leftEncoder) {
-        super();
-    }
+
+    private static Object DcMotorEx ;
+
     public static void encode (byte[] input,
                                int offset,
                                int len,
@@ -23,4 +25,4 @@ class Encoder extends Base64.Encoder {
 //Cannot be accessed from outside package.
 //what does that mean
 //whatever who knows
- 
+*/
