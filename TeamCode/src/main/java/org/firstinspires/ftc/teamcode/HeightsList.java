@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-
+/**
+ * A class used to store the heights of the junctions and cone stacks for easier access to the values
+ */
 public class HeightsList { //heights are all in tics
 
     //junction heights:
