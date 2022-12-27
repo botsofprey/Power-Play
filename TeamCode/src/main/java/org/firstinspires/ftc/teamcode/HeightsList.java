@@ -21,7 +21,7 @@ public class HeightsList { //heights are all in tics
     /**
      * An int used to represent the tic value at the the height of the ground junction, it is subject to change based of the lift
      */
-    int groundJunction = 400;
+    int groundJunction = 250;
 
     //cone stack heights:
     int fiveConeStack = 355;
