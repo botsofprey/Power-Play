@@ -26,7 +26,7 @@ public class RecalibrateHeightsForConeStack extends OpMode {
         }
 
         liftPosition += gamepad1.right_trigger - gamepad1.left_trigger;
-        board.setLiftToRunToPosition(liftPosition, 1);
+        board.setLift(liftPosition);
 
         if (coneStackHeight == 5) {
             fiveStackHeight = (int) board.getLift();

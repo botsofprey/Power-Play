@@ -66,6 +66,7 @@ public class EncodedEverything extends OpMode {
 
     public void init() {
         board.init(hardwareMap);
+        board.setLift(0);
     }
 
     @Override
@@ -74,7 +75,7 @@ public class EncodedEverything extends OpMode {
         x = gamepad1.left_stick_x;
         rx = gamepad1.right_stick_x;
 
-        //from about line 78 to 119 is code to limit acceleration
+        //from about line 79 to 120 is code to limit acceleration
         double changeX = x - lastX;
         if (gamepad1.left_bumper) {
             if (Math.abs(changeX) > limitPowerChangeFast) {
@@ -137,9 +138,9 @@ public class EncodedEverything extends OpMode {
                 targetPositionManualControl = 0;
             }
             if (board.getLift() < 500) { //used to prevent crashing the slides when going down
-                board.setLiftToRunToPosition(targetPositionManualControl, 0.25);
+                board.setLift(targetPositionManualControl);
             } else {
-                board.setLiftToRunToPosition(targetPositionManualControl, 1);
+                board.setLift(targetPositionManualControl);
             }
             if (Math.abs(board.getLift() - heights.highJunction) < Math.abs(board.getLift() - heights.midJunction)) {
                 targetPositionPresetHeights = heights.highJunction;
@@ -173,9 +174,9 @@ public class EncodedEverything extends OpMode {
                 targetPositionPresetHeights = heights.groundJunction;
             }
             if (board.getLift() < 500) { //used to prevent crashing the slides when going down
-                board.setLiftToRunToPosition(targetPositionPresetHeights, 0.25);
+                board.setLift(targetPositionPresetHeights);
             } else {
-                board.setLiftToRunToPosition(targetPositionPresetHeights, 1);
+                board.setLift(targetPositionPresetHeights);
             }
             telemetry.addData("lift mode", "preset heights");
             telemetry.addData("target position", targetPositionPresetHeights);

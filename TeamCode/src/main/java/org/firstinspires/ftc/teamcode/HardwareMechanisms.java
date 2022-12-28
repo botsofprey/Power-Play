@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.control.PIDFController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -32,10 +34,7 @@ public class HardwareMechanisms {
         imu = hwMap.get(BNO055IMU.class, "imu");
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        setLiftToRunToPosition(0, 1);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         imu.initialize(parameters);
     }
@@ -44,15 +43,21 @@ public class HardwareMechanisms {
         return lift.getCurrentPosition();
     }
 
+    public void setLiftPower(double liftPower) {
+        lift.setPower(liftPower);
+    }
+
     /**
      * A method used to control the lift using PID control
      *
      * @param position The target position
-     * @param power the lift's power
      */
-    public void setLiftToRunToPosition(int position, double power) {
-        lift.setTargetPosition(position);
-        lift.setPower(power);
+    public void setLift(int position) {
+        PIDCoefficients coeffs = new PIDCoefficients(0.05, 0, 0);
+        PIDFController controller = new PIDFController(coeffs);
+        controller.setTargetPosition(position);
+        double correction = controller.update(getLift());
+        setLiftPower(correction);
     }
 
     public double getClaw() {
