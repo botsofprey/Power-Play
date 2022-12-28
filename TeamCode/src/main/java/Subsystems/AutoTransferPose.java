@@ -8,7 +8,7 @@ public class AutoTransferPose extends LinearOpMode {
     @Override
 
     public void runOpMore() throws InterruptedException {
-        MecanumDrive drive = new MecanumDrive();
+        MecanumDrive drive = new MecanumDrive(hardwareMap);
 
         Pose2d startPose = new Pose2d(10, 15, Math.toRadians(90));
 

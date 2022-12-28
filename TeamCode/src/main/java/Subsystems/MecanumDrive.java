@@ -12,7 +12,7 @@ public class MecanumDrive {
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
 
-    public MecanumDrive() {
+    public MecanumDrive(HardwareMap hardwareMap) {
     }
 
     public void init(HardwareMap hardwareMap) {

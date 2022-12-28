@@ -5,11 +5,14 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-//import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.codec.Encoder;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.codec.Encoder;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.internal.android.dex.EncodedValue;
+import org.firstinspires.ftc.robotcore.internal.android.dex.EncodedValueReader;
+import org.firstinspires.ftc.robotcore.internal.android.dx.dex.file.ValueEncoder;
 import org.openftc.easyopencv.PipelineRecordingParameters;
 
 import java.util.Arrays;
@@ -33,9 +36,9 @@ public class StandardTrackngWheelLocalizer extends ThreeTrackingWheelLocalizer {
                 new Pose2d(FORWARD_OFFSET, 0, Math.toRadians(90))
         ));
 
-        //leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
-        //rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
-        //frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "frontEncoder"));
+        leftEncoder = new EncodedValue(hardwareMap.get((Class<? extends DcMotorEx>) DcMotorEx.class, "leftEncoder"));
+        rightEncoder = new EncodedValue(hardwareMap.get((Class<? extends DcMotorEx>) DcMotorEx.class, "rightEncoder"));
+        frontEncoder = new EncodedValue(hardwareMap.get((Class<? extends DcMotorEx>) DcMotorEx.class, "frontEncoder"));
     }
 
     public static double encoderTicksToInches(double ticks) {
