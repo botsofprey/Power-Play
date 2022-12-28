@@ -24,13 +24,9 @@ public class PIDLiftClass extends OpMode {
         } else {
             targetPosition -= (int) gamepad2.left_trigger * 15;
         }
-        if (board.getLift() < 0) { //a way to keep the lift from going below 0
+        if (board.getLift() < 0) { //keeps the lift from going below 0
             targetPosition = 0;
         }
-        if (board.getLift() < 500) { //used to prevent crashing the slides when going down
-            board.setLift(targetPosition);
-        } else {
             board.setLift(targetPosition);
         }
     }
-}

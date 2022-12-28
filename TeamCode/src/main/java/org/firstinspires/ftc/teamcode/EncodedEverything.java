@@ -134,14 +134,11 @@ public class EncodedEverything extends OpMode {
             } else {
                 targetPositionManualControl -= (int) gamepad2.left_trigger * 15;
             }
-            if (board.getLift() < 0) { //a way to keep the lift from going below 0
+            if (board.getLift() < 0) { //keeps the lift from going below 0
                 targetPositionManualControl = 0;
             }
-            if (board.getLift() < 500) { //used to prevent crashing the slides when going down
-                board.setLift(targetPositionManualControl);
-            } else {
-                board.setLift(targetPositionManualControl);
-            }
+            board.setLift(targetPositionManualControl);
+
             if (Math.abs(board.getLift() - heights.highJunction) < Math.abs(board.getLift() - heights.midJunction)) {
                 targetPositionPresetHeights = heights.highJunction;
             } else if (Math.abs(board.getLift() - heights.midJunction) < Math.abs(board.getLift() - heights.lowJunction)) {
