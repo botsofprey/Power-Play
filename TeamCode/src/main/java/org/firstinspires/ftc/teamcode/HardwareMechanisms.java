@@ -18,6 +18,7 @@ import java.util.ArrayList;
  * This class acts as a common way for our codes to access and interact with the robot's hardware
  */
 public class HardwareMechanisms {
+
     PIDCoefficients coeffs = new PIDCoefficients(0.01, 0, 0);
     PIDFController controller = new PIDFController(coeffs);
 
