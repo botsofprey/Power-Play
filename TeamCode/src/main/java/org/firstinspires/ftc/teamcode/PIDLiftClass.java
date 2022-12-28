@@ -27,6 +27,8 @@ public class PIDLiftClass extends OpMode {
         if (board.getLift() < 0) { //keeps the lift from going below 0
             targetPosition = 0;
         }
-            board.setLift(targetPosition);
-        }
+        board.setLift(targetPosition);
+        telemetry.addData("target position", targetPosition);
+        telemetry.addData("current position", board.getLift());
     }
+}
