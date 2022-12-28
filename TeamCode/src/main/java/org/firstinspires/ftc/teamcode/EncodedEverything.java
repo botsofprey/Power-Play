@@ -134,7 +134,7 @@ public class EncodedEverything extends OpMode {
             } else {
                 targetPositionManualControl -= (int) gamepad2.left_trigger * 15;
             }
-            if (board.getLift() < 0) { //keeps the lift from going below 0
+            if (targetPositionManualControl < 0) { //keeps the lift from going below 0
                 targetPositionManualControl = 0;
             }
             board.setLift(targetPositionManualControl);
@@ -170,11 +170,7 @@ public class EncodedEverything extends OpMode {
             } else if (gamepad2.right_bumper) {
                 targetPositionPresetHeights = heights.groundJunction;
             }
-            if (board.getLift() < 500) { //used to prevent crashing the slides when going down
-                board.setLift(targetPositionPresetHeights);
-            } else {
-                board.setLift(targetPositionPresetHeights);
-            }
+            board.setLift(targetPositionPresetHeights);
             telemetry.addData("lift mode", "preset heights");
             telemetry.addData("target position", targetPositionPresetHeights);
             upPressed = gamepad2.dpad_up;

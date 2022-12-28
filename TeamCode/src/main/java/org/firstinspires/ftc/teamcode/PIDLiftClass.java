@@ -24,7 +24,7 @@ public class PIDLiftClass extends OpMode {
         } else {
             targetPosition -= (int) gamepad2.left_trigger * 15;
         }
-        if (board.getLift() < 0) { //keeps the lift from going below 0
+        if (targetPosition < 0) { //keeps the lift from going below 0
             targetPosition = 0;
         }
         board.setLift(targetPosition);

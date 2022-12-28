@@ -18,6 +18,8 @@ import java.util.ArrayList;
  * This class acts as a common way for our codes to access and interact with the robot's hardware
  */
 public class HardwareMechanisms {
+    PIDCoefficients coeffs = new PIDCoefficients(0.01, 0, 0);
+    PIDFController controller = new PIDFController(coeffs);
 
     MecanumDrive drive = new MecanumDrive();
 
@@ -53,8 +55,6 @@ public class HardwareMechanisms {
      * @param position The target position
      */
     public void setLift(int position) {
-        PIDCoefficients coeffs = new PIDCoefficients(0.05, 0, 0);
-        PIDFController controller = new PIDFController(coeffs);
         controller.setTargetPosition(position);
         double correction = controller.update(getLift());
         setLiftPower(correction);
