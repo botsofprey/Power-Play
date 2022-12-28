@@ -2,21 +2,14 @@ package Subsystems;
 
 import android.os.Build;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.codec.Encoder;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+//import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.codec.Encoder;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.internal.android.dex.EncodedValue;
-import org.firstinspires.ftc.robotcore.internal.android.dex.EncodedValueReader;
-import org.firstinspires.ftc.robotcore.internal.android.dx.dex.file.ValueEncoder;
-import org.openftc.easyopencv.PipelineRecordingParameters;
 
 import java.util.Arrays;
-import java.util.Base64;
 
 public class StandardTrackngWheelLocalizer extends ThreeTrackingWheelLocalizer {
     public static double TICKS_PER_REV = 0;
@@ -26,7 +19,9 @@ public class StandardTrackngWheelLocalizer extends ThreeTrackingWheelLocalizer {
     public static double LATERAL_DISTANCE = 12;
     public static double FORWARD_OFFSET = 2; //idk how to measure it
 
-    private Base64.Encoder leftEncoder, rightEncoder, frontEncoder;
+    private EncodedValue leftEncoder;
+    private EncodedValue rightEncoder;
+    private EncodedValue frontEncoder;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public StandardTrackngWheelLocalizer(HardwareMap hardwareMap) throws Throwable {
@@ -36,9 +31,9 @@ public class StandardTrackngWheelLocalizer extends ThreeTrackingWheelLocalizer {
                 new Pose2d(FORWARD_OFFSET, 0, Math.toRadians(90))
         ));
 
-        leftEncoder = new EncodedValue(hardwareMap.get((Class<? extends DcMotorEx>) DcMotorEx.class, "leftEncoder"));
-        rightEncoder = new EncodedValue(hardwareMap.get((Class<? extends DcMotorEx>) DcMotorEx.class, "rightEncoder"));
-        frontEncoder = new EncodedValue(hardwareMap.get((Class<? extends DcMotorEx>) DcMotorEx.class, "frontEncoder"));
+        leftEncoder = new EncodedValue(hardwareMap.get((byte[].class), "leftEncoder"));
+        rightEncoder = new EncodedValue(hardwareMap.get((byte[].class), "rightEncoder"));
+        frontEncoder = new EncodedValue(hardwareMap.get((byte[].class), "frontEncoder"));
     }
 
     public static double encoderTicksToInches(double ticks) {

@@ -1,5 +1,6 @@
 package UtilityClasses;
 
+import com.acmerobotics.roadrunner.path.Path;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import Subsystems.MecanumDrive;
@@ -10,14 +11,15 @@ public class Trajectory extends LinearOpMode {
     public void runOpMode() {
         MecanumDrive drive = new MecanumDrive(hardwareMap);
 
-        Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d())
+
+        Path myTrajectory = drive.trajectoryBuilder(new Pose2d())
                 .strafeRight(10)
                 .forward(5)
                 .build();
         waitForStart();
 
         if(isStopRequested()) return;
-        drive.followTrajectory(myTrajectory);
+        drive.init(myTrajectory);
     }
 
     public double duration() {

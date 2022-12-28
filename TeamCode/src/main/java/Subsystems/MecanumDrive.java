@@ -1,9 +1,12 @@
 package Subsystems;
 
+import com.acmerobotics.roadrunner.path.Path;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+//import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
 @TeleOp
 public class MecanumDrive {
@@ -15,11 +18,11 @@ public class MecanumDrive {
     public MecanumDrive(HardwareMap hardwareMap) {
     }
 
-    public void init(HardwareMap hardwareMap) {
-        frontLeftMotor = hardwareMap.dcMotor.get("frontLeftDriveMotor");
-        frontRightMotor = hardwareMap.dcMotor.get("frontRightDriveMotor");
-        backLeftMotor = hardwareMap.dcMotor.get("backLeftDriveMotor");
-        backRightMotor = hardwareMap.dcMotor.get("backRightDriveMotor");
+    public void init(Path hardwareMap) {
+        frontLeftMotor = hardwareMap.DcMotor.get("frontLeftDriveMotor");
+        frontRightMotor = hardwareMap.DcMotor.get("frontRightDriveMotor");
+        backLeftMotor = hardwareMap.DcMotor.get("backLeftDriveMotor");
+        backRightMotor = hardwareMap.DcMotor.get("backRightDriveMotor");
 
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -59,5 +62,9 @@ public class MecanumDrive {
     }
 
     public void setMode(DcMotor.RunMode runWithoutEncoder) {
+    }
+
+    public void trajectoryBuilder(Pose2d pose2d) {
+    return;
     }
 }

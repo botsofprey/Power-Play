@@ -23,7 +23,11 @@ public abstract class SequenceSegment {
         this.markers = markers;
     }
 
-    public SequenceSegment(double duration, void start, Object end, List<TrajectoryMarker> markers) {
+    public SequenceSegment(double duration, double start, Object end, List<TrajectoryMarker> markers, double duration1, Pose2d startPose, Pose2d endPose, List<TrajectoryMarker> markers1) {
+        this.duration = duration1;
+        this.startPose = startPose;
+        this.endPose = endPose;
+        this.markers = markers1;
     }
 
     public double getDuration() {
