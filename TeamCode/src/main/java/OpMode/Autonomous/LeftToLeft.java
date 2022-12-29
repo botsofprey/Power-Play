@@ -2,10 +2,12 @@
 orentation)and is trying to go to the left same colored ?storage? (idk man whatever scores the
 points)
 //IT HAS TO START ON THE LEFT SIDE OF THE RED ALLIANCE FOR THIS TO WORK
-actually what idk what im doing
-i dont think it matters
+actually what
+idk what im doing
+i dont think it matters where it starts
 it might matter if the qr code isnt found
 cause it has to park in the terminal
+just in case
  *//*
 thought process
 scan qr code
@@ -14,11 +16,12 @@ score it or just bring it with you to the storage triangle thing
      (if scoring prolly on the medium or low or even ground junction)
 reverse back to the original starting position
 go left into the half square
-wait til the drivers drive around
+after it does alot of complicated stuff
+wait til the drivers can drive around
 ta-da all done
 */
 //but you should ignore this because its prolly wrong
-//actually its wrong
+//actually its 98787654678654345% wrong
 //maybe
 package OpMode.Autonomous;
 
@@ -48,7 +51,8 @@ public abstract class LeftToLeft extends LinearOpMode {
 
         drive = new MecanumDrive(hardwareMap, this, 0);
         try {
-            odometry = new StandardTrackingWheelLocalizer(hardwareMap, new Location(0,0), this, drive);
+            odometry = new StandardTrackingWheelLocalizer(hardwareMap, new Location(0,0),
+                    this, drive);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -62,7 +66,7 @@ public abstract class LeftToLeft extends LinearOpMode {
             telemetry.addLine();
         }
         Location[] parkingLocations = {
-                new Location (1),//= (60, -60), // tha 1st parking spot
+                new Location (1), //= (60, -60), // tha 1st parking spot
                 new Location (2), //= (60, 0), //tha 2nd parking spot
                 new Location (3), //= (60, 60), //tha 3rd parking spot
                 new Location (4) //= (0, 90)
@@ -70,7 +74,7 @@ public abstract class LeftToLeft extends LinearOpMode {
 
         boolean tagFound;
 
-        int getParking;
+        int getParking; //but how
 
         //parking space time
         telemetry.addData("Tag found", camera.tagFound());
