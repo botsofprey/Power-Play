@@ -23,6 +23,13 @@ ta-da all done
 //but you should ignore this because its prolly wrong
 //actually its 98787654678654345% wrong
 //maybe
+/*
+1. read cone
+2. close claw and go to score
+3. reverse motion
+4. park where ever it was supposed to
+5. sleep
+ */
 package OpMode.Autonomous;
 
 import android.os.Build;
@@ -84,5 +91,18 @@ public abstract class LeftToLeft extends LinearOpMode {
         telemetry.addLine();
         telemetry.update();
         //assume it found the tag for my sake plz
+
+        //now its gotta score
+        while (opModeIsActive()){
+            odometry.update();
+
+            telemetry.addData("Position", odometry.getLocation);
+            telemetry.addData("Parking Spot", camera.getParking()+1);
+            telemetry.update();
+
+            odometry.setTargetPosition(0, 60);
+            MecanumDrive drive = this.drive;
+            telemetry.update();
+        }
     }
 }

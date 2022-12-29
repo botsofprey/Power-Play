@@ -30,4 +30,7 @@ public class ThreeTrackingWheelLocalizer {
     public String frontEncoder() {
         return null;
     }
+
+    public void setTargetPosition(int x, int y) {
+    }
 }

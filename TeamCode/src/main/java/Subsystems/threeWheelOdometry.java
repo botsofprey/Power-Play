@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import DriveEngine.MecanumDrive;
@@ -33,6 +32,10 @@ public class threeWheelOdometry {
     private boolean moving = false, maintain = false;
     private double startAngle = 0;
     private double cmOffset = 5, angleOffset = 10;
+
+    public threeWheelOdometry() {
+
+    }
 
     private enum direction {
         x,

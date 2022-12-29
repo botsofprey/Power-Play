@@ -27,6 +27,9 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public EncodedValue leftEncoder;
     public EncodedValue rightEncoder;
     public EncodedValue frontEncoder;
+    public Location location;
+    public Object getLocation;
+    public Object moveToTargetPostion;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public StandardTrackingWheelLocalizer(HardwareMap hardwareMap, Location location, LeftToLeft leftToLeft, MecanumDrive drive) throws Throwable {
@@ -45,6 +48,9 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         return WHEEL_RADIUS * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
     }
 
+    public void location(int x, int y) {
+    }
+
     //frontEncoder.setDirection(Encoder.Direction.REVERSE);
     /*@NonNull
     @Override
@@ -55,4 +61,15 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
                 encoderTicksToInches(frontEncoder.getRawVelocity())
         );
     }*/
+
+    private enum direction {
+        x,
+        y,
+        angle,
+        stationary
+    }
+
+    public Object getMoveToTargetPostion() {
+        return moveToTargetPostion;
+    }
 }
