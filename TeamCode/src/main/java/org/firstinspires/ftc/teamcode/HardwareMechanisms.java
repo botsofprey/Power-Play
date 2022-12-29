@@ -28,12 +28,12 @@ public class HardwareMechanisms {
 
     Servo claw;
 
-    BNO055IMU imu;
+    static BNO055IMU imu;
 
     public void init(HardwareMap hwMap) {
-        drive.init(hwMap);
+//        drive.init(hwMap);
         lift = hwMap.dcMotor.get("lift");
-        claw = hwMap.servo.get("claw");
+//        claw = hwMap.servo.get("claw");
         imu = hwMap.get(BNO055IMU.class, "imu");
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
