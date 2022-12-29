@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.driveBase;
+package org.firstinspires.ftc.teamcode.mecanumDrive;
 
 public class driveBaseClaw {
     public static int clawPercent;
@@ -8,7 +8,6 @@ public class driveBaseClaw {
         clawPercent += percentOpened;
         if ((percentOpened < 0 || percentOpened > 100) || (clawPercent == 0 || clawPercent == 100)) {
             clawPercent -= percentOpened;
-            logger.logError("openClaw");
             return 1;
         }
         return clawPercent;
@@ -18,7 +17,6 @@ public class driveBaseClaw {
         clawPercent -= percentClosed;
         if ((percentClosed < 0 || percentClosed > 100) && (clawPercent == 0 || clawPercent == 100)) {
             clawPercent += percentClosed;
-            logger.logError("closeClaw");
             return 1;
         }
         return clawPercent;
