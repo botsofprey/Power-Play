@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @TeleOp
 public class FieldRelativeMecanumDriveOpMode extends OpMode {
-    MecanumDrive drive = new MecanumDrive();
+    MecanumDrive drive = new MecanumDrive(hardwareMap);
     BNO055IMU imu;
 
     @Override
