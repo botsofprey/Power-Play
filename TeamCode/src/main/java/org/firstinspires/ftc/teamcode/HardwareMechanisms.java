@@ -31,9 +31,9 @@ public class HardwareMechanisms {
     static BNO055IMU imu;
 
     public void init(HardwareMap hwMap) {
-//        drive.init(hwMap);
+        drive.init(hwMap);
         lift = hwMap.dcMotor.get("lift");
-//        claw = hwMap.servo.get("claw");
+        claw = hwMap.servo.get("claw");
         imu = hwMap.get(BNO055IMU.class, "imu");
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -77,7 +77,7 @@ public class HardwareMechanisms {
      */
     public double getHeading(AngleUnit angleUnit) {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
-        return angles.firstAngle;
+        return angles.firstAngle + Static.imuValue;
     }
 
     /**
@@ -100,10 +100,9 @@ public class HardwareMechanisms {
      * The method used for our driving, driving field relative is also known as true north driving, it allow us to drive in any direction with the robot facing any direction
      */
     public void driveFieldRelative(double y, double x, double rx) {
-        Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
         double theta = Math.atan2(y, x);
         double r = Math.hypot(y, x);
-        theta = AngleUnit.normalizeRadians(theta - orientation.firstAngle);
+        theta = AngleUnit.normalizeRadians(theta - getHeading(AngleUnit.RADIANS));
         double newY = r * Math.sin(theta);
         double newX = r * Math.cos(theta);
         drive.drive(newY, newX, rx);
