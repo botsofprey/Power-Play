@@ -77,7 +77,7 @@ public class HardwareMechanisms {
      */
     public double getHeading(AngleUnit angleUnit) {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
-        return angles.firstAngle + Static.imuValue;
+        return angles.firstAngle + StaticImu.imuStatic;
     }
 
     /**

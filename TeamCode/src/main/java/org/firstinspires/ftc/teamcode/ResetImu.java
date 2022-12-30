@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp()
 public class ResetImu extends OpMode {
     public void init() {
-        Static.imuValue = 0;
+        StaticImu.imuStatic = 0;
     }
 
     public void loop() {
-        Static.imuValue = 0;
+        StaticImu.imuStatic = 0;
     }
 }
