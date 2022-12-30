@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 /**
  * This is the combination of all of our TeleOp codes into one
  */
@@ -197,5 +199,8 @@ public class EncodedEverything extends OpMode {
             board.driveFieldRelative(y / 2, x / 2, rx / 2); //normal mode
             telemetry.addData("Mode", "Normal");
         }
+    }
+    public void stop(){
+        Static.imuValue = board.getHeading(AngleUnit.RADIANS);
     }
 }
