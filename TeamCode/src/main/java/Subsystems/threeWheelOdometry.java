@@ -152,6 +152,11 @@ public class threeWheelOdometry {
         setTargetPoint(new Location(x, y, h));
     }
 
+    public void cancelTarget() {
+        targetLocation = null;
+        moving = false;
+    }
+
     //Rounds robot's rotation to the nearest 90 degrees and adds/subtracts 90
     public void next90degrees(int negPos) {
         Location target = new Location(positionLocation.x, positionLocation.y);
@@ -224,8 +229,8 @@ public class threeWheelOdometry {
         prevLeftPos = currentLeftPos;
         prevAuxPos = currentAuxPos;
         currentRightPos = -meccanumDrive.getCurrentPositionMotor(3);
-        currentLeftPos = -meccanumDrive.getCurrentPositionMotor(0); //take away - for main
-        currentAuxPos = meccanumDrive.getCurrentPositionMotor(2); //add - for main
+        currentLeftPos = meccanumDrive.getCurrentPositionMotor(0); //take away - for main
+        currentAuxPos = -meccanumDrive.getCurrentPositionMotor(2); //add - for main
         other = meccanumDrive.getCurrentPositionMotor(1);
 
         //Update current point values

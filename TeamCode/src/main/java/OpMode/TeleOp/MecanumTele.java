@@ -21,8 +21,8 @@ public class MecanumTele extends LinearOpMode {
 
     private MecanumDrive drive;
     private Controller controller1, controller2;
-    //private Claw claw;
-    //private Lift lift;
+    private Claw claw;
+    private Lift lift;
     private int liftPreset = 0;
     private int coneNum = 5;
 
@@ -32,39 +32,29 @@ public class MecanumTele extends LinearOpMode {
 
     private boolean slowModeOn = true;
     private boolean overrideDrivers = false;
+    private boolean scoring = false;
 
     private String filename = "TeleStartLocation.JSON";
     private File file = AppUtil.getInstance().getSettingsFile(filename);
+    private String sideFileName = "AutoStartSide.JSON";
+    private File sideFile = AppUtil.getInstance().getSettingsFile(sideFileName);
+
+    private int negateScoring;
 
     @Override
     public void runOpMode() {
         controller1 = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
-        //claw = new Claw(hardwareMap);
-        //lift = new Lift(hardwareMap);
+        claw = new Claw(hardwareMap);
+        lift = new Lift(hardwareMap);
 
         startLoc = settingStart(ReadWriteFile.readFile(file));
         drive = new MecanumDrive(hardwareMap, this, startLoc.angle);
         odometry = new threeWheelOdometry(hardwareMap, startLoc, this, drive);
 
-        while (!isStarted() && !isStopRequested()) {
-            controller2.update();
+        negateScoring = ReadWriteFile.readFile(sideFile) == "R" ? 1 : -1;
 
-            /*
-            if(controller2.rightTriggerHeld){
-                lift.setPower(controller2.rightTrigger);
-            } else if(controller2.leftTriggerHeld){
-                lift.setPower(-controller2.leftTrigger);
-            } else {
-                lift.brake();
-            }
-
-            if(controller2.xPressed){
-                lift.zeroLift();
-            }
-
-             */
-        }
+        waitForStart();
 
         while (opModeIsActive()) {
             //Checks for new inputs
@@ -72,8 +62,21 @@ public class MecanumTele extends LinearOpMode {
             controller2.update();
 
             //Check that override can be stopped
-            if (odometry.atTarget()) {
+            if (odometry.atTarget() && !scoring || (controller1.bPressed || controller2.bPressed)) {
                 overrideDrivers = false;
+                odometry.cancelTarget();
+            }
+
+            //Automatic scoring
+            if(controller1.downPressed)
+                scoring = !scoring;
+
+            while(scoring && !(controller1.bPressed || controller2.bPressed)){
+                odometry.setTargetPoint(0, -60 * negateScoring, 180 * negateScoring);
+                whileMoving(1);
+
+                odometry.setTargetPoint(60, -60 * negateScoring, -45 * negateScoring);
+                whileMoving(1);
             }
 
             if (controller1.upPressed) {
@@ -115,15 +118,13 @@ public class MecanumTele extends LinearOpMode {
                 drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
             }
 
-            /*
+
             //Driver 1 controls claw
             if(controller1.aPressed){
                 claw.setPosition(claw.getPosition() != Claw.CLOSE_POSITION ?
                         Claw.CLOSE_POSITION : Claw.OPEN_POSITION);
             }
             telemetry.addData("Claw Pos", claw.getPosition());
-
-             */
 
             // Changes lift preset once bumper pressed (may change to a different button)
             if (controller2.rightBumperPressed) {
@@ -133,7 +134,6 @@ public class MecanumTele extends LinearOpMode {
                 liftPreset -= 1;
             }
 
-            /*
             //Driver 2 uses triggers to control lift
             if(liftPreset == 0) {
                 if (controller2.rightTriggerHeld) {
@@ -145,10 +145,6 @@ public class MecanumTele extends LinearOpMode {
                 }
             }
 
-             */
-
-
-            /*
             // Checks lift preset and sets the preset
             if(liftPreset != 0) {
                 // If trigger is pressed, it will switch from presets to manual
@@ -182,8 +178,6 @@ public class MecanumTele extends LinearOpMode {
 
             telemetry.addData("Lift Position", lift.getPosition());
 
-             */
-
             telemetry.addData("Powers", drive.getPowers());
 
             odometry.update();
@@ -205,5 +199,24 @@ public class MecanumTele extends LinearOpMode {
                 Double.parseDouble(pos[1]),
                 Double.parseDouble(pos[2])
         );
+    }
+
+    private void whileMoving(long secondsOfSleep){
+        while(opModeIsActive() && !odometry.atTarget()) {
+            odometry.update();
+
+            controller1.update();
+            controller2.update();
+
+            telemetry.addData("Target", odometry.getTargetLocation());
+            telemetry.addData("Position", odometry.getLocation());
+            telemetry.addData("Current State", odometry.getCurrentMovement());
+            telemetry.addData("Powers", drive.getPowers());
+
+            telemetry.update();
+        }
+
+        drive.brake();
+        sleep(1000 * secondsOfSleep);
     }
 }

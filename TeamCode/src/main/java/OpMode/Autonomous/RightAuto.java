@@ -4,11 +4,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
+
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 import java.io.File;
 
 import DriveEngine.MecanumDrive;
+import Subsystems.AprilTagCamera;
+import Subsystems.Claw;
+import Subsystems.Lift;
 import Subsystems.threeWheelOdometry;
 import UtilityClasses.Controller;
 import UtilityClasses.Location;
@@ -19,6 +23,9 @@ public class RightAuto extends LinearOpMode {
     private MecanumDrive drive;
     private threeWheelOdometry odometry;
 
+    private Lift lift;
+    private Claw claw;
+
     private Location[] parkingLocations = {
             new Location(60, -60), //parking spot 1
             new Location(60, 0), //2
@@ -26,21 +33,34 @@ public class RightAuto extends LinearOpMode {
             new Location(0, 90) //terminal, when qr code is not found
     };
 
-    private String filename = "TeleStartLocation.JSON";
-    private File file = AppUtil.getInstance().getSettingsFile(filename);
+    private String startFileName = "TeleStartLocation.JSON";
+    private File startFile = AppUtil.getInstance().getSettingsFile(startFileName);
+    private String sideFileName = "AutoStartSide.JSON";
+    private File sideFile = AppUtil.getInstance().getSettingsFile(sideFileName);
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //AprilTagCamera camera = new AprilTagCamera(hardwareMap);
+        AprilTagCamera camera = new AprilTagCamera(hardwareMap);
 
         Controller con = new Controller(gamepad1);
+
+        lift = new Lift(hardwareMap);
+        claw = new Claw(hardwareMap);
 
         int parking = 3;
 
         drive = new MecanumDrive(hardwareMap, this, 0);
-        odometry = new threeWheelOdometry(hardwareMap, new Location(0,0), this, drive);
+        odometry = new threeWheelOdometry(hardwareMap, new Location(-22.5,0), this, drive);
+
+        ReadWriteFile.writeFile(sideFile, "L");
 
         while (!isStarted() && !isStopRequested()) {
+            lift.setPower(-.25);
+            while(!lift.isPressed()) {
+                lift.update();
+            }
+            lift.setPower(0);
+
             odometry.update();
 
             updatePosition();
@@ -64,13 +84,11 @@ public class RightAuto extends LinearOpMode {
 
             telemetry.addData("Parking", parking+1);
             telemetry.addData("P Loc", parkingLocations[parking].y);
-            /*
             telemetry.addData("Tag found", camera.tagFound());
             if(camera.tagFound()){
                 telemetry.addData("Parking", camera.getParking()+1);
             }
 
-             */
             telemetry.addLine();
 
             //telemetry.addData("Right Distance", odometry.getRightDistance());
@@ -121,7 +139,7 @@ public class RightAuto extends LinearOpMode {
         odometry.resetEncoders();
 
         //If camera is too far away to see qr, robot gets closer
-        /*
+
         if(!camera.tagFound()){
             odometry.setTargetPoint(parkingLocations[1]);
 
@@ -136,20 +154,22 @@ public class RightAuto extends LinearOpMode {
             drive.brake();
         }
 
-         */
-
         //Turns camera off
-        //camera.stop();
+        camera.stop();
 
         //Sets target to parking spot
-        //parking = camera.getParking();
+        parking = camera.getParking();
 
         //Scoring pre-loaded cone
         odometry.setTargetPoint(0, -60, 0);
         whileMoving(2);
 
+        lift.hjunction();
         odometry.setTargetPoint(60, -60, -45);
         whileMoving(1);
+
+        claw.setPosition(claw.OPEN_POSITION);
+        sleep(2500);
 
         //Getting in position to go to cone stack
         odometry.setTargetPoint(60, -60, 90);
@@ -160,17 +180,23 @@ public class RightAuto extends LinearOpMode {
 
         //Scoring all cones
         int times = 0;
+        int coneStack = 5;
 
         while(opModeIsActive() && times < 5){
             //Picks up cone
+            lift.coneStack(coneStack);
             odometry.setTargetPoint(new Location(120, 60, 90));
             whileMoving(2);
+
+            claw.setPosition(Claw.CLOSE_POSITION);
+            sleep(2500);
 
             //Backs away from cone stack before turning
             odometry.setTargetPoint(120, 50, 90);
             whileMoving(0);
 
             //Turns toward high junction
+            lift.hjunction();
             odometry.setTargetPoint(120, 60, -45);
             whileMoving(0);
 
@@ -178,21 +204,27 @@ public class RightAuto extends LinearOpMode {
             odometry.setTargetPoint(120,0,-45);
             whileMoving(2);
 
+            claw.setPosition(Claw.OPEN_POSITION);
+            sleep(2500);
+
             //Turns to cone stack
             odometry.setTargetPoint(120, 0, 90);
             whileMoving(0);
 
             times++;
+            coneStack--;
         }
 
+        lift.Ground();
         odometry.setTargetPoint(60, 0, 90);
-        whileMoving(5);
+        whileMoving(1);
+
+        odometry.setTargetPoint(parkingLocations[parking]);
+        whileMoving(1);
 
         while(opModeIsActive()) {
             updatePosition();
         }
-
-
     }
 
     private void whileMoving(long secondsOfSleep){
@@ -214,8 +246,8 @@ public class RightAuto extends LinearOpMode {
     }
 
     private void updatePosition(){
-        ReadWriteFile.writeFile(file, odometry.getLocation());
-        System.out.println("Positions of bot: " + ReadWriteFile.readFile(file));
+        ReadWriteFile.writeFile(startFile, odometry.getLocation());
+        System.out.println("Positions of bot: " + ReadWriteFile.readFile(startFile));
     }
 }
 

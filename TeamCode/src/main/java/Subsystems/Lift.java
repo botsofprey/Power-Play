@@ -95,6 +95,10 @@ public class Lift {
 
     }
 
+    public boolean isPressed(){
+        return limitSwitch.isPressed();
+    }
+
     public boolean isBusy(){
         return liftMotor.isBusy();
     }

@@ -12,7 +12,7 @@ public class AutoTransferPose extends LinearOpMode {
 
         Pose2d startPose = new Pose2d(10, 15, Math.toRadians(90));
 
-        drive.setPoseEstimate(startPose);
+        //drive.setPoseEstimate(startPose);
 
         waitForStart();
 
