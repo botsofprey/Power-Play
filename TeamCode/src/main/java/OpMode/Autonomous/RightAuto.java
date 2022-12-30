@@ -2,18 +2,19 @@ package OpMode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.ReadWriteFile;
 
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+
+import java.io.File;
 
 import DriveEngine.MecanumDrive;
-import Subsystems.AprilTagCamera;
 import Subsystems.threeWheelOdometry;
 import UtilityClasses.Controller;
 import UtilityClasses.Location;
-import UtilityClasses.Vector2D;
 
-@Autonomous (name="Auto Test", group = "Autonomous")
-public class AutonomousTest extends LinearOpMode {
+@Autonomous (name="Right Auto", group = "Autonomous")
+public class RightAuto extends LinearOpMode {
 
     private MecanumDrive drive;
     private threeWheelOdometry odometry;
@@ -25,9 +26,12 @@ public class AutonomousTest extends LinearOpMode {
             new Location(0, 90) //terminal, when qr code is not found
     };
 
+    private String filename = "TeleStartLocation.JSON";
+    private File file = AppUtil.getInstance().getSettingsFile(filename);
+
     @Override
     public void runOpMode() throws InterruptedException {
-        AprilTagCamera camera = new AprilTagCamera(hardwareMap);
+        //AprilTagCamera camera = new AprilTagCamera(hardwareMap);
 
         Controller con = new Controller(gamepad1);
 
@@ -38,6 +42,9 @@ public class AutonomousTest extends LinearOpMode {
 
         while (!isStarted() && !isStopRequested()) {
             odometry.update();
+
+            updatePosition();
+
             telemetry.addData("left", odometry.getCurrentLeftPos());
             telemetry.addData("right", odometry.getCurrentRightPos());
             telemetry.addData("aux", odometry.getCurrentAuxPos());
@@ -54,10 +61,16 @@ public class AutonomousTest extends LinearOpMode {
             } else if(con.bPressed){
                 parking = 2;
             }
+
+            telemetry.addData("Parking", parking+1);
+            telemetry.addData("P Loc", parkingLocations[parking].y);
+            /*
             telemetry.addData("Tag found", camera.tagFound());
             if(camera.tagFound()){
                 telemetry.addData("Parking", camera.getParking()+1);
             }
+
+             */
             telemetry.addLine();
 
             //telemetry.addData("Right Distance", odometry.getRightDistance());
@@ -66,8 +79,8 @@ public class AutonomousTest extends LinearOpMode {
             telemetry.update();
         }
 
-        /*
 
+/*
         double fps=0, frameCounter = 0;
         double startTime = System.currentTimeMillis();
 
@@ -102,7 +115,7 @@ public class AutonomousTest extends LinearOpMode {
             odometry.update();
         }
 
-         */
+*/
 
         //Resets position and encoders
         odometry.resetEncoders();
@@ -126,64 +139,83 @@ public class AutonomousTest extends LinearOpMode {
          */
 
         //Turns camera off
-        camera.stop();
+        //camera.stop();
 
         //Sets target to parking spot
         //parking = camera.getParking();
-        odometry.setTargetPoint(parkingLocations[parking]);
-        while(opModeIsActive() && !odometry.atTarget()){
+
+        //Scoring pre-loaded cone
+        odometry.setTargetPoint(0, -60, 0);
+        whileMoving(2);
+
+        odometry.setTargetPoint(60, -60, -45);
+        whileMoving(1);
+
+        //Getting in position to go to cone stack
+        odometry.setTargetPoint(60, -60, 90);
+        whileMoving(2);
+
+        odometry.setTargetPoint(new Location(120, -60, 90));
+        whileMoving(1);
+
+        //Scoring all cones
+        int times = 0;
+
+        while(opModeIsActive() && times < 5){
+            //Picks up cone
+            odometry.setTargetPoint(new Location(120, 60, 90));
+            whileMoving(2);
+
+            //Backs away from cone stack before turning
+            odometry.setTargetPoint(120, 50, 90);
+            whileMoving(0);
+
+            //Turns toward high junction
+            odometry.setTargetPoint(120, 60, -45);
+            whileMoving(0);
+
+            //Scores
+            odometry.setTargetPoint(120,0,-45);
+            whileMoving(2);
+
+            //Turns to cone stack
+            odometry.setTargetPoint(120, 0, 90);
+            whileMoving(0);
+
+            times++;
+        }
+
+        odometry.setTargetPoint(60, 0, 90);
+        whileMoving(5);
+
+        while(opModeIsActive()) {
+            updatePosition();
+        }
+
+
+    }
+
+    private void whileMoving(long secondsOfSleep){
+        while(opModeIsActive() && !odometry.atTarget()) {
             odometry.update();
+
+            updatePosition();
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
             telemetry.addData("Current State", odometry.getCurrentMovement());
             telemetry.addData("Powers", drive.getPowers());
 
-            con.update();
-            if(con.aPressed){
-                System.out.println("Position of Bot: " + odometry.getLocation());
-            }
             telemetry.update();
         }
 
         drive.brake();
+        sleep(1000 * secondsOfSleep);
+    }
 
-        while (opModeIsActive()){
-            odometry.update();
-
-            telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Parking Spot", camera.getParking()+1);
-            telemetry.update();
-        }
-
-        ElapsedTime timer = new ElapsedTime();
-        int conesDropped = 0;
-        while(opModeIsActive() && timer.seconds() < 25 && conesDropped != 5){
-            //odometry.setTargetPoint(Cone stack);
-            while(!odometry.atTarget())
-                odometry.update();
-            sleep(1000);
-
-            //pick up
-            sleep(1000);
-
-            //odometry.setTargetPoint(High Jun);
-            while(!odometry.atTarget())
-                odometry.update();
-            sleep(1000);
-
-            //Lift, drop, reset lift
-            conesDropped++;
-            sleep(1000);
-        }
-
-        odometry.setTargetPoint(parkingLocations[parking]);
-        while(opModeIsActive() && !odometry.atTarget())
-            odometry.update();
-
-        while(!isStopRequested());
-
-
+    private void updatePosition(){
+        ReadWriteFile.writeFile(file, odometry.getLocation());
+        System.out.println("Positions of bot: " + ReadWriteFile.readFile(file));
     }
 }
 
