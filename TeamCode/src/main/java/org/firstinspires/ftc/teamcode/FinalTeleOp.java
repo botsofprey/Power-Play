@@ -13,11 +13,11 @@ public class FinalTeleOp extends OpMode {
     /**
      * A double used to make sure the acceleration isn't too high
      */
-    double limitPowerChange = 0.05;
+    double limitPowerChange = 0.1;
     /**
      * A double used to make sure the acceleration isn't too high, specifically for the speed mode
      */
-    double limitPowerChangeFast = 0.01;
+    double limitPowerChangeFast = 0.05;
     /**
      * The variable used to represent the amount forward, implemented as gamepad1.left_stick_y
      */
@@ -196,9 +196,10 @@ public class FinalTeleOp extends OpMode {
             board.driveFieldRelative(y, x, rx); //speed mode
             telemetry.addData("Mode", "Speed");
         } else {
-            board.driveFieldRelative(y / 2, x / 2, rx / 2); //normal mode
+            board.driveFieldRelative(y * 0.6, x * 0.6, rx * 0.6); //normal mode
             telemetry.addData("Mode", "Normal");
         }
+        telemetry.addData("angle", (board.getHeading(AngleUnit.RADIANS) * 180) / Math.PI);
     }
     public void stop(){
         StaticImu.imuStatic = board.getHeading(AngleUnit.RADIANS);

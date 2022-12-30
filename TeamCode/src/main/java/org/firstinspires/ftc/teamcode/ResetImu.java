@@ -12,4 +12,8 @@ public class ResetImu extends OpMode {
     public void loop() {
         StaticImu.imuStatic = 0;
     }
+
+    public void stop() {
+        StaticImu.imuStatic = 0;
+    }
 }
