@@ -59,6 +59,9 @@ public class HardwareMechanisms {
         controller.setTargetPosition(position);
         double correction = controller.update(getLift());
         setLiftPower(correction);
+        if ((lift.getPower() < 0.1) && !(0 == position - getLift())) {
+            setLiftPower(0.1 * Math.signum(lift.getPower()));
+        }
     }
 
     public double getClaw() {
@@ -77,7 +80,7 @@ public class HardwareMechanisms {
      */
     public double getHeading(AngleUnit angleUnit) {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
-        return angles.firstAngle + Static.imuValue;
+        return angles.firstAngle + StaticImu.imuStatic;
     }
 
     /**

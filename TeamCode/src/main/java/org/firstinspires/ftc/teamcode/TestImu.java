@@ -17,6 +17,6 @@ public class TestImu extends OpMode {
         telemetry.addData("Angle", board.getHeading(AngleUnit.RADIANS));
     }
     public void stop(){
-        Static.imuValue = board.getHeading(AngleUnit.RADIANS);
+        StaticImu.imuStatic = board.getHeading(AngleUnit.RADIANS);
     }
 }
