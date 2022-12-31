@@ -204,7 +204,4 @@ public class FinalTeleOp extends OpMode {
     public void stop() {
         StaticImu.imuStatic = board.getHeading(AngleUnit.RADIANS);
     }
-    public void stop(){
-        Static.imuValue = board.getHeading(AngleUnit.RADIANS);
-    }
 }
