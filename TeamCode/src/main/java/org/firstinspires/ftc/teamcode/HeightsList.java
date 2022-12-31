@@ -9,39 +9,39 @@ public class HeightsList { //heights are all in tics
     /**
      * An int used to represent the tic value of the lift at the height of the low junction, it is subject to change based off of the lift
      */
-    int lowJunction = 553;
+    int lowJunction = 2049;
     /**
      * An int used to represent the tic value of the lift at the height of the medium junction, it is subject to change based off of the lift
      */
-    int midJunction = 856;
+    int midJunction = 3172;
     /**
      * An int used to represent the tic value of the lift at the height of the high junction, it is subject to change based off of the lift
      */
-    int highJunction = 1151;
+    int highJunction = 4265;
     /**
      * An int used to represent the tic value at the the height of the ground junction, it is subject to change based of the lift
      */
-    int groundJunction = 250;
+    int groundJunction = 926;
 
     //cone stack heights:
     /**
      * An int used to represent the tic value of the lift at the height of the cone stack with five cones, it is subject to change based of the lift
      */
-    int fiveConeStack = 355;
+    int fiveConeStack = 1316;
     /**
      * An int used to represent the tic value of the lift at the height of the cone stack with four cones, it is subject to change based of the lift
      */
-    int fourConeStack = 341;
+    int fourConeStack = 1260;
     /**
      * An int used to represent the tic value of the lift at the height of cone stack with three cones, it is subject to change based of the lift
      */
-    int threeConeStack = 310;
+    int threeConeStack = 1148;
     /**
      * An int used to represent the tic value of the lift at the height of the cone stack with two cones, it is subject to change based of the lift
      */
-    int twoConeStack = 230;
+    int twoConeStack = 852;
     /**
      * An int used to represent the tic value of the lift at the height of one cone, it is subject to change based of the lift
      */
-    int oneConeStack = 195;
+    int oneConeStack = 723;
 }

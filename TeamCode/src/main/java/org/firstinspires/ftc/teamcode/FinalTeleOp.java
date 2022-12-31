@@ -68,7 +68,6 @@ public class FinalTeleOp extends OpMode {
 
     public void init() {
         board.init(hardwareMap);
-        board.setLift(0);
     }
 
     @Override
@@ -130,11 +129,11 @@ public class FinalTeleOp extends OpMode {
         if (!presetLiftHeightsMode) { //manual lift
             //the right trigger makes the lift go up and the left trigger makes the lift go down
             if (board.getLift() <= 0) {
-                targetPositionManualControl += (int) gamepad2.right_trigger * 15;
+                targetPositionManualControl += (int) gamepad2.right_trigger * 50;
             } else if (board.getLift() <= heights.highJunction) {
-                targetPositionManualControl += (int) ((gamepad2.right_trigger - gamepad2.left_trigger) * 15);
+                targetPositionManualControl += (int) ((gamepad2.right_trigger - gamepad2.left_trigger) * 50);
             } else {
-                targetPositionManualControl -= (int) gamepad2.left_trigger * 15;
+                targetPositionManualControl -= (int) gamepad2.left_trigger * 50;
             }
             if (targetPositionManualControl < 0) { //keeps the lift from going below 0
                 targetPositionManualControl = 0;
@@ -201,7 +200,8 @@ public class FinalTeleOp extends OpMode {
         }
         telemetry.addData("angle", (board.getHeading(AngleUnit.RADIANS) * 180) / Math.PI);
     }
-    public void stop(){
+
+    public void stop() {
         StaticImu.imuStatic = board.getHeading(AngleUnit.RADIANS);
     }
 }
