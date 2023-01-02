@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 //general imports
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -13,6 +15,9 @@ import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
 import org.firstinspires.ftc.teamcode.mecanumDrive.mecanumDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.motorProgrammingBoard;
 import org.openftc.apriltag.AprilTagDetection;
+
+import static org.firstinspires.ftc.teamcode.mecanumDrive.driveVariables.VELOCITY_CONSTRAINT;
+import static org.firstinspires.ftc.teamcode.mecanumDrive.driveVariables.ACCELERATION_CONSTRAINT;
 
 @Autonomous()
 public class auto extends OpMode {
@@ -50,7 +55,7 @@ public class auto extends OpMode {
             apriltagpipelineEXAMPLE = new AprilTagPipelineEXAMPLECOPY(tagsize, fx, fy, cx, cy);
 
         //set up any functions or variables needed for program
-            //initialize
+            //initialize hardware
             mpb.init(hardwareMap);
             //set up driving speeds
             autoDriveBase.normalMode = 2;
@@ -65,30 +70,35 @@ public class auto extends OpMode {
         //set up all trajectories
         //1. Parking trajectories
             //Trajectory to park in a designated area if the robot detects apriltag no. 17
-            Trajectory parkIf17 = mecanumDrive.trajectoryBuilder;
+            Trajectory parkIf17 = new TrajectoryBuilder(new Pose2d(), VELOCITY_CONSTRAINT,
+                                                        ACCELERATION_CONSTRAINT).build();
 
             //Trajectory to park in a designated area if the robot detects apriltag no. 18
-            Trajectory parkIf18 = mecanumDrive.trajectoryBuilder;
+            Trajectory parkIf18 = new TrajectoryBuilder(new Pose2d(), VELOCITY_CONSTRAINT,
+                                                        ACCELERATION_CONSTRAINT).build();
 
             //Trajectory to park in a designated area if the robot detects apriltag no. 19
-            Trajectory parkIf19 = mecanumDrive.trajectoryBuilder;
+            Trajectory parkIf19 = new TrajectoryBuilder(new Pose2d(), VELOCITY_CONSTRAINT,
+                                                        ACCELERATION_CONSTRAINT).build();
 
         //2. Cone pickup trajectories
             //Trajectory to go to a cone in the auto pickup zone
-            Trajectory autoPickUp = mecanumDrive.trajectoryBuilder;
+            Trajectory autoPickUp = new TrajectoryBuilder(new Pose2d(), VELOCITY_CONSTRAINT,
+                                                          ACCELERATION_CONSTRAINT).build();
 
             //Trajectory to go back from a given junction to the auto pickup zone
-            Trajectory autoPickUpReturn = mecanumDrive.trajectoryBuilder;
+            Trajectory autoPickUpReturn = new TrajectoryBuilder(new Pose2d(), VELOCITY_CONSTRAINT,
+                                                                ACCELERATION_CONSTRAINT).build();
 
             //Trajectory to go to a given junction of a specified height
-            Trajectory goToJunction = mecanumDrive.trajectoryBuilder;
+            Trajectory goToJunction = new TrajectoryBuilder(new Pose2d(), VELOCITY_CONSTRAINT,
+                                                            ACCELERATION_CONSTRAINT).build();
 
             //
     }
 
     @Override
     public void loop() {
-        double[] moveReturn = autoDriveBase.createPath(180,0,0);
         tagData = null;
         ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
 

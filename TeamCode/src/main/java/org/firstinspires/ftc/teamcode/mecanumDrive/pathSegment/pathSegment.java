@@ -7,7 +7,7 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker;
 
 import java.util.List;
 
-public class pathSegment {
+public class pathSegment{
     //temporal data
     public final double targetDuration;
     //positional data

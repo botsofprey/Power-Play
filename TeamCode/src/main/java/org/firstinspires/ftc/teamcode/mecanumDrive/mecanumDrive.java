@@ -4,6 +4,11 @@ import static org.firstinspires.ftc.teamcode.mecanumDrive.driveVariables.TICKS_P
 import static org.firstinspires.ftc.teamcode.mecanumDrive.driveVariables.BLOCK_LENGTH;
 import static org.firstinspires.ftc.teamcode.mecanumDrive.driveVariables.COMPLETE_TURN_ROTS;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.path.PathSegment;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
+
 import org.firstinspires.ftc.teamcode.mecanumDrive.pathSegment.legitPathSegment;
 import org.firstinspires.ftc.teamcode.mecanumDrive.pathSegment.pathSegment;
 
@@ -97,9 +102,12 @@ public class mecanumDrive {
                                     backRightMotor, pathseg.markers);
     }
 
-    public List<legitPathSegment> addPaths(legitPathSegment firstPath, legitPathSegment lastPath) {
-
-    }
+    /*public TrajectoryBuilder trajectoryBuilder(List<legitPathSegment> path) {
+        for (legitPathSegment pathsegment : path) {
+            ;
+        }
+        return trajectory = new TrajectoryBuilder();
+    }*/
 
     public void setSlowMode() {
         slowMode = normalMode / 2;

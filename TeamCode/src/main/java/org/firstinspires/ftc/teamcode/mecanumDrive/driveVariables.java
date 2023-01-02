@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.mecanumDrive;
 
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
+
 public class driveVariables {
     //amount of ticks in a single full revolution of the wheel
     public static final double TICKS_PER_REV = 537.7;
@@ -32,4 +35,9 @@ public class driveVariables {
     public static double MAX_ANG_VEL = 0;
     //
     public static double MAX_ANG_ACCEL = 0;
+
+    //
+    public static TrajectoryVelocityConstraint VELOCITY_CONSTRAINT;
+    public static TrajectoryAccelerationConstraint ACCELERATION_CONSTRAINT;
+    }
 }

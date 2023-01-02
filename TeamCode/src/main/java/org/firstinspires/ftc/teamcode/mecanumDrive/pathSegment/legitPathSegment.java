@@ -23,7 +23,7 @@ public class legitPathSegment {
 
     public legitPathSegment(
             double targetDuration,
-            Pose2d endPosition,
+            Pose2d targetEndPosition,
             double frontLeftMotor,
             double frontRightMotor,
             double backLeftMotor,
@@ -33,7 +33,7 @@ public class legitPathSegment {
         this.startPosition = lastKnownPosition;
 
         this.targetDuration = targetDuration;
-        this.targetEndPosition = endPosition;
+        this.targetEndPosition = targetEndPosition;
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
         this.backLeftMotor = backLeftMotor;
