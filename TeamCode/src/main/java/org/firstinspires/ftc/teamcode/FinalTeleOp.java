@@ -76,49 +76,42 @@ public class FinalTeleOp extends OpMode {
         x = gamepad1.left_stick_x;
         rx = gamepad1.right_stick_x;
 
-        //from about line 79 to 120 is code to limit acceleration
+        //from about line 80 to 114 is code to limit acceleration
         double changeX = x - lastX;
+        double changeRX = rx - lastRx;
+        double changeY = y - lastY;
         if (gamepad1.left_bumper) {
             if (Math.abs(changeX) > limitPowerChangeFast) {
                 changeX = Math.signum(changeX) * limitPowerChangeFast;
             }
-            x = lastX + changeX;
-            lastX = x;
 
-            double changeRX = rx - lastRx;
             if (Math.abs(changeRX) > limitPowerChangeFast) {
                 changeRX = Math.signum(changeRX) * limitPowerChangeFast;
             }
-            rx = lastRx + changeRX;
-            lastRx = rx;
 
-            double changeY = y - lastY;
             if (Math.abs(changeY) > limitPowerChangeFast) {
                 changeY = Math.signum(changeY) * limitPowerChangeFast;
             }
-            y = lastY + changeY;
-            lastY = y;
+
         } else {
             if (Math.abs(changeX) > limitPowerChange) {
                 changeX = Math.signum(changeX) * limitPowerChange;
             }
-            x = lastX + changeX;
-            lastX = x;
 
-            double changeRX = rx - lastRx;
             if (Math.abs(changeRX) > limitPowerChange) {
                 changeRX = Math.signum(changeRX) * limitPowerChange;
             }
-            rx = lastRx + changeRX;
-            lastRx = rx;
 
-            double changeY = y - lastY;
             if (Math.abs(changeY) > limitPowerChange) {
                 changeY = Math.signum(changeY) * limitPowerChange;
             }
-            y = lastY + changeY;
-            lastY = y;
         }
+        x = lastX + changeX;
+        lastX = x;
+        rx = lastRx + changeRX;
+        lastRx = rx;
+        y = lastY + changeY;
+        lastY = y;
 
         if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
             presetLiftHeightsMode = false;
@@ -151,8 +144,8 @@ public class FinalTeleOp extends OpMode {
             }
             telemetry.addData("lift mode", "manual control");
             telemetry.addData("target position", "n/a");
-        } else {
-            if (gamepad2.dpad_up) { //lift uses preset heights
+        } else { //lift uses preset heights
+            if (gamepad2.dpad_up) { //dpad up increases the preset's value
                 if (targetPositionPresetHeights == 0 || targetPositionPresetHeights == heights.groundJunction) {
                     targetPositionPresetHeights = heights.lowJunction;
                 } else if ((targetPositionPresetHeights == heights.lowJunction) && !upPressed) {
@@ -160,7 +153,7 @@ public class FinalTeleOp extends OpMode {
                 } else if ((targetPositionPresetHeights == heights.midJunction) && !upPressed) {
                     targetPositionPresetHeights = heights.highJunction;
                 }
-            } else if (gamepad2.dpad_down) {
+            } else if (gamepad2.dpad_down) {//dpad down decreases the preset's value
                 if (targetPositionPresetHeights == heights.highJunction) {
                     targetPositionPresetHeights = heights.midJunction;
                 } else if ((targetPositionPresetHeights == heights.midJunction) && !downPressed) {
@@ -168,7 +161,7 @@ public class FinalTeleOp extends OpMode {
                 } else if ((targetPositionPresetHeights == heights.lowJunction || targetPositionPresetHeights == heights.groundJunction) && !downPressed) {
                     targetPositionPresetHeights = 0;
                 }
-            } else if (gamepad2.right_bumper) {
+            } else if (gamepad2.right_bumper) {//the right bumper sets the preset to ground junction
                 targetPositionPresetHeights = heights.groundJunction;
             }
             board.setLift(targetPositionPresetHeights);
