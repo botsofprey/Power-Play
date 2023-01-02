@@ -59,7 +59,7 @@ public class HardwareMechanisms {
         controller.setTargetPosition(position);
         double correction = controller.update(getLift());
         setLiftPower(correction);
-        if ((lift.getPower() < 0.1) && !(0 == position - getLift())) {
+        if ((lift.getPower() < 0.1) && !(position - getLift() == 0)) {
             setLiftPower(0.1 * Math.signum(lift.getPower()));
         }
     }

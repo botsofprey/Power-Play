@@ -41,14 +41,14 @@ public class LastMinuteScrimmageAuto extends LinearOpMode {
         board.drive.motorFrontRight.setPower(0);
         board.drive.motorBackRight.setPower(0);
 
-        StaticImu.imuStatic = board.getHeading(AngleUnit.RADIANS) + 1.5708;
+        StaticImu.imuStatic = board.getHeading(AngleUnit.RADIANS) - 1.5708;
 
         if (isStopRequested()) {
             board.drive.motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             board.drive.motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             board.drive.motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             board.drive.motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            StaticImu.imuStatic = board.getHeading(AngleUnit.RADIANS) + 1.5708;
+            StaticImu.imuStatic = board.getHeading(AngleUnit.RADIANS) - 1.5708;
         }
     }
 }
