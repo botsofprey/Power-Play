@@ -192,7 +192,6 @@ public class FinalTeleOp extends OpMode {
             telemetry.addData("Mode", "Normal");
         }
         telemetry.addData("angle", (board.getHeading(AngleUnit.RADIANS) * 180) / Math.PI);
-        //displays the robot's angle in degrees
     }
 
     public void stop() {
