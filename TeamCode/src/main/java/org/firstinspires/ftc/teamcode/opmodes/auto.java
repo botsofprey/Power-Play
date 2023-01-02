@@ -13,7 +13,6 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
 import org.firstinspires.ftc.teamcode.mecanumDrive.mecanumDrive;
-import org.firstinspires.ftc.teamcode.mechanisms.motorProgrammingBoard;
 import org.openftc.apriltag.AprilTagDetection;
 
 import static org.firstinspires.ftc.teamcode.mecanumDrive.driveVariables.VELOCITY_CONSTRAINT;
