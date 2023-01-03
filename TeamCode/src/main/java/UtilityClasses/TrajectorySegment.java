@@ -3,7 +3,7 @@ package UtilityClasses;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 public class TrajectorySegment {
-    private final Trajectory trajectory;
+    public final Trajectory trajectory;
 
     public TrajectorySegment(Trajectory trajectory) {
        // super(trajectory.duration(),
