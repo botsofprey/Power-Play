@@ -50,16 +50,25 @@ public class LeftAuto extends LinearOpMode {
         int parking = 3;
 
         drive = new MecanumDrive(hardwareMap, this, 0);
-        odometry = new threeWheelOdometry(hardwareMap, new Location(-22.5,0), this, drive);
+        odometry = new threeWheelOdometry(hardwareMap, new Location(-6,0), this, drive);
 
         ReadWriteFile.writeFile(sideFile, "L");
 
+        lift.setPower(-.25);
+        while(!isStarted() && !isStopRequested() && !lift.isPressed()){
+            updatePosition();
+            lift.update();
+
+            telemetry.addData("touch", lift.isPressed());
+            telemetry.addData("touch weight", lift.getTouchValue());
+            telemetry.update();
+        };
+        lift.zeroLift();
+        lift.setPower(0);
+
+        claw.setPosition(Claw.CLOSE_POSITION);
+
         while (!isStarted() && !isStopRequested()) {
-            lift.setPower(-.25);
-            while(!lift.isPressed()) {
-                lift.update();
-            }
-            lift.setPower(0);
 
             odometry.update();
 

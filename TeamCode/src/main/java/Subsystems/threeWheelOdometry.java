@@ -152,6 +152,11 @@ public class threeWheelOdometry {
         setTargetPoint(new Location(x, y, h));
     }
 
+    public void setTargetPoint(double x, double y, double h, boolean maintain){
+        setTargetPoint(new Location(x, y, h));
+        this.maintain = maintain;
+    }
+
     public void cancelTarget() {
         targetLocation = null;
         moving = false;
@@ -228,10 +233,10 @@ public class threeWheelOdometry {
         prevRightPos = currentRightPos;
         prevLeftPos = currentLeftPos;
         prevAuxPos = currentAuxPos;
-        currentRightPos = -meccanumDrive.getCurrentPositionMotor(3);
-        currentLeftPos = meccanumDrive.getCurrentPositionMotor(0); //take away - for main
-        currentAuxPos = -meccanumDrive.getCurrentPositionMotor(2); //add - for main
-        other = meccanumDrive.getCurrentPositionMotor(1);
+        currentRightPos = meccanumDrive.getCurrentPositionMotor(1);
+        currentLeftPos = -meccanumDrive.getCurrentPositionMotor(3);
+        currentAuxPos = -meccanumDrive.getCurrentPositionMotor(0);
+        other = meccanumDrive.getCurrentPositionMotor(2);
 
         //Update current point values
         calculateChange();
@@ -314,7 +319,7 @@ public class threeWheelOdometry {
     }
 
     public boolean atTarget() {
-        return targetLocation == null || positionLocation.compareHeading(targetLocation, angleOffset) &&
+        return positionLocation.compareHeading(targetLocation, angleOffset) &&
                                         positionLocation.distanceBetween(targetLocation) < cmOffset;
     }
 

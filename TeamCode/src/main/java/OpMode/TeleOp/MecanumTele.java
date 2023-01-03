@@ -2,11 +2,13 @@ package OpMode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ClockWarningSource;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 import java.io.File;
+import java.util.Objects;
 
 import DriveEngine.MecanumDrive;
 import Subsystems.Claw;
@@ -47,12 +49,16 @@ public class MecanumTele extends LinearOpMode {
         controller2 = new Controller(gamepad2);
         claw = new Claw(hardwareMap);
         lift = new Lift(hardwareMap);
+        lift.zeroLift();
+        claw.setPosition(Claw.CLOSE_POSITION);
 
         startLoc = settingStart(ReadWriteFile.readFile(file));
         drive = new MecanumDrive(hardwareMap, this, startLoc.angle);
         odometry = new threeWheelOdometry(hardwareMap, startLoc, this, drive);
 
-        negateScoring = ReadWriteFile.readFile(sideFile) == "R" ? 1 : -1;
+        negateScoring = Objects.equals(ReadWriteFile.readFile(sideFile), "R") ? 1 : -1;
+
+        odometry.setTargetPoint(startLoc);
 
         waitForStart();
 
@@ -62,9 +68,11 @@ public class MecanumTele extends LinearOpMode {
             controller2.update();
 
             //Check that override can be stopped
-            if (odometry.atTarget() && !scoring || (controller1.bPressed || controller2.bPressed)) {
-                overrideDrivers = false;
-                odometry.cancelTarget();
+            if(overrideDrivers){
+                if (odometry.atTarget() && !scoring || (controller1.bPressed || controller2.bPressed)) {
+                    overrideDrivers = false;
+                    odometry.cancelTarget();
+                }
             }
 
             //Automatic scoring
@@ -107,15 +115,15 @@ public class MecanumTele extends LinearOpMode {
                 double newForward = controller1.leftStick.y;
                 double newRight = controller1.leftStick.x;
                 double rotate = controller1.rightStick.x;
-                /*drive.moveWithPower(
+                drive.moveWithPower(
                         newForward + newRight + rotate,
                         newForward - newRight + rotate,
                         newForward + newRight - rotate,
                         newForward - newRight - rotate
                 );
 
-                 */
-                drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
+                 /*
+                drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);*/
             }
 
 
@@ -184,8 +192,10 @@ public class MecanumTele extends LinearOpMode {
             //lift.update();
 
             telemetry.addData("Robot position", odometry.getLocation());
-            if (!odometry.atTarget())
-                telemetry.addData("Target", odometry.getTargetLocation());
+            if(overrideDrivers) {
+                if (!odometry.atTarget())
+                    telemetry.addData("Target", odometry.getTargetLocation());
+            }
 
             telemetry.update();
         }

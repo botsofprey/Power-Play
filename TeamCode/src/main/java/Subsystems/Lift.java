@@ -51,41 +51,41 @@ public class Lift {
     // Change target positions
 
     public void coneStack(int coneNum) {
-        liftMotor.setTargetPosition(coneNum*50+300);
+        liftMotor.setTargetPosition((coneNum*50)+300);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(0.75);
+        liftMotor.setPower(1);
         braking = false;
     }
 
     public void Ground() {
         liftMotor.setTargetPosition(0);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(0.75);
+        liftMotor.setPower(1);
         braking = false;
     }
 
     public void ljunction() {
-        liftMotor.setTargetPosition(1150);
+        liftMotor.setTargetPosition(1702);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(0.75);
+        liftMotor.setPower(1);
         braking = false;
     }
 
     public void mjunction() {
-        liftMotor.setTargetPosition(1650);
+        liftMotor.setTargetPosition(12736);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(0.75);
+        liftMotor.setPower(1);
         braking = false;
     }
 
     public void hjunction() {
-        liftMotor.setTargetPosition(2150);
+        liftMotor.setTargetPosition(3718);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(0.75);
+        liftMotor.setPower(1);
         braking = false;
     }
 
-    public void update() {;
+    public void update() {
         if (limitSwitch.isPressed()) {
             zeroLift();
             if(liftMotor.getPower() < 0){
@@ -97,6 +97,10 @@ public class Lift {
 
     public boolean isPressed(){
         return limitSwitch.isPressed();
+    }
+
+    public double getTouchValue(){
+        return limitSwitch.getValue();
     }
 
     public boolean isBusy(){
