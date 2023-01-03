@@ -65,4 +65,18 @@ public class Location {
                 || Math.abs(location.angle - this.angle) > (360 - angleOffset);
     }
 
+    public double[] toArray(){
+        double[] locArray = {
+                x,
+                y,
+                angle
+        };
+
+        return locArray;
+    }
+
+    public double distanceBetween(Location other){
+        return Math.sqrt(Math.pow(xDifference(other.x), 2) + Math.pow(yDifference(other.y), 2));
+    }
+
 }

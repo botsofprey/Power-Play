@@ -36,10 +36,10 @@ public class MecanumDrive {
             "backRightDriveMotor"
     };
     private DcMotorSimple.Direction[] directions = {
-            DcMotorSimple.Direction.FORWARD,
-            DcMotorSimple.Direction.FORWARD,
             DcMotorSimple.Direction.REVERSE,
-            DcMotorSimple.Direction.REVERSE
+            DcMotorSimple.Direction.REVERSE,
+            DcMotorSimple.Direction.FORWARD,
+            DcMotorSimple.Direction.FORWARD
     };
 
     private double maxSpeed = 1,
@@ -137,7 +137,7 @@ public class MecanumDrive {
 
         imu.initialize(parameters);
 
-        globalAngle = startAngle;
+        globalAngle = -startAngle;
         driverAngle=startAngle;
     }
 
