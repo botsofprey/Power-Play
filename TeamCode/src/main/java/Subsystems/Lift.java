@@ -85,6 +85,13 @@ public class Lift {
         braking = false;
     }
 
+    public void hjunctionScore() {
+        liftMotor.setTargetPosition(3318);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(1);
+        braking = false;
+    }
+
     public void update() {
         if (limitSwitch.isPressed()) {
             zeroLift();

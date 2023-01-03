@@ -26,12 +26,12 @@ public class threeWheelOdometry {
 
     public Location positionLocation;
     private Location targetLocation;
-    private Location start;
+    private Location start, startLoc;
 
     //private AverageDistanceSensor leftDisSensor, rightDisSensor;
     private DistanceUnit distanceUnit = DistanceUnit.CM;
 
-    private boolean moving = false, maintain = false;
+    private boolean moving = false, maintain = false, rotateOnly = false;
     private double startAngle = 0;
     private double cmOffset = 5, angleOffset = 10;
 
@@ -71,6 +71,7 @@ public class threeWheelOdometry {
 
         //Set start point
         positionLocation = start;
+        startLoc = start;
 
         this.opMode = op;
 
@@ -157,6 +158,11 @@ public class threeWheelOdometry {
         this.maintain = maintain;
     }
 
+    public void rotateToAngle(double angle){
+        rotateOnly = true;
+        setTargetPoint(positionLocation.x, positionLocation.y, angle);
+    }
+
     public void cancelTarget() {
         targetLocation = null;
         moving = false;
@@ -205,8 +211,11 @@ public class threeWheelOdometry {
 
         double distance = positionLocation.distanceBetween(targetLocation);
 
-        x = Math.cos(h) + movePID.calculateResponse(distance * Math.cos(h));
-        y = Math.sin(h) + movePID.calculateResponse(distance * Math.sin(h));
+        if(!rotateOnly){
+            x = Math.cos(h) + movePID.calculateResponse(distance * Math.cos(h));
+            y = Math.sin(h) + movePID.calculateResponse(distance * Math.sin(h));
+        }
+
         double rotate = Math.abs(diff.angle) < 5 ?
                 0 : headingPID.calculateResponse(diff.angle);
         rotate = Range.clip(rotate, -.5, .5);
@@ -227,6 +236,37 @@ public class threeWheelOdometry {
         );
     }
 
+    public void update(boolean move) {
+
+        //Update previous & current position
+        prevRightPos = currentRightPos;
+        prevLeftPos = currentLeftPos;
+        prevAuxPos = currentAuxPos;
+        currentRightPos = meccanumDrive.getCurrentPositionMotor(1);
+        currentLeftPos = -meccanumDrive.getCurrentPositionMotor(3);
+        currentAuxPos = -meccanumDrive.getCurrentPositionMotor(0);
+        other = meccanumDrive.getCurrentPositionMotor(2);
+
+        //Update current point values
+        calculateChange();
+
+        //leftDisSensor.update();
+        //rightDisSensor.update();
+
+        //Check if at target position and heading
+        if ((moving || maintain) && !atTarget()) {
+            Location diff = positionLocation.difference(targetLocation);
+            if(move){
+                moveTowards(diff);
+            }
+
+        } else if (moving || maintain) {
+            moving = false;
+            rotateOnly = false;
+            currentMovement = direction.stationary;
+            meccanumDrive.brake();
+        }
+    }
     public void update() {
 
         //Update previous & current position
@@ -267,7 +307,7 @@ public class threeWheelOdometry {
         currentLeftPos = 0;
         currentAuxPos = 0;
 
-        positionLocation = new Location(0, 0);
+        positionLocation = startLoc;
     }
 
     public double getother() {
@@ -320,7 +360,7 @@ public class threeWheelOdometry {
 
     public boolean atTarget() {
         return positionLocation.compareHeading(targetLocation, angleOffset) &&
-                                        positionLocation.distanceBetween(targetLocation) < cmOffset;
+               (positionLocation.distanceBetween(targetLocation) < cmOffset || rotateOnly);
     }
 
     private boolean compare(double a, double b, double offset) {
