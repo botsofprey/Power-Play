@@ -180,6 +180,36 @@ public class MecanumTele extends LinearOpMode {
                     liftPreset = 5;
                 }
             }
+            // Find positions of junctions
+            /*
+            int[][] lJunctions = {
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {}
+            };
+            int[][] mJunctions = {
+                    {},
+                    {},
+                    {},
+                    {},
+            };
+            int[][] hJunctions = {
+                    {},
+                    {},
+                    {},
+                    {}
+            };
+
+            if (controller1.yPressed) {
+
+            }
+            */
+
             telemetry.addData("Lift preset", liftPreset);
 
             telemetry.addData("Cones", coneNum);
