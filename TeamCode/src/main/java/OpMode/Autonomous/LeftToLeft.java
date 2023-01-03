@@ -103,6 +103,7 @@ public abstract class LeftToLeft extends LinearOpMode {
             odometry.setTargetPosition(0, 60);
             MecanumDrive drive = this.drive;
             telemetry.update();
+            //ok did it score?
         }
     }
 }

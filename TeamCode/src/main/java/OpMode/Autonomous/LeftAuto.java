@@ -4,16 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
 import DriveEngine.MecanumDrive;
 import Subsystems.AprilTagCamera;
 import Subsystems.threeWheelOdometry;
 import UtilityClasses.Controller;
 import UtilityClasses.Location;
-import UtilityClasses.Vector2D;
 
 @Autonomous (name="Auto Test", group = "Autonomous")
-public class AutonomousTest extends LinearOpMode {
+class AutonomousTest extends LinearOpMode {
 
     private MecanumDrive drive;
     private threeWheelOdometry odometry;
