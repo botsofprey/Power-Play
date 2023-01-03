@@ -44,4 +44,7 @@ public class HeightsList { //heights are all in tics
      * An int used to represent the tic value of the lift at the height of one cone, it is subject to change based of the lift
      */
     int oneConeStack = 723;
+
+    //extra height:
+    int rightAboveACone = 0; //replace this number with the real value
 }

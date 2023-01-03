@@ -115,7 +115,7 @@ public class FinalTeleOp extends OpMode {
 
         if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
             presetLiftHeightsMode = false;
-        } else if (gamepad2.dpad_up || gamepad2.dpad_down || gamepad2.dpad_right || gamepad2.dpad_left || gamepad2.right_bumper) {
+        } else if (gamepad2.dpad_up || gamepad2.dpad_down || gamepad2.dpad_right || gamepad2.dpad_left || gamepad2.right_bumper || gamepad2.left_bumper) {
             presetLiftHeightsMode = true;
         }
 
@@ -161,8 +161,12 @@ public class FinalTeleOp extends OpMode {
                 } else if ((targetPositionPresetHeights == heights.lowJunction || targetPositionPresetHeights == heights.groundJunction) && !downPressed) {
                     targetPositionPresetHeights = 0;
                 }
-            } else if (gamepad2.right_bumper) {//the right bumper sets the preset to ground junction
+            } else if (gamepad2.left_bumper) {//the left bumper sets the preset to ground junction
                 targetPositionPresetHeights = heights.groundJunction;
+            } else if (gamepad2.right_bumper) { //the right bumper sets the preset to just above the cone
+                targetPositionPresetHeights = heights.rightAboveACone;
+                board.setClaw(0);
+                telemetry.addData("claw state", "release");
             }
             board.setLift(targetPositionPresetHeights);
             telemetry.addData("lift mode", "preset heights");
