@@ -75,4 +75,8 @@ public class Location {
         return Math.sqrt(Math.pow(xDifference(other.x), 2) + Math.pow(yDifference(other.y), 2));
     }
 
+    public boolean equals(Location other, double angleOffset){
+        return distanceBetween(other) < 1 && compareHeading(other, angleOffset);
+    }
+
 }

@@ -43,7 +43,7 @@ public class MecanumDrive {
     };
 
     private double maxSpeed = 1,
-    slowSpeed = .5, currentSpeed = .5;
+    slowSpeed = .5, currentSpeed;
 
     private LinearOpMode mode;
 
@@ -59,26 +59,6 @@ public class MecanumDrive {
     private int[] startPos = new int[4],
     endPos = new int[4],
     distanceTraveled = new int[4];
-
-    private double Kt;
-    private double R;
-    private double Kv;
-
- //   private OldLocalizerClass localizer;
-//    private OldLocationClass currentLocation;
-    private boolean currentlyMoving;
-    private static final double buffer = 0.1;
-    private static final double maxTorque = 1;
-    public static final double MAX_SPEED = 24;
-    public static final double MAX_ANGULAR = 90;
-
-    // these have been tuned, you can re tune them if you want and know what you're doing
-    private PIDCoefficients xCoefficients = new PIDCoefficients(0.08, 0.01, 0.02);
-    private PIDCoefficients yCoefficients = new PIDCoefficients(0.08, 0.01, 0.02);
-    private PIDCoefficients headingCoefficients = new PIDCoefficients(0.02, 0.006, 0.005);
-  //  private PIDController xController = new PIDController(xCoefficients);
-  //  private PIDController yController = new PIDController(yCoefficients);
-  //  private PIDController hController = new PIDController(headingCoefficients);
 
     // for config file, see RobotConfig.json
     // track width and track length change based on width and length of the robot
@@ -316,6 +296,10 @@ public class MecanumDrive {
 
     public double getRadians() {
         return Math.toRadians(getAngle());
+    }
+
+    public void setCurrentSpeed(double speed) {
+        currentSpeed = speed;
     }
 }
 

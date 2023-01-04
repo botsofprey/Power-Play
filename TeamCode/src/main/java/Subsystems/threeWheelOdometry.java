@@ -32,25 +32,14 @@ public class threeWheelOdometry {
     private DistanceUnit distanceUnit = DistanceUnit.CM;
 
     private boolean moving = false, maintain = false, rotateOnly = false;
-    private double startAngle = 0;
-    private double cmOffset = 5, angleOffset = 10;
+    private final double cmOffset = 5, angleOffset = 5;
+    private final double slowDownOffset = 15;
 
-    private double xMult = 60.0/7.0;
-
-    private enum direction {
-        x,
-        y,
-        angle,
-        stationary
-    }
-
-    ;
-    private direction currentMovement;
     public PidController movePID, headingPID;
 
     //Robot measurements in mm
     public final static double DISTANCE_FROM_MIDPOINT = 18.5;//6.8;
-    public final static double LENGETH_BETWEEN_VERTS = 42;//29.2, LEFT_DISTANCE_FROM_MID = 13.5, RIGHT_DISTANCE_FROM_MID = 10.4;
+    public final static double LENGETH_BETWEEN_VERTS = 42;
     public final static double ANGLE_CIRCUMFERENCE = DISTANCE_FROM_MIDPOINT * Math.PI * 2;
     public final static double CM_PER_TICK = (3.5 * Math.PI) / 8192;
 
@@ -75,7 +64,6 @@ public class threeWheelOdometry {
 
         this.opMode = op;
 
-        currentMovement = direction.stationary;
         movePID = new PidController(.0625, 0, .125);
         headingPID = new PidController(.75, 0, .125);
     }
@@ -144,23 +132,25 @@ public class threeWheelOdometry {
         moving = true;
         movePID.reset();
         headingPID.reset();
-        startAngle = meccanumDrive.getAngle();
         start = positionLocation;
         moveTowards(positionLocation.difference(targetLocation));
     }
 
     public void setTargetPoint(double x, double y, double h){
+        rotateOnly = false;
         setTargetPoint(new Location(x, y, h));
     }
 
     public void setTargetPoint(double x, double y, double h, boolean maintain){
-        setTargetPoint(new Location(x, y, h));
+        rotateOnly = false;
         this.maintain = maintain;
+        setTargetPoint(new Location(x, y, h));
     }
 
     public void rotateToAngle(double angle){
         rotateOnly = true;
-        setTargetPoint(positionLocation.x, positionLocation.y, angle);
+        maintain = false;
+        setTargetPoint(new Location(positionLocation.x, positionLocation.y, angle));
     }
 
     public void cancelTarget() {
@@ -170,7 +160,6 @@ public class threeWheelOdometry {
 
     //Rounds robot's rotation to the nearest 90 degrees and adds/subtracts 90
     public void next90degrees(int negPos) {
-        Location target = new Location(positionLocation.x, positionLocation.y);
 
         if (negPos != -1 && negPos != 1)
             return;
@@ -179,54 +168,37 @@ public class threeWheelOdometry {
 
         angle = Math.round(angle/90) * 90;
 
-        target.angle = angle;
-        setTargetPoint(target);
+        rotateToAngle(angle);
     }
 
     public double x, y, h;
 
     //Robot move towards target
     private void moveTowards(Location diff) {
-        /*
-        double robotMovementAngle = Math.atan2(diff.y, diff.x);
-        h = robotMovementAngle - meccanumDrive.getRadians();
-
-        x = Math.cos(h) + movePID.calculateResponse(diff.x);
-        y = Math.sin(h) * .0005 + movePID.calculateResponse(diff.y);
-        double rotate = Math.abs(diff.angle) < 5 ?
-                0 : headingPID.calculateResponse(diff.angle);
-        rotate = Range.clip(rotate, -1, 1);
-
-        meccanumDrive.moveWithPower(
-                x + y + rotate,
-                x - y + rotate,
-                x + y - rotate,
-                x - y - rotate
-        );
-
-         */
-
-        double robotMovementAngle = Math.atan2(diff.y, diff.x);
-        h = robotMovementAngle - meccanumDrive.getRadians();
-
-        double distance = positionLocation.distanceBetween(targetLocation);
-
         if(!rotateOnly){
-            x = Math.cos(h) + movePID.calculateResponse(distance * Math.cos(h));
-            y = Math.sin(h) + movePID.calculateResponse(distance * Math.sin(h));
+            double robotMovementAngle = Math.atan2(diff.y, diff.x); //angle of movement
+            h = robotMovementAngle - meccanumDrive.getRadians(); //angle of movement relative to robot's current angle
+
+            double distance = positionLocation.distanceBetween(targetLocation);
+
+            x = Math.cos(h) + movePID.calculateResponse(distance * Math.cos(h)); //forward movement
+            y = Math.sin(h) + movePID.calculateResponse(distance * Math.sin(h)); //horizontal movement
+
+            if(distance <= slowDownOffset) {
+                x *= distance / slowDownOffset;
+                y *= distance / slowDownOffset;
+            }
+
+            x = Range.clip(x, -1, 1);
+            y = Range.clip(y, -1, 1);
+        } else{
+            x = 0;
+            y = 0;
         }
 
         double rotate = Math.abs(diff.angle) < 5 ?
                 0 : headingPID.calculateResponse(diff.angle);
         rotate = Range.clip(rotate, -.5, .5);
-
-        if(distance < 2.5){
-            x = 0;
-            y = 0;
-        } else {
-            x = Range.clip(x, -1, 1);
-            y = Range.clip(y, -1, 1);
-        }
 
         meccanumDrive.moveWithPower(
                 x + y + rotate,
@@ -263,7 +235,6 @@ public class threeWheelOdometry {
         } else if (moving || maintain) {
             moving = false;
             rotateOnly = false;
-            currentMovement = direction.stationary;
             meccanumDrive.brake();
         }
     }
@@ -285,13 +256,12 @@ public class threeWheelOdometry {
         //rightDisSensor.update();
 
         //Check if at target position and heading
-        if ((moving || maintain) && !atTarget()) {
+        if ((moving || maintain) && (!atTarget() || !atTargetAngle())) {
             Location diff = positionLocation.difference(targetLocation);
             moveTowards(diff);
 
         } else if (moving || maintain) {
             moving = false;
-            currentMovement = direction.stationary;
             meccanumDrive.brake();
         }
     }
@@ -359,8 +329,11 @@ public class threeWheelOdometry {
     }
 
     public boolean atTarget() {
-        return positionLocation.compareHeading(targetLocation, angleOffset) &&
-               (positionLocation.distanceBetween(targetLocation) < cmOffset || rotateOnly);
+        return positionLocation.equals(targetLocation, angleOffset);
+    }
+
+    public boolean atTargetAngle(){
+        return rotateOnly && positionLocation.compareHeading(targetLocation, angleOffset);
     }
 
     private boolean compare(double a, double b, double offset) {
@@ -377,10 +350,6 @@ public class threeWheelOdometry {
 
     public int getCurrentAuxPos() {
         return currentAuxPos;
-    }
-
-    public direction getCurrentMovement() {
-        return currentMovement;
     }
 
     public String getTargetLocation() {

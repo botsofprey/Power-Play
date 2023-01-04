@@ -66,7 +66,6 @@ public class RightAuto extends LinearOpMode {
         lift.setPower(0);
         lift.zeroLift();
 
-        claw.setPosition(Claw.CLOSE_POSITION);
 
         while (!isStarted() && !isStopRequested()) {
 
@@ -106,45 +105,12 @@ public class RightAuto extends LinearOpMode {
             telemetry.update();
         }
 
-/*
-        double fps=0, frameCounter = 0;
-        double startTime = System.currentTimeMillis();
-
-        odometry.setTargetPoint(new Location(60, 0));
-
-        while(opModeIsActive()){
-            telemetry.addData("Positon", odometry.getLocation());
-            telemetry.addData("Target", odometry.getTargetLocation());
-            telemetry.addLine();
-
-            telemetry.addData("x movement", odometry.x);
-            telemetry.addData("y movement", odometry.y);
-            telemetry.addData("angle of movement", Math.toDegrees(odometry.h));
-            telemetry.update();
-
-            if(System.currentTimeMillis() - startTime >= 1){
-                fps = frameCounter;
-                frameCounter = 0;
-                startTime = System.currentTimeMillis();
-            }
-            frameCounter++;
-
-            if(fps == 0)
-                continue;
-
-            con.update();
-            double deltaTime = 1/fps;
-
-            Vector2D movement = con.leftStick;
-
-            odometry.positionLocation.add(movement.x * deltaTime, movement.y * deltaTime, 0);
-            odometry.update();
-        }
-
-*/
-
         //Resets position and encoders
         odometry.resetEncoders();
+
+        //Close around preset cone
+        claw.setPosition(Claw.CLOSE_POSITION);
+        sleep(500);
 
         //If camera is too far away to see qr, robot gets closer
         if(!camera.tagFound()){
@@ -158,39 +124,49 @@ public class RightAuto extends LinearOpMode {
                     telemetry.addData("Parking Spot", camera.getParking()+1);
                 telemetry.update();
             }
-            drive.brake();
+
+            //Turns camera off
+            camera.stop();
+
+            //Sets target to parking spot
+            parking = camera.getParking();
+
+        }else{
+            //Turns camera off
+            camera.stop();
+
+            //Sets target to parking spot
+            parking = camera.getParking();
+
+            //Scoring pre-loaded cone
+            odometry.setTargetPoint(0, -60, 0, true);
+            lift.hjunction();
+            whileMoving(1);
         }
-
-        //Turns camera off
-        camera.stop();
-
-        //Sets target to parking spot
-        parking = camera.getParking();
-
-        //Scoring pre-loaded cone
-        odometry.setTargetPoint(0, -60, 0, true);
-        lift.hjunction();
-        whileMoving(1);
 
         odometry.setTargetPoint(60, -60, -45, true);
         whileMoving(0);
         while(lift.isBusy() && opModeIsActive());
 
+        drive.setCurrentSpeed(.5);
         odometry.setTargetPoint(73, -69, -45, true);
         whileMoving(0);
 
+        //Scores
         lift.hjunctionScore();
         while(lift.isBusy() && opModeIsActive());
 
-        claw.setPosition(claw.OPEN_POSITION);
+        sleep(500);
+        claw.setPosition(Claw.OPEN_POSITION);
         sleep(500);
 
         //Getting in position to go to cone stack
+        drive.setCurrentSpeed(.5);
         odometry.setTargetPoint(60, -60, -45, true);
         whileMoving(0);
 
         odometry.rotateToAngle(90);
-        whileMoving(0);
+        whileRotating(0);
 
         odometry.setTargetPoint(120, -60, 90, true);
         while(!con.aPressed && opModeIsActive()){
@@ -202,7 +178,7 @@ public class RightAuto extends LinearOpMode {
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Current State", odometry.getCurrentMovement());
+            
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();
@@ -224,7 +200,7 @@ public class RightAuto extends LinearOpMode {
 
                 telemetry.addData("Target", odometry.getTargetLocation());
                 telemetry.addData("Position", odometry.getLocation());
-                telemetry.addData("Current State", odometry.getCurrentMovement());
+                
                 telemetry.addData("Powers", drive.getPowers());
 
                 telemetry.update();
@@ -240,7 +216,7 @@ public class RightAuto extends LinearOpMode {
 
                 telemetry.addData("Target", odometry.getTargetLocation());
                 telemetry.addData("Position", odometry.getLocation());
-                telemetry.addData("Current State", odometry.getCurrentMovement());
+                
                 telemetry.addData("Powers", drive.getPowers());
 
                 telemetry.update();
@@ -256,7 +232,7 @@ public class RightAuto extends LinearOpMode {
 
                 telemetry.addData("Target", odometry.getTargetLocation());
                 telemetry.addData("Position", odometry.getLocation());
-                telemetry.addData("Current State", odometry.getCurrentMovement());
+                
                 telemetry.addData("Powers", drive.getPowers());
 
                 telemetry.update();
@@ -273,7 +249,7 @@ public class RightAuto extends LinearOpMode {
 
                 telemetry.addData("Target", odometry.getTargetLocation());
                 telemetry.addData("Position", odometry.getLocation());
-                telemetry.addData("Current State", odometry.getCurrentMovement());
+                
                 telemetry.addData("Powers", drive.getPowers());
 
                 telemetry.update();
@@ -281,6 +257,7 @@ public class RightAuto extends LinearOpMode {
 
             //Turns toward high junction
             lift.hjunction();
+            odometry.rotateToAngle(-45);
             while(!con.aPressed && opModeIsActive()){
                 con.update();
 
@@ -290,22 +267,7 @@ public class RightAuto extends LinearOpMode {
 
                 telemetry.addData("Target", odometry.getTargetLocation());
                 telemetry.addData("Position", odometry.getLocation());
-                telemetry.addData("Current State", odometry.getCurrentMovement());
-                telemetry.addData("Powers", drive.getPowers());
-
-                telemetry.update();
-            }
-            odometry.setTargetPoint(120, 60, -45, true);
-            while(!con.aPressed && opModeIsActive()){
-                con.update();
-
-                odometry.update();
-
-                updatePosition();
-
-                telemetry.addData("Target", odometry.getTargetLocation());
-                telemetry.addData("Position", odometry.getLocation());
-                telemetry.addData("Current State", odometry.getCurrentMovement());
+                
                 telemetry.addData("Powers", drive.getPowers());
 
                 telemetry.update();
@@ -322,11 +284,14 @@ public class RightAuto extends LinearOpMode {
 
                 telemetry.addData("Target", odometry.getTargetLocation());
                 telemetry.addData("Position", odometry.getLocation());
-                telemetry.addData("Current State", odometry.getCurrentMovement());
+                
                 telemetry.addData("Powers", drive.getPowers());
 
                 telemetry.update();
             }
+
+            lift.hjunctionScore();
+            while(!con.aPressed && opModeIsActive());
 
             claw.setPosition(Claw.OPEN_POSITION);
             while(!con.aPressed && opModeIsActive()){
@@ -338,14 +303,18 @@ public class RightAuto extends LinearOpMode {
 
                 telemetry.addData("Target", odometry.getTargetLocation());
                 telemetry.addData("Position", odometry.getLocation());
-                telemetry.addData("Current State", odometry.getCurrentMovement());
+                
                 telemetry.addData("Powers", drive.getPowers());
 
                 telemetry.update();
             }
 
+            odometry.setTargetPoint(120, 0, -45);
+            lift.Ground();
+            while(!con.aPressed && opModeIsActive());
+
             //Turns to cone stack
-            odometry.setTargetPoint(120, 0, 90, true);
+            odometry.rotateToAngle(90);
             while(!con.aPressed && opModeIsActive()){
                 con.update();
 
@@ -355,7 +324,7 @@ public class RightAuto extends LinearOpMode {
 
                 telemetry.addData("Target", odometry.getTargetLocation());
                 telemetry.addData("Position", odometry.getLocation());
-                telemetry.addData("Current State", odometry.getCurrentMovement());
+                
                 telemetry.addData("Powers", drive.getPowers());
 
                 telemetry.update();
@@ -375,7 +344,7 @@ public class RightAuto extends LinearOpMode {
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Current State", odometry.getCurrentMovement());
+            
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();
@@ -390,7 +359,7 @@ public class RightAuto extends LinearOpMode {
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Current State", odometry.getCurrentMovement());
+            
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();
@@ -406,7 +375,7 @@ public class RightAuto extends LinearOpMode {
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Current State", odometry.getCurrentMovement());
+            
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();
@@ -425,7 +394,24 @@ public class RightAuto extends LinearOpMode {
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Current State", odometry.getCurrentMovement());
+            
+            telemetry.addData("Powers", drive.getPowers());
+
+            telemetry.update();
+        }
+
+        drive.brake();
+    }
+
+    private void whileRotating(long secondsOfSleep){
+        while(opModeIsActive() && !odometry.atTargetAngle()) {
+            odometry.update();
+
+            updatePosition();
+
+            telemetry.addData("Target", odometry.getTargetLocation());
+            telemetry.addData("Position", odometry.getLocation());
+            
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();

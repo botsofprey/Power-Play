@@ -244,7 +244,6 @@ public class LeftAuto extends LinearOpMode {
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Current State", odometry.getCurrentMovement());
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();

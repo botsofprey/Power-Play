@@ -111,6 +111,7 @@ public class Lift {
     }
 
     public boolean isBusy(){
-        return liftMotor.isBusy();
+        return liftMotor.isBusy()
+                && Math.abs(liftMotor.getTargetPosition()-liftMotor.getCurrentPosition()) > 300;
     }
 }
