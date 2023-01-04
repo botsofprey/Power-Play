@@ -14,6 +14,10 @@ public class Location {
         this.angle = 0;
     }
 
+    public Location(int i) {
+
+    }
+
     public double getRadians(){
         return Math.toRadians(angle);
     }
