@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.util.ReadWriteFile;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import DriveEngine.MecanumDrive;
@@ -180,33 +182,42 @@ public class MecanumTele extends LinearOpMode {
                     liftPreset = 5;
                 }
             }
-            // Find positions of junctions
             /*
-            int[][] lJunctions = {
-                    {},
-                    {},
-                    {},
-                    {},
-                    {},
-                    {},
-                    {},
-                    {}
-            };
-            int[][] mJunctions = {
-                    {},
-                    {},
-                    {},
-                    {},
-            };
-            int[][] hJunctions = {
-                    {},
-                    {},
-                    {},
-                    {}
-            };
+            // Find positions of junctions
+            double[][][] junctionPositions = {
+            { // Low junctions
+                    {30,-30},
+                    {30,-150},
+                    {90,30},
+                    {90,-210},
+                    {210,30},
+                    {210,-210},
+                    {270,-150},
+                    {270,-30}
+            },
+            { // Medium Junctions
+                    {90,-30},
+                    {90,-150},
+                    {210,-30},
+                    {210,-150}
+            },
+            { // High junctions
+                    {90,-90},
+                    {150,-30},
+                    {150,-150},
+                    {210,-90}
+            }};
 
+            double[] robotPos = {odometry.positionLocation.x,odometry.positionLocation.y};
+
+            ArrayList absDif = new ArrayList();
+            // Find closest junction to the robot's position then find distance and angle to get to junction
             if (controller1.yPressed) {
-
+                for(int a = 0; a < junctionPositions.length; a++) {
+                    for(int b = 0; b < junctionPositions[a].length; b++) {
+                        absDif.add(new double[]{Math.abs(junctionPositions[a][b][0] - robotPos[0]), Math.abs(junctionPositions[a][b][1] - robotPos[1]), a, b});
+                    }
+                }
             }
             */
 
@@ -250,7 +261,6 @@ public class MecanumTele extends LinearOpMode {
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Current State", odometry.getCurrentMovement());
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();
