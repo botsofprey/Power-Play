@@ -210,12 +210,18 @@ public class MecanumTele extends LinearOpMode {
 
             double[] robotPos = {odometry.positionLocation.x,odometry.positionLocation.y};
 
-            ArrayList absDif = new ArrayList();
+            double[][] absDif = new double[15][3];
             // Find closest junction to the robot's position then find distance and angle to get to junction
             if (controller1.yPressed) {
                 for(int a = 0; a < junctionPositions.length; a++) {
                     for(int b = 0; b < junctionPositions[a].length; b++) {
-                        absDif.add(new double[]{Math.abs(junctionPositions[a][b][0] - robotPos[0]), Math.abs(junctionPositions[a][b][1] - robotPos[1]), a, b});
+                        for(int c = 0; c < absDif.length; c++) {
+                            absDif[c][0] = Math.abs(junctionPositions[a][b][0] - robotPos[0]);
+                            absDif[c][1] = Math.abs(junctionPositions[a][b][1] - robotPos[1]);
+                            absDif[c][2] = a;
+                            absDif[c][3] = b;
+                            }
+                        }
                     }
                 }
             }
