@@ -2,15 +2,12 @@ package Subsystems;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import DriveEngine.MecanumDrive;
-import UtilityClasses.AverageDistanceSensor;
 import UtilityClasses.Location;
 import UtilityClasses.PidController;
 
@@ -36,6 +33,9 @@ public class threeWheelOdometry {
     private double cmOffset = 5, angleOffset = 10;
 
     private double xMult = 60.0/7.0;
+
+    public void rotateToAngle(int degrees) {
+    }
 
     private enum direction {
         x,

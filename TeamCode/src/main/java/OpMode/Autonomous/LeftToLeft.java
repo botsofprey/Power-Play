@@ -100,7 +100,7 @@ public abstract class LeftToLeft extends LinearOpMode {
             telemetry.addData("Parking Spot", camera.getParking()+1);
             telemetry.update();
 
-            odometry.setTargetPosition(0, 60);
+            odometry.getMoveToTargetPostion(0, 60);
             MecanumDrive drive = this.drive;
             telemetry.update();
             //ok did it score?

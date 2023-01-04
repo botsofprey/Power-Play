@@ -2,17 +2,16 @@ package Subsystems;
 
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-//import com.acmerobotics.roadrunner.geometry;
-
-//import com.acmerobotics.roadrunner.geometry;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.internal.android.dex.EncodedValue;
 
 import java.util.Arrays;
+import java.util.List;
 
 import DriveEngine.MecanumDrive;
 import OpMode.Autonomous.LeftToLeft;
@@ -55,15 +54,22 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     }
 
     //frontEncoder.setDirection(Encoder.Direction.REVERSE);
-    /*@NonNull
+    @NonNull
     @Override
     public List<Double> getWheelVelocities() {
         return Arrays.asList(
-                encoderTicksToInches(leftEncoder.getRawVelocity()),
-                encoderTicksToInches(rightEncoder.getRawVelocity()),
-                encoderTicksToInches(frontEncoder.getRawVelocity())
+                encoderTicksToInches(leftEncoder.getClass()),
+                encoderTicksToInches(rightEncoder.getClass()),
+                encoderTicksToInches(frontEncoder.getClass())
         );
-    }*/
+    }
+
+    private Double encoderTicksToInches(Class<? extends EncodedValue> encoderClass) {
+        return null;
+    }
+
+    public void update() {
+    }
 
     private enum direction {
         x,
