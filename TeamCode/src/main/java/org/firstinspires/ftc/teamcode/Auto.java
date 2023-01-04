@@ -10,6 +10,7 @@ import java.util.ArrayList;
 //roadrunner imports
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 //teamcode imports
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
@@ -63,10 +64,10 @@ public class Auto extends OpMode {
         //initialize hardware
         mpb.init(hardwareMap);
         //set up driving speeds
-        autoDriveBase.normalMode = 2;
-        autoDriveBase.setFastMode();
-        autoDriveBase.setSlowMode();
-        autoDriveBase.setDriveMode("normal");
+        //autoDriveBase.normalMode = 2;
+        //autoDriveBase.setFastMode();
+        //autoDriveBase.setSlowMode();
+        //autoDriveBase.setDriveMode("normal");
         //start the camera
         autocam.createCameraInstance(hardwareMap, telemetry);
         //set the pipeline for the camera
@@ -86,7 +87,6 @@ public class Auto extends OpMode {
         //2. Cone scoring and retrieval
             //Go from current position to auto cone stack
                 getCone = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                    .
                     .build();
             //Go from current position to ground junction
                 toGroundJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
@@ -98,7 +98,7 @@ public class Auto extends OpMode {
                 toMedJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
                     .build();
             //Go from current position to high junction
-                toHighJunction = mecanumDrive.trajectoryBuilder(, currentHeading)
+                toHighJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
                     .build();
 
     }
@@ -137,6 +137,7 @@ public class Auto extends OpMode {
     @Override
     public void stop() {
         autocam.destroyCameraInstance();
+        StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
     }
 
     public void updateCurrentPosition() {
