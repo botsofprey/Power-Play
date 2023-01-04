@@ -4,7 +4,9 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
+//import com.acmerobotics.roadrunner.geometry;
+
+//import com.acmerobotics.roadrunner.geometry;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -72,5 +74,13 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 
     public Object getMoveToTargetPostion() {
         return moveToTargetPostion;
+    }
+
+    private static class Pose2d {
+        public Pose2d(int i, double v, int i1) {
+        }
+
+        public Pose2d(double forwardOffset, int v, double toRadians) {
+        }
     }
 }

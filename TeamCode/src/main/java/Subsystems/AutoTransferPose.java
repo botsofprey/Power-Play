@@ -1,7 +1,7 @@
 package Subsystems;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
+//import com.acmerobotics.roadrunner.geometry.Pose2d;
+//import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public abstract class AutoTransferPose extends LinearOpMode {
@@ -34,5 +34,13 @@ public abstract class AutoTransferPose extends LinearOpMode {
         //);
         Object PoseStorage ;{}
         //PoseStorage.currentPose = drive.getPoseEstimate();
+    }
+
+    public class Pose2d {
+        public Pose2d(int i, int i1, double toRadians) {
+        }
+    }
+
+    public class Trajectory {
     }
 }

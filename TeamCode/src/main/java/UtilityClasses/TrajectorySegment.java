@@ -1,11 +1,13 @@
 package UtilityClasses;
 
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
+//import com.acmerobotics.roadrunner.trajectory.Trajectory;
+
+import Subsystems.AutoTransferPose;
 
 public class TrajectorySegment {
-    public final Trajectory trajectory;
+    public final AutoTransferPose.Trajectory trajectory;
 
-    public TrajectorySegment(Trajectory trajectory) {
+    public TrajectorySegment(AutoTransferPose.Trajectory trajectory) {
        // super(trajectory.duration(),
                 //trajectory.start(),
                 //trajectory.end(),
@@ -13,7 +15,7 @@ public class TrajectorySegment {
         this.trajectory = trajectory;
     }
 
-    public Trajectory getTrajectory() {
+    public AutoTransferPose.Trajectory getTrajectory() {
         return this.trajectory;
     }
 }

@@ -1,8 +1,5 @@
 package Subsystems;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.path.Path;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -70,10 +67,22 @@ public class MecanumDrive {
     return;
     }
 
-    public void setPoseEstimate(Pose2d startPose) {
+    public void setPoseEstimate(AutoTransferPose.Pose2d startPose) {
     }
 
     public void followTrajectory(Trajectory traj) {
+    }
+
+    public void followTrajectory(AutoTransferPose.Trajectory traj) {
+    }
+
+    private class Trajectory {
+    }
+
+    public class Pose2d {
+    }
+
+    private class Path {
     }
 
     //public Object getPoseEstimate() {
