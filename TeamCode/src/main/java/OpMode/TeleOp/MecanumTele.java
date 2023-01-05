@@ -2,14 +2,11 @@ package OpMode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ClockWarningSource;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 import java.io.File;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import DriveEngine.MecanumDrive;
@@ -182,7 +179,7 @@ public class MecanumTele extends LinearOpMode {
                     liftPreset = 5;
                 }
             }
-            /*
+
             // Find positions of junctions
             double[][][] junctionPositions = {
             { // Low junctions
@@ -210,9 +207,9 @@ public class MecanumTele extends LinearOpMode {
 
             double[] robotPos = {odometry.positionLocation.x,odometry.positionLocation.y};
 
-            double[][] absDif = new double[15][3];
             // Find closest junction to the robot's position then find distance and angle to get to junction
             if (controller1.yPressed) {
+                double[][] absDif = new double[15][3];
                 for(int a = 0; a < junctionPositions.length; a++) {
                     for(int b = 0; b < junctionPositions[a].length; b++) {
                         for(int c = 0; c < absDif.length; c++) {
@@ -223,9 +220,18 @@ public class MecanumTele extends LinearOpMode {
                             }
                         }
                     }
+                double[] smallestAbsDif = absDif[0];
+                for(int a = 0; a < absDif.length; a++) {
+                    if(absDif[a][0] < smallestAbsDif[0] && absDif[a][1] < smallestAbsDif[1]) {
+                        smallestAbsDif = absDif[a];
+                    }
                 }
+                int typeofjunction = (int) smallestAbsDif[2];
+                int junctionNumber = (int) smallestAbsDif[3];
+                double[] closestJunction = junctionPositions[typeofjunction][junctionNumber];
+                telemetry.addData("Closest junction", closestJunction);
             }
-            */
+
 
             telemetry.addData("Lift preset", liftPreset);
 
