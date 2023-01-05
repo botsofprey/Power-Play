@@ -226,10 +226,13 @@ public class MecanumTele extends LinearOpMode {
                         smallestAbsDif = absDif[a];
                     }
                 }
-                int typeofjunction = (int) smallestAbsDif[2];
+                int typeOfJunction = (int) smallestAbsDif[2];
                 int junctionNumber = (int) smallestAbsDif[3];
-                double[] closestJunction = junctionPositions[typeofjunction][junctionNumber];
+                double[] closestJunction = junctionPositions[typeOfJunction][junctionNumber];
                 telemetry.addData("Closest junction", closestJunction);
+                telemetry.addData("Type of junction", typeOfJunction);
+                double distanceToJunction = Math.sqrt(Math.pow(smallestAbsDif[0],2) + Math.pow(smallestAbsDif[1],2));
+                double angleToJunction = Math.toDegrees(Math.acos(smallestAbsDif[0]/distanceToJunction));
             }
 
 
