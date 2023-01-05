@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import UtilityClasses.DashboardUtil;
 
 //import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
@@ -93,18 +92,7 @@ public class MecanumDrive {
         public double getY() {
             return 0;
         }
-
-        public Query headingVec() {
-            return null;
-        }
-
-        private class Query {
-            public DashboardUtil.Vector2d times(double robotRadius) {
-                return null;
-            }
-        }
     }
-
 
     private class Path {
     }
