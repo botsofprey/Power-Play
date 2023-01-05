@@ -12,12 +12,12 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 //teamcode imports
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
-import org.firstinspires.ftc.teamcode.mecanumDrive.mecanumDrive;
+import org.firstinspires.ftc.teamcode.mecanumDriveOLD.mecanumDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.motorProgrammingBoard;
 import org.openftc.apriltag.AprilTagDetection;
 
-import static org.firstinspires.ftc.teamcode.mecanumDrive.driveVariables.VELOCITY_CONSTRAINT;
-import static org.firstinspires.ftc.teamcode.mecanumDrive.driveVariables.ACCELERATION_CONSTRAINT;
+import static org.firstinspires.ftc.teamcode.mecanumDriveOLD.driveVariables.VELOCITY_CONSTRAINT;
+import static org.firstinspires.ftc.teamcode.mecanumDriveOLD.driveVariables.ACCELERATION_CONSTRAINT;
 
 @Autonomous()
 public class auto extends OpMode {
@@ -26,8 +26,8 @@ public class auto extends OpMode {
     cameraControl autocam;
     AprilTagDetection tagData;
     motorProgrammingBoard mpb;
-    org.firstinspires.ftc.teamcode.mecanumDrive.mecanumDrive autoDriveBase;
-    org.firstinspires.ftc.teamcode.mecanumDrive.mecanumDrive mecanumDrive;
+    org.firstinspires.ftc.teamcode.mecanumDriveOLD.mecanumDrive autoDriveBase;
+    org.firstinspires.ftc.teamcode.mecanumDriveOLD.mecanumDrive mecanumDrive;
     AprilTagPipelineEXAMPLECOPY apriltagpipelineEXAMPLE;
 
     //create array to hold the returned variables from robot

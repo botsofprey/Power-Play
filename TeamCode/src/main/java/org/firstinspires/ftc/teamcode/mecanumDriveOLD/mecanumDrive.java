@@ -1,18 +1,11 @@
-package org.firstinspires.ftc.teamcode.mecanumDrive;
+package org.firstinspires.ftc.teamcode.mecanumDriveOLD;
 
-import static org.firstinspires.ftc.teamcode.mecanumDrive.driveVariables.TICKS_PER_REV;
-import static org.firstinspires.ftc.teamcode.mecanumDrive.driveVariables.BLOCK_LENGTH;
-import static org.firstinspires.ftc.teamcode.mecanumDrive.driveVariables.COMPLETE_TURN_ROTS;
+import static org.firstinspires.ftc.teamcode.mecanumDriveOLD.driveVariables.TICKS_PER_REV;
+import static org.firstinspires.ftc.teamcode.mecanumDriveOLD.driveVariables.BLOCK_LENGTH;
+import static org.firstinspires.ftc.teamcode.mecanumDriveOLD.driveVariables.COMPLETE_TURN_ROTS;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.path.PathSegment;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
-
-import org.firstinspires.ftc.teamcode.mecanumDrive.pathSegment.legitPathSegment;
-import org.firstinspires.ftc.teamcode.mecanumDrive.pathSegment.pathSegment;
-
-import java.util.List;
+import org.firstinspires.ftc.teamcode.mecanumDriveOLD.pathSegment.legitPathSegment;
+import org.firstinspires.ftc.teamcode.mecanumDriveOLD.pathSegment.pathSegment;
 
 /*
 * This is the driveBaseMovement class, which is responsible for auto and teleop
