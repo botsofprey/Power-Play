@@ -58,8 +58,28 @@ public abstract class LeftToLeft extends LinearOpMode {
 
         drive = new MecanumDrive(hardwareMap, this, 0);
         try {
-            odometry = new StandardTrackingWheelLocalizer(hardwareMap, new Location(0,0),
-                    this, drive);
+            odometry = new StandardTrackingWheelLocalizer(hardwareMap, new Location(0, 0),
+                    this, drive) {
+                @Override
+                public String leftEncoder() {
+                    return null;
+                }
+
+                @Override
+                public String rightEncoder() {
+                    return null;
+                }
+
+                @Override
+                public String frontEncoder() {
+                    return null;
+                }
+
+                @Override
+                public void getMoveToTargetPostion(int x, int y) {
+
+                }
+            };
         } catch (Throwable e) {
             e.printStackTrace();
         }

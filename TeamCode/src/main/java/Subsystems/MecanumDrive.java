@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import UtilityClasses.DashboardUtil;
+
 //import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
 @TeleOp
@@ -63,8 +65,8 @@ public class MecanumDrive {
     public void setMode(DcMotor.RunMode runWithoutEncoder) {
     }
 
-    public void trajectoryBuilder(Pose2d pose2d) {
-    return;
+    public AutoTransferPose.Trajectory trajectoryBuilder(Pose2d pose2d) {
+        return null;
     }
 
     public void setPoseEstimate(AutoTransferPose.Pose2d startPose) {
@@ -76,11 +78,33 @@ public class MecanumDrive {
     public void followTrajectory(AutoTransferPose.Trajectory traj) {
     }
 
+    public AutoTransferPose.Trajectory trajectoryBuilder(AutoTransferPose.Pose2d startPose) {
+        return null;
+    }
+
     private class Trajectory {
     }
 
     public class Pose2d {
+        public double getX() {
+            return 0;
+        }
+
+        public double getY() {
+            return 0;
+        }
+
+        public Query headingVec() {
+            return null;
+        }
+
+        private class Query {
+            public DashboardUtil.Vector2d times(double robotRadius) {
+                return null;
+            }
+        }
     }
+
 
     private class Path {
     }
