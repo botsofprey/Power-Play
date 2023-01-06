@@ -14,6 +14,7 @@ public class TestOdomDirections extends OpMode {
         leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
         rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
         frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "frontEncoder"));
+        frontEncoder.setDirection(Encoder.Direction.REVERSE);
     }
 
     @Override
