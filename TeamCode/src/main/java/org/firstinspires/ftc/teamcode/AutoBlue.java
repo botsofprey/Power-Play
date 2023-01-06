@@ -24,16 +24,6 @@ public class AutoBlue extends OpMode {
     SampleMecanumDrive mecanumDrive;
     AprilTagPipelineEXAMPLECOPY apriltagpipelineEXAMPLE;
 
-    Trajectory parkIf17,
-               parkIf18,
-               parkIf19,
-               getCone,
-               toGroundJunction,
-               toLowJunction,
-               toMedJunction,
-               toHighJunction;
-    Trajectory left, right, forward;
-
     //apriltag variable definitions
     //set the variable that holds the tag ID of interest
     int tagOfInterest;
@@ -45,9 +35,7 @@ public class AutoBlue extends OpMode {
     double cx = 402.145;
     double cy = 221.506;
 
-    //road runner localization variables
-    Pose2d currentPosition = new Pose2d(0,0);
-    double currentHeading;
+    Trajectory right19, forward18, forward19, left17, forward17;
 
     @Override
     public void init() {
@@ -66,43 +54,11 @@ public class AutoBlue extends OpMode {
         //set the pipeline for the camera
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
-        //Initialize and declare all trajectories
-        //1. Parking trajectories
-            //Park if apriltag id 17 is seen
-                parkIf17 = mecanumDrive.trajectoryBuilder(new Pose2d())
-                        .strafeRight(24)
-                        .forward(24)
-                        .build();
-            //Park if apriltag id 18 is seen
-                parkIf18 = mecanumDrive.trajectoryBuilder(new Pose2d())
-                        .forward(24)
-                        .build();
-            //Park if apriltag id 19 is seen
-                parkIf19 = mecanumDrive.trajectoryBuilder(new Pose2d())
-                        .strafeLeft(24)
-                        .forward(24)
-                        .build();
-        /*//2. Cone scoring and retrieval
-            //Go from current position to auto cone stack
-                getCone = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                        .build();
-            //Go from current position to ground junction
-                toGroundJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                        .build();
-            //Go from current position to low junction
-                toLowJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                        .build();
-            //Go from current position to medium junction
-                toMedJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                        .build();
-            //Go from current position to high junction
-                toHighJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                        .build();
-*/
-        //Set the current position to a coordinate based on
-        left = mecanumDrive.trajectoryBuilder(currentPosition).strafeLeft(24).build();
-        right = mecanumDrive.trajectoryBuilder(currentPosition).strafeRight(24).build();
-        forward = mecanumDrive.trajectoryBuilder(currentPosition).forward(24).build();
+        right19 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeRight(24).build();
+        forward19 = mecanumDrive.trajectoryBuilder(right19.end()).forward(24).build();
+        forward18 = mecanumDrive.trajectoryBuilder(new Pose2d()).forward(24).build();
+        left17 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeLeft(24).build();
+        forward17 = mecanumDrive.trajectoryBuilder(left17.end()).forward(24).build();
     }
 
     @Override
@@ -122,16 +78,15 @@ public class AutoBlue extends OpMode {
                     telemetry.addLine("No tag found.");
                 }
                 if (tagOfInterest == 17) {
-                    mecanumDrive.followTrajectory(right);
-                    mecanumDrive.followTrajectory(forward);
-
+                    mecanumDrive.followTrajectory(left17);
+                    mecanumDrive.followTrajectory(forward17);
                 }
                 if (tagOfInterest == 18) {
-                    mecanumDrive.followTrajectory(forward);
+                    mecanumDrive.followTrajectory(forward18);
                 }
                 if (tagOfInterest == 19) {
-                    mecanumDrive.followTrajectory(left);
-                    mecanumDrive.followTrajectory(forward);
+                    mecanumDrive.followTrajectory(right19);
+                    mecanumDrive.followTrajectory(forward19);
                 }
             }
         }
@@ -141,14 +96,6 @@ public class AutoBlue extends OpMode {
     public void stop() {
         autocam.destroyCameraInstance();
         StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
-    }
-
-    public void updateCurrentPosition() {
-        this.currentPosition = mecanumDrive.getPoseEstimate();
-    }
-
-    public void updateCurrentHeading() {
-        this.currentHeading = mecanumDrive.getRawExternalHeading();
     }
 }
 

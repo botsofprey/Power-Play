@@ -1,19 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 //general imports
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import java.util.ArrayList;
-//easyopencv imports
-//roadrunner imports
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-//teamcode imports
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
+import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 import org.openftc.apriltag.AprilTagDetection;
+
+import java.util.ArrayList;
 
 @Autonomous()
 public class AutoRed extends OpMode {
@@ -24,16 +23,6 @@ public class AutoRed extends OpMode {
     HardwareMechanisms mpb;
     SampleMecanumDrive mecanumDrive;
     AprilTagPipelineEXAMPLECOPY apriltagpipelineEXAMPLE;
-
-    Trajectory parkIf17,
-               parkIf18,
-               parkIf19,
-               getCone,
-               toGroundJunction,
-               toLowJunction,
-               toMedJunction,
-               toHighJunction;
-    Trajectory left, right, forward;
 
     //apriltag variable definitions
     //set the variable that holds the tag ID of interest
@@ -46,9 +35,7 @@ public class AutoRed extends OpMode {
     double cx = 402.145;
     double cy = 221.506;
 
-    //road runner localization variables
-    Pose2d currentPosition = new Pose2d(0,0);
-    double currentHeading;
+    Trajectory right17, forward18, forward19, left19, forward17;
 
     @Override
     public void init() {
@@ -67,44 +54,11 @@ public class AutoRed extends OpMode {
         //set the pipeline for the camera
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
-        //Initialize and declare all trajectories
-        //1. Parking trajectories
-            //Park if apriltag id 17 is seen
-                parkIf17 = mecanumDrive.trajectoryBuilder(new Pose2d())
-                        .strafeLeft(24)
-                        .forward(24)
-                        .build();
-            //Park if apriltag id 18 is seen
-                parkIf18 = mecanumDrive.trajectoryBuilder(new Pose2d())
-                        .forward(24)
-                        .build();
-            //Park if apriltag id 19 is seen
-                parkIf19 = mecanumDrive.trajectoryBuilder(new Pose2d())
-                        .strafeRight(24)
-                        .forward(24)
-                        .build();
-        /*//2. Cone scoring and retrieval
-            //Go from current position to auto cone stack
-                getCone = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                        .build();
-            //Go from current position to ground junction
-                toGroundJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                        .build();
-            //Go from current position to low junction
-                toLowJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                        .build();
-            //Go from current position to medium junction
-                toMedJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                        .build();
-            //Go from current position to high junction
-                toHighJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                        .build();
-*/
-        //Set the current position to a coordinate based on
-
-        left = mecanumDrive.trajectoryBuilder(currentPosition).strafeLeft(24).build();
-        right = mecanumDrive.trajectoryBuilder(currentPosition).strafeRight(24).build();
-        forward = mecanumDrive.trajectoryBuilder(currentPosition).forward(24).build();
+        left19 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeLeft(24).build();
+        forward19 = mecanumDrive.trajectoryBuilder(left19.end()).forward(24).build();
+        forward18 = mecanumDrive.trajectoryBuilder(new Pose2d()).forward(24).build();
+        right17 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeRight(24).build();
+        forward17 = mecanumDrive.trajectoryBuilder(right17.end()).forward(24).build();
     }
 
     @Override
@@ -124,15 +78,15 @@ public class AutoRed extends OpMode {
                     telemetry.addLine("No tag found.");
                 }
                 if (tagOfInterest == 17) {
-                    mecanumDrive.followTrajectory(left);
-                    mecanumDrive.followTrajectory(forward);
+                    mecanumDrive.followTrajectory(right17);
+                    mecanumDrive.followTrajectory(forward17);
                 }
                 if (tagOfInterest == 18) {
-                    mecanumDrive.followTrajectory(forward);
+                    mecanumDrive.followTrajectory(forward18);
                 }
                 if (tagOfInterest == 19) {
-                    mecanumDrive.followTrajectory(right);
-                    mecanumDrive.followTrajectory(forward);
+                    mecanumDrive.followTrajectory(left19);
+                    mecanumDrive.followTrajectory(forward19);
                 }
             }
         }
@@ -142,14 +96,6 @@ public class AutoRed extends OpMode {
     public void stop() {
         autocam.destroyCameraInstance();
         StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
-    }
-
-    public void updateCurrentPosition() {
-        this.currentPosition = mecanumDrive.getPoseEstimate();
-    }
-
-    public void updateCurrentHeading() {
-        this.currentHeading = mecanumDrive.getRawExternalHeading();
     }
 }
 
