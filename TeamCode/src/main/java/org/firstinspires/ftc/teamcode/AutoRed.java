@@ -33,6 +33,7 @@ public class AutoRed extends OpMode {
                toLowJunction,
                toMedJunction,
                toHighJunction;
+    Trajectory left, right, forward;
 
     //apriltag variable definitions
     //set the variable that holds the tag ID of interest
@@ -82,7 +83,7 @@ public class AutoRed extends OpMode {
                         .strafeRight(24)
                         .forward(24)
                         .build();
-        //2. Cone scoring and retrieval
+        /*//2. Cone scoring and retrieval
             //Go from current position to auto cone stack
                 getCone = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
                         .build();
@@ -98,8 +99,12 @@ public class AutoRed extends OpMode {
             //Go from current position to high junction
                 toHighJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
                         .build();
-
+*/
         //Set the current position to a coordinate based on
+
+        left = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeLeft(24).build();
+        right = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeRight(24).build();
+        forward = mecanumDrive.trajectoryBuilder(new Pose2d()).forward(24).build();
     }
 
     @Override
@@ -119,14 +124,15 @@ public class AutoRed extends OpMode {
                     telemetry.addLine("No tag found.");
                 }
                 if (tagOfInterest == 17) {
-                    mecanumDrive.followTrajectory(parkIf17);
-
+                    mecanumDrive.followTrajectory(left);
+                    mecanumDrive.followTrajectory(forward);
                 }
                 if (tagOfInterest == 18) {
-                    mecanumDrive.followTrajectory(parkIf18);
+                    mecanumDrive.followTrajectory(forward);
                 }
                 if (tagOfInterest == 19) {
-                    mecanumDrive.followTrajectory(parkIf19);
+                    mecanumDrive.followTrajectory(right);
+                    mecanumDrive.followTrajectory(forward);
                 }
             }
         }
