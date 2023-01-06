@@ -95,7 +95,7 @@ public class AutoBlue extends OpMode {
     @Override
     public void stop() {
         autocam.destroyCameraInstance();
-        StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
+        //StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
     }
 }
 

@@ -71,7 +71,7 @@ public class AutoRed extends OpMode {
                 if (tag.id >= 17 || tag.id <= 19) {
                     tagOfInterest = tag.id;
                     telemetry.addData("Tag of interest", tagOfInterest);
-                    telemetry.addData("Tag data", tag.toString());
+                    telemetry.addData("Tag data", tagData);
                     break;
                 }
                 else {
@@ -95,7 +95,7 @@ public class AutoRed extends OpMode {
     @Override
     public void stop() {
         autocam.destroyCameraInstance();
-        StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
+        //StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
     }
 }
 
