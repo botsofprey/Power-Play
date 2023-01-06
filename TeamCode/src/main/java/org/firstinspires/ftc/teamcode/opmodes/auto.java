@@ -10,6 +10,9 @@ import java.util.ArrayList;
 //roadrunner imports
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 //teamcode imports
+import org.firstinspires.ftc.teamcode.autoAndTeleOpDriveClasses.driveMode;
+import org.firstinspires.ftc.teamcode.hedgehogPID.segment;
+import org.firstinspires.ftc.teamcode.hedgehogPID.trajectory;
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
 import org.firstinspires.ftc.teamcode.mecanumDriveOLD.mecanumDrive;
@@ -70,29 +73,24 @@ public class auto extends OpMode {
         //set up all trajectories
         //1. Parking trajectories
             //Trajectory to park in a designated area if the robot detects apriltag no. 17
-            Trajectory parkIf17 = new TrajectoryBuilder(new Pose2d(), VELOCITY_CONSTRAINT,
-                                                        ACCELERATION_CONSTRAINT).build();
+            trajectory parkIf17 = new trajectory(new driveMode(1, "normal"))
+                    .;
 
             //Trajectory to park in a designated area if the robot detects apriltag no. 18
-            Trajectory parkIf18 = new TrajectoryBuilder(new Pose2d(), VELOCITY_CONSTRAINT,
-                                                        ACCELERATION_CONSTRAINT).build();
+            trajectory parkIf18 = new trajectory(new driveMode(1, "normal"));
 
             //Trajectory to park in a designated area if the robot detects apriltag no. 19
-            Trajectory parkIf19 = new TrajectoryBuilder(new Pose2d(), VELOCITY_CONSTRAINT,
-                                                        ACCELERATION_CONSTRAINT).build();
+            trajectory parkIf19 = new trajectory(new driveMode(1, "normal"));
 
         //2. Cone pickup trajectories
             //Trajectory to go to a cone in the auto pickup zone
-            Trajectory autoPickUp = new TrajectoryBuilder(new Pose2d(), VELOCITY_CONSTRAINT,
-                                                          ACCELERATION_CONSTRAINT).build();
+            trajectory autoPickUp = new trajectory(new driveMode(1, "normal"));
 
             //Trajectory to go back from a given junction to the auto pickup zone
-            Trajectory autoPickUpReturn = new TrajectoryBuilder(new Pose2d(), VELOCITY_CONSTRAINT,
-                                                                ACCELERATION_CONSTRAINT).build();
+            trajectory autoPickUpReturn = new trajectory(new driveMode(1, "normal"));
 
             //Trajectory to go to a given junction of a specified height
-            Trajectory goToJunction = new TrajectoryBuilder(new Pose2d(), VELOCITY_CONSTRAINT,
-                                                            ACCELERATION_CONSTRAINT).build();
+            trajectory goToJunction = new trajectory(new driveMode(1, "normal"));
 
             //
     }
