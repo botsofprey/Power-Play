@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 //general imports
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -14,11 +13,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
-import org.firstinspires.ftc.teamcode.HardwareMechanisms;
 import org.openftc.apriltag.AprilTagDetection;
 
 @Autonomous()
-public class Auto extends OpMode {
+public class AutoRed extends OpMode {
     //remember: System.currentTimeMillis();
     //prototype objects to be created
     cameraControl autocam;
@@ -63,11 +61,6 @@ public class Auto extends OpMode {
         //set up any functions or variables needed for program
         //initialize hardware
         mpb.init(hardwareMap);
-        //set up driving speeds
-        //autoDriveBase.normalMode = 2;
-        //autoDriveBase.setFastMode();
-        //autoDriveBase.setSlowMode();
-        //autoDriveBase.setDriveMode("normal");
         //start the camera
         autocam.createCameraInstance(hardwareMap, telemetry);
         //set the pipeline for the camera
@@ -77,30 +70,36 @@ public class Auto extends OpMode {
         //1. Parking trajectories
             //Park if apriltag id 17 is seen
                 parkIf17 = mecanumDrive.trajectoryBuilder(new Pose2d())
-                .build();
+                        .strafeLeft(24)
+                        .forward(24)
+                        .build();
             //Park if apriltag id 18 is seen
                 parkIf18 = mecanumDrive.trajectoryBuilder(new Pose2d())
-                .build();
+                        .forward(24)
+                        .build();
             //Park if apriltag id 19 is seen
                 parkIf19 = mecanumDrive.trajectoryBuilder(new Pose2d())
-                .build();
+                        .strafeRight(24)
+                        .forward(24)
+                        .build();
         //2. Cone scoring and retrieval
             //Go from current position to auto cone stack
                 getCone = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                    .build();
+                        .build();
             //Go from current position to ground junction
                 toGroundJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                    .build();
+                        .build();
             //Go from current position to low junction
                 toLowJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                    .build();
+                        .build();
             //Go from current position to medium junction
                 toMedJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                    .build();
+                        .build();
             //Go from current position to high junction
                 toHighJunction = mecanumDrive.trajectoryBuilder(currentPosition, currentHeading)
-                    .build();
+                        .build();
 
+        //Set the current position to a coordinate based on
     }
 
     @Override
@@ -121,7 +120,6 @@ public class Auto extends OpMode {
                 }
                 if (tagOfInterest == 17) {
                     mecanumDrive.followTrajectory(parkIf17);
-                    updateCurrentHeading();
 
                 }
                 if (tagOfInterest == 18) {
