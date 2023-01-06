@@ -1,26 +1,20 @@
 package org.firstinspires.ftc.teamcode.opmodes;
+
 //general imports
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import java.util.ArrayList;
 //easyopencv imports
-//roadrunner imports
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
+
 //teamcode imports
 import org.firstinspires.ftc.teamcode.autoAndTeleOpDriveClasses.driveMode;
-import org.firstinspires.ftc.teamcode.hedgehogPID.segment;
 import org.firstinspires.ftc.teamcode.hedgehogPID.trajectory;
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
-import org.firstinspires.ftc.teamcode.mecanumDriveOLD.mecanumDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.motorProgrammingBoard;
 import org.openftc.apriltag.AprilTagDetection;
 
-import static org.firstinspires.ftc.teamcode.mecanumDriveOLD.driveVariables.VELOCITY_CONSTRAINT;
-import static org.firstinspires.ftc.teamcode.mecanumDriveOLD.driveVariables.ACCELERATION_CONSTRAINT;
+import java.util.ArrayList;
 
 @Autonomous()
 public class auto extends OpMode {
@@ -29,8 +23,6 @@ public class auto extends OpMode {
     cameraControl autocam;
     AprilTagDetection tagData;
     motorProgrammingBoard mpb;
-    org.firstinspires.ftc.teamcode.mecanumDriveOLD.mecanumDrive autoDriveBase;
-    org.firstinspires.ftc.teamcode.mecanumDriveOLD.mecanumDrive mecanumDrive;
     AprilTagPipelineEXAMPLECOPY apriltagpipelineEXAMPLE;
 
     //create array to hold the returned variables from robot
@@ -54,17 +46,11 @@ public class auto extends OpMode {
             tagData = new AprilTagDetection();
             autocam = new cameraControl();
             mpb = new motorProgrammingBoard();
-            autoDriveBase = new mecanumDrive();
             apriltagpipelineEXAMPLE = new AprilTagPipelineEXAMPLECOPY(tagsize, fx, fy, cx, cy);
 
         //set up any functions or variables needed for program
             //initialize hardware
             mpb.init(hardwareMap);
-            //set up driving speeds
-            autoDriveBase.normalMode = 2;
-            autoDriveBase.setFastMode();
-            autoDriveBase.setSlowMode();
-            autoDriveBase.setDriveMode("normal");
             //start the camera
             autocam.createCameraInstance(hardwareMap, telemetry);
             //set the pipeline for the camera
@@ -73,8 +59,7 @@ public class auto extends OpMode {
         //set up all trajectories
         //1. Parking trajectories
             //Trajectory to park in a designated area if the robot detects apriltag no. 17
-            trajectory parkIf17 = new trajectory(new driveMode(1, "normal"))
-                    .;
+            trajectory parkIf17 = new trajectory(new driveMode(1, "normal"));
 
             //Trajectory to park in a designated area if the robot detects apriltag no. 18
             trajectory parkIf18 = new trajectory(new driveMode(1, "normal"));
