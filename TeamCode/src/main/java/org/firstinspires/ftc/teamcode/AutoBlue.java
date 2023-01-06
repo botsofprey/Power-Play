@@ -46,7 +46,7 @@ public class AutoBlue extends OpMode {
     double cy = 221.506;
 
     //road runner localization variables
-    Pose2d currentPosition = new Pose2d();
+    Pose2d currentPosition = new Pose2d(0,0);
     double currentHeading;
 
     @Override
@@ -100,9 +100,9 @@ public class AutoBlue extends OpMode {
                         .build();
 */
         //Set the current position to a coordinate based on
-        left = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeLeft(24).build();
-        right = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeRight(24).build();
-        forward = mecanumDrive.trajectoryBuilder(new Pose2d()).forward(24).build();
+        left = mecanumDrive.trajectoryBuilder(currentPosition).strafeLeft(24).build();
+        right = mecanumDrive.trajectoryBuilder(currentPosition).strafeRight(24).build();
+        forward = mecanumDrive.trajectoryBuilder(currentPosition).forward(24).build();
     }
 
     @Override
