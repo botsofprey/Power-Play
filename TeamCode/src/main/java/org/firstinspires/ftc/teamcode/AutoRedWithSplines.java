@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 //general imports
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -15,7 +16,7 @@ import org.openftc.apriltag.AprilTagDetection;
 import java.util.ArrayList;
 
 @Autonomous()
-public class AutoRed extends OpMode {
+public class AutoRedWithSplines extends OpMode {
     //remember: System.currentTimeMillis();
     //prototype objects to be created
     cameraControl autocam;
@@ -35,7 +36,7 @@ public class AutoRed extends OpMode {
     double cx = 402.145;
     double cy = 221.506;
 
-    Trajectory right17, forward18, forward19, left19, forward17;
+    Trajectory trajectory17, trajectory18, trajectory19;
 
     @Override
     public void init() {
@@ -54,11 +55,17 @@ public class AutoRed extends OpMode {
         //set the pipeline for the camera
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
-        left19 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeLeft(24).build();
-        forward19 = mecanumDrive.trajectoryBuilder(left19.end()).forward(24).build();
-        forward18 = mecanumDrive.trajectoryBuilder(new Pose2d()).forward(24).build();
-        right17 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeRight(24).build();
-        forward17 = mecanumDrive.trajectoryBuilder(right17.end()).forward(24).build();
+        trajectory19 = mecanumDrive.trajectoryBuilder(
+                        new Pose2d())
+                .splineTo(new Vector2d(0, -24), Math.toRadians(0))
+                .splineTo(new Vector2d(24, -24), Math.toRadians(0))
+                .build();
+        trajectory18 = mecanumDrive.trajectoryBuilder(new Pose2d()).forward(24).build();
+        trajectory17 = mecanumDrive.trajectoryBuilder(
+                        new Pose2d())
+                .splineTo(new Vector2d(0, 24), Math.toRadians(0))
+                .splineTo(new Vector2d(24, 24), Math.toRadians(0))
+                .build();
     }
 
     @Override
@@ -77,15 +84,14 @@ public class AutoRed extends OpMode {
                     telemetry.addLine("No tag found.");
                 }
                 if (tagOfInterest == 17) {
-                    mecanumDrive.followTrajectory(right17);
-                    mecanumDrive.followTrajectory(forward17);
+                    mecanumDrive.followTrajectory(trajectory17);
+
                 }
                 if (tagOfInterest == 18) {
-                    mecanumDrive.followTrajectory(forward18);
+                    mecanumDrive.followTrajectory(trajectory18);
                 }
                 if (tagOfInterest == 19) {
-                    mecanumDrive.followTrajectory(left19);
-                    mecanumDrive.followTrajectory(forward19);
+                    mecanumDrive.followTrajectory(trajectory19);
                 }
             }
         }
@@ -97,4 +103,5 @@ public class AutoRed extends OpMode {
         StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
     }
 }
+
 

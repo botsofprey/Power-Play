@@ -195,7 +195,7 @@ public class FinalTeleOp extends OpMode {
             board.driveFieldRelative(y * 0.6, x * 0.6, rx * 0.6); //normal mode
             telemetry.addData("Mode", "Normal");
         }
-        telemetry.addData("angle", (board.getHeading(AngleUnit.RADIANS) * 180) / Math.PI);
+        telemetry.addData("degrees", board.getNormalizedDegrees());
     }
 
     public void stop() {

@@ -70,6 +70,7 @@ public class HardwareMechanisms {
 
     /**
      * A method that sets the claw's position
+     *
      * @param clawPosit The target position
      */
     public void setClaw(double clawPosit) {
@@ -85,6 +86,10 @@ public class HardwareMechanisms {
     public double getHeading(AngleUnit angleUnit) {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
         return angles.firstAngle + StaticImu.imuStatic;
+    }
+
+    public double getNormalizedDegrees() {
+        return AngleUnit.normalizeDegrees((getHeading(AngleUnit.RADIANS) * 180) / Math.PI);
     }
 
     /**
