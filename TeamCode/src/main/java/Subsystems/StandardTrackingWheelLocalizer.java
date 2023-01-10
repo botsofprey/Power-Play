@@ -64,6 +64,26 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         );
     }
 
+    @Override
+    public String leftEncoder() {
+        return null;
+    }
+
+    @Override
+    public String rightEncoder() {
+        return null;
+    }
+
+    @Override
+    public String frontEncoder() {
+        return null;
+    }
+
+    @Override
+    public void getMoveToTargetPostion(int x, int y) {
+
+    }
+
     private Double encoderTicksToInches(Class<? extends EncodedValue> encoderClass) {
         return null;
     }

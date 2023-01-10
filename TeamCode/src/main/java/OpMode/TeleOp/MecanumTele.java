@@ -32,7 +32,7 @@ public class MecanumTele extends LinearOpMode {
     private Location startLoc = new Location(4,0,4);
 
     private boolean slowModeOn = true;
-    private boolean overrideDrivers = false;
+    private boolean overrideDrivers = false, grid = false;
     private boolean scoring = false;
 
     private String filename = "TeleStartLocation.JSON";
@@ -56,8 +56,6 @@ public class MecanumTele extends LinearOpMode {
         odometry = new threeWheelOdometry(hardwareMap, startLoc, this, drive);
 
         negateScoring = Objects.equals(ReadWriteFile.readFile(sideFile), "R") ? 1 : -1;
-
-        odometry.setTargetPoint(startLoc);
 
         waitForStart();
 
@@ -86,11 +84,6 @@ public class MecanumTele extends LinearOpMode {
                 whileMoving(1);
             }
 
-            if (controller1.upPressed) {
-                odometry.moveToOpenSpace(0, 0, 0, true);
-                overrideDrivers = true;
-            }
-
             if (controller1.leftPressed) {
                 odometry.next90degrees(-1);
                 overrideDrivers = true;
@@ -99,27 +92,28 @@ public class MecanumTele extends LinearOpMode {
                 overrideDrivers = true;
             }
 
-            if (controller1.startPressed) {
-                drive.slowMode();
-                slowModeOn = !slowModeOn;
-            } else {
-                drive.slowMode(controller1.leftTriggerHeld && !slowModeOn);
-            }
+            drive.slowMode(controller1.leftTriggerHeld);
+
+            telemetry.addData("Slow mode", controller1.leftTriggerHeld);
 
             //Driver 1 uses joysticks for movement, duh
             if (!overrideDrivers) {
-                Vector2D leftInput = controller1.leftStick,
-                        rightInput = controller1.rightStick;
+                if(!grid) {
+                    Vector2D leftInput = controller1.leftStick,
+                            rightInput = controller1.rightStick;
 
-                double newForward = controller1.leftStick.y;
-                double newRight = controller1.leftStick.x;
-                double rotate = controller1.rightStick.x;
-                drive.moveWithPower(
-                        newForward + newRight + rotate,
-                        newForward - newRight + rotate,
-                        newForward + newRight - rotate,
-                        newForward - newRight - rotate
-                );
+                    double newForward = controller1.leftStick.y;
+                    double newRight = controller1.leftStick.x;
+                    double rotate = controller1.rightStick.x;
+                    drive.moveWithPower(
+                            newForward + newRight + rotate,
+                            newForward - newRight + rotate,
+                            newForward + newRight - rotate,
+                            newForward - newRight - rotate
+                    );
+                }else{
+                    drive.gridMovement(controller1.leftStick, odometry.getLocationClass());
+                }
 
                  /*
                 drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);*/
@@ -245,7 +239,7 @@ public class MecanumTele extends LinearOpMode {
             telemetry.addData("Powers", drive.getPowers());
 
             odometry.update();
-            //lift.update();
+            lift.update();
 
             telemetry.addData("Robot position", odometry.getLocation());
             if(overrideDrivers) {

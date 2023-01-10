@@ -19,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import Subsystems.threeWheelOdometry;
 import UtilityClasses.Location;
+import UtilityClasses.Vector2D;
 //import UtilityClasses.PIDController;
 
 /**
@@ -42,7 +43,7 @@ public class MecanumDrive {
             DcMotorSimple.Direction.FORWARD
     };
 
-    private double maxSpeed = 1,
+    private double maxSpeed = .75,
     slowSpeed = .5, currentSpeed;
 
     private LinearOpMode mode;
@@ -55,6 +56,7 @@ public class MecanumDrive {
     private boolean rotating;
 
     public final static double TICKS_PER_CENTI = (5281.1 / (9 * Math.PI));
+    private static final double tile = 2.54 * 24.0;
 
     private int[] startPos = new int[4],
     endPos = new int[4],
@@ -139,6 +141,31 @@ public class MecanumDrive {
                newForward + newRight - rotate,
                newForward - newRight - rotate
        );
+    }
+
+
+    public void gridMovement(Vector2D movement, Location current){
+        double xMovement = 0, yMovement = 0;
+
+        if(Math.round(movement.y) != 0){
+            xMovement = Math.sin(getRadians()) * movement.x;
+
+            double tileYOffset = (tile * Math.round(current.y/tile)) - current.y;
+            yMovement = Math.cos(getRadians()) * tileYOffset;
+
+        } else if(Math.round(movement.x) != 0){
+            yMovement = Math.cos(getRadians()) * movement.y;
+
+            double tileXOffset = (tile * Math.round(current.y/tile)) - current.y;
+            xMovement = Math.cos(getRadians()) * tileXOffset;
+        }
+
+        moveWithPower(
+                xMovement + yMovement,
+                xMovement - yMovement,
+                xMovement + yMovement,
+                xMovement - yMovement
+        );
     }
 
     public void moveWithPower(double fl, double bl, double br, double fr){
