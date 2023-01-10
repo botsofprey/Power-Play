@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.hedgehogPID;
 
-public class Marker {
+public class marker extends segment {
+    super.
 }

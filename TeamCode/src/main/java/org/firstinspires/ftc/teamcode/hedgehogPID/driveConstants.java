@@ -15,12 +15,18 @@ public class driveConstants {
     //
     public static final double COMPLETE_TURN_ROTS_ODOM = 0;
     //
-    public static final double MAX_VEL = 0;
+    public static final double MAX_VELOCITY = 0;
     //
-    public static final double MAX_ACCEL = 0;
+    public static final double MAX_ACCELERATION = 0;
     //
-    public static final double MAX_ANG_VEL = 0;
+    public static final double MAX_ANGULAR_VELOCITY = 0;
     //
-    public static final double MAX_ANG_ACCEL = 0;
+    public static final double MAX_ANGULAR_ACCELERATION = 0;
+    //
+    public static final double kV = 0;
+    //
+    public static final double kA = 0;
+    //
+    public static final double kSTATIC = 0;
 
 }

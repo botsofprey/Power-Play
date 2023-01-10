@@ -5,34 +5,46 @@ import org.firstinspires.ftc.teamcode.autoAndTeleOpDriveClasses.driveMode;
 import static org.firstinspires.ftc.teamcode.hedgehogPID.driveConstants.BLOCK_LENGTH;
 import static org.firstinspires.ftc.teamcode.hedgehogPID.driveConstants.COMPLETE_TURN_ROTS;
 import static org.firstinspires.ftc.teamcode.hedgehogPID.driveConstants.TICKS_PER_REV;
-import static org.firstinspires.ftc.teamcode.hedgehogPID.driveConstants.MAX_VEL;
 
 import java.util.List;
+
+/*
+* This class simultaneously holds all trajectory data, as well as all methods required to create a
+* trajectory. This makes trajectory making very simple in an auto opmode
+*       EX)
+*           //in init()
+*           trajectory example = new trajectory(new driveMode(1, "normal"))
+*               .setSegment(*args*)
+*               .setSegment(*args*)
+*               .setSegment(*args*);
+*
+*           //in loop()
+*           example.executeSegmentList();
+*/
 
 public class trajectory {
     public List<segment> segmentList;
 
     private driveMode dm;
+    private PID pid;
 
     public trajectory(driveMode dm) {
         this.dm = dm;
     }
 
-    public void setSegment(double forbackBLOCK, double strafeBLOCK, double turnDEG, Marker marker) {
-        segment seg = new segment();
-
-        double frontLeftMotor = 0.0,
+    public trajectory setSegment(double forbackBLOCK, double strafeBLOCK, double turnDEG,
+                           double targetVelocity, marker marker) {
+        double frontLeftMotor  = 0.0,
                frontRightMotor = 0.0,
-               backLeftMotor = 0.0,
-               backRightMotor = 0.0;
+               backLeftMotor   = 0.0,
+               backRightMotor  = 0.0;
 
         double[] motors = new double[]{frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
 
-        //(MAX_VEL / dm.driveMode) is the proportion of the maximum velocity in ticks to
-        //the driveMode (fast, slow, or normal)
-        double duration = Math.hypot(strafeBLOCK, forbackBLOCK) / (MAX_VEL / dm.driveMode);
+        double duration = Math.hypot(strafeBLOCK * TICKS_PER_REV, forbackBLOCK * TICKS_PER_REV)
+                          / (targetVelocity / dm.driveMode);
 
-        //convert degrees into parts of asegment whole turn
+        //convert degrees into parts of a whole turn
         turnDEG = (turnDEG / 360) * (TICKS_PER_REV * COMPLETE_TURN_ROTS);
 
         //turn robot a certain amount of degrees
@@ -48,14 +60,12 @@ public class trajectory {
         motors[0] = motors[3] -= (strafeBLOCK * dm.driveMode * BLOCK_LENGTH);
 
         //return calculation results from pipeline for use in code
-        addToSegmentList(seg);
+        segment seg = new segment(motors, duration, targetVelocity);
+        segmentList.add(seg);
+        return this;
     }
 
     public void executeSegmentList() {
-
-    }
-
-    private void addToSegmentList(segment seg) {
 
     }
 }

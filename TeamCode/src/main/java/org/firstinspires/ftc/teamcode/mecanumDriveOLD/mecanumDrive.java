@@ -32,7 +32,7 @@ import org.firstinspires.ftc.teamcode.mecanumDriveOLD.pathSegment.pathSegment;
 *
 * **FURTHER READING**
 * All robot movements that are used in this class are based on GM0's mecanum drive
-* documentation at
+* documentation.md at
 * https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html
 */
 public class mecanumDrive {
