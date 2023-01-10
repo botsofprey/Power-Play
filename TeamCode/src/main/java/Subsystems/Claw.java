@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Claw {
-    private final Servo claw;
+    private Servo claw;
     public static final double CLOSE_POSITION = 0, OPEN_POSITION = 1;
 
     public Claw(HardwareMap hardwareMap){

@@ -116,7 +116,6 @@ public class AutonomousTest2 extends LinearOpMode {
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Current State", odometry.getCurrentMovement());
             telemetry.addData("Powers", drive.getPowers());
 
             con.update();

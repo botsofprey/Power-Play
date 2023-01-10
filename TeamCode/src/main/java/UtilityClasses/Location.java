@@ -83,4 +83,10 @@ public class Location {
         return distanceBetween(other) < 1 && compareHeading(other, angleOffset);
     }
 
+    public String toString(){
+        return Math.round(x) + ", " +
+        Math.round(y) + ", " +
+        Math.round(angle) + ", ";
+    }
+
 }
