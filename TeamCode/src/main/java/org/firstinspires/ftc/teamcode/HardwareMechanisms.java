@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
-import com.acmerobotics.roadrunner.control.PIDFController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -18,9 +16,6 @@ import java.util.ArrayList;
  * This class acts as a common way for the codes to access and interact with the robot's hardware
  */
 public class HardwareMechanisms {
-
-    PIDCoefficients coeffs = new PIDCoefficients(0.01, 0, 0);
-    PIDFController controller = new PIDFController(coeffs);
 
     MecanumDrive drive = new MecanumDrive();
 
@@ -40,7 +35,7 @@ public class HardwareMechanisms {
 //        limitSwitch = hwMap.get(TouchSensor.class, "limitSwitch");
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         imu.initialize(parameters);
     }
@@ -49,23 +44,14 @@ public class HardwareMechanisms {
         return lift.getCurrentPosition();
     }
 
-    public void setLiftPower(double liftPower) {
-        lift.setPower(liftPower);
-    }
-
     /**
-     * A method used to control the lift using PIDF control
+     * A method used to control the lift using Run To Position
      *
      * @param position The target position
      */
     public void setLift(int position) {
-        controller.setTargetPosition(position);
-        double correction = controller.update(getLift());
-        setLiftPower(correction);
-    }
-
-    public double getClaw() {
-        return claw.getPosition();
+        lift.setTargetPosition(position);
+        lift.setPower(1);
     }
 
     /**
