@@ -9,19 +9,19 @@ public class HeightsList { //heights are all in tics
     /**
      * An int used to represent the tic value of the lift at the height of the low junction, it is subject to change based off of the lift
      */
-    int lowJunction = 2049;
+    int lowJunction = 683;
     /**
      * An int used to represent the tic value of the lift at the height of the medium junction, it is subject to change based off of the lift
      */
-    int midJunction = 3172;
+    int midJunction = 1366;
     /**
      * An int used to represent the tic value of the lift at the height of the high junction, it is subject to change based off of the lift
      */
-    int highJunction = 4265;
+    int highJunction = 2049;
     /**
      * An int used to represent the tic value at the the height of the ground junction, it is subject to change based of the lift
      */
-    int groundJunction = 926;
+    int groundJunction = 400;
 
     //cone stack heights:
     /**

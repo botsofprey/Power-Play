@@ -30,11 +30,14 @@ public class HardwareMechanisms {
 
     static BNO055IMU imu;
 
+//    TouchSensor limitSwitch;
+
     public void init(HardwareMap hwMap) {
         drive.init(hwMap);
         lift = hwMap.dcMotor.get("lift");
         claw = hwMap.servo.get("claw");
         imu = hwMap.get(BNO055IMU.class, "imu");
+//        limitSwitch = hwMap.get(TouchSensor.class, "limitSwitch");
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -59,9 +62,6 @@ public class HardwareMechanisms {
         controller.setTargetPosition(position);
         double correction = controller.update(getLift());
         setLiftPower(correction);
-        if ((lift.getPower() < 0.1) && !(position - getLift() == 0)) {
-            setLiftPower(0.1 * Math.signum(lift.getPower()));
-        }
     }
 
     public double getClaw() {
@@ -91,6 +91,10 @@ public class HardwareMechanisms {
     public double getNormalizedDegrees() {
         return AngleUnit.normalizeDegrees((getHeading(AngleUnit.RADIANS) * 180) / Math.PI);
     }
+
+//    public boolean getLimitSwitch() {
+//        return limitSwitch.isPressed();
+//    }
 
     /**
      * The method used in our TestWiring class, it builds off the TestItem, TestMotor, and TestServo classes
