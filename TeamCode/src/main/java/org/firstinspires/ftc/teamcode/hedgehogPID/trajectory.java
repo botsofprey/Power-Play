@@ -4,23 +4,10 @@ import org.firstinspires.ftc.teamcode.autoAndTeleOpDriveClasses.driveMode;
 
 import static org.firstinspires.ftc.teamcode.hedgehogPID.driveConstants.BLOCK_LENGTH;
 import static org.firstinspires.ftc.teamcode.hedgehogPID.driveConstants.COMPLETE_TURN_ROTS;
+import static org.firstinspires.ftc.teamcode.hedgehogPID.driveConstants.MAX_VELOCITY;
 import static org.firstinspires.ftc.teamcode.hedgehogPID.driveConstants.TICKS_PER_REV;
 
 import java.util.List;
-
-/*
-* This class simultaneously holds all trajectory data, as well as all methods required to create a
-* trajectory. This makes trajectory making very simple in an auto opmode
-*       EX)
-*           //in init()
-*           trajectory example = new trajectory(new driveMode(1, "normal"))
-*               .setSegment(*args*)
-*               .setSegment(*args*)
-*               .setSegment(*args*);
-*
-*           //in loop()
-*           example.executeSegmentList();
-*/
 
 public class trajectory {
     public List<segment> segmentList;
@@ -33,11 +20,13 @@ public class trajectory {
     }
 
     public trajectory setSegment(double forbackBLOCK, double strafeBLOCK, double turnDEG,
-                           double targetVelocity, marker marker) {
+                           double targetVelocityBLOCK, marker marker) {
         double frontLeftMotor  = 0.0,
                frontRightMotor = 0.0,
                backLeftMotor   = 0.0,
                backRightMotor  = 0.0;
+
+        double targetVelocity = Math.min((targetVelocityBLOCK * TICKS_PER_REV), MAX_VELOCITY);
 
         double[] motors = new double[]{frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
 
@@ -59,7 +48,7 @@ public class trajectory {
         motors[1] = motors[2] += (strafeBLOCK * dm.driveMode * BLOCK_LENGTH);
         motors[0] = motors[3] -= (strafeBLOCK * dm.driveMode * BLOCK_LENGTH);
 
-        //return calculation results from pipeline for use in code
+        //return calculation results and
         segment seg = new segment(motors, duration, targetVelocity);
         segmentList.add(seg);
         return this;
