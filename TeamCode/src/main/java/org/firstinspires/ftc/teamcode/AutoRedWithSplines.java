@@ -7,7 +7,6 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
@@ -100,7 +99,7 @@ public class AutoRedWithSplines extends OpMode {
     @Override
     public void stop() {
         autocam.destroyCameraInstance();
-        StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
+//        StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
     }
 }
 
