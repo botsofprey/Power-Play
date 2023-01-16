@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -16,6 +17,7 @@ import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
 
+@Autonomous
 public class AutoBlueLeft extends OpMode {
 
     //prototype objects to be created
@@ -41,7 +43,8 @@ public class AutoBlueLeft extends OpMode {
             forward19,
             left17,
             forward17,
-            toConeStack;
+            preLoad,
+    test;
 
     @Override
     public void init() {
@@ -61,8 +64,13 @@ public class AutoBlueLeft extends OpMode {
         //set the pipeline for the camera
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
-        //toConeStack = mecanumDrive.trajectoryBuilder(new Pose2d(locations.))
-        //        .splineTo(new Vector2d())
+        preLoad = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
+                .splineTo(new Vector2d(locations.leftHighJunc.getX() + 12,
+                                       locations.leftHighJunc.getY() + 12), 135)
+                .build();
+
+        test = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
+                .lineTo(new Vector2d(12,12)).build();
 
         right19 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeRight(24).build();
         forward19 = mecanumDrive.trajectoryBuilder(right19.end()).forward(24).build();
@@ -89,8 +97,8 @@ public class AutoBlueLeft extends OpMode {
         else {
             telemetry.addLine("No tag found.");
         }
-
-        //end
+        mecanumDrive.followTrajectory(test);
+        /*//end
         if (tagOfInterest == 17) {
             mecanumDrive.followTrajectory(left17);
             mecanumDrive.followTrajectory(forward17);
@@ -102,7 +110,7 @@ public class AutoBlueLeft extends OpMode {
             mecanumDrive.followTrajectory(right19);
             mecanumDrive.followTrajectory(forward19);
         }
-        StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
+        StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS); */
     }
 
     @Override
