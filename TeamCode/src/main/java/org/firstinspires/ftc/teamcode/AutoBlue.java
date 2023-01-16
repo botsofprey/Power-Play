@@ -90,12 +90,12 @@ public class AutoBlue extends OpMode {
         else {
             telemetry.addLine("No tag found.");
         }
+        StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
     }
 
     @Override
     public void stop() {
         autocam.destroyCameraInstance();
-        //StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
     }
 }
 
