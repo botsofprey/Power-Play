@@ -23,6 +23,7 @@ public abstract class GridMovement extends LinearOpMode {
     public int getX() {
         return x;
     }
+    //some stuff i thought might be important
     public void gridMovement(@NonNull Vector2D movement, Location current){
         double xMovement = 0, yMovement = 0;
 
