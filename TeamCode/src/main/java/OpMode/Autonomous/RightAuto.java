@@ -196,7 +196,7 @@ public class RightAuto extends LinearOpMode {
             sleep(1000);
 
             //Backs away from cone stack before turning
-            odometry.setTargetPoint(tile*2, 38, 90, true);
+            odometry.setTargetPoint(tile*2, 32, 92, true);
             whileMoving(0);
 
             //Turns toward high junction
@@ -280,6 +280,10 @@ public class RightAuto extends LinearOpMode {
     private void updatePosition(){
         ReadWriteFile.writeFile(startFile, odometry.getLocation());
         System.out.println("Positions of bot: " + ReadWriteFile.readFile(startFile));
+    }
+
+    private double getTile(int numOfTiles){
+        return (numOfTiles * tile) + (numOfTiles * 2.54);
     }
 }
 
