@@ -43,7 +43,7 @@ public class AutoBlueLeft extends LinearOpMode {
             left17,
             forward17,
             preLoad,
-    test;
+            test;
 
     @Override
     public void runOpMode() {
@@ -71,7 +71,7 @@ public class AutoBlueLeft extends LinearOpMode {
                 .build();
 
         test = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
-                .lineTo(new Vector2d(12,12)).build();
+                .lineTo(new Vector2d(12, 12)).build();
 
         right19 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeRight(24).build();
         forward19 = mecanumDrive.trajectoryBuilder(right19.end()).forward(24).build();
@@ -79,38 +79,40 @@ public class AutoBlueLeft extends LinearOpMode {
         left17 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeLeft(24).build();
         forward17 = mecanumDrive.trajectoryBuilder(left17.end()).forward(24).build();
 
+        waitForStart();
 
-        tagData = null;
-        ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
+        while (opModeIsActive() && !isStopRequested()) {
+            tagData = null;
+            ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
 
-        if(currentDetections.size() != 0) {
-            for (AprilTagDetection tag : currentDetections) {
-                if (tag.id >= 17 || tag.id <= 19) {
-                    tagOfInterest = tag.id;
-                    telemetry.addData("Tag of interest", tagOfInterest);
-                    telemetry.addData("Tag data", tag.toString());
-                    break;
+            if (currentDetections.size() != 0) {
+                for (AprilTagDetection tag : currentDetections) {
+                    if (tag.id >= 17 || tag.id <= 19) {
+                        tagOfInterest = tag.id;
+                        telemetry.addData("Tag of interest", tagOfInterest);
+                        telemetry.addData("Tag data", tag.toString());
+                        break;
+                    }
                 }
+            } else {
+                telemetry.addLine("No tag found.");
             }
-        }
-        else {
-            telemetry.addLine("No tag found.");
-        }
-        mecanumDrive.followTrajectory(test);
-        /*//end
-        if (tagOfInterest == 17) {
-            mecanumDrive.followTrajectory(left17);
-            mecanumDrive.followTrajectory(forward17);
-        }
-        if (tagOfInterest == 18) {
-            mecanumDrive.followTrajectory(forward18);
-        }
-        if (tagOfInterest == 19) {
-            mecanumDrive.followTrajectory(right19);
-            mecanumDrive.followTrajectory(forward19);
-        }
-        StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS); */
+            mecanumDrive.followTrajectory(test);
+            /*//end
+            if (tagOfInterest == 17) {
+                mecanumDrive.followTrajectory(left17);
+                mecanumDrive.followTrajectory(forward17);
+            }
+            if (tagOfInterest == 18) {
+                mecanumDrive.followTrajectory(forward18);
+            }
+            if (tagOfInterest == 19) {
+                mecanumDrive.followTrajectory(right19);
+                mecanumDrive.followTrajectory(forward19);
+            }
+            StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS); */
 
-        autocam.destroyCameraInstance();
+            autocam.destroyCameraInstance();
+        }
     }
 }
