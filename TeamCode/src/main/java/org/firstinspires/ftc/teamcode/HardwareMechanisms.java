@@ -32,7 +32,6 @@ public class HardwareMechanisms {
         lift = hwMap.dcMotor.get("lift");
         claw = hwMap.servo.get("claw");
         imu = hwMap.get(BNO055IMU.class, "imu");
-//        limitSwitch = hwMap.get(TouchSensor.class, "limitSwitch");
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setTargetPosition(0);
