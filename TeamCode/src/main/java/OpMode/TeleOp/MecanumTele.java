@@ -57,7 +57,13 @@ public class MecanumTele extends LinearOpMode {
 
         negateScoring = Objects.equals(ReadWriteFile.readFile(sideFile), "R") ? 1 : -1;
 
-        waitForStart();
+        while(!isStarted() && !isStopRequested()){
+            controller1.update();
+
+            if(controller1.startPressed){
+                odometry.changeStartLocation(new Location(0,0));
+            }
+        }
 
         while (opModeIsActive()) {
             //Checks for new inputs
@@ -66,16 +72,21 @@ public class MecanumTele extends LinearOpMode {
 
             //Check that override can be stopped
             if(overrideDrivers){
-                if (odometry.atTarget() && !scoring || (controller1.bPressed || controller2.bPressed)) {
+
+                if (odometry.atTarget() && !scoring || odometry.atTargetAngle() && !scoring
+                        || (controller1.bPressed || controller2.bPressed)) {
+                    telemetry.addData("Drivers", "Overridden");
+                    telemetry.addData("Press B to cancel", 0);
                     overrideDrivers = false;
                     odometry.cancelTarget();
                 }
             }
 
             //Automatic scoring
-            if(controller1.downPressed)
-                scoring = !scoring;
+            //if(controller1.downPressed)
+            //    scoring = !scoring;
 
+            //automatic scoring from substation to high junction
             while(scoring && !(controller1.bPressed || controller2.bPressed)){
                 odometry.setTargetPoint(0, -60 * negateScoring, 180 * negateScoring);
                 whileMoving(1);
@@ -84,6 +95,7 @@ public class MecanumTele extends LinearOpMode {
                 whileMoving(1);
             }
 
+            //Turns the robot to the nearest next 90 degree
             if (controller1.leftPressed) {
                 odometry.next90degrees(-1);
                 overrideDrivers = true;
@@ -92,13 +104,19 @@ public class MecanumTele extends LinearOpMode {
                 overrideDrivers = true;
             }
 
+            //slows robot
             drive.slowMode(controller1.leftTriggerHeld);
 
             telemetry.addData("Slow mode", controller1.leftTriggerHeld);
 
+            //enables/disables grid movement
+            if(controller1.leftTriggerPressed)
+                grid = !grid;
+
             //Driver 1 uses joysticks for movement, duh
             if (!overrideDrivers) {
                 if(!grid) {
+                    //Robot-oriented movement unrestricted
                     Vector2D leftInput = controller1.leftStick,
                             rightInput = controller1.rightStick;
 
@@ -112,11 +130,14 @@ public class MecanumTele extends LinearOpMode {
                             newForward - newRight - rotate
                     );
                 }else{
+                    // Robot stays in the center of the tile as it moves
                     drive.gridMovement(controller1.leftStick, odometry.getLocationClass());
+
+                    telemetry.addData("Forward", Math.sin(drive.getRadians() * controller1.leftStick.y));
+                    telemetry.addData("Strafe", Math.cos(drive.getRadians() * controller1.leftStick.x));
                 }
 
-                 /*
-                drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);*/
+                //drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
             }
 
 
@@ -135,7 +156,7 @@ public class MecanumTele extends LinearOpMode {
                 liftPreset -= 1;
             }
 
-            //Driver 2 uses triggers to control lift
+            //Driver 2 uses triggers to control manually lift
             if(liftPreset == 0) {
                 if (controller2.rightTriggerHeld) {
                     lift.setPower(controller2.rightTrigger);
@@ -251,6 +272,7 @@ public class MecanumTele extends LinearOpMode {
         }
     }
 
+    //Setting start position for Tele based on Auto end position
     private Location settingStart(String lString){
         String[] pos = lString.split(", ");
 
