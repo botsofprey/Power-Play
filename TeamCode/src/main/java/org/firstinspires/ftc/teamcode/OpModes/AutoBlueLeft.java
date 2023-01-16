@@ -72,7 +72,7 @@ public class AutoBlueLeft extends OpMode {
                 .build();
 
         test = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
-                .lineTo(new Vector2d(-12,12)).build();
+                .lineTo(new Vector2d(12,12)).build();
 
         right19 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeRight(24).build();
         forward19 = mecanumDrive.trajectoryBuilder(right19.end()).forward(24).build();
