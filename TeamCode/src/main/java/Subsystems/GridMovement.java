@@ -63,9 +63,35 @@ public abstract class GridMovement extends LinearOpMode {
         //x=>0.0 && y =0.0;
         return ;
     }
+    //ok so this is supposed to align the robot to the center of the tiles, no matter where it is
+    //so here goes everything confuzzling
+
+    /*
+    Positions of the center of the tiles (y,x)
+    it actually shouldnt be zero, it supposed to be the current x position
+    the majority of these arent gonna actually be on da field but it kinda depends
+    on where da robot starts
+    (0,-300)
+    (0,-240)
+    (0,-180)
+    (0,-120)
+    (0,-60)
+    (0,0)
+    (0,60)
+    (0,120)
+    (0,180)
+    (0,240)
+    (0,300)
+     */
 
     private void when() {
-
     }
-
 }
+
+
+/*not really sure how to make the grid but here goes everything
+class Grid {
+    public Grid(int x, int y) {
+        (0.0, 0.0);
+    }
+}*/
