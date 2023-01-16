@@ -3,7 +3,6 @@ package Subsystems;
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import UtilityClasses.Location;
 import UtilityClasses.PidController;
@@ -59,7 +58,7 @@ public abstract class GridMovement extends LinearOpMode {
     //also if x=0 still y=0
     //but if y is moving, x is whateves idk
     public GridMovement (double y, double x) {
-        while(x=>0.0) && y==0.0;
+        while(x>=0.0 && y==0.0);
         //x=>0.0 && y =0.0;
         return ;
     }
