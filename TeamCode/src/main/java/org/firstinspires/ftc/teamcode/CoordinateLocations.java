@@ -12,7 +12,7 @@ public class CoordinateLocations {
    Pose2d leftBlueStart  = new Pose2d(0, startY, 180), //Quadrant 1
           rightBlueStart = new Pose2d(-0, startY, 180), //Quadrant 2
           leftRedStart   = new Pose2d(-0, -startY, 0), //Quadrant 3
-          rightRedStart  = new Pose2d(0, -startY, 0); //Quadrant 4
+          rightRedStart  = new Pose2d(28.5, -startY, 0); //Quadrant 4
 
    //cone stack coordinates:
    Vector2d leftBlueConeStack  = new Vector2d(66, -12), //Quadrant 1
