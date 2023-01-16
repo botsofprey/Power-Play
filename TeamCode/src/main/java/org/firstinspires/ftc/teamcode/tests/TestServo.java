@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.tests;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.tests.TestItem;
 
 public class TestServo extends TestItem {
     private Servo servo;

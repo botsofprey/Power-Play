@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.tests;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.tests.TestItem;
 
 public class TestMotor extends TestItem {
     private double speed;

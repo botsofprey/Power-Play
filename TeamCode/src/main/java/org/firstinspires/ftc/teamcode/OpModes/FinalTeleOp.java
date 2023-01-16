@@ -125,11 +125,11 @@ public class FinalTeleOp extends OpMode {
         if (!presetLiftHeightsMode) { //manual lift
             //the right trigger makes the lift go up and the left trigger makes the lift go down
             if (board.getLift() <= 0) {
-                targetPositionManualControl += (int) gamepad2.right_trigger * 50;
+                targetPositionManualControl += gamepad2.right_trigger * 30;
             } else if (board.getLift() <= heights.highJunction) {
-                targetPositionManualControl += (int) ((gamepad2.right_trigger - gamepad2.left_trigger) * 50);
+                targetPositionManualControl += (gamepad2.right_trigger - gamepad2.left_trigger) * 30;
             } else {
-                targetPositionManualControl -= (int) gamepad2.left_trigger * 50;
+                targetPositionManualControl -=gamepad2.left_trigger * 30;
             }
             if (targetPositionManualControl < 0) { //keeps the lift from going below 0
                 targetPositionManualControl = 0;
