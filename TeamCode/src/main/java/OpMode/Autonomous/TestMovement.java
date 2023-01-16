@@ -1,15 +1,12 @@
 package OpMode.Autonomous;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import DriveEngine.MecanumDrive;
 import Subsystems.threeWheelOdometry;
 import UtilityClasses.Controller;
 import UtilityClasses.Location;
-import UtilityClasses.Vector2D;
 
-@Autonomous
 public class TestMovement extends LinearOpMode {
 
     @Override
