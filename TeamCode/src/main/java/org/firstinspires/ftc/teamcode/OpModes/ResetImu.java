@@ -7,7 +7,8 @@ import org.firstinspires.ftc.teamcode.vars.StaticImu;
 
 @TeleOp()
 public class ResetImu extends OpMode {
-    public void init() {
+
+    public void init () {
         StaticImu.imuStatic = 0;
     }
 
