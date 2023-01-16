@@ -35,6 +35,8 @@ public class HardwareMechanisms {
 //        limitSwitch = hwMap.get(TouchSensor.class, "limitSwitch");
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift.setTargetPosition(0);
+        lift.setPower(0);
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         imu.initialize(parameters);
