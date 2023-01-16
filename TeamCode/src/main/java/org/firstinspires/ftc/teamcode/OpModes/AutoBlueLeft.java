@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.mechanisms.HardwareMechanisms;
@@ -16,7 +17,7 @@ import org.openftc.apriltag.AprilTagDetection;
 import java.util.ArrayList;
 
 @Autonomous
-public class AutoBlueLeft extends OpMode {
+public class AutoBlueLeft extends LinearOpMode {
 
     //prototype objects to be created
     cameraControl autocam;
@@ -45,7 +46,7 @@ public class AutoBlueLeft extends OpMode {
     test;
 
     @Override
-    public void init() {
+    public void runOpMode() {
         //allocate memory for objects
         tagData = new AprilTagDetection();
         autocam = new cameraControl();
@@ -66,7 +67,7 @@ public class AutoBlueLeft extends OpMode {
 
         preLoad = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
                 .splineTo(new Vector2d(locations.leftHighJunc.getX() + 12,
-                                       locations.leftHighJunc.getY() + 12), 135)
+                        locations.leftHighJunc.getY() + 12), 135)
                 .build();
 
         test = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
@@ -77,10 +78,8 @@ public class AutoBlueLeft extends OpMode {
         forward18 = mecanumDrive.trajectoryBuilder(new Pose2d()).forward(24).build();
         left17 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeLeft(24).build();
         forward17 = mecanumDrive.trajectoryBuilder(left17.end()).forward(24).build();
-    }
 
-    @Override
-    public void loop() {
+
         tagData = null;
         ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
 
@@ -111,10 +110,7 @@ public class AutoBlueLeft extends OpMode {
             mecanumDrive.followTrajectory(forward19);
         }
         StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS); */
-    }
 
-    @Override
-    public void stop() {
-            autocam.destroyCameraInstance();
+        autocam.destroyCameraInstance();
     }
 }
