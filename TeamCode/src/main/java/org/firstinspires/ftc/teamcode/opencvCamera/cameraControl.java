@@ -49,7 +49,8 @@ public class  cameraControl{
     }
 
     public void destroyCameraInstance() {
-        camera.stopStreaming();
+        if (camera != null)
+            camera.stopStreaming();
         camera = null;
         webcamName = null;
         System.gc();
