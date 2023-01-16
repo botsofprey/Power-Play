@@ -9,7 +9,7 @@ public class CoordinateLocations {
    double startY = 63.75;
 
    //Starting positions for robot
-   public Pose2d leftBlueStart  = new Pose2d(36, startY, 180), //Quadrant 1
+   public Pose2d leftBlueStart  = new Pose2d(-36, startY, 180), //Quadrant 1
                  rightBlueStart = new Pose2d(-0, startY, 180), //Quadrant 2
                  leftRedStart   = new Pose2d(-0, -startY, 0), //Quadrant 3
                  rightRedStart  = new Pose2d(28.5, -startY, 0); //Quadrant 4
@@ -21,7 +21,7 @@ public class CoordinateLocations {
                    rightRedConeStack  = new Vector2d(66, -12); //Quadrant 4
 
    //Junction coordinates
-   public Vector2d leftHighJunc          = new Vector2d(24, 0),
+   public Vector2d leftHighJunc          = new Vector2d(-24, 0),
                    rightHighJunc         = new Vector2d(),
                    topHighJunc           = new Vector2d(),
                    bottomHighJunc        = new Vector2d(),

@@ -64,13 +64,15 @@ public class AutoBlueLeft extends OpMode {
         //set the pipeline for the camera
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
+        mecanumDrive.setPoseEstimate(locations.leftBlueStart);
+
         preLoad = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
                 .splineTo(new Vector2d(locations.leftHighJunc.getX() + 12,
                                        locations.leftHighJunc.getY() + 12), 135)
                 .build();
 
         test = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
-                .lineTo(new Vector2d(12,12)).build();
+                .lineTo(new Vector2d(-12,12)).build();
 
         right19 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeRight(24).build();
         forward19 = mecanumDrive.trajectoryBuilder(right19.end()).forward(24).build();
