@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OpModes;
 //general imports
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -7,15 +7,18 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.mechanisms.HardwareMechanisms;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
+import org.firstinspires.ftc.teamcode.vars.StaticImu;
 import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
 
 @Autonomous()
-public class AutoRedWithSplines extends OpMode {
+public class AutoBlueLeft extends OpMode {
     //remember: System.currentTimeMillis();
     //prototype objects to be created
     cameraControl autocam;
@@ -35,7 +38,12 @@ public class AutoRedWithSplines extends OpMode {
     double cx = 402.145;
     double cy = 221.506;
 
-    Trajectory trajectory17, trajectory18, trajectory19;
+    Trajectory right19,
+               forward18,
+               forward19,
+               left17,
+               forward17,
+               toConeStack;
 
     @Override
     public void init() {
@@ -54,17 +62,14 @@ public class AutoRedWithSplines extends OpMode {
         //set the pipeline for the camera
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
-        trajectory19 = mecanumDrive.trajectoryBuilder(
-                        new Pose2d())
-                .splineTo(new Vector2d(0, -24), Math.toRadians(0))
-                .splineTo(new Vector2d(24, -24), Math.toRadians(0))
-                .build();
-        trajectory18 = mecanumDrive.trajectoryBuilder(new Pose2d()).forward(24).build();
-        trajectory17 = mecanumDrive.trajectoryBuilder(
-                        new Pose2d())
-                .splineTo(new Vector2d(0, 24), Math.toRadians(0))
-                .splineTo(new Vector2d(24, 24), Math.toRadians(0))
-                .build();
+        toConeStack = mecanumDrive.trajectoryBuilder(new Pose2d(-36, -72))
+                .splineTo(new Vector2d())
+
+        right19 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeRight(24).build();
+        forward19 = mecanumDrive.trajectoryBuilder(right19.end()).forward(24).build();
+        forward18 = mecanumDrive.trajectoryBuilder(new Pose2d()).forward(24).build();
+        left17 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeLeft(24).build();
+        forward17 = mecanumDrive.trajectoryBuilder(left17.end()).forward(24).build();
     }
 
     @Override
@@ -72,12 +77,12 @@ public class AutoRedWithSplines extends OpMode {
         tagData = null;
         ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
 
-        if (currentDetections.size() != 0) {
+        if(currentDetections.size() != 0) {
             for (AprilTagDetection tag : currentDetections) {
                 if (tag.id >= 17 || tag.id <= 19) {
                     tagOfInterest = tag.id;
                     telemetry.addData("Tag of interest", tagOfInterest);
-                    telemetry.addData("Tag data", tagData);
+                    telemetry.addData("Tag data", tag.toString());
                     break;
                 }
             }
@@ -88,24 +93,22 @@ public class AutoRedWithSplines extends OpMode {
 
         //end
         if (tagOfInterest == 17) {
-            mecanumDrive.followTrajectory(trajectory17);
-            mecanumDrive.update();
+            mecanumDrive.followTrajectory(left17);
+            mecanumDrive.followTrajectory(forward17);
         }
         if (tagOfInterest == 18) {
-            mecanumDrive.followTrajectory(trajectory18);
-            mecanumDrive.update();
+            mecanumDrive.followTrajectory(forward18);
         }
         if (tagOfInterest == 19) {
-            mecanumDrive.followTrajectory(trajectory19);
-            mecanumDrive.update();
+            mecanumDrive.followTrajectory(right19);
+            mecanumDrive.followTrajectory(forward19);
         }
+        StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
     }
 
     @Override
     public void stop() {
         autocam.destroyCameraInstance();
-//        StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
     }
 }
-
 

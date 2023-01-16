@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.HardwareMechanisms;
+import org.firstinspires.ftc.teamcode.mechanisms.HardwareMechanisms;
 import org.firstinspires.ftc.teamcode.vars.HeightsList;
-import org.firstinspires.ftc.teamcode.StaticImu;
+import org.firstinspires.ftc.teamcode.vars.StaticImu;
 
 /**
  * This is the combination of all of our TeleOp codes into one

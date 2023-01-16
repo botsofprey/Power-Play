@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.vars;
 
 /**
  * A class for storing the static double imuStatic
