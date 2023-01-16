@@ -81,7 +81,7 @@ public class AutoBlueLeft extends LinearOpMode {
 
         waitForStart();
 
-        while (opModeIsActive() && !isStopRequested()) {
+        if(opModeIsActive() && !isStopRequested()) {
             tagData = null;
             ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
 
