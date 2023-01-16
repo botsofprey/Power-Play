@@ -79,8 +79,6 @@ public class AutoRedWithSplines extends OpMode {
                     telemetry.addData("Tag of interest", tagOfInterest);
                     telemetry.addData("Tag data", tagData);
                     break;
-                } else {
-                    telemetry.addLine("No tag found.");
                 }
                 if (tagOfInterest == 17) {
                     mecanumDrive.followTrajectory(trajectory17);
@@ -93,6 +91,9 @@ public class AutoRedWithSplines extends OpMode {
                     mecanumDrive.followTrajectory(trajectory19);
                 }
             }
+        }
+        else {
+            telemetry.addLine("No tag found.");
         }
     }
 

@@ -74,9 +74,6 @@ public class AutoBlue extends OpMode {
                     telemetry.addData("Tag data", tag.toString());
                     break;
                 }
-                else {
-                    telemetry.addLine("No tag found.");
-                }
                 if (tagOfInterest == 17) {
                     mecanumDrive.followTrajectory(left17);
                     mecanumDrive.followTrajectory(forward17);
@@ -89,6 +86,9 @@ public class AutoBlue extends OpMode {
                     mecanumDrive.followTrajectory(forward19);
                 }
             }
+        }
+        else {
+            telemetry.addLine("No tag found.");
         }
     }
 
