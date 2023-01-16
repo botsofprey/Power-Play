@@ -68,8 +68,7 @@ public class auto extends OpMode {
             parkIf17         = new trajectory(new driveMode(1, "normal"))
                                .setSegment(0, 0, 0, 0, new marker())
                                .setSegment(0, 0, 0, 0, new marker())
-                               .setSegment(0, 0, 0, 0, new marker())
-                               .build();
+                               .setSegment(0, 0, 0, 0, new marker());
 
             //Trajectory to park in a designated area if the robot detects apriltag no. 18
             parkIf18         = new trajectory(new driveMode(1, "normal"));

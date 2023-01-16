@@ -23,10 +23,12 @@ public class driveConstants {
     //
     public static final double MAX_ANGULAR_ACCELERATION = 0;
     //
-    public static final double kV = 0;
+    public static final double kP = 0;
     //
-    public static final double kA = 0;
+    public static final double kI = 0;
     //
-    public static final double kSTATIC = 0;
+    public static final double kD = 0;
+    //
+    public static final double MOTOR_ODOM_TICK_PROPORTION = 0;
 
 }
