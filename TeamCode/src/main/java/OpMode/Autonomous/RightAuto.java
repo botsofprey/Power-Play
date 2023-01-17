@@ -55,7 +55,6 @@ public class RightAuto extends LinearOpMode {
 
         drive = new MecanumDrive(hardwareMap, this, 0);
         odometry = new threeWheelOdometry(hardwareMap, new Location(-10.5,13.5), this, drive);
-        //odometry = new threeWheelOdometry(hardwareMap, new Location(0,0), this, drive);
 
         ReadWriteFile.writeFile(sideFile, "R");
 

@@ -250,7 +250,8 @@ public class MecanumTele extends LinearOpMode {
                 double angleToJunction = Math.toDegrees(Math.acos(smallestAbsDif[0]/distanceToJunction));
             }
 
-
+            if(liftPreset != 0)
+                telemetry.addData("Lift Target", lift.getTargetPosition());
             telemetry.addData("Lift preset", liftPreset);
 
             telemetry.addData("Cones", coneNum);

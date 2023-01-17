@@ -3,6 +3,7 @@ package Subsystems;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -153,6 +154,11 @@ public class threeWheelOdometry {
         double angle = meccanumDrive.getAngle() + (negPos * 90);
 
         angle = Math.round(angle/90) * 90;
+
+        if (angle < -180)
+            angle += 360;
+        else if (angle > 180)
+            angle -= 360;
 
         rotateToAngle(angle);
     }
@@ -327,21 +333,10 @@ public class threeWheelOdometry {
 
     }
 
-    /*
-    public double getLeftDistance() {
-        return leftDisSensor.getDistance();
-    }
-
-    public double getRightDistance() {
-        return rightDisSensor.getDistance();
-    }
-
-     */
-
     public String getLocation() {
-        return Math.round(positionLocation.x) + ", " +
-                Math.round(positionLocation.y) + ", " +
-                Math.round(positionLocation.angle);
+        return (Math.round(positionLocation.x * Math.pow(10, 5)) / Math.pow(10, 5)) + ",\n" +
+                (Math.round(positionLocation.y * Math.pow(10, 5)) / Math.pow(10, 5)) + ",\n" +
+                (Math.round(positionLocation.angle * Math.pow(10, 5)) / Math.pow(10, 5));
     }
 
 

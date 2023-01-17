@@ -18,9 +18,14 @@ public class Lift {
     }
 
     public void setPower(double power) {
-        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftMotor.setPower(power);
-        braking = false;
+        if(liftMotor.getCurrentPosition() >= 2899 && power > 0
+                || liftMotor.getCurrentPosition() <= 0 && power < 0){
+            brake();
+        } else {
+            liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            liftMotor.setPower(power);
+            braking = false;
+        }
     }
 
     public void setPosition(int position, double power) {
@@ -65,21 +70,21 @@ public class Lift {
     }
 
     public void ljunction() {
-        liftMotor.setTargetPosition(1185);
+        liftMotor.setTargetPosition(1365);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(1);
         braking = false;
     }
 
     public void mjunction() {
-        liftMotor.setTargetPosition(2100);
+        liftMotor.setTargetPosition(2190);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(1);
         braking = false;
     }
 
     public void hjunction() {
-        liftMotor.setTargetPosition(2850);
+        liftMotor.setTargetPosition(2861);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(1);
         braking = false;
@@ -96,8 +101,10 @@ public class Lift {
         if (limitSwitch.isPressed()) {
             zeroLift();
             if(liftMotor.getPower() < 0){
-                liftMotor.setPower(0);
+                brake();
             }
+        }else if (liftMotor.getCurrentPosition() >= 2899 && liftMotor.getPower() > 0){
+            brake();
         }
 
     }
@@ -113,5 +120,9 @@ public class Lift {
     public boolean isBusy(){
         return liftMotor.isBusy()
                 && Math.abs(liftMotor.getTargetPosition()-liftMotor.getCurrentPosition()) > 300;
+    }
+
+    public int getTargetPosition(){
+        return liftMotor.getTargetPosition();
     }
 }
