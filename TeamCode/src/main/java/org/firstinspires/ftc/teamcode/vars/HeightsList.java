@@ -4,7 +4,9 @@ package org.firstinspires.ftc.teamcode.vars;
  * A class used to store the heights of the junctions and cone stacks for easier access to the values
  */
 public class HeightsList { //heights are all in tics
-
+//calculation values:
+    double currentSpoolDiameter = 47.2;
+    double spoolRatio = (Math.pow(34.27, 2) * Math.PI) / (Math.pow(currentSpoolDiameter, 2) * Math.PI);
     //junction heights:
     /**
      * An int used to represent the tic value of the lift at the height of the low junction, it is subject to change based off of the lift
