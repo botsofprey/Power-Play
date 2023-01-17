@@ -55,6 +55,9 @@ public class trajectory {
     }
 
     public void executeSegmentList() {
-        pid.checkPID();
+        for (int i = 0; i <= segmentList.size(); ++i) {
+            segment currentSeg = segmentList.get(i);
+            pid.checkPID(currentSeg);
+        }
     }
 }
