@@ -71,8 +71,8 @@ public class AutoBlueLeft extends LinearOpMode {
         preLoad = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
                 .lineToLinearHeading(new Pose2d(locations.leftHighJunc.getX() + 5,
                         locations.leftHighJunc.getY() + 5, Math.toRadians(225)))
-                .addTemporalMarker(0.0, () -> {
-                    mpb.lift.setPower(0.5);
+                .addDisplacementMarker(0.0, () -> {
+                    mpb.lift.setPower(1);
                 })
                 .addTemporalMarker(2, () -> {
                     mpb.lift.setPower(0);
