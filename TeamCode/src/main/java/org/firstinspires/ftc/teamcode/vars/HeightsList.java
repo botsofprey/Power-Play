@@ -6,7 +6,7 @@ package org.firstinspires.ftc.teamcode.vars;
 public class HeightsList { //heights are all in tics
 //calculation values:
     double currentSpoolDiameter = 47.2;
-    double spoolRatio = (Math.pow(34.27, 2) * Math.PI) / (Math.pow(currentSpoolDiameter, 2) * Math.PI);
+    double spoolRatio = (Math.pow(47.2, 2) * Math.PI) / (Math.pow(currentSpoolDiameter, 2) * Math.PI);
     //junction heights:
     /**
      * An int used to represent the tic value of the lift at the height of the low junction, it is subject to change based off of the lift
@@ -19,7 +19,7 @@ public class HeightsList { //heights are all in tics
     /**
      * An int used to represent the tic value of the lift at the height of the high junction, it is subject to change based off of the lift
      */
-    public int highJunction = (int) Math.round(1366 * spoolRatio);
+    public int highJunction = (int) Math.round(1700 * spoolRatio);
     /**
      * An int used to represent the tic value at the the height of the ground junction, it is subject to change based of the lift
      */
