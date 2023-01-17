@@ -23,9 +23,9 @@ public class HardwareMechanisms {
 
     MecanumDrive drive = new MecanumDrive();
 
-    DcMotor lift;
+    public DcMotor lift;
 
-    Servo claw;
+    public Servo claw;
 
     static BNO055IMU imu;
 
