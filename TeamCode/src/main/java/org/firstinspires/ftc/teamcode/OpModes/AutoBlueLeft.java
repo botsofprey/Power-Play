@@ -71,23 +71,20 @@ public class AutoBlueLeft extends LinearOpMode {
         mecanumDrive.setPoseEstimate(locations.leftBlueStart);
 
         preLoad1 = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
-                .lineTo(new Vector2d(locations.leftHighJunc.getX() + 12,
-                        locations.leftHighJunc.getY() + 12))
                 .addDisplacementMarker(0.0, () -> {
                     mpb.lift.setPower(1);
                 })
                 .addTemporalMarker(2, () -> {
                     mpb.lift.setTargetPosition(0);
                 })
+                .lineTo(new Vector2d(locations.leftHighJunc.getX() + 12,
+                        locations.leftHighJunc.getY() + 12))
                 .build();
 
         preLoad2 = mecanumDrive.trajectoryBuilder(preLoad1.end().plus(new Pose2d(0, 0, Math.toRadians(-45))))
                 .lineToLinearHeading(new Pose2d(locations.leftHighJunc.getX() + 5,
                                     locations.leftHighJunc.getY() + 5, Math.toRadians(225)))
                 .build();
-
-        test = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
-                .lineTo(new Vector2d(12, 12)).build();
 
         right19 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeRight(24).build();
         forward19 = mecanumDrive.trajectoryBuilder(right19.end()).forward(24).build();
