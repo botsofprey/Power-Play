@@ -5,7 +5,6 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.mechanisms.HardwareMechanisms;
@@ -13,6 +12,7 @@ import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.vars.CoordinateLocations;
+import org.firstinspires.ftc.teamcode.vars.HeightsList;
 import org.firstinspires.ftc.teamcode.vars.StaticImu;
 import org.openftc.apriltag.AprilTagDetection;
 
@@ -44,7 +44,8 @@ public class AutoBlueLeft extends LinearOpMode {
             forward19,
             left17,
             forward17,
-            preLoad,
+            preLoad1,
+            preLoad2,
             test;
 
     @Override
@@ -55,6 +56,7 @@ public class AutoBlueLeft extends LinearOpMode {
         mpb = new HardwareMechanisms();
         locations = new CoordinateLocations();
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
+        HeightsList HL = new HeightsList();
         apriltagpipelineEXAMPLE = new AprilTagPipelineEXAMPLECOPY(tagsize, fx, fy, cx, cy);
 
         //set up any functions or variables needed for program
@@ -68,15 +70,20 @@ public class AutoBlueLeft extends LinearOpMode {
 
         mecanumDrive.setPoseEstimate(locations.leftBlueStart);
 
-        preLoad = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
-                .lineToLinearHeading(new Pose2d(locations.leftHighJunc.getX() + 5,
-                        locations.leftHighJunc.getY() + 5, Math.toRadians(225)))
+        preLoad1 = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
+                .lineTo(new Vector2d(locations.leftHighJunc.getX() + 12,
+                        locations.leftHighJunc.getY() + 12))
                 .addDisplacementMarker(0.0, () -> {
                     mpb.lift.setPower(1);
                 })
                 .addTemporalMarker(2, () -> {
-                    mpb.lift.setPower(0);
+                    mpb.lift.setTargetPosition(0);
                 })
+                .build();
+
+        preLoad2 = mecanumDrive.trajectoryBuilder(preLoad1.end().plus(new Pose2d(0, 0, Math.toRadians(-45))))
+                .lineToLinearHeading(new Pose2d(locations.leftHighJunc.getX() + 5,
+                                    locations.leftHighJunc.getY() + 5, Math.toRadians(225)))
                 .build();
 
         test = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
@@ -91,7 +98,7 @@ public class AutoBlueLeft extends LinearOpMode {
         //tag detection
         tagData = null;
         ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
-
+        mecanumDrive.getPoseEstimate();
         if (currentDetections.size() != 0) {
             for (AprilTagDetection tag : currentDetections) {
                 if (tag.id >= 17 || tag.id <= 19) {
@@ -110,7 +117,12 @@ public class AutoBlueLeft extends LinearOpMode {
 
         if(!isStopRequested() && opModeIsActive()) {
             //begin
-            mecanumDrive.followTrajectory(preLoad);
+            mecanumDrive.followTrajectory(preLoad1);
+            mecanumDrive.updatePoseEstimate();
+            mecanumDrive.turn(Math.toRadians(-45));
+            mecanumDrive.updatePoseEstimate();
+            mecanumDrive.followTrajectory(preLoad2);
+            mecanumDrive.updatePoseEstimate();
 
             //end
             if (tagOfInterest == 17) {
