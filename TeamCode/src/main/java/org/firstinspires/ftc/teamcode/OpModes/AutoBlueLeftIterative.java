@@ -20,10 +20,8 @@ import java.util.ArrayList;
 
 @Autonomous
 public class AutoBlueLeftIterative extends OpMode {
-    cameraControl autocam;
-    AprilTagDetection tagData;
-    HardwareMechanisms mpb;
     SampleMecanumDrive mecanumDrive;
+    AprilTagDetection tagData;
     AprilTagPipelineEXAMPLECOPY apriltagpipelineEXAMPLE;
     int tagOfInterest;
     //set size of tag in meters
@@ -37,18 +35,18 @@ public class AutoBlueLeftIterative extends OpMode {
     Trajectory right19, forward18, forward19, left17, forward17, preLoad, test;
 
     HeightsList heights = new HeightsList();
+    cameraControl autocam = new cameraControl();
+    HardwareMechanisms mpb = new HardwareMechanisms();
     CoordinateLocations coordinateLocations = new CoordinateLocations();
 
     @Override
     public void init() {
         apriltagpipelineEXAMPLE = new AprilTagPipelineEXAMPLECOPY(tagsize, fx, fy, cx, cy);
         tagData = new AprilTagDetection();
-        cameraControl autocam = new cameraControl();
-        HardwareMechanisms mpb = new HardwareMechanisms();
-        SampleMecanumDrive mecanumDrive = new SampleMecanumDrive(hardwareMap);
         //set up any functions or variables needed for program
         //initialize hardware
         mpb.init(hardwareMap);
+        mecanumDrive = new SampleMecanumDrive(hardwareMap);
         //start the camera
         autocam.createCameraInstance(hardwareMap, telemetry);
         //set the pipeline for the camera
@@ -71,7 +69,7 @@ public class AutoBlueLeftIterative extends OpMode {
 
         if (currentDetections.size() != 0) {
             for (AprilTagDetection tag : currentDetections) {
-                if (tag.id >= 17 || tag.id <= 19) {
+                if (tag.id >= 17 && tag.id <= 19) {
                     tagOfInterest = tag.id;
                     telemetry.addData("Tag of interest", tagOfInterest);
                     telemetry.addData("Tag data", tag.toString());
@@ -91,7 +89,6 @@ public class AutoBlueLeftIterative extends OpMode {
 
     public void stop() {
         StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
-
         autocam.destroyCameraInstance();
     }
 }
