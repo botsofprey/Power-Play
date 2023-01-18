@@ -83,15 +83,20 @@ public abstract class GridMovement extends LinearOpMode {
     (0,240)
     (0,300)
      */
-
+    /*if da robot knows where the junctions are, then the robot should be able to drift
+    into the middle of the mat and continue from there
+    the only teeny tiny nonimportant question is
+    how to make this work pls?
+     */
     private void when() {
+        (x>=0.0 && y==-300.0, -240.0, -180.0, -120.0, -60.0, 0.0, 60.0, 120.0, 180.0, 240.0, 300.0);
     }
 }
 
 
-/*not really sure how to make the grid but here goes everything
+//not really sure how to make the grid but here goes everything
 class Grid {
     public Grid(int x, int y) {
-        (0.0, 0.0);
+        (0.0), (0.0);
     }
-}*/
+}
