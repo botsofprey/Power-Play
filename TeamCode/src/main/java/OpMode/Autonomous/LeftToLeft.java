@@ -16,7 +16,7 @@ score it or just bring it with you to the storage triangle thing
      (if scoring prolly on the medium or low or even ground junction)
 reverse back to the original starting position
 go left into the half square
-after it does alot of complicated stuff
+after that it does alot of complicated stuff that hurts my head. i thinks its called math
 wait til the drivers can drive around
 ta-da all done
 */
