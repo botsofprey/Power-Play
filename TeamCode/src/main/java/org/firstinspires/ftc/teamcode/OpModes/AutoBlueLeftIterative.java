@@ -64,21 +64,21 @@ public class AutoBlueLeftIterative extends OpMode {
         tagData = null;
         ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
 
-       while (true) {
-            for (AprilTagDetection tag : currentDetections) {
-                if (tag.id >= 17 && tag.id <= 19) {
-                    tagOfInterest = tag.id;
-                    telemetry.addData("Tag of interest", tagOfInterest);
-                    telemetry.addData("Tag data", tag.toString());
-                    break;
-                } else {
-                    telemetry.addLine("No tag found.");
-                }
-            }
-            if (currentDetections.size() > 0) {
-                break;
-            }
-        }
+//       while (true) {
+//            for (AprilTagDetection tag : currentDetections) {
+//                if (tag.id >= 17 && tag.id <= 19) {
+//                    tagOfInterest = tag.id;
+//                    telemetry.addData("Tag of interest", tagOfInterest);
+//                    telemetry.addData("Tag data", tag.toString());
+//                    break;
+//                } else {
+//                    telemetry.addLine("No tag found.");
+//                }
+//            }
+//            if (currentDetections.size() > 0) {
+//                break;
+//            }
+//        }
     }
 
     @Override
@@ -102,6 +102,7 @@ public class AutoBlueLeftIterative extends OpMode {
             } else if (tagOfInterest == 17) {
                 mecanumDrive.followTrajectoryAsync(park17);
             }
+            mpb.sleep(1000);
             step++;
         } else if (step == 3) {
             mecanumDrive.update();
@@ -116,6 +117,6 @@ public class AutoBlueLeftIterative extends OpMode {
 
     public void stop() {
         StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
-        autocam.destroyCameraInstance();
+//        autocam.destroyCameraInstance();
     }
 }
