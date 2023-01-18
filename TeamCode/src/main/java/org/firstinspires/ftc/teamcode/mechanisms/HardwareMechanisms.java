@@ -9,10 +9,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.vars.StaticImu;
 import org.firstinspires.ftc.teamcode.tests.TestItem;
 import org.firstinspires.ftc.teamcode.tests.TestMotor;
 import org.firstinspires.ftc.teamcode.tests.TestServo;
+import org.firstinspires.ftc.teamcode.vars.StaticImu;
 
 import java.util.ArrayList;
 
@@ -68,6 +68,10 @@ public class HardwareMechanisms {
         claw.setPosition(clawPosit);
     }
 
+    public double getClaw() {
+        return claw.getPosition();
+    }
+
     /**
      * A method that obtains the imu's heading
      *
@@ -81,6 +85,13 @@ public class HardwareMechanisms {
 
     public double getNormalizedDegrees() {
         return AngleUnit.normalizeDegrees((getHeading(AngleUnit.RADIANS) * 180) / Math.PI);
+    }
+
+    public void sleep(long miliseconds) {
+        long start = System.currentTimeMillis();
+        while (System.currentTimeMillis() - start < miliseconds) {
+            Thread.yield();
+        }
     }
 
 //    public boolean getLimitSwitch() {
