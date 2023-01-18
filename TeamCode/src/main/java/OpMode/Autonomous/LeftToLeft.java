@@ -62,17 +62,17 @@ public abstract class LeftToLeft extends LinearOpMode {
                     this, drive) {
                 @Override
                 public String leftEncoder() {
-                    return null;
+                    return leftEncoder();
                 }
 
                 @Override
                 public String rightEncoder() {
-                    return null;
+                    return rightEncoder();
                 }
 
                 @Override
                 public String frontEncoder() {
-                    return null;
+                    return frontEncoder();
                 }
 
                 @Override
@@ -93,15 +93,16 @@ public abstract class LeftToLeft extends LinearOpMode {
             telemetry.addLine();
         }
         Location[] parkingLocations = {
+                //robot starts at (0,-6)
                 new Location (1), //= (60, -60), // tha 1st parking spot
                 new Location (2), //= (60, 0), //tha 2nd parking spot
                 new Location (3), //= (60, 60), //tha 3rd parking spot
-                new Location (4) //= (0, 90)
+                new Location (4) //= (0, 90)//terminal
         };
 
         boolean tagFound;
 
-        int getParking; //but how
+        int getParking; //but how tis da question
 
         //parking space time
         telemetry.addData("Tag found", camera.tagFound());
@@ -125,6 +126,11 @@ public abstract class LeftToLeft extends LinearOpMode {
             telemetry.update();
             //ok did it score?
             //prolly not
+            //prolly cause i didnt even write the code for it to move
         }
+    }
+    public void done(){
+        isStopRequested();
+        sleep(50000000);
     }
 }

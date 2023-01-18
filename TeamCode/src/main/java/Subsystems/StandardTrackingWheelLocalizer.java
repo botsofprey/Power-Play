@@ -34,7 +34,8 @@ public abstract class StandardTrackingWheelLocalizer extends ThreeTrackingWheelL
     public Object moveToTargetPostion;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public StandardTrackingWheelLocalizer(HardwareMap hardwareMap, Location location, LeftToLeft leftToLeft, MecanumDrive drive) throws Throwable {
+    public StandardTrackingWheelLocalizer(HardwareMap hardwareMap, Location location, LeftToLeft
+            leftToLeft, MecanumDrive drive) throws Throwable {
         super(Arrays.asList(
                 new Pose2d(0, LATERAL_DISTANCE / 2, 0),
                 new Pose2d(0, -LATERAL_DISTANCE / 2, 0),
