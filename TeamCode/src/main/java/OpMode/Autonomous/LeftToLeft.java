@@ -21,7 +21,7 @@ wait til the drivers can drive around
 ta-da all done
 */
 //but you should ignore this because its prolly wrong
-//actually its 98787654678654345% wrong
+//actually its 9878765467869342095438745% wrong
 //maybe
 /*
 1. read cone
@@ -124,6 +124,7 @@ public abstract class LeftToLeft extends LinearOpMode {
             MecanumDrive drive = this.drive;
             telemetry.update();
             //ok did it score?
+            //prolly not
         }
     }
 }
