@@ -112,7 +112,6 @@ public class AutoBlueLeftIterative extends OpMode {
         } else {
             telemetry.addLine("Done");
         }
-        StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
     }
 
     public void stop() {
