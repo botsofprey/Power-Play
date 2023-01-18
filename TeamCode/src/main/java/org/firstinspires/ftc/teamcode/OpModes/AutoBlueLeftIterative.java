@@ -64,7 +64,7 @@ public class AutoBlueLeftIterative extends OpMode {
         tagData = null;
         ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
 
-        while (currentDetections.size() == 0) {
+       while (true) {
             for (AprilTagDetection tag : currentDetections) {
                 if (tag.id >= 17 && tag.id <= 19) {
                     tagOfInterest = tag.id;
@@ -74,6 +74,9 @@ public class AutoBlueLeftIterative extends OpMode {
                 } else {
                     telemetry.addLine("No tag found.");
                 }
+            }
+            if (currentDetections.size() > 0) {
+                break;
             }
         }
     }
@@ -109,6 +112,7 @@ public class AutoBlueLeftIterative extends OpMode {
         } else {
             telemetry.addLine("Done");
         }
+        StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
     }
 
     public void stop() {
