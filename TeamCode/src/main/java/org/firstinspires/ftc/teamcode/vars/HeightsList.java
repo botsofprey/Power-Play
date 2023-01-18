@@ -6,24 +6,24 @@ package org.firstinspires.ftc.teamcode.vars;
 public class HeightsList { //heights are all in tics
 //calculation values:
     double currentSpoolDiameter = 47.2;
-    double spoolRatio = (Math.pow(47.2, 2) * Math.PI) / (Math.pow(currentSpoolDiameter, 2) * Math.PI);
+    double spoolRatio = 47.2 / currentSpoolDiameter;
     //junction heights:
     /**
      * An int used to represent the tic value of the lift at the height of the low junction, it is subject to change based off of the lift
      */
-    public int lowJunction = (int) Math.round(683 * spoolRatio);
+    public int lowJunction = (int) Math.round(430 * spoolRatio);
     /**
      * An int used to represent the tic value of the lift at the height of the medium junction, it is subject to change based off of the lift
      */
-    public int midJunction = (int) Math.round(900 * spoolRatio);
+    public int midJunction = (int) Math.round(685 * spoolRatio);
     /**
      * An int used to represent the tic value of the lift at the height of the high junction, it is subject to change based off of the lift
      */
-    public int highJunction = (int) Math.round(1700 * spoolRatio);
+    public int highJunction = (int) Math.round(950 * spoolRatio);
     /**
      * An int used to represent the tic value at the the height of the ground junction, it is subject to change based of the lift
      */
-    public int groundJunction = (int) Math.round(400 * spoolRatio);
+    public int groundJunction = (int) Math.round(190 * spoolRatio);
 
     //cone stack heights:
     /**

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -32,7 +31,9 @@ public class AutoBlueLeftIterative extends OpMode {
     double cx = 402.145;
     double cy = 221.506;
 
-    Trajectory right19, forward18, forward19, left17, forward17, preLoad, test;
+    int step = 0;
+
+    Trajectory park19, park18, park17, preLoad;
 
     HeightsList heights = new HeightsList();
     cameraControl autocam = new cameraControl();
@@ -53,42 +54,69 @@ public class AutoBlueLeftIterative extends OpMode {
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
         mecanumDrive.setPoseEstimate(coordinateLocations.leftBlueStart);
-        preLoad = mecanumDrive.trajectoryBuilder(coordinateLocations.leftBlueStart).lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 5, Math.toRadians(225))).build();
+        preLoad = mecanumDrive.trajectoryBuilder(coordinateLocations.leftBlueStart).lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 5, Math.toRadians(250))).build();
+
+        park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(8, 27, Math.toRadians(270))).build();
+        park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(36, 16, Math.toRadians(270))).build();
+        park17 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(54, 27, Math.toRadians(270))).build();
         mecanumDrive.followTrajectoryAsync(preLoad);
-        test = mecanumDrive.trajectoryBuilder(coordinateLocations.leftBlueStart).lineTo(new Vector2d(12, 12)).build();
-
-        right19 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeRight(24).build();
-        forward19 = mecanumDrive.trajectoryBuilder(right19.end()).forward(24).build();
-        forward18 = mecanumDrive.trajectoryBuilder(new Pose2d()).forward(24).build();
-        left17 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeLeft(24).build();
-        forward17 = mecanumDrive.trajectoryBuilder(left17.end()).forward(24).build();
-
         //tag detection
         tagData = null;
         ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
 
-        if (currentDetections.size() != 0) {
-            for (AprilTagDetection tag : currentDetections) {
-                if (tag.id >= 17 && tag.id <= 19) {
-                    tagOfInterest = tag.id;
-                    telemetry.addData("Tag of interest", tagOfInterest);
-                    telemetry.addData("Tag data", tag.toString());
-                    break;
-                }
-            }
-        } else {
-            telemetry.addLine("No tag found.");
-        }
+//       while (true) {
+//            for (AprilTagDetection tag : currentDetections) {
+//                if (tag.id >= 17 && tag.id <= 19) {
+//                    tagOfInterest = tag.id;
+//                    telemetry.addData("Tag of interest", tagOfInterest);
+//                    telemetry.addData("Tag data", tag.toString());
+//                    break;
+//                } else {
+//                    telemetry.addLine("No tag found.");
+//                }
+//            }
+//            if (currentDetections.size() > 0) {
+//                break;
+//            }
+//        }
     }
 
     @Override
     public void loop() {
-        mecanumDrive.update();
-        mpb.setLift(heights.highJunction);
+        if (step == 0) {
+            mpb.setClaw(0.4);
+            mpb.sleep(1000);
+            step++;
+        } else if (step == 1) {
+            mpb.setLift(heights.highJunction);
+            mecanumDrive.update();
+            if (!mecanumDrive.isBusy()) {
+                step++;
+            }
+        } else if (step == 2) {
+            mpb.setClaw(0);
+            if (tagOfInterest == 19) {
+                mecanumDrive.followTrajectoryAsync(park19);
+            } else if (tagOfInterest == 18) {
+                mecanumDrive.followTrajectoryAsync(park18);
+            } else if (tagOfInterest == 17) {
+                mecanumDrive.followTrajectoryAsync(park17);
+            }
+            mpb.sleep(1000);
+            step++;
+        } else if (step == 3) {
+            mecanumDrive.update();
+            mpb.setLift(0);
+            if (!mecanumDrive.isBusy()) {
+                step++;
+            }
+        } else {
+            telemetry.addLine("Done");
+        }
     }
 
     public void stop() {
         StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
-        autocam.destroyCameraInstance();
+//        autocam.destroyCameraInstance();
     }
 }
