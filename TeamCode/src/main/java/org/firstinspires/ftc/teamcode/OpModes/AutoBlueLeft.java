@@ -81,8 +81,11 @@ public class AutoBlueLeft extends LinearOpMode {
         tagData = null;
         mecanumDrive.getPoseEstimate();
 
+        ArrayList<AprilTagDetection> currentDetections;
+
         do {
-            ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
+            telemetry.addLine("in camera loop");
+            currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
             for (AprilTagDetection tag : currentDetections) {
                 if (tag.id >= 17 && tag.id <= 19) {
                     foundTag = true;
@@ -93,7 +96,10 @@ public class AutoBlueLeft extends LinearOpMode {
                 } else
                     telemetry.addLine("No tag found.");
             }
+            if (currentDetections.size() == 0)
+                telemetry.addLine("no detections found");
         } while (!isStarted());
+        telemetry.addLine("out of camera loop");
 
         if(!isStopRequested() && opModeIsActive()) {
             //begin
