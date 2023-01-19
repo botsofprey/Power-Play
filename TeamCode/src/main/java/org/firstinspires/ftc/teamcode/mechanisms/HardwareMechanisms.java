@@ -87,9 +87,9 @@ public class HardwareMechanisms {
         return AngleUnit.normalizeDegrees((getHeading(AngleUnit.RADIANS) * 180) / Math.PI);
     }
 
-    public void sleep(long miliseconds) {
+    public void sleep(long milliseconds) {
         long start = System.currentTimeMillis();
-        while (System.currentTimeMillis() - start < miliseconds) {
+        while (System.currentTimeMillis() - start < milliseconds) {
             Thread.yield();
         }
     }

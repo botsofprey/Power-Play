@@ -18,7 +18,7 @@ import org.openftc.apriltag.AprilTagDetection;
 import java.util.ArrayList;
 
 @Autonomous
-public class AutoBlueLeftIterative extends OpMode {
+public class AutoLeft extends OpMode {
     SampleMecanumDrive mecanumDrive;
     AprilTagDetection tagData;
     AprilTagPipelineEXAMPLECOPY apriltagpipelineEXAMPLE;
@@ -33,7 +33,7 @@ public class AutoBlueLeftIterative extends OpMode {
 
     int step = 0;
 
-    Trajectory park19, park18, park17, preLoad;
+    Trajectory park19, park18, park17, preLoad, preLoadSpline;
 
     HeightsList heights = new HeightsList();
     cameraControl autocam = new cameraControl();
@@ -42,6 +42,7 @@ public class AutoBlueLeftIterative extends OpMode {
 
     @Override
     public void init() {
+        StaticImu.imuStatic = 0;
         apriltagpipelineEXAMPLE = new AprilTagPipelineEXAMPLECOPY(tagsize, fx, fy, cx, cy);
         tagData = new AprilTagDetection();
         //set up any functions or variables needed for program
@@ -54,38 +55,43 @@ public class AutoBlueLeftIterative extends OpMode {
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
         mecanumDrive.setPoseEstimate(coordinateLocations.leftBlueStart);
-        preLoad = mecanumDrive.trajectoryBuilder(coordinateLocations.leftBlueStart).lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 5, Math.toRadians(250))).build();
-
+        preLoad = mecanumDrive.trajectoryBuilder(coordinateLocations.leftBlueStart).lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 5, Math.toRadians(225))).build();
+//preLoadSpline = mecanumDrive.trajectoryBuilder(coordinateLocations.leftBlueStart)
+//        .splineTo(new Vector2d(0, coordinateLocations.leftBlueStart.getY()))
+//        .build();
         park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(8, 27, Math.toRadians(270))).build();
         park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(36, 16, Math.toRadians(270))).build();
         park17 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(54, 27, Math.toRadians(270))).build();
         mecanumDrive.followTrajectoryAsync(preLoad);
+    }
+
+    @Override
+    public void init_loop() {
         //tag detection
         tagData = null;
-        ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
-
-//       while (true) {
-//            for (AprilTagDetection tag : currentDetections) {
-//                if (tag.id >= 17 && tag.id <= 19) {
-//                    tagOfInterest = tag.id;
-//                    telemetry.addData("Tag of interest", tagOfInterest);
-//                    telemetry.addData("Tag data", tag.toString());
-//                    break;
-//                } else {
-//                    telemetry.addLine("No tag found.");
-//                }
-//            }
-//            if (currentDetections.size() > 0) {
-//                break;
-//            }
-//        }
+        ArrayList<AprilTagDetection> currentDetections;
+        currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
+        for (AprilTagDetection tag : currentDetections) {
+            if (tag.id >= 17 && tag.id <= 19) {
+                tagOfInterest = tag.id;
+                telemetry.addData("Tag of interest", tagOfInterest);
+                telemetry.addData("Tag data", tag.toString());
+                break;
+            } else {
+                telemetry.addLine("No tag found.");
+            }
+        }
+        if (currentDetections.size() == 0) {
+            telemetry.addLine("no detections found");
+            telemetry.update();
+        }
     }
 
     @Override
     public void loop() {
         if (step == 0) {
             mpb.setClaw(0.4);
-            mpb.sleep(1000);
+            mpb.sleep(1500);
             step++;
         } else if (step == 1) {
             mpb.setLift(heights.highJunction);
@@ -102,21 +108,26 @@ public class AutoBlueLeftIterative extends OpMode {
             } else if (tagOfInterest == 17) {
                 mecanumDrive.followTrajectoryAsync(park17);
             }
-            mpb.sleep(1000);
+            mpb.sleep(1500);
             step++;
         } else if (step == 3) {
             mecanumDrive.update();
-            mpb.setLift(0);
             if (!mecanumDrive.isBusy()) {
                 step++;
             }
+        } else if (step == 4) {
+            mpb.setLift(0);
+            if (mpb.getLift() == 0) {
+                step++;
+            }
         } else {
-            telemetry.addLine("Done");
-        }
+        telemetry.addLine("Done");
     }
+
+}
 
     public void stop() {
         StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
-//        autocam.destroyCameraInstance();
+        autocam.destroyCameraInstance();
     }
 }
