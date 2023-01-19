@@ -38,8 +38,8 @@ public class AutoRight extends OpMode {
 
     int step = 0;
 
-    Trajectory park19, park18, park17, preLoad, preLoadSpline;
-    TrajectorySequence getConeAndScoreInitial, getConeAndScore;
+    Trajectory park19, park18, park17;
+    TrajectorySequence preLoad, getConeAndScoreInitial, getConeAndScore;
 
     HeightsList heights = new HeightsList();
     cameraControl autocam = new cameraControl();
@@ -60,8 +60,12 @@ public class AutoRight extends OpMode {
         //set the pipeline for the camera
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
-        mecanumDrive.setPoseEstimate(coordinateLocations.leftStart);
-        preLoad = mecanumDrive.trajectoryBuilder(coordinateLocations.leftStart).lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() - 5, coordinateLocations.leftHighJunc.getY() + 5, Math.toRadians(-225))).build();
+        mecanumDrive.setPoseEstimate(coordinateLocations.rightStart);
+        preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.leftStart)
+                .lineToLinearHeading(new Pose2d(33, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(32, 12, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 5, Math.toRadians(225)))
+                .build();
         getConeAndScoreInitial = mecanumDrive.trajectorySequenceBuilder(preLoad.end())
                 .lineTo(new Vector2d(coordinateLocations.rightHighJunc.getX() - 12, coordinateLocations.rightHighJunc.getY() + 12))
                 .turn(-135)
@@ -70,7 +74,7 @@ public class AutoRight extends OpMode {
         park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-8, 27, Math.toRadians(270))).build();
         park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-36, 16, Math.toRadians(270))).build();
         park17 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-54, 27, Math.toRadians(270))).build();
-        mecanumDrive.followTrajectoryAsync(preLoad);
+        mecanumDrive.followTrajectorySequenceAsync(preLoad);
     }
 
     @Override
