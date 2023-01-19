@@ -152,13 +152,15 @@ public class MecanumDrive {
             xMovement = Math.sin(getRadians()) * movement.y;
 
            double tileYOffset = (tile * Math.round(current.y/tile)) - current.y;
-           yMovement = stig.calculateResponse(Math.cos(getRadians()) * tileYOffset) * movement.y;
+           yMovement = stig.calculateResponse(Math.cos(getRadians()) *
+                   tileYOffset) * movement.y;
 
         } else if(movement.x != 0){
             yMovement = Math.cos(getRadians()) * movement.x;
 
             double tileXOffset = (tile * Math.round(current.x/tile)) - current.x;
-            xMovement = stig.calculateResponse(Math.sin(getRadians()) * tileXOffset) * movement.x;
+            xMovement = stig.calculateResponse(Math.sin(getRadians()) *
+                    tileXOffset) * movement.x;
         }
 
         moveWithPower(
