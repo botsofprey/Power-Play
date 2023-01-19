@@ -118,8 +118,10 @@ public class MecanumTele extends LinearOpMode {
             telemetry.addData("Slow mode", controller1.leftTriggerHeld);
 
             //enables/disables grid movement
-            if(controller1.rightTriggerPressed)
+            if(controller1.rightTriggerHeld) {
                 grid = !grid;
+            }
+            telemetry.addData("Grid?", controller1.rightTriggerHeld);
 
             //Driver 1 uses joysticks for movement, duh
             if (!overrideDrivers) {
