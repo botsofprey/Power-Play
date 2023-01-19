@@ -81,7 +81,6 @@ public class AutoBlueLeft extends LinearOpMode {
         ArrayList<AprilTagDetection> currentDetections;
 
         do {
-            telemetry.addLine("in camera loop");
             currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
             for (AprilTagDetection tag : currentDetections) {
                 if (tag.id >= 17 && tag.id <= 19) {
@@ -93,10 +92,24 @@ public class AutoBlueLeft extends LinearOpMode {
                 } else
                     telemetry.addLine("No tag found.");
             }
-            if (currentDetections.size() == 0)
-                telemetry.addLine("no detections found");
+                telemetry.update();
         } while (!isStarted());
-        telemetry.addLine("out of camera loop");
+        telemetry.update();
+
+        preLoad1 = mecanumDrive.trajectorySequenceBuilder(locations.leftBlueStart)
+                .addTemporalMarker(0, () -> {
+                    mpb.lift.setPower(1);
+                })
+                .addSpatialMarker(new Vector2d(locations.leftHighJunc.getX() + 17,
+                        locations.leftHighJunc.getY() +17), () -> {
+                    mpb.lift.setPower(0);
+                })
+                .lineTo(new Vector2d(locations.leftHighJunc.getX() + 12,
+                        locations.leftHighJunc.getY() + 12))
+                .turn(Math.toRadians(-45))
+                .lineTo(new Vector2d(locations.leftHighJunc.getX() + 5,
+                        locations.leftHighJunc.getY() + 5))
+                .build();
 
         if(!isStopRequested() && opModeIsActive()) {
             //begin

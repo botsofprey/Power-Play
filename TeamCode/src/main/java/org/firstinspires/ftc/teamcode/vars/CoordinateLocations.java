@@ -21,7 +21,7 @@ public class CoordinateLocations {
 
    //Junction coordinates
    public Vector2d leftHighJunc          = new Vector2d(24, 0),
-                   rightHighJunc         = new Vector2d(),
+                   rightHighJunc         = new Vector2d(-24, 0),
                    topHighJunc           = new Vector2d(),
                    bottomHighJunc        = new Vector2d(),
                    topLeftMidJunc        = new Vector2d(),
