@@ -2,6 +2,7 @@ package OpMode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
@@ -42,6 +43,9 @@ public class MecanumTele extends LinearOpMode {
 
     private int negateScoring;
 
+    private ElapsedTime endGameTimer;
+    private boolean rumble = false;
+
     @Override
     public void runOpMode() {
         controller1 = new Controller(gamepad1);
@@ -50,6 +54,8 @@ public class MecanumTele extends LinearOpMode {
         lift = new Lift(hardwareMap);
         lift.zeroLift();
         claw.setPosition(Claw.CLOSE_POSITION);
+
+        endGameTimer = new ElapsedTime();
 
         startLoc = settingStart(ReadWriteFile.readFile(file));
         drive = new MecanumDrive(hardwareMap, this, startLoc.angle);
@@ -64,6 +70,8 @@ public class MecanumTele extends LinearOpMode {
                 odometry.changeStartLocation(new Location(0,0));
             }
         }
+
+        endGameTimer.reset();
 
         while (opModeIsActive()) {
             //Checks for new inputs
@@ -253,6 +261,12 @@ public class MecanumTele extends LinearOpMode {
                 double angleToJunction = Math.toDegrees(Math.acos(smallestAbsDif[0]/distanceToJunction));
             }
 
+            //Controllers rumble at start of end game
+            if(endGameTimer.seconds() >= 30 && !rumble){
+                rumble = true;
+                controller1.rumble(3);
+                controller2.rumble(3);
+            }
 
             telemetry.addData("Lift preset", liftPreset);
 

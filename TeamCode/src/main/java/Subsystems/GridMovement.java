@@ -89,7 +89,7 @@ public abstract class GridMovement extends LinearOpMode {
     how to make this work pls?
      */
     private void when() {
-        (x>=0.0 && y==-300.0, -240.0, -180.0, -120.0, -60.0, 0.0, 60.0, 120.0, 180.0, 240.0, 300.0);
+      //  (x>=0.0 && y==-300.0, -240.0, -180.0, -120.0, -60.0, 0.0, 60.0, 120.0, 180.0, 240.0, 300.0);
     }
 }
 
@@ -97,6 +97,6 @@ public abstract class GridMovement extends LinearOpMode {
 //not really sure how to make the grid but here goes everything
 class Grid {
     public Grid(int x, int y) {
-        (0.0), (0.0);
+       // (0.0), (0.0);
     }
 }

@@ -3,11 +3,14 @@ package OpMode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import DriveEngine.MecanumDrive;
+import Subsystems.Lift;
 import Subsystems.threeWheelOdometry;
 import UtilityClasses.Controller;
 import UtilityClasses.Location;
 
 public class TestMovement extends LinearOpMode {
+
+    private Location liftLoc = new Location(19, 0);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -15,6 +18,7 @@ public class TestMovement extends LinearOpMode {
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, 0);
         threeWheelOdometry odom = new threeWheelOdometry(hardwareMap, new Location(0, 0), this, drive);
+        Lift lift = new Lift(hardwareMap);
         drive.setCurrentSpeed(.5);
 
         while(!isStarted() && !isStopRequested()){
@@ -24,8 +28,15 @@ public class TestMovement extends LinearOpMode {
             telemetry.update();
         }
 
+        odom.setTargetByOffset(liftLoc, new Location(30, -30), true);
+        lift.ljunction();
+        while(opModeIsActive() && lift.isBusy()){
+            odom.update();
+            telemetry.addData("Pos", odom.getLocation());
+            telemetry.update();
+        }
 
-        while(opModeIsActive()){
+        while(opModeIsActive() && !odom.atTarget()){
             odom.update();
             telemetry.addData("Pos", odom.getLocation());
             telemetry.addData("left", odom.getCurrentLeftPos());
@@ -34,6 +45,10 @@ public class TestMovement extends LinearOpMode {
             telemetry.update();
         }
 
+        while(opModeIsActive()){
+            odom.update();
+            telemetry.addData("Pos", odom.getLocation());
+        }
 
     }
 }

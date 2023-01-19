@@ -3,6 +3,7 @@ package OpMode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 
@@ -110,6 +111,7 @@ public class RightAuto extends LinearOpMode {
 
             telemetry.update();
         }
+        ElapsedTime autoTimer = new ElapsedTime();
 
         //Resets position and encoders
         odometry.resetEncoders();
@@ -118,37 +120,24 @@ public class RightAuto extends LinearOpMode {
         claw.setPosition(Claw.CLOSE_POSITION);
         sleep(1000);
 
+        //Turns camera off
+        camera.stop();
+
         //If camera is too far away to see qr, robot gets closer
         if(!camera.tagFound()){
-            odometry.setTargetPoint(parkingLocations[1]);
-
-            while(!odometry.atTarget() && !camera.tagFound()){
-                odometry.update();
-
-                telemetry.addData("QR Code Found", camera.tagFound());
-                if(camera.tagFound())
-                    telemetry.addData("Parking Spot", camera.getParking()+1);
-                telemetry.update();
-            }
-
-            //Turns camera off
-            camera.stop();
-
-            //Sets target to parking spot
-            parking = camera.getParking();
+            //Sets parking to the second parking spot
+            parking = 1;
 
         }else{
-            //Turns camera off
-            camera.stop();
-
             //Sets target to parking spot
             parking = camera.getParking();
 
-            //Scoring pre-loaded cone
-            odometry.setTargetPoint(0, -tile, 0, true);
-            lift.hjunction();
-            whileMoving(1);
         }
+
+        //Scoring pre-loaded cone
+        odometry.setTargetPoint(0, -tile, 0, true);
+        lift.hjunction();
+        whileMoving(1);
 
         odometry.setTargetPoint(tile, -tile, -45, true);
         whileMoving(0);
@@ -163,17 +152,16 @@ public class RightAuto extends LinearOpMode {
         lift.hjunctionScore();
         while(lift.isBusy() && opModeIsActive());
 
-        sleep(500);
+        sleep(250);
         claw.setPosition(Claw.OPEN_POSITION);
         sleep(500);
 
         //Getting in position to go to cone stack
-        drive.setCurrentSpeed(.25);
+        drive.setCurrentSpeed(.5);
         lift.coneStack(5);
         odometry.setTargetPoint(tile, -tile, -45, true);
         whileMoving(0);
 
-        drive.setCurrentSpeed(.5);
         odometry.rotateToAngle(0);
         whileRotating(0);
         while(lift.isBusy() && opModeIsActive());
@@ -188,7 +176,7 @@ public class RightAuto extends LinearOpMode {
         int times = 0;
         int coneStack = 5;
 
-        while(opModeIsActive() && times < 5){
+        while(opModeIsActive() && times < 5 && autoTimer.seconds() < 25){
             //Picks up cone
             lift.coneStack(coneStack);
             while(lift.isBusy() && opModeIsActive());
@@ -234,7 +222,7 @@ public class RightAuto extends LinearOpMode {
         odometry.setTargetPoint(tile, 0, 90);
         whileMoving(0);
 
-        odometry.setTargetPoint(parkingLocations[parking]);
+        odometry.setTargetPoint(parkingLocations[parking], true);
         whileMoving(0);
 
         while(opModeIsActive()) {
