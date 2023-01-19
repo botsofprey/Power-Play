@@ -1,5 +1,7 @@
 package DriveEngine;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import androidx.annotation.NonNull;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -8,19 +10,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.util.Range;
 
-//import DriveEngine.Deprecated.OldLocalizerClass;
-//import UtilityClasses.JSONReader;
-//import UtilityClasses.Deprecated.OldLocationClass;
-//import UtilityClasses.Deprecated.Matrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-import Subsystems.threeWheelOdometry;
 import UtilityClasses.Location;
 import UtilityClasses.StigmoidController;
 import UtilityClasses.Vector2D;
@@ -151,17 +147,21 @@ public class MecanumDrive {
     public void gridMovement(@NonNull Vector2D movement, Location current){
         double xMovement = 0, yMovement = 0;
 
+        telemetry.update();
+
         if(movement.y > movement.x){
             xMovement = Math.sin(getRadians()) * movement.y;
 
            double tileYOffset = (tile * Math.round(current.y/tile)) - current.y;
-           yMovement = stig.calculateResponse(Math.cos(getRadians()) * tileYOffset) * movement.y;
+           yMovement = stig.calculateResponse(Math.cos(getRadians()) *
+                   tileYOffset) * movement.y;
 
         } else if(movement.x != 0){
             yMovement = Math.cos(getRadians()) * movement.x;
 
             double tileXOffset = (tile * Math.round(current.x/tile)) - current.x;
-            xMovement = stig.calculateResponse(Math.sin(getRadians()) * tileXOffset) * movement.x;
+            xMovement = stig.calculateResponse(Math.sin(getRadians()) *
+                    tileXOffset) * movement.x;
         }
 
         moveWithPower(
