@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.mechanisms.HardwareMechanisms;
 import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.vars.CoordinateLocations;
 import org.firstinspires.ftc.teamcode.vars.HeightsList;
 import org.firstinspires.ftc.teamcode.vars.StaticImu;
@@ -31,6 +33,7 @@ public class AutoBlueLeft extends LinearOpMode {
 
     //set the variable that holds the tag ID of interest
     int tagOfInterest;
+    boolean foundTag;
     //set size of tag in meters
     double tagsize = 0.166;
     //lens intrinsics
@@ -39,14 +42,7 @@ public class AutoBlueLeft extends LinearOpMode {
     double cx = 402.145;
     double cy = 221.506;
 
-    Trajectory right19,
-            forward18,
-            forward19,
-            left17,
-            forward17,
-            preLoad1,
-            preLoad2,
-            test;
+    TrajectorySequence preLoad1;
 
     @Override
     public void runOpMode() {
@@ -70,69 +66,57 @@ public class AutoBlueLeft extends LinearOpMode {
 
         mecanumDrive.setPoseEstimate(locations.leftBlueStart);
 
-        preLoad1 = mecanumDrive.trajectoryBuilder(locations.leftBlueStart)
-                .addDisplacementMarker(0.0, () -> {
+        preLoad1 = mecanumDrive.trajectorySequenceBuilder(locations.leftBlueStart)
+                .addDisplacementMarker(5, () -> {
                     mpb.lift.setPower(1);
-                })
-                .addTemporalMarker(2, () -> {
-                    mpb.lift.setTargetPosition(0);
                 })
                 .lineTo(new Vector2d(locations.leftHighJunc.getX() + 12,
                         locations.leftHighJunc.getY() + 12))
+                .turn(Math.toRadians(-45))
+                .lineTo(new Vector2d(locations.leftHighJunc.getX() + 5,
+                        locations.leftHighJunc.getY() + 5))
                 .build();
-
-        preLoad2 = mecanumDrive.trajectoryBuilder(preLoad1.end().plus(new Pose2d(0, 0, Math.toRadians(-45))))
-                .lineToLinearHeading(new Pose2d(locations.leftHighJunc.getX() + 5,
-                                    locations.leftHighJunc.getY() + 5, Math.toRadians(225)))
-                .build();
-
-        right19 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeRight(24).build();
-        forward19 = mecanumDrive.trajectoryBuilder(right19.end()).forward(24).build();
-        forward18 = mecanumDrive.trajectoryBuilder(new Pose2d()).forward(24).build();
-        left17 = mecanumDrive.trajectoryBuilder(new Pose2d()).strafeLeft(24).build();
-        forward17 = mecanumDrive.trajectoryBuilder(left17.end()).forward(24).build();
 
         //tag detection
         tagData = null;
-        ArrayList<AprilTagDetection> currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
         mecanumDrive.getPoseEstimate();
-        if (currentDetections.size() != 0) {
+
+        ArrayList<AprilTagDetection> currentDetections;
+
+        do {
+            telemetry.addLine("in camera loop");
+            currentDetections = apriltagpipelineEXAMPLE.getLatestDetections();
             for (AprilTagDetection tag : currentDetections) {
-                if (tag.id >= 17 || tag.id <= 19) {
+                if (tag.id >= 17 && tag.id <= 19) {
+                    foundTag = true;
                     tagOfInterest = tag.id;
                     telemetry.addData("Tag of interest", tagOfInterest);
                     telemetry.addData("Tag data", tag.toString());
                     break;
-                }
+                } else
+                    telemetry.addLine("No tag found.");
             }
-        }
-        else {
-            telemetry.addLine("No tag found.");
-        }
-
-        waitForStart();
+            if (currentDetections.size() == 0)
+                telemetry.addLine("no detections found");
+        } while (!isStarted());
+        telemetry.addLine("out of camera loop");
 
         if(!isStopRequested() && opModeIsActive()) {
             //begin
-            mecanumDrive.followTrajectory(preLoad1);
-            mecanumDrive.updatePoseEstimate();
-            mecanumDrive.turn(Math.toRadians(-45));
-            mecanumDrive.updatePoseEstimate();
-            mecanumDrive.followTrajectory(preLoad2);
-            mecanumDrive.updatePoseEstimate();
+            mecanumDrive.followTrajectorySequence(preLoad1);
 
             //end
             if (tagOfInterest == 17) {
-                mecanumDrive.followTrajectory(left17);
-                mecanumDrive.followTrajectory(forward17);
+
             }
             if (tagOfInterest == 18) {
-                mecanumDrive.followTrajectory(forward18);
             }
             if (tagOfInterest == 19) {
-                mecanumDrive.followTrajectory(right19);
-                mecanumDrive.followTrajectory(forward19);
+
             }
+        }
+
+        if (isStopRequested()) {
             StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
 
             autocam.destroyCameraInstance();
