@@ -34,8 +34,8 @@ public class AutoLeft extends OpMode {
 
     int step = 0;
 
-    Trajectory park19, park18, park17;
-    TrajectorySequence preLoad;
+    Trajectory park19, park18;
+    TrajectorySequence preLoad, park17;
 
     HeightsList heights = new HeightsList();
     cameraControl autocam = new cameraControl();
@@ -56,15 +56,21 @@ public class AutoLeft extends OpMode {
         //set the pipeline for the camera
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
-        mecanumDrive.setPoseEstimate(coordinateLocations.leftBlueStart);
+        mecanumDrive.setPoseEstimate(coordinateLocations.leftStart);
 
-        preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.leftBlueStart)
-                .lineToLinearHeading(new Pose2d(36, 12, Math.toRadians(270)))
+        preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.leftStart)
+                .lineToLinearHeading(new Pose2d(33, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(32, 12, Math.toRadians(270)))
                 .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 5, Math.toRadians(225)))
                 .build();
-        park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(8, 27, Math.toRadians(270))).build();
-        park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(36, 16, Math.toRadians(270))).build();
-        park17 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(54, 27, Math.toRadians(270))).build();
+
+        park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(12, 12, Math.toRadians(270))).build();
+        park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(36, 12, Math.toRadians(270))).build();
+        park17 = mecanumDrive.trajectorySequenceBuilder(preLoad.end())
+                .lineToLinearHeading(new Pose2d(36, 12, preLoad.end().getHeading()))
+                .turn(Math.toRadians(45))
+                .lineToLinearHeading(new Pose2d(60, 12, Math.toRadians(270)))
+                .build();
         mecanumDrive.followTrajectorySequenceAsync(preLoad);
     }
 
@@ -106,10 +112,10 @@ public class AutoLeft extends OpMode {
             mpb.setClaw(0);
             if (tagOfInterest == 19) {
                 mecanumDrive.followTrajectoryAsync(park19);
-            } else if (tagOfInterest == 18) {
-                mecanumDrive.followTrajectoryAsync(park18);
             } else if (tagOfInterest == 17) {
-                mecanumDrive.followTrajectoryAsync(park17);
+                mecanumDrive.followTrajectorySequenceAsync(park17);
+            } else {
+                mecanumDrive.followTrajectoryAsync(park18);
             }
             mpb.sleep(1500);
             step++;

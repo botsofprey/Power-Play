@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -12,7 +10,6 @@ import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.vars.CoordinateLocations;
 import org.firstinspires.ftc.teamcode.vars.HeightsList;
 import org.firstinspires.ftc.teamcode.vars.StaticImu;
@@ -64,9 +61,9 @@ public class AutoBlueLeft extends LinearOpMode {
         //set the pipeline for the camera
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
-        mecanumDrive.setPoseEstimate(locations.leftBlueStart);
+        mecanumDrive.setPoseEstimate(locations.leftStart);
 
-        preLoad1 = mecanumDrive.trajectorySequenceBuilder(locations.leftBlueStart)
+        preLoad1 = mecanumDrive.trajectorySequenceBuilder(locations.leftStart)
                 .addDisplacementMarker(5, () -> {
                     mpb.lift.setPower(1);
                 })
