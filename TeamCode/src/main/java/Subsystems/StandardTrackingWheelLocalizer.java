@@ -18,13 +18,13 @@ import OpMode.Autonomous.LeftToLeft;
 import UtilityClasses.Location;
 
 @TeleOp //(name="Auto Test", group = "Autonomous")
-public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
+public abstract class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
     public static double TICKS_PER_REV = 0;
     public static double WHEEL_RADIUS = 2;
     public static double GEAR_RATIO = 1;
 
     public static double LATERAL_DISTANCE = 12;
-    public static double FORWARD_OFFSET = 2; //idk how to measure it so heres a guess ig
+    public static double FORWARD_OFFSET = 2; //idk how to measure it so here be a guesstimate
 
     public EncodedValue leftEncoder;
     public EncodedValue rightEncoder;
@@ -34,7 +34,8 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public Object moveToTargetPostion;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public StandardTrackingWheelLocalizer(HardwareMap hardwareMap, Location location, LeftToLeft leftToLeft, MecanumDrive drive) throws Throwable {
+    public StandardTrackingWheelLocalizer(HardwareMap hardwareMap, Location location, LeftToLeft
+            leftToLeft, MecanumDrive drive) throws Throwable {
         super(Arrays.asList(
                 new Pose2d(0, LATERAL_DISTANCE / 2, 0),
                 new Pose2d(0, -LATERAL_DISTANCE / 2, 0),

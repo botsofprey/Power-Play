@@ -1,5 +1,7 @@
 package UtilityClasses;
 
+import Subsystems.MecanumDrive;
+
 public class Path {
     private Location start, end;
     private Location[] locationPath;
@@ -11,5 +13,13 @@ public class Path {
 
     public void createPath(){
 
+    }
+
+    public double length() {
+        return 0;
+    }
+
+    public MecanumDrive.Pose2d get(double displacement) {
+        return null;
     }
 }

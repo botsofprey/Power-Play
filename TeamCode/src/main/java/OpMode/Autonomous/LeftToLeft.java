@@ -16,12 +16,12 @@ score it or just bring it with you to the storage triangle thing
      (if scoring prolly on the medium or low or even ground junction)
 reverse back to the original starting position
 go left into the half square
-after it does alot of complicated stuff
+after that it does alot of complicated stuff that hurts my head. i thinks its called math
 wait til the drivers can drive around
 ta-da all done
 */
 //but you should ignore this because its prolly wrong
-//actually its 98787654678654345% wrong
+//actually its 9878765467869342095438745% wrong
 //maybe
 /*
 1. read cone
@@ -58,8 +58,28 @@ public abstract class LeftToLeft extends LinearOpMode {
 
         drive = new MecanumDrive(hardwareMap, this, 0);
         try {
-            odometry = new StandardTrackingWheelLocalizer(hardwareMap, new Location(0,0),
-                    this, drive);
+            odometry = new StandardTrackingWheelLocalizer(hardwareMap, new Location(0, 0),
+                    this, drive) {
+                @Override
+                public String leftEncoder() {
+                    return leftEncoder();
+                }
+
+                @Override
+                public String rightEncoder() {
+                    return rightEncoder();
+                }
+
+                @Override
+                public String frontEncoder() {
+                    return frontEncoder();
+                }
+
+                @Override
+                public void getMoveToTargetPostion(int x, int y) {
+
+                }
+            };
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -73,15 +93,16 @@ public abstract class LeftToLeft extends LinearOpMode {
             telemetry.addLine();
         }
         Location[] parkingLocations = {
+                //robot starts at (0,-6)
                 new Location (1), //= (60, -60), // tha 1st parking spot
                 new Location (2), //= (60, 0), //tha 2nd parking spot
                 new Location (3), //= (60, 60), //tha 3rd parking spot
-                new Location (4) //= (0, 90)
+                new Location (4) //= (0, 90)//terminal
         };
 
         boolean tagFound;
 
-        int getParking; //but how
+        int getParking; //but how tis da question
 
         //parking space time
         telemetry.addData("Tag found", camera.tagFound());
@@ -104,6 +125,12 @@ public abstract class LeftToLeft extends LinearOpMode {
             MecanumDrive drive = this.drive;
             telemetry.update();
             //ok did it score?
+            //prolly not
+            //prolly cause i didnt even write the code for it to move
         }
+    }
+    public void done(){
+        isStopRequested();
+        sleep(50000000);
     }
 }

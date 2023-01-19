@@ -2,19 +2,11 @@ package OpMode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.internal.network.ApChannel;
-import org.firstinspires.ftc.robotcore.internal.network.ControlHubApChannelManager;
-import org.firstinspires.ftc.robotcore.internal.network.InvalidNetworkSettingException;
 
 import DriveEngine.MecanumDrive;
 import Subsystems.AprilTagCamera;
-import Subsystems.CameraPipeline;
 import Subsystems.threeWheelOdometry;
-import UtilityClasses.Camera;
 import UtilityClasses.Controller;
 import UtilityClasses.Location;
 
