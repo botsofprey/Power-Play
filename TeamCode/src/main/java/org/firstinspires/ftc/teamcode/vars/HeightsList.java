@@ -47,7 +47,7 @@ public class HeightsList { //heights are all in tics
      */
     int oneConeStack = (int) Math.round(0 * spoolRatio);
 
-    int[] heights = {fiveConeStack, fourConeStack, threeConeStack, twoConeStack, oneConeStack};
+    public int[] heights = {fiveConeStack, fourConeStack, threeConeStack, twoConeStack, oneConeStack};
 
     //extra height:
     public int rightAboveACone = 0; //replace this number with the real value
