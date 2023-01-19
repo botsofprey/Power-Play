@@ -34,11 +34,12 @@ public class AutoRight extends OpMode {
     double cy = 221.506;
 
     int coneheight = 0;
+    int i = 0;
 
     int step = 0;
 
     Trajectory park19, park18, park17, preLoad, preLoadSpline;
-    TrajectorySequence getConeAndScoreInitial;
+    TrajectorySequence getConeAndScoreInitial, getConeAndScore;
 
     HeightsList heights = new HeightsList();
     cameraControl autocam = new cameraControl();
@@ -112,8 +113,18 @@ public class AutoRight extends OpMode {
             step++;
         } else if (step == 3) {
             mecanumDrive.followTrajectorySequenceAsync(getConeAndScoreInitial);
-            coneheight =
-        } else if (step == 3) {
+            coneheight = heights.heights[i++];
+            while (mecanumDrive.isBusy())
+                mecanumDrive.update();
+            step++;
+        } else if (step == 4) {
+            mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
+            coneheight = heights.heights[i++];
+            while (mecanumDrive.isBusy())
+                mecanumDrive.update();
+            if (coneheight == heights.heights[4])
+                step++;
+        } else if (step == 5) {
             if (tagOfInterest == 19) {
                 mecanumDrive.followTrajectoryAsync(park19);
             } else if (tagOfInterest == 18) {
@@ -122,12 +133,12 @@ public class AutoRight extends OpMode {
                 mecanumDrive.followTrajectoryAsync(park17);
             }
             step++;
-        } else if (step == 4) {
+        } else if (step == 6) {
             mecanumDrive.update();
             if (!mecanumDrive.isBusy()) {
                 step++;
             }
-        } else if (step == 5) {
+        } else if (step == 7) {
             mpb.setLift(0);
             if (mpb.getLift() == 0) {
                 step++;

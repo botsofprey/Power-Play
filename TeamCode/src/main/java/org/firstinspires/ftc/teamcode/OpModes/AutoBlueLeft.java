@@ -96,7 +96,7 @@ public class AutoBlueLeft extends LinearOpMode {
         } while (!isStarted());
         telemetry.update();
 
-        preLoad1 = mecanumDrive.trajectorySequenceBuilder(locations.leftBlueStart)
+        preLoad1 = mecanumDrive.trajectorySequenceBuilder(locations.leftStart)
                 .addTemporalMarker(0, () -> {
                     mpb.lift.setPower(1);
                 })
