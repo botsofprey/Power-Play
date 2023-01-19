@@ -63,17 +63,6 @@ public class AutoBlueLeft extends LinearOpMode {
 
         mecanumDrive.setPoseEstimate(locations.leftStart);
 
-        preLoad1 = mecanumDrive.trajectorySequenceBuilder(locations.leftStart)
-                .addDisplacementMarker(5, () -> {
-                    mpb.lift.setPower(1);
-                })
-                .lineTo(new Vector2d(locations.leftHighJunc.getX() + 12,
-                        locations.leftHighJunc.getY() + 12))
-                .turn(Math.toRadians(-45))
-                .lineTo(new Vector2d(locations.leftHighJunc.getX() + 5,
-                        locations.leftHighJunc.getY() + 5))
-                .build();
-
         //tag detection
         tagData = null;
         mecanumDrive.getPoseEstimate();
