@@ -36,6 +36,8 @@ public class RightAuto extends LinearOpMode {
             new Location(0, 90) //terminal, when qr code is not found
     };
 
+    private Location liftOffset = new Location(0, 0);
+
     private String startFileName = "TeleStartLocation.JSON";
     private File startFile = AppUtil.getInstance().getSettingsFile(startFileName);
     private String sideFileName = "AutoStartSide.JSON";
@@ -95,6 +97,7 @@ public class RightAuto extends LinearOpMode {
 
             telemetry.addData("Parking", parking+1);
             telemetry.addData("P Loc", parkingLocations[parking].y);
+
             telemetry.addData("Tag found", camera.tagFound());
             if(camera.tagFound()){
                 telemetry.addData("Parking", camera.getParking()+1);
@@ -152,7 +155,8 @@ public class RightAuto extends LinearOpMode {
         while(lift.isBusy() && opModeIsActive());
 
         drive.setCurrentSpeed(.25);
-        odometry.setTargetPoint(71, -67, -41, true);
+        //odometry.setTargetPoint(71, -67, -41, true);
+        odometry.setTargetByOffset(liftOffset, new Location(tile*1.5, -tile*1.5), true);
         whileMoving(0);
 
         //Scores
@@ -189,14 +193,14 @@ public class RightAuto extends LinearOpMode {
             lift.coneStack(coneStack);
             while(lift.isBusy() && opModeIsActive());
 
-            odometry.setTargetPoint(125, 52, 92, true);
+            odometry.setTargetPoint(tile*2, 52, 92, true);
             whileMoving(0);
 
             claw.setPosition(Claw.CLOSE_POSITION);
             sleep(1000);
 
             //Backs away from cone stack before turning
-            odometry.setTargetPoint(tile*2, 32, 92, true);
+            odometry.setTargetPoint(tile*2, 42, 92, true);
             whileMoving(0);
 
             //Turns toward high junction

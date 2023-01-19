@@ -110,7 +110,7 @@ public class MecanumTele extends LinearOpMode {
             telemetry.addData("Slow mode", controller1.leftTriggerHeld);
 
             //enables/disables grid movement
-            if(controller1.leftTriggerPressed)
+            if(controller1.rightTriggerPressed)
                 grid = !grid;
 
             //Driver 1 uses joysticks for movement, duh
@@ -194,6 +194,9 @@ public class MecanumTele extends LinearOpMode {
                     liftPreset = 5;
                 }
             }
+
+            if(lift.getPosition() <= 1000 && lift.getPower() < -.75)
+                claw.setPosition(Claw.OPEN_POSITION);
 
             // Find positions of junctions
             double[][][] junctionPositions = {
