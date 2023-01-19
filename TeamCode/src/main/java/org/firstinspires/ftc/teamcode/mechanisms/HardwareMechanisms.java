@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -29,13 +30,14 @@ public class HardwareMechanisms {
 
     static BNO055IMU imu;
 
-//    TouchSensor limitSwitch;
+    TouchSensor touchSensor;
 
     public void init(HardwareMap hwMap) {
         drive.init(hwMap);
         lift = hwMap.dcMotor.get("lift");
         claw = hwMap.servo.get("claw");
         imu = hwMap.get(BNO055IMU.class, "imu");
+        touchSensor = hwMap.get(TouchSensor.class, "touchSensor");
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setTargetPosition(0);
@@ -94,9 +96,9 @@ public class HardwareMechanisms {
         }
     }
 
-//    public boolean getLimitSwitch() {
-//        return limitSwitch.isPressed();
-//    }
+    public boolean isTouchSensorPressed() {
+        return !touchSensor.isPressed();
+    }
 
     /**
      * The method used in our TestWiring class, it builds off the TestItem, TestMotor, and TestServo classes
