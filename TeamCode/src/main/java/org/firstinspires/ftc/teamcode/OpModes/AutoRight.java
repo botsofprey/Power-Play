@@ -61,10 +61,10 @@ public class AutoRight extends OpMode {
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
         mecanumDrive.setPoseEstimate(coordinateLocations.rightStart);
-        preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.leftStart)
-                .lineToLinearHeading(new Pose2d(33, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(32, 12, Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 5, Math.toRadians(225)))
+        preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.rightStart)
+                .lineToLinearHeading(new Pose2d(-38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-32, 12, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 5, Math.toRadians(315)))
                 .build();
         getConeAndScoreInitial = mecanumDrive.trajectorySequenceBuilder(preLoad.end())
                 .lineTo(new Vector2d(coordinateLocations.rightHighJunc.getX() - 12, coordinateLocations.rightHighJunc.getY() + 12))
