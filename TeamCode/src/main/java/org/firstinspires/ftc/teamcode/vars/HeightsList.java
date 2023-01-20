@@ -29,19 +29,19 @@ public class HeightsList { //heights are all in tics
     /**
      * An int used to represent the tic value of the lift at the height of the cone stack with five cones, it is subject to change based of the lift
      */
-    int fiveConeStack = (int) Math.round(1316 * spoolRatio);
+    int fiveConeStack = (int) Math.round(160 * spoolRatio);
     /**
      * An int used to represent the tic value of the lift at the height of the cone stack with four cones, it is subject to change based of the lift
      */
-    int fourConeStack = (int) Math.round(1260 * spoolRatio);
+    int fourConeStack = (int) Math.round(100 * spoolRatio);
     /**
      * An int used to represent the tic value of the lift at the height of cone stack with three cones, it is subject to change based of the lift
      */
-    int threeConeStack = (int) Math.round(1148 * spoolRatio);
+    int threeConeStack = (int) Math.round(95 * spoolRatio);
     /**
      * An int used to represent the tic value of the lift at the height of the cone stack with two cones, it is subject to change based of the lift
      */
-    int twoConeStack = (int) Math.round(852 * spoolRatio);
+    int twoConeStack = (int) Math.round(60 * spoolRatio);
     /**
      * An int used to represent the tic value of the lift at the height of one cone, it is subject to change based of the lift
      */

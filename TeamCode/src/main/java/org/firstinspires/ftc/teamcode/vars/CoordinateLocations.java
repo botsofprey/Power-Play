@@ -9,8 +9,8 @@ public class CoordinateLocations {
    double startY = 63.75;
 
    //Starting positions for robot
-   public Pose2d leftStart = new Pose2d(36, startY, Math.toRadians(270)), //Quadrant 1 and 3
-                 rightStart = new Pose2d(-36, startY, Math.toRadians(270)); //Quadrant 2 and 4
+   public Pose2d leftStart = new Pose2d(40.5, startY, Math.toRadians(270)), //Quadrant 1 and 3 ***was 36***
+                 rightStart = new Pose2d(-31, startY, Math.toRadians(270)); //Quadrant 2 and 4
 
    //cone stack coordinates:
    public Vector2d leftBlueConeStack  = new Vector2d(66, -12), //Quadrant 1
