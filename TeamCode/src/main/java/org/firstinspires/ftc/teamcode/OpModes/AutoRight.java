@@ -164,10 +164,10 @@ public class AutoRight extends OpMode {
         } else if (step == 5) {
             if (tagOfInterest == 19) {
                 mecanumDrive.followTrajectoryAsync(park19);
-            } else if (tagOfInterest == 18) {
-                mecanumDrive.followTrajectoryAsync(park18);
             } else if (tagOfInterest == 17) {
                 mecanumDrive.followTrajectoryAsync(park17);
+            } else {
+                mecanumDrive.followTrajectoryAsync(park18);
             }
             step++;
         } else if (step == 6) {
