@@ -16,7 +16,6 @@ import Subsystems.Lift;
 import Subsystems.threeWheelOdometry;
 import UtilityClasses.Controller;
 import UtilityClasses.Location;
-import UtilityClasses.Vector2D;
 
 @TeleOp(name="Basic TeleOp", group="TeleOp")
 public class MecanumTele extends LinearOpMode {
@@ -118,37 +117,37 @@ public class MecanumTele extends LinearOpMode {
             telemetry.addData("Slow mode", controller1.leftTriggerHeld);
 
             //enables/disables grid movement
-            if(controller1.rightTriggerHeld) {
-                grid = !grid;
-            }
-            telemetry.addData("Grid?", controller1.rightTriggerHeld);
+            //if(controller1.rightTriggerHeld) {
+            //    grid = !grid;
+            //}
+            //telemetry.addData("Grid?", controller1.rightTriggerHeld);
 
             //Driver 1 uses joysticks for movement, duh
-            if (!overrideDrivers) {
-                if(!grid) {
+            //if (!overrideDrivers) {
+                //if(!grid) {
                     //Robot-oriented movement unrestricted
-                    Vector2D leftInput = controller1.leftStick,
-                            rightInput = controller1.rightStick;
+                    //Vector2D leftInput = controller1.leftStick,
+                            //rightInput = controller1.rightStick;
 
-                    double newForward = controller1.leftStick.y;
-                    double newRight = controller1.leftStick.x;
-                    double rotate = controller1.rightStick.x;
-                    drive.moveWithPower(
-                            newForward + newRight + rotate,
-                            newForward - newRight + rotate,
-                            newForward + newRight - rotate,
-                            newForward - newRight - rotate
-                    );
-                }else{
+                    //double newForward = controller1.leftStick.y;
+                    //double newRight = controller1.leftStick.x;
+                    //double rotate = controller1.rightStick.x;
+                    //drive.moveWithPower(
+                    //        newForward + newRight + rotate,
+                    //        newForward - newRight + rotate,
+                    //        newForward + newRight - rotate,
+                    //        newForward - newRight - rotate
+                    //);
+                //}else{
                     // Robot stays in the center of the tile as it moves
-                    drive.gridMovement(controller1.leftStick, odometry.getLocationClass());
+                    //drive.gridMovement(controller1.leftStick, odometry.getLocationClass());
 
-                    telemetry.addData("Forward", Math.sin(drive.getRadians() * controller1.leftStick.y));
-                    telemetry.addData("Strafe", Math.cos(drive.getRadians() * controller1.leftStick.x));
-                }
+                    //telemetry.addData("Forward", Math.sin(drive.getRadians() * controller1.leftStick.y));
+            //telemetry.addData("Strafe", Math.cos(drive.getRadians() * controller1.leftStick.x));
+                //}
 
                 //drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
-            }
+            //}
 
 
             //Driver 1 controls claw
