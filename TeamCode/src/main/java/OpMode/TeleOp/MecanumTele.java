@@ -118,8 +118,10 @@ public class MecanumTele extends LinearOpMode {
             telemetry.addData("Slow mode", controller1.leftTriggerHeld);
 
             //enables/disables grid movement
-            if(controller1.rightTriggerPressed)
+            if(controller1.rightTriggerHeld) {
                 grid = !grid;
+            }
+            telemetry.addData("Grid?", controller1.rightTriggerHeld);
 
             //Driver 1 uses joysticks for movement, duh
             if (!overrideDrivers) {
@@ -259,6 +261,17 @@ public class MecanumTele extends LinearOpMode {
                 telemetry.addData("Type of junction", typeOfJunction);
                 double distanceToJunction = Math.sqrt(Math.pow(smallestAbsDif[0],2) + Math.pow(smallestAbsDif[1],2));
                 double angleToJunction = Math.toDegrees(Math.acos(smallestAbsDif[0]/distanceToJunction));
+                /*
+                odometry.setTargetPoint(((distanceToJunction-32)*closestJunction[1])/distanceToJunction,((distanceToJunction-32)*closestJunction[0])/distanceToJunction,angleToJunction);
+                if (typeOfJunction == 0) {
+                    lift.ljunction();
+                } else if (typeOfJunction == 1) {
+                    lift.mjunction();
+                } else if (typeOfJunction == 2) {
+                    lift.hjunction();
+                }
+                odometry.setTargetPoint(((distanceToJunction-22)*closestJunction[1])/distanceToJunction,((distanceToJunction-22)*closestJunction[0])/distanceToJunction,angleToJunction);
+                */
             }
 
             //Controllers rumble at start of end game
