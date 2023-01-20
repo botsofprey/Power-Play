@@ -37,7 +37,7 @@ public class RightAuto extends LinearOpMode {
             new Location(0, 90) //terminal, when qr code is not found
     };
 
-    private Location liftOffset = new Location(0, 0);
+    private Location liftOffset = new Location(28, 0);
 
     private String startFileName = "TeleStartLocation.JSON";
     private File startFile = AppUtil.getInstance().getSettingsFile(startFileName);
@@ -132,6 +132,16 @@ public class RightAuto extends LinearOpMode {
             //Sets target to parking spot
             parking = camera.getParking();
 
+        }
+
+        odometry.setTargetPoint(tile, 0, 0, true);
+        whileMoving(1);
+
+        odometry.setTargetPoint(parkingLocations[parking], true);
+        whileMoving(0);
+
+        while (opModeIsActive()){
+            odometry.update();
         }
 
         //Scoring pre-loaded cone

@@ -81,23 +81,18 @@ public class threeWheelOdometry {
                 dy = (currentAuxPos - prevAuxPos) * CM_PER_TICK;
 
         double theta = (dx2-dx1)/(LENGETH_BETWEEN_VERTS),
-                //theta = meccanumDrive.getRadians() - positionLocation.getRadians(),
                 fwd = (dx2+dx1)/2.0,
                 str = dy - (DISTANCE_FROM_MIDPOINT * theta);
 
-        double relX = fwd,
-                relY = str;
-
         double angle = meccanumDrive.getRadians();
-        double deltaX = (relX * Math.cos(angle)) - (relY * Math.sin(angle)),
-                deltaY = (relY * Math.cos(angle)) + (relX * Math.sin(angle));
+        double deltaX = (fwd * Math.cos(angle)) - (str * Math.sin(angle)),
+                deltaY = (str * Math.cos(angle)) + (fwd * Math.sin(angle));
 
         positionLocation.add(deltaX * xMult, deltaY * yMult,0);
         positionLocation.angle = meccanumDrive.getAngle();
 
         //dx = x change
         //dy = y change
-        //dt = delta theta
     }
 
     //Sets target
