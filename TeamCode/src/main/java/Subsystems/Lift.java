@@ -72,14 +72,14 @@ public class Lift {
     }
 
     public void mjunction() {
-        liftMotor.setTargetPosition(2386);
+        liftMotor.setTargetPosition(2286);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(1);
         braking = false;
     }
 
     public void hjunction() {
-        liftMotor.setTargetPosition(3042);
+        liftMotor.setTargetPosition(3242);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(1);
         braking = false;
