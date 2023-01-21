@@ -48,7 +48,6 @@ public class AutoRight extends OpMode {
     int coneheight = heights.heights[0];
 
 
-
     @Override
     public void init() {
         StaticImu.imuStatic = 0;
@@ -67,7 +66,7 @@ public class AutoRight extends OpMode {
         preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.rightStart)
                 .lineToLinearHeading(new Pose2d(-38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 6.3, coordinateLocations.rightHighJunc.getY() + 6.3, Math.toRadians(315)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 6, coordinateLocations.rightHighJunc.getY() + 6.6, Math.toRadians(330)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
                 .lineTo(new Vector2d(coordinateLocations.rightHighJunc.getX() - 12, coordinateLocations.rightHighJunc.getY() + 12))
@@ -75,34 +74,34 @@ public class AutoRight extends OpMode {
                     mpb.setLift(300);
                 })
                 .turn(Math.toRadians(-135))
-                .lineTo(new Vector2d(-62,12))
+                .lineTo(new Vector2d(-62, 12))
                 .addTemporalMarker(() -> {
                     mpb.setLift(coneheight);
                 })
-                .waitSeconds(1)
+                .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0.4);
                 })
-                .waitSeconds(1.5)
+                .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    mpb.setLift(300);
+                    mpb.setLift(500);
                 })
-                .waitSeconds(1.5)
+                .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     mpb.setLift(heights.highJunction);
                 })
-                .lineTo(new Vector2d(coordinateLocations.rightHighJunc.getX() -12, coordinateLocations.rightHighJunc.getY() + 12))
+                .lineTo(new Vector2d(coordinateLocations.rightHighJunc.getX() - 12, coordinateLocations.rightHighJunc.getY() + 12))
                 .turn(Math.toRadians(135))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(330)))
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
                 })
-                .waitSeconds(1.5)
+                .waitSeconds(0.5)
 
                 .build();
-        park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-8, 27, Math.toRadians(270))).build();
-        park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-36, 16, Math.toRadians(270))).build();
-        park17 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-54, 27, Math.toRadians(270))).build();
+        park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-60, 12, Math.toRadians(270))).build();
+        park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270))).build();
+        park17 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-12, 12, Math.toRadians(270))).build();
         mecanumDrive.followTrajectorySequenceAsync(preLoad);
     }
 
@@ -145,23 +144,17 @@ public class AutoRight extends OpMode {
             mpb.setClaw(0);
             mpb.sleep(1500);
             step++;
+            mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
         } else if (step == 3) {
-            mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
             prevtraj = getConeAndScore.end();
-            coneheight = heights.heights[i++];
-            while (mecanumDrive.isBusy())
-                mecanumDrive.update();
-            step++;
-        } else if (step == 4) {
-            mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
-            prevtraj = preLoad.end();
             coneheight = heights.heights[i];
-            while (mecanumDrive.isBusy())
-                mecanumDrive.update();
-            if (coneheight == heights.heights[1])
+            mecanumDrive.update();
+            if (!mecanumDrive.isBusy()) {
                 step++;
-            i++;
-        } else if (step == 5) {
+                i++;
+                mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
+            }
+        } else if (step == 4) {
             if (tagOfInterest == 19) {
                 mecanumDrive.followTrajectoryAsync(park19);
             } else if (tagOfInterest == 17) {
@@ -170,21 +163,21 @@ public class AutoRight extends OpMode {
                 mecanumDrive.followTrajectoryAsync(park18);
             }
             step++;
-        } else if (step == 6) {
+        } else if (step == 5) {
             mecanumDrive.update();
             if (!mecanumDrive.isBusy()) {
                 step++;
             }
-        } else if (step == 7) {
+        } else if (step == 6) {
             mpb.setLift(0);
             if (mpb.getLift() == 0) {
                 step++;
             }
         } else {
-        telemetry.addLine("Done");
-    }
+            telemetry.addLine("Done");
+        }
 
-}
+    }
 
     public void stop() {
         StaticImu.imuStatic = mpb.getHeading(AngleUnit.RADIANS);
