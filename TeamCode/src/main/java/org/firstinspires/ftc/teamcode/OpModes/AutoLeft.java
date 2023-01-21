@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -34,13 +35,16 @@ public class AutoLeft extends OpMode {
 
     int step = 0;
 
-    Trajectory park19, park18;
-    TrajectorySequence preLoad, park17;
+    Trajectory park19, park18, park17;
+    TrajectorySequence preLoad, getConeAndScore;
 
     HeightsList heights = new HeightsList();
     cameraControl autocam = new cameraControl();
     HardwareMechanisms mpb = new HardwareMechanisms();
     CoordinateLocations coordinateLocations = new CoordinateLocations();
+    Pose2d prevtraj = new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315));
+    int coneheight = heights.heights[0];
+    int i = 0;
 
     @Override
     public void init() {
@@ -63,16 +67,33 @@ public class AutoLeft extends OpMode {
                 .lineToLinearHeading(new Pose2d(32, 12, Math.toRadians(270)))
                 .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 5, Math.toRadians(225)))
                 .build();
-
-        park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(12, 12, Math.toRadians(270))).build();
-        park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(36, 12, Math.toRadians(270))).build();
-        park17 = mecanumDrive.trajectorySequenceBuilder(preLoad.end())
-                .lineToLinearHeading(new Pose2d(36, 12, preLoad.end().getHeading()))
-                .turn(Math.toRadians(45))
-                .lineToLinearHeading(new Pose2d(60, 12, Math.toRadians(270)))
+        getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj).lineTo(new Vector2d(coordinateLocations.leftHighJunc.getX() + 12, coordinateLocations.leftHighJunc.getY() + 12)).addTemporalMarker(() -> {
+                    mpb.setLift(300);
+                }).turn(Math.toRadians(135)).lineTo(new Vector2d(62, 12)).addTemporalMarker(() -> {
+                    mpb.setLift(coneheight);
+                })
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
+                    mpb.setClaw(0.4);
+                })
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
+                    mpb.setLift(500);
+                })
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
+                    mpb.setLift(heights.highJunction);
+                }).lineTo(new Vector2d(coordinateLocations.leftHighJunc.getX() + 12, coordinateLocations.leftHighJunc.getY() + 12)).turn(Math.toRadians(135)).lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 3, Math.toRadians(210))).addTemporalMarker(() -> {
+                    mpb.setClaw(0);
+                })
+                .waitSeconds(0.5)
                 .build();
+        park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(60, 12, Math.toRadians(270))).build();
+        park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(36, 12, Math.toRadians(270))).build();
+        park17 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(12, 12, preLoad.end().getHeading())).build();
         mecanumDrive.followTrajectorySequenceAsync(preLoad);
     }
+
 
     @Override
     public void init_loop() {
@@ -107,32 +128,47 @@ public class AutoLeft extends OpMode {
             mecanumDrive.update();
             if (!mecanumDrive.isBusy()) {
                 step++;
-            }
-        } else if (step == 2) {
-            mpb.setClaw(0);
-            if (tagOfInterest == 19) {
-                mecanumDrive.followTrajectoryAsync(park19);
-            } else if (tagOfInterest == 17) {
-                mecanumDrive.followTrajectorySequenceAsync(park17);
-            } else {
-                mecanumDrive.followTrajectoryAsync(park18);
-            }
-            mpb.sleep(1500);
-            step++;
-        } else if (step == 3) {
-            mecanumDrive.update();
-            if (!mecanumDrive.isBusy()) {
+            } else if (step == 2) {
+                mpb.setClaw(0);
+                mpb.sleep(1500);
                 step++;
-            }
-        } else if (step == 4) {
-            mpb.setLift(0);
-            if (mpb.getLift() == 0) {
-                step++;
-            }
-        } else {
-            telemetry.addLine("Done");
-        }
+                mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
+            } else if (step == 3) {
+                prevtraj = getConeAndScore.end();
+                coneheight = heights.heights[i];
+                mecanumDrive.update();
+                if (!mecanumDrive.isBusy()) {
+                    step++;
+                    i++;
+                    mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
+                }
 
+            } else if (step == 4) {
+                mpb.setClaw(0);
+                if (tagOfInterest == 19) {
+                    mecanumDrive.followTrajectoryAsync(park19);
+                } else if (tagOfInterest == 17) {
+                    mecanumDrive.followTrajectoryAsync(park17);
+                } else {
+                    mecanumDrive.followTrajectoryAsync(park18);
+                }
+                mpb.sleep(1500);
+                step++;
+            } else if (step == 5) {
+                mecanumDrive.update();
+                if (!mecanumDrive.isBusy()) {
+                    step++;
+                }
+            } else if (step == 6) {
+                mpb.setLift(0);
+                if (mpb.getLift() == 0) {
+                    step++;
+                }
+            } else {
+                telemetry.addLine("Done");
+            }
+
+        }
     }
 
     public void stop() {
