@@ -128,47 +128,46 @@ public class AutoLeft extends OpMode {
             mecanumDrive.update();
             if (!mecanumDrive.isBusy()) {
                 step++;
-            } else if (step == 2) {
-                mpb.setClaw(0);
-                mpb.sleep(1500);
-                step++;
-                mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
-            } else if (step == 3) {
-                prevtraj = getConeAndScore.end();
-                coneheight = heights.heights[i];
-                mecanumDrive.update();
-                if (!mecanumDrive.isBusy()) {
-                    step++;
-                    i++;
-                    mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
-                }
-
-            } else if (step == 4) {
-                mpb.setClaw(0);
-                if (tagOfInterest == 19) {
-                    mecanumDrive.followTrajectoryAsync(park19);
-                } else if (tagOfInterest == 17) {
-                    mecanumDrive.followTrajectoryAsync(park17);
-                } else {
-                    mecanumDrive.followTrajectoryAsync(park18);
-                }
-                mpb.sleep(1500);
-                step++;
-            } else if (step == 5) {
-                mecanumDrive.update();
-                if (!mecanumDrive.isBusy()) {
-                    step++;
-                }
-            } else if (step == 6) {
-                mpb.setLift(0);
-                if (mpb.getLift() == 0) {
-                    step++;
-                }
-            } else {
-                telemetry.addLine("Done");
             }
-
+        } else if (step == 2) {
+            mpb.setClaw(0);
+            mpb.sleep(1500);
+            step++;
+            mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
+        } else if (step == 3) {
+            prevtraj = getConeAndScore.end();
+            coneheight = heights.heights[i];
+            mecanumDrive.update();
+            if (!mecanumDrive.isBusy()) {
+                step++;
+                i++;
+                mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
+            }
+        } else if (step == 4) {
+            mpb.setClaw(0);
+            if (tagOfInterest == 19) {
+                mecanumDrive.followTrajectoryAsync(park19);
+            } else if (tagOfInterest == 17) {
+                mecanumDrive.followTrajectoryAsync(park17);
+            } else {
+                mecanumDrive.followTrajectoryAsync(park18);
+            }
+            mpb.sleep(1500);
+            step++;
+        } else if (step == 5) {
+            mecanumDrive.update();
+            if (!mecanumDrive.isBusy()) {
+                step++;
+            }
+        } else if (step == 6) {
+            mpb.setLift(0);
+            if (mpb.getLift() == 0) {
+                step++;
+            }
+        } else {
+            telemetry.addLine("Done");
         }
+
     }
 
     public void stop() {
