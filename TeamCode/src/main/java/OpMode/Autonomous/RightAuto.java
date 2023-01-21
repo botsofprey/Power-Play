@@ -120,6 +120,69 @@ public class RightAuto extends LinearOpMode {
         claw.setPosition(Claw.CLOSE_POSITION);
         sleep(1000);
 
+        //If camera is too far away to see qr, robot gets closer
+        if(!camera.tagFound()){
+            odometry.setTargetPoint(parkingLocations[1]);
+
+            while(!odometry.atTarget() && !camera.tagFound()){
+                odometry.update();
+
+                telemetry.addData("QR Code Found", camera.tagFound());
+                if(camera.tagFound())
+                    telemetry.addData("Parking Spot", camera.getParking()+1);
+                telemetry.update();
+            }
+
+            //Turns camera off
+            camera.stop();
+
+            //Sets target to parking spot
+            parking = camera.getParking();
+
+        }else{
+            //Turns camera off
+            camera.stop();
+
+            //Sets target to parking spot
+            parking = camera.getParking();
+
+            //Scoring pre-loaded cone
+            odometry.setTargetPoint(0, -60, 0, true);
+            lift.hjunction();
+            whileMoving(1);
+        }
+
+        odometry.setTargetPoint(60, -60, -45, true);
+        whileMoving(0);
+        while(lift.isBusy() && opModeIsActive());
+
+        drive.setCurrentSpeed(.25);
+        odometry.setTargetPoint(76, -80, -44, true);
+        whileMoving(0);
+
+        //Scores
+        lift.hjunctionScore();
+        while(lift.isBusy() && opModeIsActive());
+
+        sleep(500);
+        claw.setPosition(Claw.OPEN_POSITION);
+        sleep(500);
+
+        //Getting in position to go to cone stack
+        drive.setCurrentSpeed(.25);
+        //lift.coneStack(5);
+        odometry.setTargetPoint(60, -60, -45, true);
+        whileMoving(0);
+
+        drive.setCurrentSpeed(.5);
+        lift.Ground();
+        odometry.setTargetPoint(parkingLocations[parking], true);
+        whileMoving(0);
+
+        while(opModeIsActive()){
+            odometry.update();
+        }
+
         //Turns camera off
         camera.stop();
 
@@ -242,6 +305,7 @@ public class RightAuto extends LinearOpMode {
 
     private void whileMoving(long secondsOfSleep){
         long startTime = System.currentTimeMillis();
+        ElapsedTime stopTime = null;
 
         while(opModeIsActive() && !odometry.atTarget()) {
             telemetry.addData("FPS", 1000.0/(System.currentTimeMillis()-startTime));
@@ -257,6 +321,13 @@ public class RightAuto extends LinearOpMode {
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();
+
+            if(stopTime == null && odometry.getLocationClass().distanceBetween(odometry.getTargetLocationClass()) <= 5){
+                stopTime = new ElapsedTime();
+            } else if(stopTime != null && stopTime.seconds() > 5){
+                break;
+            }
+
         }
 
         drive.brake();

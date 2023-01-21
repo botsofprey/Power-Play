@@ -408,4 +408,8 @@ public class threeWheelOdometry {
     public void changeStartLocation(Location s){
         startLoc = s;
     }
+
+    public Location getTargetLocationClass() {
+        return targetLocation;
+    }
 }

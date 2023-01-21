@@ -32,7 +32,7 @@ public class LeftAuto extends LinearOpMode {
             new Location(60, -60), //parking spot 1
             new Location(60, 0), //2
             new Location(60, 60), //3
-            new Location(0, -60) //terminal, when qr code is not found
+            new Location(0, 90) //terminal, when qr code is not found
     };
 
     private String startFileName = "TeleStartLocation.JSON";
@@ -140,7 +140,7 @@ public class LeftAuto extends LinearOpMode {
 
             //Scoring pre-loaded cone
             odometry.setTargetPoint(0, 60, 0, true);
-            lift.setPosition(3500, 1);
+            lift.hjunction();
             whileMoving(1);
         }
 
@@ -149,7 +149,7 @@ public class LeftAuto extends LinearOpMode {
         while(lift.isBusy() && opModeIsActive());
 
         drive.setCurrentSpeed(.25);
-        odometry.setTargetPoint(74, 76, 45, true);
+        odometry.setTargetPoint(68, 66, 45, true);
         whileMoving(0);
 
         //Scores
@@ -217,7 +217,7 @@ public class LeftAuto extends LinearOpMode {
 
                 telemetry.addData("Target", odometry.getTargetLocation());
                 telemetry.addData("Position", odometry.getLocation());
-                telemetry.addData("Lift postion", lift.getPosition());
+
                 telemetry.addData("Powers", drive.getPowers());
 
                 telemetry.update();
@@ -234,7 +234,7 @@ public class LeftAuto extends LinearOpMode {
 
                 telemetry.addData("Target", odometry.getTargetLocation());
                 telemetry.addData("Position", odometry.getLocation());
-                telemetry.addData("Lift postion", lift.getPosition());
+
                 telemetry.addData("Powers", drive.getPowers());
 
                 telemetry.update();
@@ -253,7 +253,7 @@ public class LeftAuto extends LinearOpMode {
 
                 telemetry.addData("Target", odometry.getTargetLocation());
                 telemetry.addData("Position", odometry.getLocation());
-                telemetry.addData("Lift postion", lift.getPosition());
+
                 telemetry.addData("Powers", drive.getPowers());
 
                 telemetry.update();
@@ -274,7 +274,7 @@ public class LeftAuto extends LinearOpMode {
 
                 telemetry.addData("Target", odometry.getTargetLocation());
                 telemetry.addData("Position", odometry.getLocation());
-                telemetry.addData("Lift postion", lift.getPosition());
+
                 telemetry.addData("Powers", drive.getPowers());
 
                 telemetry.update();
@@ -294,7 +294,7 @@ public class LeftAuto extends LinearOpMode {
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Lift postion", lift.getPosition());
+
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();
@@ -309,7 +309,7 @@ public class LeftAuto extends LinearOpMode {
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Lift postion", lift.getPosition());
+
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();
@@ -325,7 +325,7 @@ public class LeftAuto extends LinearOpMode {
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Lift postion", lift.getPosition());
+
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();
@@ -349,7 +349,7 @@ public class LeftAuto extends LinearOpMode {
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Lift postion", lift.getPosition());
+
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();
@@ -366,7 +366,7 @@ public class LeftAuto extends LinearOpMode {
 
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
-            telemetry.addData("Lift postion", lift.getPosition());
+
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();

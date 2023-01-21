@@ -79,14 +79,14 @@ public class Lift {
     }
 
     public void hjunction() {
-        liftMotor.setTargetPosition(3242);
+        liftMotor.setTargetPosition(3500);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(1);
         braking = false;
     }
 
     public void hjunctionScore() {
-        liftMotor.setTargetPosition(2942);
+        liftMotor.setTargetPosition(3300);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(1);
         braking = false;
