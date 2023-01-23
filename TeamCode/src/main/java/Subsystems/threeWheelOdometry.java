@@ -135,15 +135,10 @@ public class threeWheelOdometry {
     }
 
     public void setTargetByOffset(Location offset, Location target, boolean maintain){
-        //finds angle robot needs to turn to target
-        this.maintain = maintain;
-
-        double angleToward = Math.atan2(positionLocation.difference(target).y, positionLocation.difference(target).x);
-
         //Finds offset position after turn
-        double distanceFromCenter = new Location(0,0).distanceBetween(offset);
-        Location posOfOff = new Location((distanceFromCenter * Math.cos(angleToward + meccanumDrive.getRadians())) + positionLocation.x,
-                (distanceFromCenter * Math.sin(angleToward + meccanumDrive.getRadians())) + positionLocation.y);
+        Location posOfOff = new Location(Math.cos(meccanumDrive.getRadians()) * offset.x - Math.sin(meccanumDrive.getRadians()) * offset.x,
+                Math.sin(meccanumDrive.getRadians()) * offset.y - Math.cos(meccanumDrive.getRadians()) * offset.y);
+        posOfOff.add(positionLocation);
 
         //Calculates differences of offset and target
         Location targetDiff = posOfOff.difference(target);
@@ -151,13 +146,7 @@ public class threeWheelOdometry {
         //Sets target
         Location tar = new Location(positionLocation.x + targetDiff.x,
                 positionLocation.y + targetDiff.y,
-                Math.toDegrees(angleToward));
-
-        if (tar.angle > 180)
-            tar.angle -= 360;
-        else if(tar.angle < -180)
-            tar.angle += 360;
-
+                meccanumDrive.getAngle());
         setTargetPoint(tar);
     }
 

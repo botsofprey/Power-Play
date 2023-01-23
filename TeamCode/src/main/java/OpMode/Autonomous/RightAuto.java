@@ -324,7 +324,7 @@ public class RightAuto extends LinearOpMode {
 
             if(stopTime == null && odometry.getLocationClass().distanceBetween(odometry.getTargetLocationClass()) <= 5){
                 stopTime = new ElapsedTime();
-            } else if(stopTime != null && stopTime.seconds() > 5){
+            } else if(stopTime != null && stopTime.seconds() > 2.5){
                 break;
             }
 

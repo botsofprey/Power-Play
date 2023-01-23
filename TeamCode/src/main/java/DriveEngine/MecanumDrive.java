@@ -261,8 +261,6 @@ public class MecanumDrive {
     public double getAngle()
     {
         prevAngle = globalAngle;
-        System.out.println("IMU NULL???: " + imu.getAngularOrientation());
-        System.out.println("IMU NULL???: " + imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES));
         Orientation angles = imu.getAngularOrientation
                 (AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 

@@ -33,12 +33,6 @@ public class TestMovement extends LinearOpMode {
 
         //odom.setTargetByOffset(liftLoc, new Location(tile/2., -tile/2.), true);
         odom.setTargetByOffset(liftLoc, new Location(tile/2., 0), true);
-        while(opModeIsActive() && lift.isBusy()){
-            odom.update();
-            telemetry.addData("Pos", odom.getLocation());
-            telemetry.addData("Target", odom.getTargetLocation());
-            telemetry.update();
-        }
 
         while(opModeIsActive() && !odom.atTarget()){
             odom.update();
