@@ -89,4 +89,9 @@ public class Location {
         Math.round(angle) + ", ";
     }
 
+    public void add(Location positionLocation) {
+        x += positionLocation.x;
+        y += positionLocation.y;
+        angle += positionLocation.angle;
+    }
 }
