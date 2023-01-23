@@ -94,6 +94,7 @@ public class AutoRight extends OpMode {
                 .lineTo(new Vector2d(coordinateLocations.rightHighJunc.getX() - 12, coordinateLocations.rightHighJunc.getY() + 12))
                 .turn(Math.toRadians(135))
                 .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(330)))
+                .waitSeconds(1.5)
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
                 })
