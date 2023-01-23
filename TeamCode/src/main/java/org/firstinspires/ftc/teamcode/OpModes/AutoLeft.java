@@ -70,7 +70,7 @@ public class AutoLeft extends OpMode {
                 .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 6, coordinateLocations.leftHighJunc.getY() + 6.6, Math.toRadians(225)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
-                .lineTo(new Vector2d(36, 12))
+                .lineTo(new Vector2d(12, 12))
                 /*.addTemporalMarker(() -> {
                     mpb.setLift(coneheight);
                 })
@@ -96,8 +96,8 @@ public class AutoLeft extends OpMode {
                 .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 3, Math.toRadians(210)))
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
-                })
-                .waitSeconds(0.5)*/
+                })*/
+                .waitSeconds(0.5)
                 .build();
         park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(60, 12, Math.toRadians(270))).build();
         park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(36, 12, Math.toRadians(270))).build();
@@ -155,13 +155,13 @@ public class AutoLeft extends OpMode {
                 mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
             }
         } else if (step == 4) {
-            if (tagOfInterest == 19) {
+            /*if (tagOfInterest == 19) {
                 mecanumDrive.followTrajectoryAsync(park19);
             } else if (tagOfInterest == 17) {
                 mecanumDrive.followTrajectoryAsync(park17);
             } else {
                 mecanumDrive.followTrajectoryAsync(park18);
-            }
+            }*/
             step++;
         } else if (step == 5) {
             mecanumDrive.update();
