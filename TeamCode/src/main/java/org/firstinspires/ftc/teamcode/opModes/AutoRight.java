@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes;
+package org.firstinspires.ftc.teamcode.opModes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -20,7 +20,7 @@ import org.openftc.apriltag.AprilTagDetection;
 import java.util.ArrayList;
 
 @Autonomous
-public class AutoLeft extends OpMode {
+public class AutoRight extends OpMode {
     SampleMecanumDrive mecanumDrive;
     AprilTagDetection tagData;
     AprilTagPipelineEXAMPLECOPY apriltagpipelineEXAMPLE;
@@ -62,22 +62,22 @@ public class AutoLeft extends OpMode {
         //set the pipeline for the camera
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
-        mecanumDrive.setPoseEstimate(coordinateLocations.leftStart);
+        mecanumDrive.setPoseEstimate(coordinateLocations.rightStart);
 
-        preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.leftStart)
-                .lineToLinearHeading(new Pose2d(38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(36, 12, Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 6, coordinateLocations.leftHighJunc.getY() + 6.6, Math.toRadians(225)))
+        preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.rightStart)
+                .lineToLinearHeading(new Pose2d(-38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 6, coordinateLocations.rightHighJunc.getY() + 6.6, Math.toRadians(330)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
-                .lineTo(new Vector2d(12, 12))
-                /*.addTemporalMarker(() -> {
-                    mpb.setLift(coneheight);
-                })
-                .turn(Math.toRadians(135))
-                .lineTo(new Vector2d(62, 12))
+                .lineTo(new Vector2d(coordinateLocations.rightHighJunc.getX() - 12, coordinateLocations.rightHighJunc.getY() + 12))
                 .addTemporalMarker(() -> {
                     mpb.setLift(300);
+                })
+                .turn(Math.toRadians(-135))
+                .lineTo(new Vector2d(-62, 12))
+                .addTemporalMarker(() -> {
+                    mpb.setLift(coneheight);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
@@ -91,17 +91,19 @@ public class AutoLeft extends OpMode {
                 .addTemporalMarker(() -> {
                     mpb.setLift(heights.highJunction);
                 })
-                .lineTo(new Vector2d(36, 12))
+                .lineTo(new Vector2d(coordinateLocations.rightHighJunc.getX() - 12, coordinateLocations.rightHighJunc.getY() + 12))
                 .turn(Math.toRadians(135))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 3, Math.toRadians(210)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(330)))
+                .waitSeconds(1.5)
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
-                })*/
+                })
                 .waitSeconds(0.5)
+
                 .build();
-        park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(60, 12, Math.toRadians(270))).build();
-        park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(36, 12, Math.toRadians(270))).build();
-        park17 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(12, 12, preLoad.end().getHeading())).build();
+        park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-60, 12, Math.toRadians(270))).build();
+        park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270))).build();
+        park17 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-12, 12, Math.toRadians(270))).build();
         mecanumDrive.followTrajectorySequenceAsync(preLoad);
     }
 
@@ -155,13 +157,13 @@ public class AutoLeft extends OpMode {
                 mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
             }
         } else if (step == 4) {
-            /*if (tagOfInterest == 19) {
+            if (tagOfInterest == 19) {
                 mecanumDrive.followTrajectoryAsync(park19);
             } else if (tagOfInterest == 17) {
                 mecanumDrive.followTrajectoryAsync(park17);
             } else {
                 mecanumDrive.followTrajectoryAsync(park18);
-            }*/
+            }
             step++;
         } else if (step == 5) {
             mecanumDrive.update();
