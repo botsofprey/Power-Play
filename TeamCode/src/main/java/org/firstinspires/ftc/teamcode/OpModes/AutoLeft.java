@@ -33,6 +33,8 @@ public class AutoLeft extends OpMode {
     double cx = 402.145;
     double cy = 221.506;
 
+    int i = 0;
+
     int step = 0;
 
     Trajectory park19, park18, park17;
@@ -44,7 +46,7 @@ public class AutoLeft extends OpMode {
     CoordinateLocations coordinateLocations = new CoordinateLocations();
     Pose2d prevtraj = new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315));
     int coneheight = heights.heights[0];
-    int i = 0;
+
 
     @Override
     public void init() {
@@ -63,14 +65,19 @@ public class AutoLeft extends OpMode {
         mecanumDrive.setPoseEstimate(coordinateLocations.leftStart);
 
         preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.leftStart)
-                .lineToLinearHeading(new Pose2d(33, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(32, 12, Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 5, Math.toRadians(225)))
+                .lineToLinearHeading(new Pose2d(38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(36, 12, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 6, coordinateLocations.leftHighJunc.getY() + 6.6, Math.toRadians(225)))
                 .build();
-        getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj).lineTo(new Vector2d(coordinateLocations.leftHighJunc.getX() + 12, coordinateLocations.leftHighJunc.getY() + 12)).addTemporalMarker(() -> {
-                    mpb.setLift(300);
-                }).turn(Math.toRadians(135)).lineTo(new Vector2d(62, 12)).addTemporalMarker(() -> {
+        getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
+                .lineTo(new Vector2d(36, 12))
+                .addTemporalMarker(() -> {
                     mpb.setLift(coneheight);
+                })
+                .turn(Math.toRadians(135))
+                .lineTo(new Vector2d(62, 12))
+                .addTemporalMarker(() -> {
+                    mpb.setLift(300);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
@@ -83,7 +90,11 @@ public class AutoLeft extends OpMode {
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     mpb.setLift(heights.highJunction);
-                }).lineTo(new Vector2d(coordinateLocations.leftHighJunc.getX() + 12, coordinateLocations.leftHighJunc.getY() + 12)).turn(Math.toRadians(135)).lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 3, Math.toRadians(210))).addTemporalMarker(() -> {
+                })
+                .lineTo(new Vector2d(36, 12))
+                .turn(Math.toRadians(135))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 3, Math.toRadians(210)))
+                .addTemporalMarker(() -> {
                     mpb.setClaw(0);
                 })
                 .waitSeconds(0.5)
@@ -93,7 +104,6 @@ public class AutoLeft extends OpMode {
         park17 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(12, 12, preLoad.end().getHeading())).build();
         mecanumDrive.followTrajectorySequenceAsync(preLoad);
     }
-
 
     @Override
     public void init_loop() {
@@ -126,6 +136,7 @@ public class AutoLeft extends OpMode {
         } else if (step == 1) {
             mpb.setLift(heights.highJunction);
             mecanumDrive.update();
+            prevtraj = preLoad.end();
             if (!mecanumDrive.isBusy()) {
                 step++;
             }
@@ -144,7 +155,6 @@ public class AutoLeft extends OpMode {
                 mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
             }
         } else if (step == 4) {
-            mpb.setClaw(0);
             if (tagOfInterest == 19) {
                 mecanumDrive.followTrajectoryAsync(park19);
             } else if (tagOfInterest == 17) {
@@ -152,7 +162,6 @@ public class AutoLeft extends OpMode {
             } else {
                 mecanumDrive.followTrajectoryAsync(park18);
             }
-            mpb.sleep(1500);
             step++;
         } else if (step == 5) {
             mecanumDrive.update();

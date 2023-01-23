@@ -38,7 +38,7 @@ public class AutoRight extends OpMode {
     int step = 0;
 
     Trajectory park19, park18, park17;
-    TrajectorySequence preLoad, getConeAndScoreInitial, getConeAndScore;
+    TrajectorySequence preLoad, getConeAndScore;
 
     HeightsList heights = new HeightsList();
     cameraControl autocam = new cameraControl();
@@ -63,6 +63,7 @@ public class AutoRight extends OpMode {
         autocam.camera.setPipeline(apriltagpipelineEXAMPLE);
 
         mecanumDrive.setPoseEstimate(coordinateLocations.rightStart);
+
         preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.rightStart)
                 .lineToLinearHeading(new Pose2d(-38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
