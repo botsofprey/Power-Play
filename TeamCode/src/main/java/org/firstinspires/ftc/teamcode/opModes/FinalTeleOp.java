@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes;
+package org.firstinspires.ftc.teamcode.opModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -123,17 +123,17 @@ public class FinalTeleOp extends OpMode {
         }
 
         if (!presetLiftHeightsMode) { //manual lift
-            //the right trigger makes the lift go up and the left trigger makes the lift go down
-            if (board.getLift() <= 0) {
-                targetPositionManualControl += gamepad2.right_trigger * 30;
-            } else if (board.getLift() <= heights.highJunction) {
+//            //the right trigger makes the lift go up and the left trigger makes the lift go down
+//            if (board.getLift() <= 0) {
+//                targetPositionManualControl += gamepad2.right_trigger * 30;
+//            } else if (board.getLift() <= heights.highJunction) {
                 targetPositionManualControl += (gamepad2.right_trigger - gamepad2.left_trigger) * 30;
-            } else {
-                targetPositionManualControl -=gamepad2.left_trigger * 30;
-            }
-            if (targetPositionManualControl < 0) { //keeps the lift from going below 0
-                targetPositionManualControl = 0;
-            }
+//            } else {
+//                targetPositionManualControl -=gamepad2.left_trigger * 30;
+//            }
+//            if (targetPositionManualControl < 0) { //keeps the lift from going below 0
+//                targetPositionManualControl = 0;
+//            }
             board.setLift(targetPositionManualControl);
 
             if (Math.abs(board.getLift() - heights.highJunction) < Math.abs(board.getLift() - heights.midJunction)) {
