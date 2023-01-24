@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.control.PIDFController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -32,6 +34,11 @@ public class HardwareMechanisms {
     static BNO055IMU imu;
 
     TouchSensor touchSensor;
+    static public double kp = 0.01,
+            kI = 0,
+            kD = 0;
+    PIDCoefficients coeffs = new PIDCoefficients(kp, kI, kD);
+    PIDFController controller = new PIDFController(coeffs);
 
     public void init(HardwareMap hwMap) {
         drive.init(hwMap);
@@ -42,7 +49,7 @@ public class HardwareMechanisms {
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setTargetPosition(0);
         lift.setPower(0);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         imu.initialize(parameters);
     }
@@ -57,9 +64,9 @@ public class HardwareMechanisms {
      * @param position The target position
      */
     public void setLift(int position) {
-        lift.setTargetPosition(position);
-        double scalar = 12.0 / VoltageLimiter.getBatteryVoltage();
-        lift.setPower(1 * lift.getVelocity() * scalar);
+        controller.setTargetPosition(position);
+        double correction = controller.update(lift.getCurrentPosition(), lift.getVelocity());
+        lift.setPower(correction);
     }
 
     /**
