@@ -120,6 +120,7 @@ public class MecanumTele extends LinearOpMode {
             //enables/disables grid movement
             if(controller1.rightTriggerHeld) {
                 grid = !grid;
+                telemetry.addData("Grid Mode", controller1.rightTriggerHeld);
             }
             telemetry.addData("Grid?", controller1.rightTriggerHeld);
 
