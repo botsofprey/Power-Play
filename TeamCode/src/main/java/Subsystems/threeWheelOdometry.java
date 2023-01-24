@@ -136,8 +136,9 @@ public class threeWheelOdometry {
 
     public void setTargetByOffset(Location offset, Location target, boolean maintain){
         //Finds offset position after turn
-        Location posOfOff = new Location(Math.cos(meccanumDrive.getRadians()) * offset.x - Math.sin(meccanumDrive.getRadians()) * offset.x,
-                Math.sin(meccanumDrive.getRadians()) * offset.y - Math.cos(meccanumDrive.getRadians()) * offset.y);
+        Location posOfOff = new Location(
+                (Math.cos(meccanumDrive.getRadians()) * offset.x) - (Math.sin(meccanumDrive.getRadians()) * offset.y),
+                (Math.sin(meccanumDrive.getRadians()) * offset.x) + (Math.cos(meccanumDrive.getRadians()) * offset.y));
         posOfOff.add(positionLocation);
 
         //Calculates differences of offset and target

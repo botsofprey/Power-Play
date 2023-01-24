@@ -37,7 +37,7 @@ public class RightAuto extends LinearOpMode {
             new Location(0, 90) //terminal, when qr code is not found
     };
 
-    private Location liftOffset = new Location(28, 0);
+    private Location liftOffset = new Location(20.5, 0);
 
     private String startFileName = "TeleStartLocation.JSON";
     private File startFile = AppUtil.getInstance().getSettingsFile(startFileName);
@@ -147,17 +147,17 @@ public class RightAuto extends LinearOpMode {
             parking = camera.getParking();
 
             //Scoring pre-loaded cone
-            odometry.setTargetPoint(0, -60, 0, true);
+            odometry.setTargetPoint(0, -tile, 0, true);
             lift.hjunction();
             whileMoving(1);
         }
 
-        odometry.setTargetPoint(60, -60, -45, true);
+        odometry.setTargetPoint(tile, -tile, -45, true);
         whileMoving(0);
         while(lift.isBusy() && opModeIsActive());
 
         drive.setCurrentSpeed(.25);
-        odometry.setTargetPoint(76, -80, -44, true);
+        odometry.setTargetByOffset(liftOffset, new Location(tile * 1.5, -tile * 1.5), true);
         whileMoving(0);
 
         //Scores
@@ -171,63 +171,8 @@ public class RightAuto extends LinearOpMode {
         //Getting in position to go to cone stack
         drive.setCurrentSpeed(.25);
         //lift.coneStack(5);
-        odometry.setTargetPoint(60, -60, -45, true);
-        whileMoving(0);
-
-        drive.setCurrentSpeed(.5);
-        lift.Ground();
-        odometry.setTargetPoint(parkingLocations[parking], true);
-        whileMoving(0);
-
-        while(opModeIsActive()){
-            odometry.update();
-        }
-
-        //Turns camera off
-        camera.stop();
-
-        //If camera is too far away to see qr, robot gets closer
-        if(!camera.tagFound()){
-            //Sets parking to the second parking spot
-            parking = 1;
-
-        }else{
-            //Sets target to parking spot
-            parking = camera.getParking();
-
-        }
-
-        odometry.setTargetPoint(tile, 0, 0, true);
-        whileMoving(1);
-
-        odometry.setTargetPoint(parkingLocations[parking], true);
-        whileMoving(0);
-
-        while (opModeIsActive()){
-            odometry.update();
-        }
-
-        //Scoring pre-loaded cone
-        odometry.setTargetPoint(0, -tile, 0, true);
-        lift.hjunction();
-        whileMoving(1);
-
         odometry.setTargetPoint(tile, -tile, -45, true);
         whileMoving(0);
-        while(lift.isBusy() && opModeIsActive());
-
-        drive.setCurrentSpeed(.25);
-        //odometry.setTargetPoint(71, -67, -41, true);
-        odometry.setTargetByOffset(liftOffset, new Location(tile*1.5, -tile*1.5), true);
-        whileMoving(0);
-
-        //Scores
-        lift.hjunctionScore();
-        while(lift.isBusy() && opModeIsActive());
-
-        sleep(250);
-        claw.setPosition(Claw.OPEN_POSITION);
-        sleep(500);
 
         //Getting in position to go to cone stack
         drive.setCurrentSpeed(.5);
@@ -251,26 +196,26 @@ public class RightAuto extends LinearOpMode {
 
         while(opModeIsActive() && times < 5 && autoTimer.seconds() < 25){
             //Picks up cone
-            lift.coneStack(coneStack);
-            while(lift.isBusy() && opModeIsActive());
+            //lift.coneStack(coneStack);
+            //while(lift.isBusy() && opModeIsActive());
 
-            odometry.setTargetPoint(tile*2, 52, 92, true);
+            odometry.setTargetByOffset(liftOffset, new Location(tile*2, 55), true);
             whileMoving(0);
 
             claw.setPosition(Claw.CLOSE_POSITION);
             sleep(1000);
 
             //Backs away from cone stack before turning
-            odometry.setTargetPoint(tile*2, 42, 92, true);
+            odometry.setTargetPoint(tile*2, 0, 90, true);
             whileMoving(0);
 
             //Turns toward high junction
             lift.hjunction();
-            odometry.rotateToAngle(-45);
+            odometry.rotateToAngle(0);
             whileRotating(0);
 
             //Scores
-            odometry.setTargetPoint(tile*2,0,-45, true);
+            odometry.setTargetByOffset(liftOffset, new Location(tile*2.5,-tile*.5), true);
             whileMoving(0);
 
             lift.hjunctionScore();
@@ -279,7 +224,7 @@ public class RightAuto extends LinearOpMode {
             claw.setPosition(Claw.OPEN_POSITION);
             sleep(1000);
 
-            odometry.setTargetPoint(134, -3, -46);
+            odometry.setTargetPoint(tile * 2, 0, 0);
             lift.Ground();
             whileMoving(0);
 
@@ -324,16 +269,17 @@ public class RightAuto extends LinearOpMode {
 
             if(stopTime == null && odometry.getLocationClass().distanceBetween(odometry.getTargetLocationClass()) <= 5){
                 stopTime = new ElapsedTime();
-            } else if(stopTime != null && stopTime.seconds() > 2.5){
+            } else if(stopTime != null && stopTime.seconds() > 2.5 && drive.getPower(0) < .25){
                 break;
             }
-
         }
 
         drive.brake();
     }
 
     private void whileRotating(long secondsOfSleep){
+        ElapsedTime stopTime = null;
+
         while(opModeIsActive() && !odometry.atTargetAngle()) {
             odometry.update();
 
@@ -345,9 +291,36 @@ public class RightAuto extends LinearOpMode {
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();
+            if(stopTime == null && odometry.getTargetLocationClass().compareHeading(odometry.getLocationClass(), 20)){
+                stopTime = new ElapsedTime();
+            }else if(stopTime != null && stopTime.seconds() >= 2.5){
+                break;
+            }
         }
 
         drive.brake();
+    }
+
+    private void whileLiftBusy(){
+        ElapsedTime stopTime = null;
+
+        while(opModeIsActive() && !odometry.atTargetAngle()) {
+            odometry.update();
+
+            updatePosition();
+
+            telemetry.addData("Target", odometry.getTargetLocation());
+            telemetry.addData("Position", odometry.getLocation());
+
+            telemetry.addData("Powers", drive.getPowers());
+
+            telemetry.update();
+            if(stopTime == null && odometry.getTargetLocationClass().compareHeading(odometry.getLocationClass(), 20)){
+                stopTime = new ElapsedTime();
+            }else if(stopTime != null && stopTime.seconds() >= 2.5){
+                break;
+            }
+        }
     }
 
     private void updatePosition(){

@@ -1,5 +1,6 @@
 package DriveEngine;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+import UtilityClasses.BatteryVoltageSensor;
 import UtilityClasses.Location;
 import UtilityClasses.StigmoidController;
 import UtilityClasses.Vector2D;
@@ -62,6 +64,8 @@ public class MecanumDrive {
     endPos = new int[4],
     distanceTraveled = new int[4];
 
+    private BatteryVoltageSensor batteryVoltageSensor;
+
     // for config file, see RobotConfig.json
     // track width and track length change based on width and length of the robot
     public MecanumDrive(HardwareMap hw, double startAngle /*, String configFileName,
@@ -91,6 +95,8 @@ public class MecanumDrive {
         driverAngle=startAngle;
 
         currentSpeed = maxSpeed;
+
+        batteryVoltageSensor = new BatteryVoltageSensor(hardwareMap);
     }
     public MecanumDrive(HardwareMap hw, LinearOpMode m, double startAngle){
         for(int i = 0; i < motors.length; i++){
@@ -121,6 +127,9 @@ public class MecanumDrive {
 
         globalAngle = -startAngle;
         driverAngle=startAngle;
+
+
+        batteryVoltageSensor = new BatteryVoltageSensor(hardwareMap);
     }
 
     public void moveTrueNorth(double forward, double right, double rotate){
@@ -198,15 +207,18 @@ public class MecanumDrive {
     }
 
     public void moveWithPower(double fl, double bl, double br, double fr){
-        motors[0].setPower(Range.clip(fl, -1, 1) * currentSpeed);
-        motors[1].setPower(Range.clip(bl, -1, 1) * currentSpeed);
-        motors[2].setPower(Range.clip(fr, -1, 1) * currentSpeed);
-        motors[3].setPower(Range.clip(br, -1, 1) * currentSpeed);
+        double scalar = 12.0 / batteryVoltageSensor.getBatteryVoltage();
+
+        motors[0].setPower(Range.clip(fl, -1, 1) * currentSpeed * scalar);
+        motors[1].setPower(Range.clip(bl, -1, 1) * currentSpeed * scalar);
+        motors[2].setPower(Range.clip(fr, -1, 1) * currentSpeed * scalar);
+        motors[3].setPower(Range.clip(br, -1, 1) * currentSpeed * scalar);
     }
 
     public void moveWithPower(double power){
+        double scalar = 12.0 / batteryVoltageSensor.getBatteryVoltage();
         for(DcMotor m : motors){
-            m.setPower(power * currentSpeed);
+            m.setPower(power * currentSpeed * scalar);
         }
     }
 
