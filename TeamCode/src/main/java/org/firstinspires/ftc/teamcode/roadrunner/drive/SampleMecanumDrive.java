@@ -281,9 +281,9 @@ public class SampleMecanumDrive extends MecanumDrive {
         double power = batteryVoltageSensor.getVoltage();
         double scalar = 12/power;
         leftFront.setPower(v * scalar);
-        leftRear.setPower(v * scalar);
-        rightRear.setPower(v * scalar);
-        rightFront.setPower(v * scalar);
+        leftRear.setPower(v1 * scalar);
+        rightRear.setPower(v2 * scalar);
+        rightFront.setPower(v3 * scalar);
     }
 
     @Override

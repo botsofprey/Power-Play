@@ -67,23 +67,17 @@ public class AutoRight extends OpMode {
         mecanumDrive.setPoseEstimate(coordinateLocations.rightStart);
 
         preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.rightStart)
-                .lineToLinearHeading(new Pose2d(-38, coordinateLocations.leftStart.getY(), Math.toRadians(270)), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL * 2, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL * 2, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 6, coordinateLocations.rightHighJunc.getY() + 6.6, Math.toRadians(330)), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL * 2, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineToLinearHeading(new Pose2d(-38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 6, coordinateLocations.rightHighJunc.getY() + 6.6, Math.toRadians(330)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
-                .lineTo(new Vector2d(coordinateLocations.rightHighJunc.getX() - 12, coordinateLocations.rightHighJunc.getY() + 12),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL * 2, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineTo(new Vector2d(coordinateLocations.rightHighJunc.getX() - 12, coordinateLocations.rightHighJunc.getY() + 12))
                 .addTemporalMarker(() -> {
                     mpb.setLift(300);
                 })
                 .turn(Math.toRadians(-135))
-                .lineTo(new Vector2d(-62, 12), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL * 2, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineTo(new Vector2d(-62, 12))
                 .addTemporalMarker(() -> {
                     mpb.setLift(coneheight);
                 })
@@ -99,11 +93,9 @@ public class AutoRight extends OpMode {
                 .addTemporalMarker(() -> {
                     mpb.setLift(heights.highJunction);
                 })
-                .lineTo(new Vector2d(coordinateLocations.rightHighJunc.getX() - 12, coordinateLocations.rightHighJunc.getY() + 12), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL * 2, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineTo(new Vector2d(coordinateLocations.rightHighJunc.getX() - 12, coordinateLocations.rightHighJunc.getY() + 12))
                 .turn(Math.toRadians(135))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(330)), SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL * 2, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(330)))
                 .waitSeconds(1.5)
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
