@@ -12,8 +12,9 @@ import UtilityClasses.Location;
 @Autonomous
 public class TestMovement extends LinearOpMode {
 
-    private Location liftLoc = new Location(20.5, 0);
+    private Location liftLoc = new Location(20.5, 1);
     private final double tile = 2.54*24.0;
+    Lift lift;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -21,7 +22,7 @@ public class TestMovement extends LinearOpMode {
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, 0);
         threeWheelOdometry odom = new threeWheelOdometry(hardwareMap, new Location(0,13.5), this, drive);
-        Lift lift = new Lift(hardwareMap);
+        lift = new Lift(hardwareMap);
         drive.setCurrentSpeed(.5);
 
         while(!isStarted() && !isStopRequested()){
@@ -29,20 +30,18 @@ public class TestMovement extends LinearOpMode {
 
             telemetry.addData("Position", odom.getLocation());
             telemetry.addData("Lift Pos", getLiftPos(odom, drive));
+
             telemetry.update();
         }
 
         //odom.setTargetByOffset(liftLoc, new Location(tile/2., -tile/2.), true);
-        odom.setTargetByOffset(liftLoc, new Location(0, tile/2.), true);
+        odom.setTargetByOffset(liftLoc, new Location(liftLoc.x, -tile/2.), true);
 
         while(opModeIsActive() && !odom.atTarget()){
             odom.update();
             telemetry.addData("Pos", odom.getLocation());
             telemetry.addData("Target", odom.getTargetLocation());
             telemetry.addData("Lift Pos", getLiftPos(odom, drive));
-            telemetry.addData("left", odom.getCurrentLeftPos());
-            telemetry.addData("right", odom.getCurrentRightPos());
-            telemetry.addData("aux", odom.getCurrentAuxPos());
             telemetry.update();
         }
 
@@ -66,4 +65,5 @@ public class TestMovement extends LinearOpMode {
                 Math.round(posOfOff.y) + " cm , " +
                 Math.round(posOfOff.angle) + "°";
     }
+
 }

@@ -30,6 +30,12 @@ public class Lift {
         braking = false;
     }
 
+
+    private double centiPerTicks = (Math.PI * 6.0) / 3895.9;
+    public double ticksToCenti(){
+        return liftMotor.getCurrentPosition() * centiPerTicks;
+    }
+
     public int getPosition() {
         return liftMotor.getCurrentPosition();
     }
@@ -117,5 +123,9 @@ public class Lift {
 
     public double getPower() {
         return liftMotor.getPower();
+    }
+
+    public int getTarget() {
+        return liftMotor.getTargetPosition();
     }
 }

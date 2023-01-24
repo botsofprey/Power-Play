@@ -96,7 +96,7 @@ public class MecanumDrive {
 
         currentSpeed = maxSpeed;
 
-        batteryVoltageSensor = new BatteryVoltageSensor(hardwareMap);
+        batteryVoltageSensor = new BatteryVoltageSensor(hw);
     }
     public MecanumDrive(HardwareMap hw, LinearOpMode m, double startAngle){
         for(int i = 0; i < motors.length; i++){
@@ -129,7 +129,7 @@ public class MecanumDrive {
         driverAngle=startAngle;
 
 
-        batteryVoltageSensor = new BatteryVoltageSensor(hardwareMap);
+        batteryVoltageSensor = new BatteryVoltageSensor(hw);
     }
 
     public void moveTrueNorth(double forward, double right, double rotate){

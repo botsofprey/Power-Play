@@ -134,7 +134,10 @@ public class threeWheelOdometry {
         setTargetPoint(new Location(positionLocation.x, positionLocation.y, angle));
     }
 
+    int time = 0;
     public void setTargetByOffset(Location offset, Location target, boolean maintain){
+        this.maintain = maintain;
+
         //Finds offset position after turn
         Location posOfOff = new Location(
                 (Math.cos(meccanumDrive.getRadians()) * offset.x) - (Math.sin(meccanumDrive.getRadians()) * offset.y),
@@ -148,6 +151,9 @@ public class threeWheelOdometry {
         Location tar = new Location(positionLocation.x + targetDiff.x,
                 positionLocation.y + targetDiff.y,
                 meccanumDrive.getAngle());
+
+        time++;
+        System.out.println("Times target offset: " + time);
         setTargetPoint(tar);
     }
 

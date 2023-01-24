@@ -37,7 +37,7 @@ public class RightAuto extends LinearOpMode {
             new Location(0, 90) //terminal, when qr code is not found
     };
 
-    private Location liftOffset = new Location(20.5, 0);
+    private Location liftOffset = new Location(20.5, 1);
 
     private String startFileName = "TeleStartLocation.JSON";
     private File startFile = AppUtil.getInstance().getSettingsFile(startFileName);
@@ -57,7 +57,7 @@ public class RightAuto extends LinearOpMode {
         int parking = 1;
 
         drive = new MecanumDrive(hardwareMap, this, 0);
-        odometry = new threeWheelOdometry(hardwareMap, new Location(-10.5,13.5), this, drive);
+        odometry = new threeWheelOdometry(hardwareMap, new Location(-10, 13.5, 90), this, drive);
         //odometry = new threeWheelOdometry(hardwareMap, new Location(0,0), this, drive);
 
         ReadWriteFile.writeFile(sideFile, "R");
@@ -116,6 +116,7 @@ public class RightAuto extends LinearOpMode {
         //Resets position and encoders
         odometry.resetEncoders();
 
+
         //Close around preset cone
         claw.setPosition(Claw.CLOSE_POSITION);
         sleep(1000);
@@ -148,41 +149,36 @@ public class RightAuto extends LinearOpMode {
 
             //Scoring pre-loaded cone
             odometry.setTargetPoint(0, -tile, 0, true);
-            lift.hjunction();
+            //lift.hjunction();
             whileMoving(1);
         }
 
         odometry.setTargetPoint(tile, -tile, -45, true);
         whileMoving(0);
-        while(lift.isBusy() && opModeIsActive());
+        whileLiftBusy();
 
         drive.setCurrentSpeed(.25);
-        odometry.setTargetByOffset(liftOffset, new Location(tile * 1.5, -tile * 1.5), true);
-        whileMoving(0);
+        //odometry.setTargetByOffset(liftOffset, new Location(tile * 1.5, -tile * 1.5), true);
+        System.out.println("Times target offset: 161");
+        //whileMoving(0);
 
         //Scores
-        lift.hjunctionScore();
-        while(lift.isBusy() && opModeIsActive());
+        //lift.hjunctionScore();
+        //whileLiftBusy();
 
-        sleep(500);
+       // sleep(500);
         claw.setPosition(Claw.OPEN_POSITION);
-        sleep(500);
-
-        //Getting in position to go to cone stack
-        drive.setCurrentSpeed(.25);
-        //lift.coneStack(5);
-        odometry.setTargetPoint(tile, -tile, -45, true);
-        whileMoving(0);
+       // sleep(500);
 
         //Getting in position to go to cone stack
         drive.setCurrentSpeed(.5);
-        lift.coneStack(5);
+       // lift.coneStack(5);
         odometry.setTargetPoint(tile, -tile, -45, true);
         whileMoving(0);
 
         odometry.rotateToAngle(0);
         whileRotating(0);
-        while(lift.isBusy() && opModeIsActive());
+        whileLiftBusy();
 
         odometry.setTargetPoint(tile*2, -tile, 0, true);
         whileMoving(0);
@@ -191,50 +187,16 @@ public class RightAuto extends LinearOpMode {
         whileRotating(0);
 
         //Scoring all cones
-        int times = 0;
-        int coneStack = 5;
-
-        while(opModeIsActive() && times < 5 && autoTimer.seconds() < 25){
-            //Picks up cone
-            //lift.coneStack(coneStack);
-            //while(lift.isBusy() && opModeIsActive());
-
-            odometry.setTargetByOffset(liftOffset, new Location(tile*2, 55), true);
-            whileMoving(0);
-
-            claw.setPosition(Claw.CLOSE_POSITION);
-            sleep(1000);
-
-            //Backs away from cone stack before turning
-            odometry.setTargetPoint(tile*2, 0, 90, true);
-            whileMoving(0);
-
-            //Turns toward high junction
-            lift.hjunction();
-            odometry.rotateToAngle(0);
-            whileRotating(0);
-
-            //Scores
-            odometry.setTargetByOffset(liftOffset, new Location(tile*2.5,-tile*.5), true);
-            whileMoving(0);
-
-            lift.hjunctionScore();
-            while(lift.isBusy());
-
-            claw.setPosition(Claw.OPEN_POSITION);
-            sleep(1000);
-
-            odometry.setTargetPoint(tile * 2, 0, 0);
-            lift.Ground();
-            whileMoving(0);
-
-            //Turns to cone stack
-            odometry.rotateToAngle(90);
-            whileRotating(0);
-
-            times++;
-            coneStack--;
-        }
+        cycles(0);
+        System.out.println("Cycle has ended: 1");
+        cycles(1);
+        System.out.println("Cycle has ended: 2");
+        cycles(2);
+        System.out.println("Cycle has ended: 3");
+        cycles(3);
+        System.out.println("Cycle has ended: 4");
+        cycles(4);
+        System.out.println("Cycle has ended: 5");
 
         lift.Ground();
         odometry.setTargetPoint(tile, 0, 90);
@@ -304,22 +266,19 @@ public class RightAuto extends LinearOpMode {
     private void whileLiftBusy(){
         ElapsedTime stopTime = null;
 
-        while(opModeIsActive() && !odometry.atTargetAngle()) {
+        while(opModeIsActive() && lift.isBusy()) {
             odometry.update();
 
             updatePosition();
 
-            telemetry.addData("Target", odometry.getTargetLocation());
+            telemetry.addData("Lift Pos", lift.getPosition());
+            telemetry.addData("Lift tar", lift.getTarget());
+            telemetry.addData("CM", lift.ticksToCenti());
             telemetry.addData("Position", odometry.getLocation());
 
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();
-            if(stopTime == null && odometry.getTargetLocationClass().compareHeading(odometry.getLocationClass(), 20)){
-                stopTime = new ElapsedTime();
-            }else if(stopTime != null && stopTime.seconds() >= 2.5){
-                break;
-            }
         }
     }
 
@@ -330,6 +289,50 @@ public class RightAuto extends LinearOpMode {
 
     private double getTile(int numOfTiles){
         return (numOfTiles * tile) + (numOfTiles * 2.54);
+    }
+
+    private void cycles(int times){
+        //Picks up cone
+        //lift.coneStack(5-times);
+        //whileLiftBusy();
+
+        odometry.setTargetByOffset(liftOffset, new Location(tile*2, 55), true);
+        System.out.println("Times target offset: 203");
+        whileMoving(0);
+
+        claw.setPosition(Claw.CLOSE_POSITION);
+        //sleep(1000);
+
+        //Backs away from cone stack before turning
+        odometry.setTargetPoint(tile*2, 0, 90, true);
+        whileMoving(0);
+
+        //Turns toward high junction
+        //lift.hjunction();
+        odometry.rotateToAngle(0);
+        whileRotating(0);
+
+        //Scores
+        //odometry.setTargetByOffset(liftOffset, new Location(tile*2.5,-tile*.5), true);
+        System.out.println("Times target offset: 220");
+        whileMoving(0);
+
+        //lift.hjunctionScore();
+        System.out.println("time : " + 1);
+        whileLiftBusy();
+
+        claw.setPosition(Claw.OPEN_POSITION);
+        sleep(1000);
+
+        odometry.setTargetPoint(tile * 2, 0, 0);
+        System.out.println("time : " + 2);
+        //lift.Ground();
+        whileMoving(0);
+
+        //Turns to cone stack
+        odometry.rotateToAngle(90);
+        System.out.println("time : " + 3);
+        whileRotating(0);
     }
 }
 
