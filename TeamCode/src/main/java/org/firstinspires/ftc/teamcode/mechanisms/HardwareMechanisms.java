@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -24,7 +25,7 @@ public class HardwareMechanisms {
 
     MecanumDrive drive = new MecanumDrive();
 
-    public DcMotor lift;
+    public DcMotorEx lift;
 
     public Servo claw;
 
@@ -34,7 +35,7 @@ public class HardwareMechanisms {
 
     public void init(HardwareMap hwMap) {
         drive.init(hwMap);
-        lift = hwMap.dcMotor.get("lift");
+        lift = hwMap.get(DcMotorEx.class, "lift");
         claw = hwMap.servo.get("claw");
         imu = hwMap.get(BNO055IMU.class, "imu");
 
@@ -57,7 +58,8 @@ public class HardwareMechanisms {
      */
     public void setLift(int position) {
         lift.setTargetPosition(position);
-        lift.setPower(1);
+        double scalar = 12.0 / VoltageLimiter.getBatteryVoltage();
+        lift.setPower(1 * lift.getVelocity() * scalar);
     }
 
     /**
