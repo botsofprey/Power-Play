@@ -5,7 +5,6 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.har
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 public class VoltageLimiter {
-    private boolean batteryLow;
 
     static public double getBatteryVoltage() {
         double result = Double.POSITIVE_INFINITY;

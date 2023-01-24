@@ -77,10 +77,6 @@ public class HardwareMechanisms {
         claw.setPosition(clawPosit);
     }
 
-    public double getClaw() {
-        return claw.getPosition();
-    }
-
     /**
      * A method that obtains the imu's heading
      *
