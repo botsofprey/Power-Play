@@ -261,6 +261,10 @@ public class MecanumTele extends LinearOpMode {
                 telemetry.addData("Type of junction", typeOfJunction);
                 double distanceToJunction = Math.sqrt(Math.pow(smallestAbsDif[0],2) + Math.pow(smallestAbsDif[1],2));
                 double angleToJunction = Math.toDegrees(Math.acos(smallestAbsDif[0]/distanceToJunction));
+                while (scoring && !(controller1.bPressed || controller2.bPressed)) {
+                    odometry.setTargetPoint(odometry.positionLocation.x, odometry.positionLocation.y, angleToJunction);
+                    whileMoving(1);
+                }
                 /*
                 odometry.setTargetPoint(((distanceToJunction-32)*closestJunction[1])/distanceToJunction,((distanceToJunction-32)*closestJunction[0])/distanceToJunction,angleToJunction);
                 if (typeOfJunction == 0) {
