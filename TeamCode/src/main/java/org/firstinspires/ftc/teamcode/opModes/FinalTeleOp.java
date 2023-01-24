@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.vars.StaticImu;
 
 /**
  * This is the combination of all of our TeleOp codes into one
+ * @author Alex Bryan
  */
 @TeleOp()
 public class FinalTeleOp extends OpMode {
