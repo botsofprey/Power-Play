@@ -37,7 +37,8 @@ public class HardwareMechanisms {
             kI = 0,
             kD = 0;
     PIDCoefficients coeffs = new PIDCoefficients(kp, kI, kD);
-    PIDFController controller = new PIDFController(coeffs);
+
+    PIDFController liftController = new PIDFController(coeffs);
 
     public void init(HardwareMap hwMap) {
         drive.init(hwMap);
@@ -46,8 +47,6 @@ public class HardwareMechanisms {
         imu = hwMap.get(BNO055IMU.class, "imu");
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.setTargetPosition(0);
-        lift.setPower(0);
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         imu.initialize(parameters);
@@ -63,8 +62,8 @@ public class HardwareMechanisms {
      * @param position The target position
      */
     public void setLift(int position) {
-        controller.setTargetPosition(position);
-        double correction = controller.update(lift.getCurrentPosition(), lift.getVelocity());
+        liftController.setTargetPosition(position);
+        double correction = liftController.update(lift.getCurrentPosition(), lift.getVelocity());
         lift.setPower(correction);
     }
 
