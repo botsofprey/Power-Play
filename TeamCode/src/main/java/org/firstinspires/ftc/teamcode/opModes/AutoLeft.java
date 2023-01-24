@@ -44,7 +44,7 @@ public class AutoLeft extends OpMode {
     cameraControl autocam = new cameraControl();
     HardwareMechanisms mpb = new HardwareMechanisms();
     CoordinateLocations coordinateLocations = new CoordinateLocations();
-    Pose2d prevtraj = new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315));
+    Pose2d prevtraj = new Pose2d(42, coordinateLocations.rightHighJunc.getY() + 42.6, Math.toRadians(225));
     int coneheight = heights.heights[0];
 
 
@@ -70,14 +70,14 @@ public class AutoLeft extends OpMode {
                 .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 6, coordinateLocations.leftHighJunc.getY() + 6.6, Math.toRadians(225)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
-                .lineTo(new Vector2d(12, 12))
-                /*.addTemporalMarker(() -> {
-                    mpb.setLift(coneheight);
+                .lineToLinearHeading(new Pose2d(36, 12, Math.toRadians(225)))
+                .addTemporalMarker(() -> {
+                    mpb.setLift(300);
                 })
                 .turn(Math.toRadians(135))
                 .lineTo(new Vector2d(62, 12))
                 .addTemporalMarker(() -> {
-                    mpb.setLift(300);
+                    mpb.setLift(coneheight);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
@@ -85,7 +85,7 @@ public class AutoLeft extends OpMode {
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    mpb.setLift(500);
+                    mpb.setLift(300);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
@@ -93,10 +93,10 @@ public class AutoLeft extends OpMode {
                 })
                 .lineTo(new Vector2d(36, 12))
                 .turn(Math.toRadians(135))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 5, coordinateLocations.leftHighJunc.getY() + 3, Math.toRadians(210)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 6, coordinateLocations.leftHighJunc.getY() + 6.6, Math.toRadians(225)))
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
-                })*/
+                })
                 .waitSeconds(0.5)
                 .build();
         park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(60, 12, Math.toRadians(270))).build();
@@ -136,8 +136,8 @@ public class AutoLeft extends OpMode {
         } else if (step == 1) {
             mpb.setLift(heights.highJunction);
             mecanumDrive.update();
-            prevtraj = preLoad.end();
             if (!mecanumDrive.isBusy()) {
+                prevtraj = preLoad.end();
                 step++;
             }
         } else if (step == 2) {
@@ -164,10 +164,10 @@ public class AutoLeft extends OpMode {
             }*/
             step++;
         } else if (step == 5) {
-            mecanumDrive.update();
+            /*mecanumDrive.update();
             if (!mecanumDrive.isBusy()) {
                 step++;
-            }
+            }*/
         } else if (step == 6) {
             mpb.setLift(0);
             if (mpb.getLift() == 0) {
