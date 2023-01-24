@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -33,7 +32,6 @@ public class HardwareMechanisms {
 
     static BNO055IMU imu;
 
-    TouchSensor touchSensor;
     static public double
             kp = 0.01,
             kI = 0,
@@ -103,10 +101,6 @@ public class HardwareMechanisms {
         while (System.currentTimeMillis() - start < milliseconds) {
             Thread.yield();
         }
-    }
-
-    public boolean isTouchSensorPressed() {
-        return !touchSensor.isPressed();
     }
 
     /**
