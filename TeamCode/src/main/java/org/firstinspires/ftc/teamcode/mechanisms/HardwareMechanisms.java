@@ -34,7 +34,8 @@ public class HardwareMechanisms {
     static BNO055IMU imu;
 
     TouchSensor touchSensor;
-    static public double kp = 0.01,
+    static public double
+            kp = 0.01,
             kI = 0,
             kD = 0;
     PIDCoefficients coeffs = new PIDCoefficients(kp, kI, kD);
