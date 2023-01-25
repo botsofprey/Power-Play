@@ -367,5 +367,15 @@ public class MecanumDrive {
     public void setCurrentSpeed(double speed) {
         currentSpeed = speed;
     }
+
+    double savedSpeed;
+    public void liftNeedsPower(boolean needs) {
+        if(needs){
+            savedSpeed = currentSpeed;
+            currentSpeed = 0;
+        }else{
+            currentSpeed = savedSpeed;
+        }
+    }
 }
 

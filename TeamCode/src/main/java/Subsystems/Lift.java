@@ -117,8 +117,11 @@ public class Lift {
     }
 
     public boolean isBusy(){
-        return liftMotor.isBusy()
-                && Math.abs(liftMotor.getTargetPosition()-liftMotor.getCurrentPosition()) > 300;
+        return liftMotor.isBusy();
+    }
+
+    public boolean closeToTarget(){
+        return Math.abs(liftMotor.getTargetPosition()-liftMotor.getCurrentPosition()) < 300;
     }
 
     public double getPower() {

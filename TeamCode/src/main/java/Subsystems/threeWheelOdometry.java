@@ -305,6 +305,14 @@ public class threeWheelOdometry {
         }
     }
 
+    public void setRotateOnly(boolean t){
+        rotateOnly = t;
+    }
+
+    public void setMaintain(boolean t){
+        maintain = t;
+    }
+
     public void resetEncoders() {
         meccanumDrive.setModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         meccanumDrive.setModes(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
