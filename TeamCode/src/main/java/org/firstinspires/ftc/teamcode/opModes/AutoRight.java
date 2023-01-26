@@ -83,9 +83,9 @@ public class AutoRight extends OpMode {
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0.4);
                 })
-                .waitSeconds(0.5)
+                .waitSeconds(1.5)
                 .addTemporalMarker(() -> {
-                    mpb.setLift(500);
+                    mpb.setLift(300);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
