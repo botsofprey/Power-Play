@@ -1,17 +1,14 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.mechanisms.HardwareMechanisms;
 import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
-import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vars.CoordinateLocations;
@@ -74,8 +71,9 @@ public class AutoRight extends OpMode {
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
                 .lineToLinearHeading(new Pose2d(-36,12, Math.toRadians(330)))
                 .addTemporalMarker(() -> {
-                    mpb.setLift(300);
+                    mpb.setLift((int) (coneheight * 1.5));
                 })
+                .waitSeconds(0.5)
                 .turn(Math.toRadians(-135))
                 .lineToLinearHeading(new Pose2d(-62, 12, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
