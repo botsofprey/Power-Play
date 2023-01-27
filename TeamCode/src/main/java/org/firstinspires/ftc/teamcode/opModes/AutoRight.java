@@ -69,16 +69,17 @@ public class AutoRight extends OpMode {
         preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.rightStart)
                 .lineToLinearHeading(new Pose2d(-38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315)))
+                .waitSeconds(0.75)
+                .turn(45)
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 6, coordinateLocations.rightHighJunc.getY() + 6, Math.toRadians(315)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
                 .lineToLinearHeading(new Pose2d(-36,12, Math.toRadians(315)))
                 .addTemporalMarker(() -> {
-                    liftHeight = (int) (heights.heights[0] * 1.25);
+                    liftHeight = (int) (heights.heights[0] * 1.5);
                 })
-                .waitSeconds(0.5)
                 .turn(Math.toRadians(-135))
-                .lineToLinearHeading(new Pose2d(-62, 12, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-64, 12, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     liftHeight = coneheight;
                 })
@@ -86,9 +87,9 @@ public class AutoRight extends OpMode {
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0.4);
                 })
-                .waitSeconds(1.5)
+                .waitSeconds(1)
                 .addTemporalMarker(() -> {
-                    liftHeight = (int) (heights.heights[0] * 1.25);
+                    liftHeight = (int) (heights.heights[0] * 1.5);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
@@ -96,7 +97,7 @@ public class AutoRight extends OpMode {
                 })
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(180)))
                 .turn(Math.toRadians(135))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 6, coordinateLocations.rightHighJunc.getY() + 6, Math.toRadians(315)))
                 .waitSeconds(0.75)
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
