@@ -27,6 +27,7 @@ public class MecanumTele extends LinearOpMode {
     private Lift lift;
     private int liftPreset = 0;
     private int coneNum = 5;
+    private double[] closestJunction;
 
     private threeWheelOdometry odometry;
 
@@ -257,22 +258,22 @@ public class MecanumTele extends LinearOpMode {
                 }
                 int typeOfJunction = (int) smallestAbsDif[2];
                 int junctionNumber = (int) smallestAbsDif[3];
-                double[] closestJunction = junctionPositions[typeOfJunction][junctionNumber];
-                telemetry.addData("Closest junction", closestJunction);
-                telemetry.addData("Type of junction", typeOfJunction);
+                closestJunction = junctionPositions[typeOfJunction][junctionNumber];
                 double distanceToJunction = Math.sqrt(Math.pow(smallestAbsDif[0],2) + Math.pow(smallestAbsDif[1],2));
                 double angleToJunction = Math.toDegrees(Math.acos(smallestAbsDif[0]/distanceToJunction));
                 odometry.rotateToAngle(angleToJunction);
-                whileMoving(10);
-                /*
-                odometry.setTargetPoint(((distanceToJunction-32)*closestJunction[1])/distanceToJunction,((distanceToJunction-32)*closestJunction[0])/distanceToJunction,angleToJunction);
                 if (typeOfJunction == 0) {
-                    lift.ljunction();
+                    lift.hjunction();
                 } else if (typeOfJunction == 1) {
                     lift.mjunction();
                 } else if (typeOfJunction == 2) {
-                    lift.hjunction();
+                    lift.ljunction();
                 }
+                while (!odometry.atTargetAngle() && (!controller1.bPressed || !controller2.bPressed)) {
+                    odometry.update();
+                }
+                /*
+                odometry.setTargetPoint(((distanceToJunction-32)*closestJunction[1])/distanceToJunction,((distanceToJunction-32)*closestJunction[0])/distanceToJunction,angleToJunction);
                 odometry.setTargetPoint(((distanceToJunction-22)*closestJunction[1])/distanceToJunction,((distanceToJunction-22)*closestJunction[0])/distanceToJunction,angleToJunction);
                 */
             }
@@ -283,7 +284,7 @@ public class MecanumTele extends LinearOpMode {
                 controller1.rumble(3);
                 controller2.rumble(3);
             }
-
+            telemetry.addData("Closest junction", "Junction type:" + closestJunction[0] + ", " + "Junction number:" + closestJunction[1]);
             telemetry.addData("Lift preset", liftPreset);
 
             telemetry.addData("Cones", coneNum);
