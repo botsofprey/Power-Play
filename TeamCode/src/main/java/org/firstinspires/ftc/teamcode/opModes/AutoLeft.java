@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.mechanisms.HardwareMechanisms;
@@ -36,6 +36,7 @@ public class AutoLeft extends OpMode {
     int i = 0;
 
     int step = 0;
+    int liftHeight;
 
     Trajectory park19, park18, park17;
     TrajectorySequence preLoad, getConeAndScore;
@@ -44,7 +45,7 @@ public class AutoLeft extends OpMode {
     cameraControl autocam = new cameraControl();
     HardwareMechanisms mpb = new HardwareMechanisms();
     CoordinateLocations coordinateLocations = new CoordinateLocations();
-    Pose2d prevtraj = new Pose2d(30, coordinateLocations.rightHighJunc.getY() + 6.6, Math.toRadians(225));
+    Pose2d prevtraj = new Pose2d(coordinateLocations.leftHighJunc.getX() + 6, coordinateLocations.leftHighJunc.getY() + 6.6, Math.toRadians(225));
     int coneheight = heights.heights[0];
 
 
@@ -56,6 +57,8 @@ public class AutoLeft extends OpMode {
         //set up any functions or variables needed for program
         //initialize hardware
         mpb.init(hardwareMap);
+        mpb.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        mpb.lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
         //start the camera
         autocam.createCameraInstance(hardwareMap, telemetry);
@@ -65,31 +68,32 @@ public class AutoLeft extends OpMode {
         mecanumDrive.setPoseEstimate(coordinateLocations.leftStart);
 
         preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.leftStart)
-                .lineToLinearHeading(new Pose2d(38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(37, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
                 .lineToLinearHeading(new Pose2d(36, 12, Math.toRadians(270)))
                 .lineToLinearHeading(new Pose2d(coordinateLocations.leftHighJunc.getX() + 6, coordinateLocations.leftHighJunc.getY() + 6.6, Math.toRadians(225)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
                 .lineToLinearHeading(new Pose2d(36, 12, Math.toRadians(225)))
                 .addTemporalMarker(() -> {
-                    mpb.setLift(300);
+                    liftHeight = (int) (heights.heights[0] * 1.5);
                 })
-                .turn(Math.toRadians(135))
-                .lineToLinearHeading(new Pose2d(62, 12, Math.toRadians(0)))
+                .waitSeconds(0.5)
+                .turn(Math.toRadians(-135))
+                .lineToLinearHeading(new Pose2d(-62, 12, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
-                    mpb.setLift(coneheight);
+                    liftHeight = coneheight;
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0.4);
                 })
-                .waitSeconds(0.5)
+                .waitSeconds(1.5)
                 .addTemporalMarker(() -> {
-                    mpb.setLift(500);
+                    liftHeight = (int) (heights.heights[0] * 1.5);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    mpb.setLift(heights.highJunction);
+                    liftHeight = heights.highJunction;
                 })
                 .lineToLinearHeading(new Pose2d(36, 12, Math.toRadians(0)))
                 .turn(Math.toRadians(-135))
@@ -132,7 +136,7 @@ public class AutoLeft extends OpMode {
     public void loop() {
         if (step == 0) {
             mpb.setClaw(0.4);
-            mpb.sleep(750);
+            mpb.sleep(1000);
             step++;
         } else if (step == 1) {
             mpb.setLift(heights.highJunction);
@@ -143,13 +147,14 @@ public class AutoLeft extends OpMode {
             }
         } else if (step == 2) {
             mpb.setClaw(0);
-            mpb.sleep(750);
+            mpb.sleep(1000);
             step++;
             mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
         } else if (step == 3) {
             prevtraj = getConeAndScore.end();
             coneheight = heights.heights[i];
             mecanumDrive.update();
+            mpb.setLift(liftHeight);
             if (!mecanumDrive.isBusy()) {
                 i++;
             }
@@ -157,19 +162,19 @@ public class AutoLeft extends OpMode {
                 step++;
             }
         } else if (step == 4) {
-            /*if (tagOfInterest == 19) {
+            if (tagOfInterest == 19) {
                 mecanumDrive.followTrajectoryAsync(park19);
             } else if (tagOfInterest == 17) {
                 mecanumDrive.followTrajectoryAsync(park17);
             } else {
                 mecanumDrive.followTrajectoryAsync(park18);
-            }*/
+            }
             step++;
         } else if (step == 5) {
-            /*mecanumDrive.update();
+            mecanumDrive.update();
             if (!mecanumDrive.isBusy()) {
                 step++;
-            }*/
+            }
         } else if (step == 6) {
             mpb.setLift(0);
             if (mpb.getLift() == 0) {

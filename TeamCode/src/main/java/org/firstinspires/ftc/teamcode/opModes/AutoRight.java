@@ -36,6 +36,7 @@ public class AutoRight extends OpMode {
     int i = 0;
 
     int step = 0;
+    int liftHeight;
 
     Trajectory park19, park18, park17;
     TrajectorySequence preLoad, getConeAndScore;
@@ -46,7 +47,7 @@ public class AutoRight extends OpMode {
     CoordinateLocations coordinateLocations = new CoordinateLocations();
     Pose2d prevtraj = new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315));
     int coneheight = heights.heights[0];
-    int liftHeight = heights.highJunction;
+
 
     @Override
     public void init() {
@@ -68,13 +69,13 @@ public class AutoRight extends OpMode {
 
         preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.rightStart)
                 .lineToLinearHeading(new Pose2d(-38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(290)))
                 .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
                 .lineToLinearHeading(new Pose2d(-36,12, Math.toRadians(315)))
                 .addTemporalMarker(() -> {
-                    liftHeight = (int) (heights.heights[0] * 1.25);
+                    liftHeight = (int) (heights.heights[0] * 1.5);
                 })
                 .waitSeconds(0.5)
                 .turn(Math.toRadians(-135))
@@ -88,7 +89,7 @@ public class AutoRight extends OpMode {
                 })
                 .waitSeconds(1.5)
                 .addTemporalMarker(() -> {
-                    liftHeight = (int) (heights.heights[0] * 1.25);
+                    liftHeight = (int) (heights.heights[0] * 1.5);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
