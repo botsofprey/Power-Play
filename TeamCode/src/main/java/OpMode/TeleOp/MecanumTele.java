@@ -260,7 +260,7 @@ public class MecanumTele extends LinearOpMode {
                 int junctionNumber = (int) smallestAbsDif[3];
                 closestJunction = junctionPositions[typeOfJunction][junctionNumber];
                 double distanceToJunction = Math.sqrt(Math.pow(smallestAbsDif[0],2) + Math.pow(smallestAbsDif[1],2));
-                double angleToJunction = Math.toDegrees(Math.acos(smallestAbsDif[0]/distanceToJunction));
+                double angleToJunction = Math.toDegrees(Math.atan2(smallestAbsDif[1], smallestAbsDif[0]));
                 odometry.rotateToAngle(angleToJunction);
                 if (typeOfJunction == 0) {
                     lift.hjunction();
@@ -273,8 +273,7 @@ public class MecanumTele extends LinearOpMode {
                     odometry.update();
                 }
                 /*
-                odometry.setTargetPoint(((distanceToJunction-32)*closestJunction[1])/distanceToJunction,((distanceToJunction-32)*closestJunction[0])/distanceToJunction,angleToJunction);
-                odometry.setTargetPoint(((distanceToJunction-22)*closestJunction[1])/distanceToJunction,((distanceToJunction-22)*closestJunction[0])/distanceToJunction,angleToJunction);
+                odometry.setTargetPoint(((distanceToJunction-20)*closestJunction[0])/distanceToJunction,((distanceToJunction-20)*closestJunction[1])/distanceToJunction,angleToJunction);
                 */
             }
 
