@@ -153,7 +153,7 @@ public class AutoLeft extends OpMode {
             if (!mecanumDrive.isBusy()) {
                 i++;
             }
-            if (i == 1) {
+            if (i == 2) {
                 step++;
             }
         } else if (step == 4) {

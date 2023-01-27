@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.mechanisms.HardwareMechanisms;
@@ -46,7 +47,6 @@ public class AutoRight extends OpMode {
     Pose2d prevtraj = new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315));
     int coneheight = heights.heights[0];
 
-
     @Override
     public void init() {
         StaticImu.imuStatic = 0;
@@ -55,6 +55,8 @@ public class AutoRight extends OpMode {
         //set up any functions or variables needed for program
         //initialize hardware
         mpb.init(hardwareMap);
+        mpb.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        mpb.lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
         //start the camera
         autocam.createCameraInstance(hardwareMap, telemetry);
@@ -66,12 +68,12 @@ public class AutoRight extends OpMode {
         preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.rightStart)
                 .lineToLinearHeading(new Pose2d(-38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 6, coordinateLocations.rightHighJunc.getY() + 6.6, Math.toRadians(330)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
-                .lineToLinearHeading(new Pose2d(-36,12, Math.toRadians(330)))
+                .lineToLinearHeading(new Pose2d(-36,12, Math.toRadians(315)))
                 .addTemporalMarker(() -> {
-                    mpb.setLift((int) (coneheight * 1.5));
+                    mpb.setLift((int) (heights.heights[0] * 1.25));
                 })
                 .waitSeconds(0.5)
                 .turn(Math.toRadians(-135))
@@ -85,7 +87,7 @@ public class AutoRight extends OpMode {
                 })
                 .waitSeconds(1.5)
                 .addTemporalMarker(() -> {
-                    mpb.setLift(300);
+                    mpb.setLift((int) (heights.heights[0] * 1.25));
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
@@ -93,7 +95,7 @@ public class AutoRight extends OpMode {
                 })
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(180)))
                 .turn(Math.toRadians(135))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 6, coordinateLocations.rightHighJunc.getY() + 6.6, Math.toRadians(330)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315)))
                 .waitSeconds(0.75)
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
@@ -132,7 +134,7 @@ public class AutoRight extends OpMode {
     public void loop() {
         if (step == 0) {
             mpb.setClaw(0.4);
-            mpb.sleep(750);
+            mpb.sleep(1000);
             step++;
         } else if (step == 1) {
             mpb.setLift(heights.highJunction);
@@ -143,7 +145,7 @@ public class AutoRight extends OpMode {
             }
         } else if (step == 2) {
             mpb.setClaw(0);
-            mpb.sleep(750);
+            mpb.sleep(1000);
             step++;
             mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
         } else if (step == 3) {
@@ -153,7 +155,7 @@ public class AutoRight extends OpMode {
             if (!mecanumDrive.isBusy()) {
                 i++;
             }
-            if (i == 1) {
+            if (i == 2) {
                 step++;
             }
         } else if (step == 4) {
