@@ -92,7 +92,7 @@ public class AutoRight extends OpMode {
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    mpb.setLift(heights.highJunction);
+                    liftHeight = heights.highJunction;
                 })
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(180)))
                 .turn(Math.toRadians(135))
