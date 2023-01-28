@@ -77,7 +77,7 @@ public class AutoRight extends OpMode {
                 })
                         .waitSeconds(0.75)
                         .turn(Math.toRadians(45))
-                        .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 6, coordinateLocations.rightHighJunc.getY() + 6, Math.toRadians(315)))
+                        .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 4, coordinateLocations.rightHighJunc.getY() + 4, Math.toRadians(315)))
                         .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(315)))
@@ -103,7 +103,7 @@ public class AutoRight extends OpMode {
                 })
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(180)))
                 .turn(Math.toRadians(135))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 5, Math.toRadians(315)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 4, coordinateLocations.rightHighJunc.getY() + 4, Math.toRadians(315)))
                 .waitSeconds(0.75)
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
