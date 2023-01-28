@@ -81,7 +81,7 @@ public class AutoRight extends OpMode {
                 .turn(Math.toRadians(-135))
                 .lineToLinearHeading(new Pose2d(-64, 12, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
-                    liftHeight = coneheight + 200;
+                    liftHeight = coneheight + 500;
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
