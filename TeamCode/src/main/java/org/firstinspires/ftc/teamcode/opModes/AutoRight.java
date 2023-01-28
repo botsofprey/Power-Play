@@ -71,7 +71,7 @@ public class AutoRight extends OpMode {
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
                 .waitSeconds(0.75)
                 .turn(Math.toRadians(45))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 6, coordinateLocations.rightHighJunc.getY() + 6, Math.toRadians(315)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 8, coordinateLocations.rightHighJunc.getY() + 8, Math.toRadians(315)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
                 .lineToLinearHeading(new Pose2d(-36,12, Math.toRadians(315)))
@@ -81,7 +81,7 @@ public class AutoRight extends OpMode {
                 .turn(Math.toRadians(-135))
                 .lineToLinearHeading(new Pose2d(-64, 12, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
-                    liftHeight = coneheight;
+                    liftHeight = coneheight + 200;
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
@@ -93,7 +93,7 @@ public class AutoRight extends OpMode {
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    liftHeight = heights.highJunction;
+                    liftHeight = heights.highJunction + 300;
                 })
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(180)))
                 .turn(Math.toRadians(135))
@@ -139,7 +139,7 @@ public class AutoRight extends OpMode {
             mpb.sleep(1000);
             step++;
         } else if (step == 1) {
-            mpb.setLift(heights.highJunction);
+            mpb.setLift(heights.highJunction + 300);
             mecanumDrive.update();
             prevtraj = preLoad.end();
             if (!mecanumDrive.isBusy()) {
@@ -157,9 +157,12 @@ public class AutoRight extends OpMode {
             mpb.setLift(liftHeight);
             if (!mecanumDrive.isBusy()) {
                 i++;
-            }
-            if (i == 2) {
-                step++;
+                if (i == 1) {
+                    step++;
+                }
+                else {
+                    mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
+                }
             }
         } else if (step == 4) {
             if (tagOfInterest == 19) {
