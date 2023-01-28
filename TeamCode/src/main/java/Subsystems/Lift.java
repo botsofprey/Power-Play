@@ -1,24 +1,33 @@
 package Subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 public class Lift {
-    private DcMotor liftMotor;
+    private DcMotorEx liftMotor;
 
     private boolean braking;
 
     private TouchSensor limitSwitch;
 
+    private double powerDecrease = 3.;
+
     public Lift(HardwareMap hardwareMap) {
-        liftMotor = hardwareMap.get(DcMotor.class, "lift");
+        liftMotor = hardwareMap.get(DcMotorEx.class, "lift");
         limitSwitch = hardwareMap.get(TouchSensor.class, "limitSwitch");
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void setPower(double power) {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        if(power < 0)
+            power /= powerDecrease;
+
         liftMotor.setPower(power);
         braking = false;
     }
@@ -26,6 +35,10 @@ public class Lift {
     public void setPosition(int position, double power) {
         liftMotor.setTargetPosition(position);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        if(position < liftMotor.getCurrentPosition()){
+            power /= powerDecrease;
+        }
         liftMotor.setPower(power);
         braking = false;
     }
@@ -38,6 +51,10 @@ public class Lift {
 
     public int getPosition() {
         return liftMotor.getCurrentPosition();
+    }
+
+    public double getCurrent() {
+        return liftMotor.getCurrent(CurrentUnit.AMPS);
     }
 
     public void brake() {
@@ -64,37 +81,24 @@ public class Lift {
     }
 
     public void Ground() {
-        liftMotor.setTargetPosition(0);
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(1);
-        braking = false;
+        setPosition(0, 1);
     }
 
     public void ljunction() {
-        liftMotor.setTargetPosition(1400);
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(1);
-        braking = false;
+        setPosition(1400, 1);
     }
 
     public void mjunction() {
-        liftMotor.setTargetPosition(2280);
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(1);
-        braking = false;
+        setPosition(2280, 1);
     }
 
     public void hjunction() {
-        liftMotor.setTargetPosition(3300);
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(1);
+        setPosition(3300, 1);
         braking = false;
     }
 
     public void hjunctionScore() {
-        liftMotor.setTargetPosition(3200);
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(1);
+        setPosition(3000, 1);
         braking = false;
     }
 
@@ -121,7 +125,11 @@ public class Lift {
     }
 
     public boolean closeToTarget(){
-        return Math.abs(liftMotor.getTargetPosition()-liftMotor.getCurrentPosition()) < 300;
+        return Math.abs(liftMotor.getTargetPosition()-liftMotor.getCurrentPosition()) <= 300;
+    }
+
+    public void addTargetClearance(){
+        liftMotor.setTargetPosition(liftMotor.getTargetPosition() + 300);
     }
 
     public double getPower() {

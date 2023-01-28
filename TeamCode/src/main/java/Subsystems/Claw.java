@@ -13,7 +13,7 @@ public class Claw {
     }
 
     public void setPosition(double position) {
-        leftArm.setPosition(1-position);
+        leftArm.setPosition(1.-position);
         rightArm.setPosition(position);
     }
 

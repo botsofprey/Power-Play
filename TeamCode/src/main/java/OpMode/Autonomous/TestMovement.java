@@ -12,18 +12,16 @@ import UtilityClasses.Location;
 @Autonomous
 public class TestMovement extends LinearOpMode {
 
-    private Location liftLoc = new Location(20.5, 1);
+    private Location liftLoc = new Location(23, 1, 0);
     private final double tile = 2.54*24.0;
     Lift lift;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Controller con = new Controller(gamepad1);
-
         MecanumDrive drive = new MecanumDrive(hardwareMap, 0);
-        threeWheelOdometry odom = new threeWheelOdometry(hardwareMap, new Location(0,13.5), this, drive);
+        threeWheelOdometry odom = new threeWheelOdometry(hardwareMap, new Location(-14,13.5), this, drive);
         lift = new Lift(hardwareMap);
-        drive.setCurrentSpeed(.5);
+        drive.setCurrentSpeed(1);
 
         while(!isStarted() && !isStopRequested()){
             odom.update();
@@ -34,23 +32,69 @@ public class TestMovement extends LinearOpMode {
             telemetry.update();
         }
 
-        //odom.setTargetByOffset(liftLoc, new Location(tile/2., -tile/2.), true);
-        odom.setTargetByOffset(liftLoc, new Location(liftLoc.x, -tile/2.), true);
-
-        while(opModeIsActive() && !odom.atTarget()){
+        odom.setTargetByOffset(liftLoc, new Location(tile/2., tile/2.), true);
+        while(opModeIsActive()){
             odom.update();
-            telemetry.addData("Pos", odom.getLocation());
-            telemetry.addData("Target", odom.getTargetLocation());
-            telemetry.addData("Lift Pos", getLiftPos(odom, drive));
-            telemetry.update();
         }
 
         while(opModeIsActive()){
-            odom.update();
-            telemetry.addData("Pos", odom.getLocation());
-            telemetry.addData("Target", odom.getTargetLocation());
-            telemetry.addData("Lift Pos", getLiftPos(odom, drive));
-            telemetry.update();
+            odom.rotateToAngle(0);
+            while(!odom.atTargetAngle()){
+                odom.update();
+                telemetry.addData("Rotation", drive.getAngle());
+                telemetry.addData("Rotation tar", odom.getTargetLocationClass().angle);
+                telemetry.update();
+            }
+            drive.brake();
+            sleep(1000);
+
+            odom.rotateToAngle(180);
+            while(!odom.atTargetAngle()){
+                odom.update();
+                telemetry.addData("Rotation", drive.getAngle());
+                telemetry.addData("Rotation tar", odom.getTargetLocationClass().angle);
+                telemetry.update();
+            }
+            drive.brake();
+            sleep(1000);
+        }
+
+        while(opModeIsActive()){
+            odom.setTargetPoint(0,0,0);
+            while(!odom.atTarget()){
+                odom.update();
+                telemetry.addData("Position", odom.getLocation());
+                telemetry.addData("X Integral", odom.xPidIntegralSum());
+                telemetry.addData("Y Integral", odom.yPidIntegralSum());
+                telemetry.update();
+            }
+
+            odom.setTargetPoint(tile,0,0);
+            while(!odom.atTarget()){
+                odom.update();
+                telemetry.addData("Position", odom.getLocation());;
+                telemetry.addData("X Integral", odom.xPidIntegralSum());
+                telemetry.addData("Y Integral", odom.yPidIntegralSum());
+                telemetry.update();
+            }
+
+            odom.setTargetPoint(tile,-tile,0);
+            while(!odom.atTarget()){
+                odom.update();
+                telemetry.addData("Position", odom.getLocation());;
+                telemetry.addData("X Integral", odom.xPidIntegralSum());
+                telemetry.addData("Y Integral", odom.yPidIntegralSum());
+                telemetry.update();
+            }
+
+            odom.setTargetPoint(0,-tile,0);
+            while(!odom.atTarget()){
+                odom.update();
+                telemetry.addData("Position", odom.getLocation());;
+                telemetry.addData("X Integral", odom.xPidIntegralSum());
+                telemetry.addData("Y Integral", odom.yPidIntegralSum());
+                telemetry.update();
+            }
         }
 
     }
@@ -65,5 +109,4 @@ public class TestMovement extends LinearOpMode {
                 Math.round(posOfOff.y) + " cm , " +
                 Math.round(posOfOff.angle) + "°";
     }
-
 }

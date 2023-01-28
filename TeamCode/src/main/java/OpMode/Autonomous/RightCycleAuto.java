@@ -2,12 +2,10 @@ package OpMode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 import java.io.File;
@@ -20,8 +18,8 @@ import Subsystems.threeWheelOdometry;
 import UtilityClasses.Controller;
 import UtilityClasses.Location;
 
-@Autonomous (name="Right Auto", group = "Autonomous")
-public class RightAuto extends LinearOpMode {
+@Autonomous (name="Right Cycle", group = "Autonomous")
+public class RightCycleAuto extends LinearOpMode {
 
     private MecanumDrive drive;
     private threeWheelOdometry odometry;
@@ -122,7 +120,7 @@ public class RightAuto extends LinearOpMode {
         sleep(1000);
 
         //If camera is too far away to see qr, robot gets closer
-        if(false){
+        if(!camera.tagFound()){
             odometry.setTargetPoint(0,0,0);
             while(!odometry.atTarget() && !camera.tagFound()){
                 odometry.update();
@@ -164,6 +162,7 @@ public class RightAuto extends LinearOpMode {
         }
 
         odometry.setTargetPoint(tile, -tile, -45, true);
+        lift.hjunction();
         whileMoving(0);
         whileLiftBusy();
 
@@ -276,7 +275,6 @@ public class RightAuto extends LinearOpMode {
 
     private void whileLiftBusy(){
         ElapsedTime stopTime = new ElapsedTime();
-       //drive.liftNeedsPower(true);
 
         while(opModeIsActive() && lift.isBusy()) {
             odometry.update();
@@ -292,7 +290,7 @@ public class RightAuto extends LinearOpMode {
 
             telemetry.update();
 
-            if(stopTime.seconds() > 3 && lift.closeToTarget()){
+             if (stopTime.seconds() > 3 && lift.closeToTarget()){
                 break;
             }
         }
@@ -313,25 +311,28 @@ public class RightAuto extends LinearOpMode {
         lift.coneStack(5-times);
         whileLiftBusy();
 
-        odometry.setTargetByOffset(liftOffset, new Location(tile*2, tile + ((tile*.5) - 5)), true);
+        odometry.setTargetByOffset(liftOffset, new Location((tile*2) - 10, tile + ((tile*.5))), true);
         whileMoving(0);
 
         claw.setPosition(Claw.CLOSE_POSITION);
         sleep(1000);
 
+        lift.ljunction();
+        whileLiftBusy();
+
         //Backs away from cone stack before turning
-        odometry.setTargetPoint(tile*2, 0, 90, true);
+        odometry.setTargetPoint((tile*2) - 10, 0, 90, true);
         whileMoving(0);
 
         //Turns toward high junction
         lift.hjunction();
-        odometry.rotateToAngle(0);
+        odometry.rotateToAngle(-45);
         whileRotating(0);
 
         whileLiftBusy();
 
         //Scores
-        odometry.setTargetByOffset(liftOffset, new Location(tile*2.5,-tile*.5), true);
+        odometry.setTargetByOffset(liftOffset, new Location((tile*2.5) - 10,-tile*.5), true);
         System.out.println("Times target offset: 220");
         whileMoving(0);
 
@@ -342,7 +343,7 @@ public class RightAuto extends LinearOpMode {
         claw.setPosition(Claw.OPEN_POSITION);
         sleep(1000);
 
-        odometry.setTargetPoint(tile * 2, 0, 0);
+        odometry.setTargetPoint((tile * 2) - 10, 0, 0);
         System.out.println("time : " + 2);
         lift.Ground();
         whileMoving(0);

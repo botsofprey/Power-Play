@@ -37,7 +37,7 @@ public class PidController {
         timer.reset();
     }
 
-    public void resetIntegral(){
-        integralSum = 0;
+    public double getIntegralSum() {
+        return integralSum;
     }
 }

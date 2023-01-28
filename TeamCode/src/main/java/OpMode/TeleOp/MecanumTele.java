@@ -156,6 +156,10 @@ public class MecanumTele extends LinearOpMode {
             if(controller1.aPressed){
                 claw.setPosition(claw.getPosition() != Claw.CLOSE_POSITION ?
                         Claw.CLOSE_POSITION : Claw.OPEN_POSITION);
+                if(claw.getPosition()==Claw.OPEN_POSITION) {
+                    controller1.rumble(1);
+                    controller2.rumble(1);
+                }
             }
             telemetry.addData("Claw Pos", claw.getPosition());
 
@@ -205,9 +209,6 @@ public class MecanumTele extends LinearOpMode {
                     liftPreset = 5;
                 }
             }
-
-            if(lift.getPosition() <= 1000 && lift.getPower() < -.75)
-                claw.setPosition(Claw.OPEN_POSITION);
 
             // Find positions of junctions
             double[][][] junctionPositions = {
@@ -290,6 +291,7 @@ public class MecanumTele extends LinearOpMode {
 
             telemetry.addData("Lift Position", lift.getPosition());
             telemetry.addData("Lift Position in cm", lift.ticksToCenti());
+            telemetry.addData("Lift Current", lift.getCurrent());
 
             telemetry.addData("Powers", drive.getPowers());
 

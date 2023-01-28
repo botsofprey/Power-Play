@@ -16,8 +16,8 @@ import Subsystems.threeWheelOdometry;
 import UtilityClasses.Controller;
 import UtilityClasses.Location;
 
-@Autonomous (name="Left Auto", group = "Autonomous")
-public class LeftAuto extends LinearOpMode {
+@Autonomous (name="Right Preload", group = "Autonomous")
+public class RightPreloadAuto extends LinearOpMode {
 
     private MecanumDrive drive;
     private threeWheelOdometry odometry;
@@ -136,17 +136,17 @@ public class LeftAuto extends LinearOpMode {
             parking = camera.getParking();
 
             //Scoring pre-loaded cone
-            odometry.setTargetPoint(0, 60, 0, true);
+            odometry.setTargetPoint(0, -60, 0, true);
             lift.hjunction();
             whileMoving(1);
         }
 
-        odometry.setTargetPoint(60, 60, 45, true);
+        odometry.setTargetPoint(60, -60, -45, true);
         whileMoving(0);
         while(lift.isBusy() && opModeIsActive());
 
         drive.setCurrentSpeed(.25);
-        odometry.setTargetPoint(68, 66, 45, true);
+        odometry.setTargetPoint(68, -66, -45, true);
         whileMoving(0);
 
         //Scores
@@ -160,7 +160,7 @@ public class LeftAuto extends LinearOpMode {
         //Getting in position to go to cone stack
         drive.setCurrentSpeed(.25);
         //lift.coneStack(5);
-        odometry.setTargetPoint(60, 60, 45, true);
+        odometry.setTargetPoint(60, -60, -45, true);
         whileMoving(0);
 
         drive.setCurrentSpeed(.5);
