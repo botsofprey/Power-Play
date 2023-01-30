@@ -65,6 +65,7 @@ public class FinalTeleOpRewritten extends OpMode {
      */
     boolean downPressed = false;
     boolean yPressed = false;
+    boolean xPressed = false;
     /**
      * A boolean used to track whether the lift is manually controlled or uses preset heights
      */
@@ -125,15 +126,20 @@ public class FinalTeleOpRewritten extends OpMode {
         } else if (gamepad2.dpad_up || gamepad2.dpad_down || gamepad2.dpad_right || gamepad2.dpad_left || gamepad2.right_bumper || gamepad2.left_bumper) {
             presetLiftHeightsMode = true;
         }
+        if (gamepad2.x && xPressed) {
+            board.resetLift();
+            targetPositionManualControl = (int) board.getLift();
+        }
         if (gamepad2.y && !yPressed) {
             liftCorrection = !liftCorrection;
         }
+        xPressed = gamepad2.x;
         yPressed = gamepad2.y;
         if (!presetLiftHeightsMode) { //manual lift
             //the right trigger makes the lift go up and the left trigger makes the lift go down
             targetPositionManualControl += (gamepad2.right_trigger - gamepad2.left_trigger) * 100;
             if (liftCorrection) {
-                targetPositionManualControl += Math.min(heights.highJunction, targetPositionManualControl);
+                targetPositionManualControl = Math.min(heights.highJunction, targetPositionManualControl);
                 targetPositionManualControl = Math.max(0, targetPositionManualControl);
             }
             board.setLift(targetPositionManualControl);

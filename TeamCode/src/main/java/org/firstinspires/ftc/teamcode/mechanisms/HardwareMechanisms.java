@@ -63,8 +63,13 @@ public class HardwareMechanisms {
      */
     public void setLift(int position) {
         liftController.setTargetPosition(position);
-        double correction = liftController.update(lift.getCurrentPosition(), lift.getVelocity());
+        double correction = liftController.update(getLift(), lift.getVelocity());
         lift.setPower(correction);
+    }
+
+    public void resetLift() {
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /**
