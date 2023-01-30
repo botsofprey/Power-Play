@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.vars.StaticImu;
  */
 @TeleOp()
 public class FinalTeleOp extends OpMode {
+    boolean liftCorrection;
     /**
      * A double used to make sure the acceleration isn't too high
      */
@@ -125,16 +126,14 @@ public class FinalTeleOp extends OpMode {
 
         if (!presetLiftHeightsMode) { //manual lift
             //the right trigger makes the lift go up and the left trigger makes the lift go down
-          if (board.getLift() <= 0) {
+          /*if (liftCorrection) {
+            if (board.getLift() <= 0) {
                 targetPositionManualControl += gamepad2.right_trigger * 100;
-           } else if (board.getLift() <= heights.highJunction) {
-               targetPositionManualControl += (gamepad2.right_trigger - gamepad2.left_trigger) * 100;
-          } else {
+            } else if (board.getLift() <= heights.highJunction) {
+               targetPositionManualControl += (gamepad2.right_trigger - gamepad2.left_trigger) * 100;*/
                 targetPositionManualControl -=gamepad2.left_trigger * 100;
-            }
-            if (targetPositionManualControl < 0) { //keeps the lift from going below 0
-                targetPositionManualControl = 0;
-            }
+              //targetPositionManualControl = Math.max(0, targetPositionManualControl);
+              targetPositionManualControl += gamepad2.right_trigger - gamepad2.left_trigger * 100;
 
             board.setLift(targetPositionManualControl);
 
@@ -149,6 +148,7 @@ public class FinalTeleOp extends OpMode {
             }
             telemetry.addData("lift mode", "manual control");
             telemetry.addData("target position", "n/a");
+            telemetry.addData("is over/undershoot enabled?", liftCorrection ? "yes" : "no" );
         } else { //lift uses preset heights
             if (gamepad2.dpad_up) { //dpad up increases the preset's value
                 if (targetPositionPresetHeights == 0 || targetPositionPresetHeights == heights.groundJunction) {

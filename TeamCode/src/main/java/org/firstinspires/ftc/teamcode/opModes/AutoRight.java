@@ -71,7 +71,7 @@ public class AutoRight extends OpMode {
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
                 .waitSeconds(0.75)
                 .turn(Math.toRadians(45))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 8, coordinateLocations.rightHighJunc.getY() + 8, Math.toRadians(315)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
                 .lineToLinearHeading(new Pose2d(-36,12, Math.toRadians(315)))
@@ -81,7 +81,7 @@ public class AutoRight extends OpMode {
                 .turn(Math.toRadians(-135))
                 .lineToLinearHeading(new Pose2d(-64, 12, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
-                    liftHeight = coneheight + 200;
+                    liftHeight = coneheight + 400;
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
@@ -97,7 +97,7 @@ public class AutoRight extends OpMode {
                 })
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(180)))
                 .turn(Math.toRadians(135))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 6, coordinateLocations.rightHighJunc.getY() + 6, Math.toRadians(315)))
+                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315)))
                 .waitSeconds(0.75)
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
@@ -146,8 +146,9 @@ public class AutoRight extends OpMode {
                 step++;
             }
         } else if (step == 2) {
+            mpb.sleep(1500);
             mpb.setClaw(0);
-            mpb.sleep(1000);
+            mpb.sleep(500);
             step++;
             mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
         } else if (step == 3) {
