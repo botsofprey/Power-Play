@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.vars.StaticImu;
  */
 @TeleOp()
 public class FinalTeleOpRewritten extends OpMode {
-    boolean liftCorrection;
+    boolean liftCorrection = true;
     /**
      * A double used to make sure the acceleration isn't too high
      */
@@ -155,7 +155,11 @@ public class FinalTeleOpRewritten extends OpMode {
             }
             telemetry.addData("lift mode", "manual control");
             telemetry.addData("target position", "n/a");
-            telemetry.addData("is over/undershoot enabled?", !liftCorrection ? "yes" : "no");
+            if (liftCorrection) {
+                telemetry.addData("is over/undershoot enabled?", "no");
+            } else {
+                telemetry.addData("is over/undershoot enabled?", "yes");
+            }
         } else { //lift uses preset heights
             if (gamepad2.dpad_up) { //dpad up increases the preset's value
                 if (targetPositionPresetHeights == 0 || targetPositionPresetHeights == heights.groundJunction) {
