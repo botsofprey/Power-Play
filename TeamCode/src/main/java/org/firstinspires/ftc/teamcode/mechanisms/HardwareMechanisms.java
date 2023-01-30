@@ -5,7 +5,6 @@ import com.acmerobotics.roadrunner.control.PIDFController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -49,7 +48,6 @@ public class HardwareMechanisms {
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lift.setDirection(DcMotorSimple.Direction.REVERSE);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         imu.initialize(parameters);
     }
@@ -87,6 +85,12 @@ public class HardwareMechanisms {
     public double getHeading(AngleUnit angleUnit) {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
         return angles.firstAngle + StaticImu.imuStatic;
+    }
+
+    public void resetHeading() {
+        StaticImu.imuStatic = 0;
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        imu.initialize(parameters);
     }
 
     public double getNormalizedDegrees() {
