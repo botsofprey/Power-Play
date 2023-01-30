@@ -136,8 +136,8 @@ public class FinalTeleOpRewritten extends OpMode {
         xPressed = gamepad2.x;
         yPressed = gamepad2.y;
         if (!presetLiftHeightsMode) { //manual lift
-            //the right trigger makes the lift go up and the left trigger makes the lift go down
             targetPositionManualControl += (gamepad2.right_trigger - gamepad2.left_trigger) * 100;
+            //the right trigger makes the lift go up and the left trigger makes the lift go down
             if (liftCorrection) {
                 targetPositionManualControl = Math.min(heights.highJunction, targetPositionManualControl);
                 targetPositionManualControl = Math.max(0, targetPositionManualControl);
