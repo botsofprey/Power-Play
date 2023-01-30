@@ -3,8 +3,7 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -26,7 +25,7 @@ public class HardwareMechanisms {
 
     MecanumDrive drive = new MecanumDrive();
 
-    public DcMotorEx lift;
+    public DcMotorImplEx lift;
 
     public Servo claw;
 
@@ -42,12 +41,12 @@ public class HardwareMechanisms {
 
     public void init(HardwareMap hwMap) {
         drive.init(hwMap);
-        lift = hwMap.get(DcMotorEx.class, "lift");
+        lift = hwMap.get(DcMotorImplEx.class, "lift");
         claw = hwMap.servo.get("claw");
         imu = hwMap.get(BNO055IMU.class, "imu");
 
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lift.setZeroPowerBehavior(DcMotorImplEx.ZeroPowerBehavior.BRAKE);
+        lift.setMode(DcMotorImplEx.RunMode.RUN_WITHOUT_ENCODER);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         imu.initialize(parameters);
     }
@@ -68,8 +67,8 @@ public class HardwareMechanisms {
     }
 
     public void resetLift() {
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lift.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotorImplEx.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /**
