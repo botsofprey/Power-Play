@@ -139,6 +139,7 @@ public class FinalTeleOpRewritten extends OpMode {
         if (gamepad2.x && xPressed) {
             board.resetLift();
             targetPositionManualControl = (int) board.getLift();
+            telemetry.addLine("lift reset");
         }
         if (gamepad2.y && !yPressed) {
             liftCorrection = !liftCorrection;
