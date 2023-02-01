@@ -434,6 +434,10 @@ public class TrajectorySequenceBuilder {
         return turn(angle, currentTurnConstraintMaxAngVel, currentTurnConstraintMaxAngAccel);
     }
 
+    public TrajectorySequenceBuilder turnDEG(double angle) {
+        return turn(Math.toRadians(angle));
+    }
+
     public TrajectorySequenceBuilder turn(double angle, double maxAngVel, double maxAngAccel) {
         pushPath();
 
