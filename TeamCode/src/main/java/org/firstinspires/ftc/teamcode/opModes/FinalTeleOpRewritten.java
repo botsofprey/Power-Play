@@ -15,7 +15,14 @@ import org.firstinspires.ftc.teamcode.vars.StaticImu;
  */
 @TeleOp()
 public class FinalTeleOpRewritten extends OpMode {
-    boolean liftCorrection = true;
+    /**
+     * An int used for tracking the target position of the lift during the preset heights mode, which changes between 0, groundJunction, lowJunction, midJunction, and highJunction
+     */
+    int targetPositionPresetHeights = 0;
+    /**
+     * An int used to control the lift while under manual control
+     */
+    int targetPositionManualControl;
     /**
      * A double used to make sure the acceleration isn't too high
      */
@@ -39,23 +46,15 @@ public class FinalTeleOpRewritten extends OpMode {
     /**
      * A double used to track the previous x value in order to limit acceleration
      */
-    double lastX;
+    double lastY;
     /**
      * A double used to track the previous rx value in order to limit acceleration
      */
-    double lastRx;
+    double lastX;
     /**
      * A double used to track the previous y value in order to limit acceleration
      */
-    double lastY;
-    /**
-     * An int used for tracking the target position of the lift during the preset heights mode, which changes between 0, groundJunction, lowJunction, midJunction, and highJunction
-     */
-    int targetPositionPresetHeights = 0;
-    /**
-     * An int used to control the lift while under manual control
-     */
-    int targetPositionManualControl;
+    double lastRx;
     /**
      * A boolean made in order to make it so that up on the dpad on gamepad 2 has to be released before being counted again
      */
@@ -64,12 +63,22 @@ public class FinalTeleOpRewritten extends OpMode {
      * A boolean made in order to make it so that up on the dpad on gamepad 2 has to be released before being counted again
      */
     boolean downPressed = false;
+    /**
+     * A boolean made in order to make it so that y on gamepad 2 has to be released before being counted again
+     */
     boolean yPressed = false;
+    /**
+     * A boolean made in order to make it so that x on gamepad 2 has to be released before being counted again
+     */
     boolean xPressed = false;
     /**
      * A boolean used to track whether the lift is manually controlled or uses preset heights
      */
     boolean presetLiftHeightsMode = false;
+    /**
+     * A boolean used to track whether the lift uses height limits
+     */
+    boolean liftCorrection = true;
 
     HardwareMechanisms board = new HardwareMechanisms();
     HeightsList heights = new HeightsList();
