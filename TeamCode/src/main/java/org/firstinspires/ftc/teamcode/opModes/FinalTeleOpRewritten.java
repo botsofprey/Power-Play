@@ -74,6 +74,7 @@ public class FinalTeleOpRewritten extends OpMode {
     HardwareMechanisms board = new HardwareMechanisms();
     HeightsList heights = new HeightsList();
 
+    @Override
     public void init() {
         board.init(hardwareMap);
     }
@@ -216,6 +217,7 @@ public class FinalTeleOpRewritten extends OpMode {
         telemetry.addData("degrees", board.getNormalizedDegrees());
     }
 
+    @Override
     public void stop() {
         StaticImu.imuStatic = board.getHeading(AngleUnit.RADIANS);
     }
