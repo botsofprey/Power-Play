@@ -29,7 +29,7 @@ public class newAutoRight extends LinearOpMode {
      */
     HeightsList                         heightsList =                   new HeightsList();
     Pose2d                                 prevtraj = new                         Pose2d(
-                                                                   36 + 5, 12 - 3,
+                                                                   36 + 6, 12 - 6,
                                                                      Math.toRadians(315)
                                                                                         );
 
@@ -44,7 +44,7 @@ public class newAutoRight extends LinearOpMode {
     int                               tagOfInterest =                                   0,
                                                   i =                                   0;
 
-    Integer                              coneheight =              heightsList.heights[i];
+    int[]                                coneheight =               heightsList.heights;
 
     final double                            tagsize =                               0.166,
 
@@ -76,8 +76,8 @@ public class newAutoRight extends LinearOpMode {
                                 .lineToLinearHeading(new Pose2d(-36, 12, toDEG(270)))
                                 .waitSeconds(0.75)
                                 .turnDEG(-45)
-                                .lineToLinearHeading(new Pose2d(HIGH_JUNCTION_X - 5,
-                                                                HIGH_JUNCTION_Y + 3,
+                                .lineToLinearHeading(new Pose2d(HIGH_JUNCTION_X - 6,
+                                                                HIGH_JUNCTION_Y + 6,
                                                                 Math.toRadians(270)))
                                 .addTemporalMarker(() -> {
                                     mpb.setClaw(RELEASE);
@@ -86,7 +86,7 @@ public class newAutoRight extends LinearOpMode {
 
                getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
                                 .addSpatialMarker(new Vector2d(-36, 12), () -> {
-                                    mpb.setLift((int) (coneheight * 1.5));
+                                    mpb.setLift((int) (coneheight[i] * 1.5));
                                 })
                                 .lineToLinearHeading(new Pose2d(-36, 12, toDEG(315)))
                                 .addTemporalMarker(() -> {
@@ -94,14 +94,14 @@ public class newAutoRight extends LinearOpMode {
                                 .turnDEG(-135)
                                 .lineToLinearHeading(new Pose2d(-64, 12, toDEG(180)))
                                 .addTemporalMarker(() -> {
-                                    mpb.setLift(coneheight);
+                                    mpb.setLift(coneheight[i]);
                                 })
                                 .waitSeconds(0.5)
                                 .addTemporalMarker(() -> {
                                     mpb.setClaw(CATCH);
                                 })
                                 .addTemporalMarker(() -> {
-                                    mpb.setLift((int) (coneheight * 1.5));
+                                    mpb.setLift((int) (coneheight[i] * 1.5));
                                 })
                                 .waitSeconds(0.5)
                                 .addTemporalMarker(getRuntime(), () -> {
@@ -109,8 +109,8 @@ public class newAutoRight extends LinearOpMode {
                                 })
                                 .lineToLinearHeading(new Pose2d(-36, 12, toDEG(180)))
                                 .turnDEG(135)
-                                .lineToLinearHeading(new Pose2d(HIGH_JUNCTION_X - 5,
-                                                                HIGH_JUNCTION_Y + 3,
+                                .lineToLinearHeading(new Pose2d(HIGH_JUNCTION_X - 6,
+                                                                HIGH_JUNCTION_Y + 6,
                                                                 toDEG(225)))
                                 .waitSeconds(0.75)
                                 .addTemporalMarker(() -> {
@@ -170,7 +170,7 @@ public class newAutoRight extends LinearOpMode {
                 mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
 
                 do {
-                  mecanumDrive.update();
+                    mecanumDrive.update();
                 }
                 while (!isStopRequested() && mecanumDrive.isBusy());
             }
