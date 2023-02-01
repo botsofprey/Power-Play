@@ -82,6 +82,10 @@ public class ParkingAuto extends LinearOpMode {
             telemetry.addData("Target", odometry.getTargetLocation());
             telemetry.addData("Position", odometry.getLocation());
 
+            telemetry.addData("left", odometry.getCurrentLeftPos());
+            telemetry.addData("right", odometry.getCurrentRightPos());
+            telemetry.addData("aux", odometry.getCurrentAuxPos());
+
             telemetry.addData("Powers", drive.getPowers());
 
             telemetry.update();

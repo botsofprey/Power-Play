@@ -2,6 +2,7 @@ package OpMode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
@@ -104,58 +105,60 @@ public class LeftPreloadAuto extends LinearOpMode {
 
         //Resets position and encoders
         odometry.resetEncoders();
+        ElapsedTime autoTimer = new ElapsedTime();
+        while(autoTimer.seconds() < 15){
+            //Close around preset cone
+            claw.setPosition(Claw.CLOSE_POSITION);
+            sleep(1000);
 
-        //Close around preset cone
-        claw.setPosition(Claw.CLOSE_POSITION);
-        sleep(1000);
+            //If camera is too far away to see qr, robot gets closer
+            if (!camera.tagFound()) {
+                odometry.setTargetPoint(parkingLocations[1]);
 
-        //If camera is too far away to see qr, robot gets closer
-        if(!camera.tagFound()){
-            odometry.setTargetPoint(parkingLocations[1]);
+                while (!odometry.atTarget() && !camera.tagFound()) {
+                    odometry.update();
 
-            while(!odometry.atTarget() && !camera.tagFound()){
-                odometry.update();
+                    telemetry.addData("QR Code Found", camera.tagFound());
+                    if (camera.tagFound())
+                        telemetry.addData("Parking Spot", camera.getParking() + 1);
+                    telemetry.update();
+                }
 
-                telemetry.addData("QR Code Found", camera.tagFound());
-                if(camera.tagFound())
-                    telemetry.addData("Parking Spot", camera.getParking()+1);
-                telemetry.update();
+                //Turns camera off
+                camera.stop();
+
+                //Sets target to parking spot
+                parking = camera.getParking();
+
+            } else {
+                //Turns camera off
+                camera.stop();
+
+                //Sets target to parking spot
+                parking = camera.getParking();
+
+                //Scoring pre-loaded cone
+                odometry.setTargetPoint(0, 60, 0, true);
+                lift.hjunction();
+                whileMoving(1);
             }
 
-            //Turns camera off
-            camera.stop();
+            odometry.setTargetPoint(60, 60, 45, true);
+            whileMoving(0);
+            while (lift.isBusy() && opModeIsActive()) ;
 
-            //Sets target to parking spot
-            parking = camera.getParking();
+            drive.setCurrentSpeed(.25);
+            odometry.setTargetPoint(68, 66, 45, true);
+            whileMoving(0);
 
-        }else{
-            //Turns camera off
-            camera.stop();
+            //Scores
+            lift.hjunctionScore();
+            while (lift.isBusy() && opModeIsActive()) ;
 
-            //Sets target to parking spot
-            parking = camera.getParking();
-
-            //Scoring pre-loaded cone
-            odometry.setTargetPoint(0, 60, 0, true);
-            lift.hjunction();
-            whileMoving(1);
+            sleep(500);
+            claw.setPosition(Claw.OPEN_POSITION);
+            sleep(500);
         }
-
-        odometry.setTargetPoint(60, 60, 45, true);
-        whileMoving(0);
-        while(lift.isBusy() && opModeIsActive());
-
-        drive.setCurrentSpeed(.25);
-        odometry.setTargetPoint(68, 66, 45, true);
-        whileMoving(0);
-
-        //Scores
-        lift.hjunctionScore();
-        while(lift.isBusy() && opModeIsActive());
-
-        sleep(500);
-        claw.setPosition(Claw.OPEN_POSITION);
-        sleep(500);
 
         //Getting in position to go to cone stack
         drive.setCurrentSpeed(.25);
@@ -170,6 +173,7 @@ public class LeftPreloadAuto extends LinearOpMode {
 
         while(opModeIsActive()){
             odometry.update();
+            updatePosition();
         }
 
         drive.setCurrentSpeed(.5);

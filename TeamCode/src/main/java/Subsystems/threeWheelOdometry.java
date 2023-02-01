@@ -34,20 +34,20 @@ public class threeWheelOdometry {
     private final double slowDownOffset = 30, angleSlowDown = 15;
 
     public PidController xPID, yPID, headingPID;
-    private static double moveI = 0, maintainI =  .000125;
-    private static double moveD = 0, maintainD = 0.125;
+    private static double moveI = 0, maintainI =  .00875;
+    private static double moveD = 0, maintainD = 0.1875;
     private static double kp = .125, hKP = .325, hDP = 0;
-    private final double headingI = 0, maintainHeadingI = 0.00001;
+    private final double headingI = 0, maintainHeadingI = 0.0000000001;
 
     private StigmoidController stigmoidController = new StigmoidController(1, 7.9/10.0, 0);
 
-    //Robot measurements in mm
+    //Robot measurements in cm
     public final static double DISTANCE_FROM_MIDPOINT = 18.5;
     public final static double LENGETH_BETWEEN_VERTS = 42;
     public final static double ANGLE_CIRCUMFERENCE = DISTANCE_FROM_MIDPOINT * Math.PI * 2;
     public final static double CM_PER_TICK = (3.5 * Math.PI) / 8192;
-    public final static double xMult = 209.0/200.0,
-            yMult = 209.0/200.0;
+    public final static double xMult = 1,
+            yMult = 1;
 
     public threeWheelOdometry(HardwareMap hardwareMap, Location start, LinearOpMode op, MecanumDrive drive) {
         meccanumDrive = drive;
@@ -69,17 +69,18 @@ public class threeWheelOdometry {
                 dx2 = (currentRightPos - prevRightPos) * CM_PER_TICK,
                 dy = (currentAuxPos - prevAuxPos) * CM_PER_TICK;
 
-        double theta = (dx2-dx1)/(LENGETH_BETWEEN_VERTS),
+        double theta = positionLocation.getRadians()-meccanumDrive.getRadians(),//(dx2-dx1)/(LENGETH_BETWEEN_VERTS),
                 fwd = (dx2+dx1)/2.0,
                 str = dy - (DISTANCE_FROM_MIDPOINT * theta);
 
-        double angle = meccanumDrive.getRadians();
-        double deltaX = (fwd * Math.cos(angle)) - (str * Math.sin(angle)),
-                deltaY = (str * Math.cos(angle)) + (fwd * Math.sin(angle));
+        double deltaX, deltaY;
 
-        positionLocation.add(deltaX * xMult, deltaY * yMult,0);
+            double angle = meccanumDrive.getRadians();
+            deltaX = (fwd * Math.cos(angle)) - (str * Math.sin(angle));
+            deltaY = (str * Math.cos(angle)) + (fwd * Math.sin(angle));
+
+        positionLocation.add(deltaX * xMult, deltaY * yMult, 0);
         positionLocation.angle = meccanumDrive.getAngle();
-
         //dx = x change
         //dy = y change
     }
@@ -231,13 +232,15 @@ public class threeWheelOdometry {
         }
 
 
-        if(Math.abs(diff.angle) <= angleSlowDown){
+        if(Math.abs(diff.angle) <= angleSlowDown && headingPID.ki != maintainHeadingI){
+            headingPID.reset();
             headingPID.updateCoefficients(headingPID.kp, maintainHeadingI, headingPID.kd);
-        }else{
+        }else if (Math.abs(diff.angle) >= angleSlowDown && headingPID.ki != headingI){
+            headingPID.reset();
             headingPID.updateCoefficients(headingPID.kp, headingI, headingPID.kd);
         }
 
-        double rotate = Math.abs(diff.angle) < angleOffset ?
+        double rotate = Math.abs(diff.angle) < (angleOffset * 2) ?
                 0 : headingPID.calculateResponse(diff.angle);
         rotate = Range.clip(rotate, -.5, .5);
 

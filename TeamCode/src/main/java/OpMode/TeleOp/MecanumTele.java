@@ -284,7 +284,9 @@ public class MecanumTele extends LinearOpMode {
                 controller1.rumble(3);
                 controller2.rumble(3);
             }
-            telemetry.addData("Closest junction", "Junction type:" + closestJunction[0] + ", " + "Junction number:" + closestJunction[1]);
+            if(closestJunction != null) {
+                //telemetry.addData("Closest junction", "Junction type:" + closestJunction[0] + ", " + "Junction number:" + closestJunction[1]);
+            }
             telemetry.addData("Lift preset", liftPreset);
 
             telemetry.addData("Cones", coneNum);

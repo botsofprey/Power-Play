@@ -35,7 +35,7 @@ public class RightCycleAuto extends LinearOpMode {
             new Location(0, 90) //terminal, when qr code is not found
     };
 
-    private Location liftOffset = new Location(20.5, 1);
+    private Location liftOffset = new Location(21, 1);
 
     private String startFileName = "TeleStartLocation.JSON";
     private File startFile = AppUtil.getInstance().getSettingsFile(startFileName);
