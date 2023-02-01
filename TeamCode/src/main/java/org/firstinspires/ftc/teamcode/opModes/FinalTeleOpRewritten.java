@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.vars.StaticImu;
  */
 @TeleOp()
 public class FinalTeleOpRewritten extends OpMode {
+
     /**
      * An int used for tracking the target position of the lift during the preset heights mode, which changes between 0, groundJunction, lowJunction, midJunction, and highJunction
      */
