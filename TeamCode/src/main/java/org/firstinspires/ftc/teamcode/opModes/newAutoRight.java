@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
+import android.app.Application;
+import android.content.Context;
+import android.content.ContextWrapper;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.util.Angle;
@@ -14,20 +18,22 @@ import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
+
 import org.firstinspires.ftc.teamcode.vars.CoordinateLocations;
 import org.firstinspires.ftc.teamcode.vars.HeightsList;
 import org.firstinspires.ftc.teamcode.vars.StaticImu;
 import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Autonomous
 public class newAutoRight extends LinearOpMode {
     /*
     Type                                       Name                                 Value
      */
-    HeightsList                         heightsList =                   new HeightsList();
+    HardwareMap                         hardwareMap;
+    HeightsList                         heightsList = new                   HeightsList();
     Pose2d                                 prevtraj = new                         Pose2d(
                                                                    36 + 6, 12 - 6,
                                                                      Math.toRadians(315)
@@ -36,15 +42,15 @@ public class newAutoRight extends LinearOpMode {
     cameraControl                           autocam = new                 cameraControl();
     AprilTagDetection                       tagData = new             AprilTagDetection();
     HardwareMechanisms                          mpb = new            HardwareMechanisms();
-    SampleMecanumDrive                 mecanumDrive = new SampleMecanumDrive(hardwareMap);
     CoordinateLocations                      coords = new           CoordinateLocations();
+    SampleMecanumDrive                 mecanumDrive;
 
     double                               liftHeight =                                   0;
 
     int                               tagOfInterest =                                   0,
                                                   i =                                   0;
 
-    int[]                                coneheight =               heightsList.heights;
+    int[]                                coneheight =                 heightsList.heights;
 
     final double                            tagsize =                               0.166,
 
@@ -65,82 +71,28 @@ public class newAutoRight extends LinearOpMode {
     AprilTagPipelineEXAMPLECOPY    aprilTagPipeline = new     AprilTagPipelineEXAMPLECOPY(
                                                                  tagsize, fx, fy, cx, cy);
 
-
-    TrajectorySequence preload = mecanumDrive.trajectorySequenceBuilder(coords.rightStart)
-                                .addSpatialMarker(RIGHT_START_VEC, () -> {
-                                    mpb.setLift(HIGH_JUNCTION_HEIGHT);
-                                    mpb.setClaw(CATCH);
-                                })
-
-                                .lineToLinearHeading(new Pose2d(-38, START_Y_COORD))
-                                .lineToLinearHeading(new Pose2d(-36, 12, toDEG(270)))
-                                .waitSeconds(0.75)
-                                .turnDEG(-45)
-                                .lineToLinearHeading(new Pose2d(HIGH_JUNCTION_X - 6,
-                                                                HIGH_JUNCTION_Y + 6,
-                                                                Math.toRadians(270)))
-                                .addTemporalMarker(() -> {
-                                    mpb.setClaw(RELEASE);
-                                })
-                                .build(),
-
-               getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
-                                .addSpatialMarker(new Vector2d(-36, 12), () -> {
-                                    mpb.setLift((int) (coneheight[i] * 1.5));
-                                })
-                                .lineToLinearHeading(new Pose2d(-36, 12, toDEG(315)))
-                                .addTemporalMarker(() -> {
-                                })
-                                .turnDEG(-135)
-                                .lineToLinearHeading(new Pose2d(-64, 12, toDEG(180)))
-                                .addTemporalMarker(() -> {
-                                    mpb.setLift(coneheight[i]);
-                                })
-                                .waitSeconds(0.5)
-                                .addTemporalMarker(() -> {
-                                    mpb.setClaw(CATCH);
-                                })
-                                .addTemporalMarker(() -> {
-                                    mpb.setLift((int) (coneheight[i] * 1.5));
-                                })
-                                .waitSeconds(0.5)
-                                .addTemporalMarker(getRuntime(), () -> {
-                                    mpb.setLift(HIGH_JUNCTION_HEIGHT);
-                                })
-                                .lineToLinearHeading(new Pose2d(-36, 12, toDEG(180)))
-                                .turnDEG(135)
-                                .lineToLinearHeading(new Pose2d(HIGH_JUNCTION_X - 6,
-                                                                HIGH_JUNCTION_Y + 6,
-                                                                toDEG(225)))
-                                .waitSeconds(0.75)
-                                .addTemporalMarker(() -> {
-                                    mpb.setClaw(0);
-                                })
-                                .waitSeconds(0.5)
-                                .build(),
-
-                        park19 = mecanumDrive.trajectorySequenceBuilder(prevtraj)
-                                .lineToLinearHeading(new Pose2d(-36, 12, toDEG(270)))
-                                .lineToLinearHeading(new Pose2d(-60, 12, toDEG(270)))
-                                .build(),
-
-                        park18 = mecanumDrive.trajectorySequenceBuilder(prevtraj)
-                                .lineToLinearHeading(new Pose2d(-36, 12, toDEG(270)))
-                                .build(),
-
-                        park17 = mecanumDrive.trajectorySequenceBuilder(prevtraj)
-                                .lineToLinearHeading(new Pose2d(-36, 12, toDEG(270)))
-                                .lineToLinearHeading(new Pose2d(-12, 12, toDEG(270)))
-                                .build();
+    TrajectorySequence preload, getConeAndScore, park17, park18, park19;
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        mecanumDrive = new SampleMecanumDrive(hardwareMap);
+
+        preload = preloadSETUP();
+
+        getConeAndScore = getConeAndScoreSETUP();
+
+        park19 = park19SETUP();
+
+        park18 = park18SETUP();
+
+        park17 = park17SETUP();
+
         //set trajectory to run on start
         mecanumDrive.followTrajectorySequenceAsync(preload);
 
         //init loop
         while (!isStopRequested() && !isStarted()) {
-
             //check detected apriltags
             tagData = null;
             ArrayList<AprilTagDetection> currentDetections;
@@ -195,7 +147,89 @@ public class newAutoRight extends LinearOpMode {
             autocam.destroyCameraInstance();
         }
     }
+    /*
+
+
+    END OPMODE
+
+
+     */
     private double toDEG(double angle) {
         return Math.toRadians(angle);
+    }
+
+    private TrajectorySequence preloadSETUP() {
+        return mecanumDrive.trajectorySequenceBuilder(coords.rightStart)
+                .addSpatialMarker(RIGHT_START_VEC, () -> {
+                    mpb.setLift(HIGH_JUNCTION_HEIGHT);
+                    mpb.setClaw(CATCH);
+                })
+
+                .lineToLinearHeading(new Pose2d(-38, START_Y_COORD))
+                .lineToLinearHeading(new Pose2d(-36, 12, toDEG(270)))
+                .waitSeconds(0.75)
+                .turnDEG(-45)
+                .lineToLinearHeading(new Pose2d(HIGH_JUNCTION_X - 6,
+                        HIGH_JUNCTION_Y + 6,
+                        Math.toRadians(270)))
+                .addTemporalMarker(() -> mpb.setClaw(RELEASE))
+                .build();
+    }
+
+    private TrajectorySequence getConeAndScoreSETUP() {
+        return mecanumDrive.trajectorySequenceBuilder(prevtraj)
+                .addSpatialMarker(new Vector2d(-36, 12), () -> {
+                    mpb.setLift((int) (coneheight[i] * 1.5));
+                })
+                .lineToLinearHeading(new Pose2d(-36, 12, toDEG(315)))
+                .addTemporalMarker(() -> {
+                })
+                .turnDEG(-135)
+                .lineToLinearHeading(new Pose2d(-64, 12, toDEG(180)))
+                .addTemporalMarker(() -> {
+                    mpb.setLift(coneheight[i]);
+                })
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
+                    mpb.setClaw(CATCH);
+                })
+                .addTemporalMarker(() -> {
+                    mpb.setLift((int) (coneheight[i] * 1.5));
+                })
+                .waitSeconds(0.5)
+                .addTemporalMarker(getRuntime(), () -> {
+                    mpb.setLift(HIGH_JUNCTION_HEIGHT);
+                })
+                .lineToLinearHeading(new Pose2d(-36, 12, toDEG(180)))
+                .turnDEG(135)
+                .lineToLinearHeading(new Pose2d(HIGH_JUNCTION_X - 6,
+                        HIGH_JUNCTION_Y + 6,
+                        toDEG(225)))
+                .waitSeconds(0.75)
+                .addTemporalMarker(() -> {
+                    mpb.setClaw(0);
+                })
+                .waitSeconds(0.5)
+                .build();
+    }
+
+    private TrajectorySequence park17SETUP() {
+        return mecanumDrive.trajectorySequenceBuilder(prevtraj)
+            .lineToLinearHeading(new Pose2d(-36, 12, toDEG(270)))
+            .lineToLinearHeading(new Pose2d(-12, 12, toDEG(270)))
+            .build();
+    }
+
+    private TrajectorySequence park18SETUP() {
+        return mecanumDrive.trajectorySequenceBuilder(prevtraj)
+            .lineToLinearHeading(new Pose2d(-36, 12, toDEG(270)))
+            .build();
+    }
+
+    private TrajectorySequence park19SETUP() {
+        return mecanumDrive.trajectorySequenceBuilder(prevtraj)
+            .lineToLinearHeading(new Pose2d(-36, 12, toDEG(270)))
+            .lineToLinearHeading(new Pose2d(-60, 12, toDEG(270)))
+            .build();
     }
 }
