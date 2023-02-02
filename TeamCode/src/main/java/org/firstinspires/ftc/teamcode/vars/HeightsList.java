@@ -24,7 +24,7 @@ public class HeightsList { //heights are all in tics
     highJunction = (int) Math.round(950 * ratio), /**
      * An int used to represent the tic value at the the height of the ground junction, it is subject to change based of the lift
      */
-    groundJunction = (int) Math.round(250 * ratio);
+    groundJunction = (int) Math.round(125 * ratio);
 
     //cone stack heights:
     /**
@@ -47,5 +47,5 @@ public class HeightsList { //heights are all in tics
     public int[] heights = {fiveConeStack, fourConeStack, threeConeStack, twoConeStack, oneConeStack};
 
     //extra height:
-    public int rightAboveACone = 0; //replace this number with the real value
+    public int rightAboveACone = (int) Math.round(250 * ratio);
 }
