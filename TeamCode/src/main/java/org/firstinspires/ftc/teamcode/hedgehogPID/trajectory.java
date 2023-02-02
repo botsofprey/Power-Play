@@ -28,7 +28,8 @@ public class trajectory {
 
         double targetVelocity = Math.min((targetVelocityBLOCK * TICKS_PER_REV), MAX_VELOCITY);
 
-        double[] motors = new double[]{frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
+        double[] motors = new double[]{frontLeftMotor, frontRightMotor,
+                                       backLeftMotor, backRightMotor};
 
         double duration = Math.hypot(strafeBLOCK * TICKS_PER_REV, forbackBLOCK * TICKS_PER_REV)
                           / (targetVelocity / dm.driveMode);

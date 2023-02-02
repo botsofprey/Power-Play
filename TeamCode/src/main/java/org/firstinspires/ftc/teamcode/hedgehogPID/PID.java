@@ -5,24 +5,24 @@ public class PID {
     private double[] motors;
     private double targetVelocity;
 
-    public double[] checkPID(double[] motors) {
-        double turnError = checkTurn();
-        double translationError = checkTranslation();
-        double velocityError = checkVelocity();
+    public double[] checkPID(segment seg, ) {
+        double turnError = checkTurn(seg);
+        double translationError = checkTranslation(seg);
+        double velocityError = checkVelocity(seg);
         return new double[]{turnError, translationError, velocityError};
     }
 
-    private double checkTurn() {
+    private double checkTurn(segment seg) {
         double error = 0;
         return error;
     }
 
-    private double checkTranslation() {
+    private double checkTranslation(segment seg) {
         double error = 0;
         return error;
     }
 
-    private double checkVelocity() {
+    private double checkVelocity(segment seg) {
         double error = 0;
         return error;
     }
