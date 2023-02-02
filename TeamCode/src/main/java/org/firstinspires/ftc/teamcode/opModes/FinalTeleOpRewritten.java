@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.vars.StaticImu;
  */
 @TeleOp()
 public class FinalTeleOpRewritten extends OpMode {
+
     /**
      * An int used for tracking the target position of the lift during the preset heights mode, which changes between 0, groundJunction, lowJunction, midJunction, and highJunction
      */
@@ -189,9 +190,9 @@ public class FinalTeleOpRewritten extends OpMode {
                     targetPositionPresetHeights = 0;
                 }
             } else if (gamepad2.left_bumper) {//the left bumper sets the preset to ground junction
-                targetPositionPresetHeights = heights.groundJunction;
-            } else if (gamepad2.right_bumper) { //the right bumper sets the preset to just above the cone
                 targetPositionPresetHeights = heights.rightAboveACone;
+            } else if (gamepad2.right_bumper) { //the right bumper sets the preset to just above the cone
+                targetPositionPresetHeights = heights.groundJunction;
                 board.setClaw(0);
                 telemetry.addData("claw state", "release");
             }

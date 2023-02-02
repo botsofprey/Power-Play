@@ -10,7 +10,7 @@ public class MeepMeepTesting {
         MeepMeep meepMeep = new MeepMeep(800);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                .setConstraints(80, 40, 15, Math.toRadians(220), 10.5553)
+                .setConstraints(60, 30, 10, Math.toRadians(180), 10.5553)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-40.5,64.5,270))
                                 //preload
