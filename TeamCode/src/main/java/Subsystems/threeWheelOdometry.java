@@ -34,8 +34,8 @@ public class threeWheelOdometry {
     private final double slowDownOffset = 30, angleSlowDown = 15;
 
     public PidController xPID, yPID, headingPID;
-    private static double moveI = 0, maintainI =  .00875;
-    private static double moveD = 0, maintainD = 0.1875;
+    private static double moveI = 0, maintainI =  .005;
+    private static double moveD = 0, maintainD = 0.21875;
     private static double kp = .125, hKP = .325, hDP = 0;
     private final double headingI = 0, maintainHeadingI = 0.0000000001;
 
@@ -46,8 +46,8 @@ public class threeWheelOdometry {
     public final static double LENGETH_BETWEEN_VERTS = 42;
     public final static double ANGLE_CIRCUMFERENCE = DISTANCE_FROM_MIDPOINT * Math.PI * 2;
     public final static double CM_PER_TICK = (3.5 * Math.PI) / 8192;
-    public final static double xMult = 1,
-            yMult = 1;
+    public final static double xMult = 203./200.,
+            yMult = 202.5/200.;
 
     public threeWheelOdometry(HardwareMap hardwareMap, Location start, LinearOpMode op, MecanumDrive drive) {
         meccanumDrive = drive;
@@ -193,6 +193,12 @@ public class threeWheelOdometry {
                 x = xPID.calculateResponse(distance * Math.cos(h));
                 y = yPID.calculateResponse(distance * Math.sin(h));
 
+                if(x > -.15 && x < .15){
+                    x = (Math.abs(x)/x) * .15;
+                }
+                if(y > -.15 && y < .15){
+                    y = (Math.abs(y)/y) * .15;
+                }
 
                 //x *= distance / slowDownOffset;
                 //y *= distance / slowDownOffset;
@@ -208,13 +214,6 @@ public class threeWheelOdometry {
 
                 x = xPID.calculateResponse(distance * Math.cos(h));
                 y = yPID.calculateResponse(distance * Math.sin(h));
-
-                if(x > -.15 && x < .15){
-                    x = (Math.abs(x)/x) * .15;
-                }
-                if(y > -.15 && y < .15){
-                    y = (Math.abs(y)/y) * .15;
-                }
             }
 
             //x = (1./.44) * (stigmoidController.calculateResponse(x) - .562);

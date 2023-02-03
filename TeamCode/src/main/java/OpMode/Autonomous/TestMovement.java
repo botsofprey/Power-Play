@@ -43,6 +43,8 @@ public class TestMovement extends LinearOpMode {
                 telemetry.update();
             }
 
+            sleep(5000);
+
             odom.setTargetPoint(tile,0,0);
             while(!odom.atTarget()){
                 odom.update();
@@ -51,6 +53,8 @@ public class TestMovement extends LinearOpMode {
                 telemetry.addData("Y Integral", odom.yPidIntegralSum());
                 telemetry.update();
             }
+
+            sleep(5000);
 
             odom.setTargetPoint(tile,-tile,0);
             while(!odom.atTarget()){
@@ -61,6 +65,9 @@ public class TestMovement extends LinearOpMode {
                 telemetry.update();
             }
 
+            sleep(5000);
+
+
             odom.setTargetPoint(0,-tile,0);
             while(!odom.atTarget()){
                 odom.update();
@@ -69,6 +76,9 @@ public class TestMovement extends LinearOpMode {
                 telemetry.addData("Y Integral", odom.yPidIntegralSum());
                 telemetry.update();
             }
+
+            sleep(5000);
+
         }
 
     }
