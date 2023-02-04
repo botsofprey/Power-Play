@@ -1,14 +1,8 @@
 package DriveEngine;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-import androidx.annotation.NonNull;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
@@ -20,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import UtilityClasses.BatteryVoltageSensor;
 import UtilityClasses.Location;
-import UtilityClasses.StigmoidController;
+import UtilityClasses.PidController;
 import UtilityClasses.Vector2D;
 //import UtilityClasses.PIDController;
 
@@ -145,57 +139,33 @@ public class MecanumDrive {
        double newRight = r * Math.cos(theta);
 
        moveWithPower(
-                newForward + newRight + rotate,
-                newForward - newRight + rotate,
+               newForward + newRight + rotate,
+               newForward - newRight + rotate,
                newForward + newRight - rotate,
                newForward - newRight - rotate
        );
     }
 
-
-    public void gridMovement(@NonNull Vector2D movement, Location current){
-        double xMovement = 0, yMovement = 0;
-
-        telemetry.update();
-
-        if(movement.y > movement.x){
-            xMovement = Math.sin(getRadians()) * movement.y;
-
-           double tileYOffset = (tile * Math.round(current.y/tile)) - current.y;
-           yMovement = stig.calculateResponse(Math.cos(getRadians()) *
-                   tileYOffset) * movement.y;
-
-        } else if(movement.x != 0){
-            yMovement = Math.cos(getRadians()) * movement.x;
-
-            double tileXOffset = (tile * Math.round(current.x/tile)) - current.x;
-            xMovement = stig.calculateResponse(Math.sin(getRadians()) *
-                    tileXOffset) * movement.x;
-        }
-
-        moveWithPower(
-                xMovement + yMovement,
-                xMovement - yMovement,
-                xMovement + yMovement,
-                xMovement - yMovement
-        );
-    }
-
-    StigmoidController stig = new StigmoidController(1, 1, 1);
+    PidController pid = new PidController(.125, .00000125, .125);
+    boolean gridX = false;
     public void grid(Vector2D movement, Location current){
         double relXMovement = 0, relYMovement = 0;
 
-        if(Math.round(movement.y) != 0){
+        if(movement.y > movement.x){
+            gridX = true;
+
             relXMovement = Math.sin(getRadians()) * movement.x;
 
             double tileYOffset = (tile * Math.round(current.y/tile)) - current.y;
-            relYMovement = stig.calculateResponse(Math.cos(getRadians()) * tileYOffset) * movement.x;
+            relYMovement = (Math.cos(getRadians()) * tileYOffset) * movement.x;
 
-        } else if(Math.round(movement.x) != 0){
+        } else if(movement.x != 0){
+            gridX = false;
+
             relYMovement = Math.cos(getRadians()) * movement.y;
 
             double tileXOffset = (tile * Math.round(current.y/tile)) - current.y;
-            relXMovement = stig.calculateResponse(Math.cos(getRadians()) * tileXOffset) * movement.y;
+            relXMovement = (Math.cos(getRadians()) * tileXOffset) * movement.y;
         }
 
         moveWithPower(

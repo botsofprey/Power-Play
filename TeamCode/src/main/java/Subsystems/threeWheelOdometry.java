@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.opencv.core.Mat;
 
 import DriveEngine.MecanumDrive;
 import UtilityClasses.Location;
@@ -47,7 +46,7 @@ public class threeWheelOdometry {
     public final static double ANGLE_CIRCUMFERENCE = DISTANCE_FROM_MIDPOINT * Math.PI * 2;
     public final static double CM_PER_TICK = (3.5 * Math.PI) / 8192;
     public final static double xMult = 203./200.,
-            yMult = 202.5/200.;
+            yMult = 202./200.;
 
     public threeWheelOdometry(HardwareMap hardwareMap, Location start, LinearOpMode op, MecanumDrive drive) {
         meccanumDrive = drive;
