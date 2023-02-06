@@ -10,13 +10,13 @@ import org.firstinspires.ftc.teamcode.vars.HeightsList;
 import org.firstinspires.ftc.teamcode.vars.StaticImu;
 
 /**
- * This is the combination of all of our TeleOp codes into one
+ * This is the combination of all of our TeleOp codes into one, now outdated
  *
  * @author Alex Bryan
  */
 @Disabled
 @TeleOp()
-public class FinalTeleOp extends OpMode {
+public class FormerFinalTeleOp extends OpMode {
     boolean liftCorrection;
     /**
      * A double used to make sure the acceleration isn't too high
