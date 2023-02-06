@@ -68,39 +68,16 @@ public class AutoRight extends OpMode {
                 .lineToLinearHeading(new Pose2d(-38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
                 .waitSeconds(0.75)
-                .turn(Math.toRadians(45))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315)))
+                .lineToLinearHeading(new Pose2d(-24, 12, Math.toRadians(270)))
+                .waitSeconds(0.1)
+                .lineToLinearHeading(new Pose2d(-24, 9.25, Math.toRadians(270)))
+//                .turn(Math.toRadians(55))
+//                .lineToLinearHeading(new Pose2d((coordinateLocations.rightHighJunc.getX() - 4.5), (coordinateLocations.rightHighJunc.getY() + 6.5), Math.toRadians(330)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
-                .lineToLinearHeading(new Pose2d(-36,12, Math.toRadians(315)))
-                .addTemporalMarker(() -> {
-                    liftHeight = (int) (heights.heights[0] * 1.5);
-                })
-                .turn(Math.toRadians(-135))
-                .lineToLinearHeading(new Pose2d(-64, 12, Math.toRadians(180)))
-                .addTemporalMarker(() -> {
-                    liftHeight = coneheight + 400;
-                })
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
-                    mpb.setClaw(0.4);
-                })
-                .waitSeconds(1)
-                .addTemporalMarker(() -> {
-                    liftHeight = (int) (heights.heights[0] * 1.5);
-                })
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
-                    liftHeight = heights.highJunction + 300;
-                })
-                .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(180)))
-                .turn(Math.toRadians(135))
-                .lineToLinearHeading(new Pose2d(coordinateLocations.rightHighJunc.getX() - 5, coordinateLocations.rightHighJunc.getY() + 3, Math.toRadians(315)))
-                .waitSeconds(0.75)
-                .addTemporalMarker(() -> {
-                    mpb.setClaw(0);
-                })
-                .waitSeconds(0.5)
+                .lineToLinearHeading(new Pose2d(-24, 12, Math.toRadians(270)))
+                .waitSeconds(0.1)
+                .turn(Math.toRadians(-90))
                 .build();
         park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-60, 12, Math.toRadians(270))).build();
         park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270))).build();
@@ -158,34 +135,33 @@ public class AutoRight extends OpMode {
                 i++;
                 if (i == 1) {
                     step++;
-                }
-                else {
+                } else {
                     mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
                 }
             }
-        } else if (step == 4) {
-            if (tagOfInterest == 19) {
-                mecanumDrive.followTrajectoryAsync(park19);
-            } else if (tagOfInterest == 17) {
-                mecanumDrive.followTrajectoryAsync(park17);
-            } else {
-                mecanumDrive.followTrajectoryAsync(park18);
-            }
-            step++;
-        } else if (step == 5) {
-            mecanumDrive.update();
-            if (!mecanumDrive.isBusy()) {
-                step++;
-            }
-        } else if (step == 6) {
-            mpb.setLift(0);
-            if (mpb.getLift() == 0) {
-                step++;
-            }
+//        } else if (step == 4) {
+//            if (tagOfInterest == 19) {
+//                mecanumDrive.followTrajectoryAsync(park19);
+//            } else if (tagOfInterest == 17) {
+//                mecanumDrive.followTrajectoryAsync(park17);
+//            } else {
+//                mecanumDrive.followTrajectoryAsync(park18);
+//            }
+//            step++;
+//        } else if (step == 5) {
+//            mecanumDrive.update();
+//            if (!mecanumDrive.isBusy()) {
+//                step++;
+//            }
+//        } else if (step == 6) {
+//            mpb.setLift(0);
+//            if (mpb.getLift() == 0) {
+//                step++;
+//            }
         } else {
             telemetry.addLine("Done");
         }
-
+        telemetry.addData("current position", mecanumDrive.getPoseEstimate());
     }
 
     public void stop() {
