@@ -76,7 +76,7 @@ public class AutoRight extends OpMode {
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
                 .lineToLinearHeading(new Pose2d(-24, 12, Math.toRadians(270)))
-                .waitSeconds(0.1)
+                .waitSeconds(2)
                 .turn(Math.toRadians(-90))
                 .build();
         park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-60, 12, Math.toRadians(270))).build();
