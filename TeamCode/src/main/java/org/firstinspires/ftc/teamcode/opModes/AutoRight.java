@@ -68,16 +68,14 @@ public class AutoRight extends OpMode {
                 .lineToLinearHeading(new Pose2d(-38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
                 .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
                 .waitSeconds(0.75)
-                .lineToLinearHeading(new Pose2d(-24, 12, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-23.5, 12, Math.toRadians(270)))
                 .waitSeconds(0.1)
-                .lineToLinearHeading(new Pose2d(-24, 9.25, Math.toRadians(270)))
-//                .turn(Math.toRadians(55))
-//                .lineToLinearHeading(new Pose2d((coordinateLocations.rightHighJunc.getX() - 4.5), (coordinateLocations.rightHighJunc.getY() + 6.5), Math.toRadians(330)))
+                .lineToLinearHeading(new Pose2d(-23.5, 9.25, Math.toRadians(270)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
-                .lineToLinearHeading(new Pose2d(-24, 12, Math.toRadians(270)))
+//                .lineToLinearHeading(new Pose2d(-24, 12, Math.toRadians(270)))
                 .waitSeconds(2)
-                .turn(Math.toRadians(-90))
+//                .turn(Math.toRadians(-90))
                 .build();
         park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-60, 12, Math.toRadians(270))).build();
         park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270))).build();
@@ -116,8 +114,8 @@ public class AutoRight extends OpMode {
         } else if (step == 1) {
             mpb.setLift(heights.highJunction + 300);
             mecanumDrive.update();
-            prevtraj = preLoad.end();
             if (!mecanumDrive.isBusy()) {
+                prevtraj = preLoad.end();
                 step++;
             }
         } else if (step == 2) {
