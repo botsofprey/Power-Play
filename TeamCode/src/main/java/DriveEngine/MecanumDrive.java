@@ -347,5 +347,12 @@ public class MecanumDrive {
             currentSpeed = savedSpeed;
         }
     }
-}
 
+    public Object grid() {
+        return null;
+    }
+
+    public Object gridM() {
+        return null;
+    }
+}
