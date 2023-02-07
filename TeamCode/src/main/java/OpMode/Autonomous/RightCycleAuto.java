@@ -35,8 +35,6 @@ public class RightCycleAuto extends LinearOpMode {
             new Location(0, 90) //terminal, when qr code is not found
     };
 
-    private Location liftOffset = new Location(17, -2);
-
     private String startFileName = "TeleStartLocation.JSON";
     private File startFile = AppUtil.getInstance().getSettingsFile(startFileName);
     private String sideFileName = "AutoStartSide.JSON";
@@ -168,7 +166,7 @@ public class RightCycleAuto extends LinearOpMode {
         whileLiftBusy();
 
         drive.setCurrentSpeed(.25);
-        odometry.setTargetByOffset(liftOffset, new Location(tile * 1.5, -tile * 1.5), true);
+        odometry.setTargetByOffset(lift.OFFSET_ON_BOT, new Location(tile * 1.5, -tile * 1.5), true);
         System.out.println("Times target offset: 161");
         whileMoving(0);
 
@@ -312,7 +310,7 @@ public class RightCycleAuto extends LinearOpMode {
         lift.coneStack(5-times);
         whileLiftBusy();
 
-        odometry.setTargetByOffset(liftOffset, new Location((tile*2) - 10, tile + ((tile*.5))), true);
+        odometry.setTargetByOffset(lift.OFFSET_ON_BOT, new Location((tile*2) - 10, tile + ((tile*.5))), true);
         whileMoving(0);
 
         claw.setPosition(Claw.CLOSE_POSITION);
@@ -333,7 +331,7 @@ public class RightCycleAuto extends LinearOpMode {
         whileLiftBusy();
 
         //Scores
-        odometry.setTargetByOffset(liftOffset, new Location((tile*2.5) - 10,-tile*.5), true);
+        odometry.setTargetByOffset(lift.OFFSET_ON_BOT, new Location((tile*2.5) - 10,-tile*.5), true);
         System.out.println("Times target offset: 220");
         whileMoving(0);
 

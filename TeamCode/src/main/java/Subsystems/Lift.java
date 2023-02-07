@@ -7,8 +7,11 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
+import UtilityClasses.Location;
+
 public class Lift {
     private DcMotorEx liftMotor;
+    public Location OFFSET_ON_BOT = new Location(29, 0);
 
     private boolean braking;
 

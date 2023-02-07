@@ -33,9 +33,10 @@ public class threeWheelOdometry {
     private final double slowDownOffset = 30, angleSlowDown = 15;
 
     public PidController xPID, yPID, headingPID;
+    private static double moveK = .125, maintainK = .1875;
     private static double moveI = 0, maintainI =  .005;
-    private static double moveD = 0, maintainD = 0.21875;
-    private static double kp = .125, hKP = .325, hDP = 0;
+    private static double moveD = 0, maintainD = .25;//0.21875;
+    private static double hKP = .325, hDP = 0;
     private final double headingI = 0, maintainHeadingI = 0.0000000001;
 
     private StigmoidController stigmoidController = new StigmoidController(1, 7.9/10.0, 0);
@@ -45,8 +46,9 @@ public class threeWheelOdometry {
     public final static double LENGETH_BETWEEN_VERTS = 42;
     public final static double ANGLE_CIRCUMFERENCE = DISTANCE_FROM_MIDPOINT * Math.PI * 2;
     public final static double CM_PER_TICK = (3.5 * Math.PI) / 8192;
-    public final static double xMult = 203./200.,
-            yMult = 202./200.;
+    public final static double xMult = 202.3/200.,
+            yMult = 201.4/200.;
+
 
     public threeWheelOdometry(HardwareMap hardwareMap, Location start, LinearOpMode op, MecanumDrive drive) {
         leftVert = hardwareMap.get(DcMotor.class, "leftVert");
@@ -61,8 +63,8 @@ public class threeWheelOdometry {
 
         this.opMode = op;
 
-        xPID = new PidController(kp, moveI, moveD);
-        yPID = new PidController(kp, moveI, moveD);
+        xPID = new PidController(moveK, moveI, moveD);
+        yPID = new PidController(moveK, moveI, moveD);
         headingPID = new PidController(hKP, headingI, hDP);
 
         resetEncoders();
@@ -98,8 +100,8 @@ public class threeWheelOdometry {
         xPID.reset();
         yPID.reset();
         headingPID.reset();
-        xPID.updateCoefficients(xPID.kp, moveI, moveD);
-        yPID.updateCoefficients(yPID.kp, moveI, moveD);
+        xPID.updateCoefficients(moveK, moveI, moveD);
+        yPID.updateCoefficients(moveK, moveI, moveD);
         headingPID.updateCoefficients(headingPID.kp, headingI, headingPID.kd);
 
         start = positionLocation;
@@ -187,17 +189,15 @@ public class threeWheelOdometry {
 
             if(distance <= slowDownOffset) {
                 if(xPID.kd == moveD){
-                    xPID.updateCoefficients(xPID.kp, maintainI, maintainD);
-                    yPID.updateCoefficients(yPID.kp, maintainI, maintainD);
+                    xPID.updateCoefficients(maintainK, maintainI, maintainD);
+                    yPID.updateCoefficients(maintainK, maintainI, maintainD);
                     xPID.reset();
                     yPID.reset();
 
                     System.out.println("Undershot and had to reset");
                 }
 
-                x = xPID.calculateResponse(distance * Math.cos(h));
-                y = yPID.calculateResponse(distance * Math.sin(h));
-
+                /*
                 if(x > -.15 && x < .15){
                     x = (Math.abs(x)/x) * .15;
                 }
@@ -205,21 +205,23 @@ public class threeWheelOdometry {
                     y = (Math.abs(y)/y) * .15;
                 }
 
+                 */
+
                 //x *= distance / slowDownOffset;
                 //y *= distance / slowDownOffset;
             }else{
                 if(xPID.kd == maintainD){
-                    xPID.updateCoefficients(xPID.kp, moveI, moveD);
-                    yPID.updateCoefficients(yPID.kp, moveI, moveD);
+                    xPID.updateCoefficients(moveK, moveI, moveD);
+                    yPID.updateCoefficients(moveK, moveI, moveD);
                     xPID.reset();
                     yPID.reset();
 
                     System.out.println("Overshot and had to reset");
                 }
 
-                x = xPID.calculateResponse(distance * Math.cos(h));
-                y = yPID.calculateResponse(distance * Math.sin(h));
             }
+            x = xPID.calculateResponse(distance * Math.cos(h));
+            y = yPID.calculateResponse(distance * Math.sin(h));
 
             //x = (1./.44) * (stigmoidController.calculateResponse(x) - .562);
             // y = (1./.44) * (stigmoidController.calculateResponse(y) - .562);

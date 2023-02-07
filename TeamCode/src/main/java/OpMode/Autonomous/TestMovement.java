@@ -11,7 +11,6 @@ import UtilityClasses.Location;
 @Autonomous
 public class TestMovement extends LinearOpMode {
 
-    private Location liftLoc = new Location(25, 2, 0);
     private final double tile = 2.54*24.0;
     Lift lift;
 
@@ -43,52 +42,6 @@ public class TestMovement extends LinearOpMode {
             telemetry.update();
         }
 
-        lift.ljunction();
-        while(lift.isBusy() && opModeIsActive()){
-            odom.update();
-
-            telemetry.addData("Position", odom.getLocation());
-            telemetry.addData("Lift Pos", getLiftPos(odom, drive));
-
-            telemetry.update();
-        }
-
-        odom.setTargetByOffset(liftLoc, new Location(tile*.5, -tile*.5), true);
-        while(!odom.atTarget() && opModeIsActive()){
-            odom.update();
-
-            telemetry.addData("Position", odom.getLocation());
-            telemetry.addData("Lift Pos", getLiftPos(odom, drive));
-            telemetry.update();
-        }
-
-        lift.setPosition(0, .25);
-        while(lift.isBusy() && opModeIsActive()){
-            odom.update();
-
-            telemetry.addData("Position", odom.getLocation());
-            telemetry.addData("Lift Pos", getLiftPos(odom, drive));
-
-            telemetry.update();
-        }
-
-        while(opModeIsActive()){
-            odom.update();
-
-            telemetry.addData("Position", odom.getLocation());
-            telemetry.addData("Lift Pos", getLiftPos(odom, drive));
-
-            telemetry.update();
-        }
-
-        while(opModeIsActive()){
-            odom.update();
-
-            telemetry.addData("Position", odom.getLocation());
-            telemetry.addData("Diff", odom.positionLocation.difference(new Location(tile/2., -tile/2.)).toString());
-            telemetry.update();
-        }
-
         while(opModeIsActive()){
             odom.setTargetPoint(0,0,0);
             while(!odom.atTarget()){
@@ -98,28 +51,31 @@ public class TestMovement extends LinearOpMode {
                 telemetry.addData("Y Integral", odom.yPidIntegralSum());
                 telemetry.update();
             }
+            drive.brake();
 
             sleep(5000);
 
             odom.setTargetPoint(tile,0,0);
             while(!odom.atTarget()){
                 odom.update();
-                telemetry.addData("Position", odom.getLocation());;
+                telemetry.addData("Position", odom.getLocation());
                 telemetry.addData("X Integral", odom.xPidIntegralSum());
                 telemetry.addData("Y Integral", odom.yPidIntegralSum());
                 telemetry.update();
             }
+            drive.brake();
 
             sleep(5000);
 
             odom.setTargetPoint(tile,-tile,0);
             while(!odom.atTarget()){
                 odom.update();
-                telemetry.addData("Position", odom.getLocation());;
+                telemetry.addData("Position", odom.getLocation());
                 telemetry.addData("X Integral", odom.xPidIntegralSum());
                 telemetry.addData("Y Integral", odom.yPidIntegralSum());
                 telemetry.update();
             }
+            drive.brake();
 
             sleep(5000);
 
@@ -127,11 +83,12 @@ public class TestMovement extends LinearOpMode {
             odom.setTargetPoint(0,-tile,0);
             while(!odom.atTarget()){
                 odom.update();
-                telemetry.addData("Position", odom.getLocation());;
+                telemetry.addData("Position", odom.getLocation());
                 telemetry.addData("X Integral", odom.xPidIntegralSum());
                 telemetry.addData("Y Integral", odom.yPidIntegralSum());
                 telemetry.update();
             }
+            drive.brake();
 
             sleep(5000);
 
@@ -141,8 +98,8 @@ public class TestMovement extends LinearOpMode {
 
     public String getLiftPos(threeWheelOdometry odom, MecanumDrive drive){
         Location posOfOff = new Location(
-                (Math.cos(drive.getRadians()) * liftLoc.x) - (Math.sin(drive.getRadians()) * liftLoc.y),
-                (Math.sin(drive.getRadians()) * liftLoc.x) + (Math.cos(drive.getRadians()) * liftLoc.y));
+                (Math.cos(drive.getRadians()) * lift.OFFSET_ON_BOT.x) - (Math.sin(drive.getRadians()) * lift.OFFSET_ON_BOT.y),
+                (Math.sin(drive.getRadians()) * lift.OFFSET_ON_BOT.x) + (Math.cos(drive.getRadians()) * lift.OFFSET_ON_BOT.y));
         posOfOff.add(odom.positionLocation);
 
         return Math.round(posOfOff.x) + " cm , " +
