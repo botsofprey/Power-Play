@@ -30,6 +30,55 @@ public class TestMovement extends LinearOpMode {
             telemetry.addData("Position", odom.getLocation());
             telemetry.addData("Lift Pos", getLiftPos(odom, drive));
 
+            telemetry.addLine();
+            telemetry.addData("Left", odom.getCurrentLeftPos());
+            telemetry.addData("Right", odom.getCurrentRightPos());
+            telemetry.addData("Aux", odom.getCurrentAuxPos());
+
+            telemetry.addLine();
+            telemetry.addData("fl", drive.getCurrentPositionMotor(0));
+            telemetry.addData("bl", drive.getCurrentPositionMotor(1));
+            telemetry.addData("fr", drive.getCurrentPositionMotor(2));
+            telemetry.addData("br", drive.getCurrentPositionMotor(3));
+
+            telemetry.update();
+        }
+
+        lift.ljunction();
+        while(lift.isBusy() && opModeIsActive()){
+            odom.update();
+
+            telemetry.addData("Position", odom.getLocation());
+            telemetry.addData("Lift Pos", getLiftPos(odom, drive));
+
+            telemetry.update();
+        }
+
+        odom.setTargetByOffset(liftLoc, new Location(tile*.5, -tile*.5), true);
+        while(!odom.atTarget() && opModeIsActive()){
+            odom.update();
+
+            telemetry.addData("Position", odom.getLocation());
+            telemetry.addData("Lift Pos", getLiftPos(odom, drive));
+            telemetry.update();
+        }
+
+        lift.setPosition(0, .25);
+        while(lift.isBusy() && opModeIsActive()){
+            odom.update();
+
+            telemetry.addData("Position", odom.getLocation());
+            telemetry.addData("Lift Pos", getLiftPos(odom, drive));
+
+            telemetry.update();
+        }
+
+        while(opModeIsActive()){
+            odom.update();
+
+            telemetry.addData("Position", odom.getLocation());
+            telemetry.addData("Lift Pos", getLiftPos(odom, drive));
+
             telemetry.update();
         }
 

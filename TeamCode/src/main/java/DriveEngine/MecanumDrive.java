@@ -75,7 +75,7 @@ public class MecanumDrive {
         for(int i = 0; i < motors.length; i++){
             motors[i] = hw.get(DcMotor.class, MOTOR_NAMES[i]);
             motors[i].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motors[i].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motors[i].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             motors[i].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             motors[i].setDirection(directions[i]);
         }
@@ -102,7 +102,7 @@ public class MecanumDrive {
         for(int i = 0; i < motors.length; i++){
             motors[i] = hw.get(DcMotor.class, MOTOR_NAMES[i]);
             motors[i].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motors[i].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motors[i].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             motors[i].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             motors[i].setDirection(directions[i]);
         }
@@ -297,7 +297,7 @@ public class MecanumDrive {
 
     public void brake(){
         for(DcMotor m : motors){
-            m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             m.setPower(0);
         }
     }
