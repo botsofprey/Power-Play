@@ -6,13 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import DriveEngine.MecanumDrive;
 import Subsystems.Lift;
 import Subsystems.threeWheelOdometry;
-import UtilityClasses.Controller;
 import UtilityClasses.Location;
 
 @Autonomous
 public class TestMovement extends LinearOpMode {
 
-    private Location liftLoc = new Location(21, 1, 0);
+    private Location liftLoc = new Location(25, 2, 0);
     private final double tile = 2.54*24.0;
     Lift lift;
 
@@ -79,6 +78,14 @@ public class TestMovement extends LinearOpMode {
             telemetry.addData("Position", odom.getLocation());
             telemetry.addData("Lift Pos", getLiftPos(odom, drive));
 
+            telemetry.update();
+        }
+
+        while(opModeIsActive()){
+            odom.update();
+
+            telemetry.addData("Position", odom.getLocation());
+            telemetry.addData("Diff", odom.positionLocation.difference(new Location(tile/2., -tile/2.)).toString());
             telemetry.update();
         }
 

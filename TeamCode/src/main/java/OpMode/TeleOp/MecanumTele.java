@@ -29,7 +29,8 @@ public class MecanumTele extends LinearOpMode {
     private int coneNum = 5;
     private double[] closestJunction;
 
-    private threeWheelOdometry odometry;
+    private
+    threeWheelOdometry odometry;
 
     private Location startLoc = new Location(4,0,4);
 
@@ -119,11 +120,11 @@ public class MecanumTele extends LinearOpMode {
             telemetry.addData("Slow mode", controller1.leftTriggerHeld);
 
             //enables/disables grid movement
-            if(controller1.rightTriggerHeld) {
+            if(controller1.rightTriggerPressed) {
                 grid = !grid;
-                telemetry.addData("Grid Mode", controller1.rightTriggerHeld);
+                //telemetry.addData("Grid Mode", controller1.rightTriggerHeld);
             }
-            telemetry.addData("Grid?", controller1.rightTriggerHeld);
+            telemetry.addData("Grid?", controller1.rightTriggerPressed);
 
             //Driver 1 uses joysticks for movement, duh
             if (!overrideDrivers) {
@@ -143,10 +144,11 @@ public class MecanumTele extends LinearOpMode {
                     );
                 }else{
                     // Robot stays in the center of the tile as it moves
-                    drive.gridMovement(controller1.leftStick, odometry.getLocationClass());
+                    drive.grid(controller1.leftStick, odometry.getLocationClass());
+
 
                     telemetry.addData("Forward", Math.sin(drive.getRadians() * controller1.leftStick.y));
-            //telemetry.addData("Strafe", Math.cos(drive.getRadians() * controller1.leftStick.x));
+                    telemetry.addData("Strafe", Math.cos(drive.getRadians() * controller1.leftStick.x));
                 }
 
                 //drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);

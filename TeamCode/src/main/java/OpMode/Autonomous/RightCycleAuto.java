@@ -35,7 +35,7 @@ public class RightCycleAuto extends LinearOpMode {
             new Location(0, 90) //terminal, when qr code is not found
     };
 
-    private Location liftOffset = new Location(21, 1);
+    private Location liftOffset = new Location(17, -2);
 
     private String startFileName = "TeleStartLocation.JSON";
     private File startFile = AppUtil.getInstance().getSettingsFile(startFileName);
@@ -55,7 +55,8 @@ public class RightCycleAuto extends LinearOpMode {
         int parking = 1;
 
         drive = new MecanumDrive(hardwareMap, this, 0);
-        odometry = new threeWheelOdometry(hardwareMap, new Location(-10, 13.5, 90), this, drive);
+        odometry = new threeWheelOdometry(hardwareMap, new Location(-10, 13.5), this, drive);
+        odometry.resetEncoders();
         //odometry = new threeWheelOdometry(hardwareMap, new Location(0,0), this, drive);
 
         ReadWriteFile.writeFile(sideFile, "R");
