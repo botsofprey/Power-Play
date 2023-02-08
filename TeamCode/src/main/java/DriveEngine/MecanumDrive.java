@@ -367,7 +367,7 @@ public class MecanumDrive {
         currentTileX = 0;
         currentTileY = 0;
 
-        public void moveCenti() {
+        /*public void moveCenti() {
             int x = 0;
             int y = 0;
             if (x < 0 || x >= GRID_SIZE || y < 0 || y >= GRID_SIZE) {
@@ -383,6 +383,8 @@ public class MecanumDrive {
             System.out.println("Robot moved to tile " + x + "," + y);
             System.out.println("Current position: " + xPos + "," + yPos);
         }
+
+         */
 
     }
 

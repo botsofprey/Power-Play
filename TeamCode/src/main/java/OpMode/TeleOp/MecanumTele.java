@@ -122,15 +122,13 @@ public class MecanumTele extends LinearOpMode {
 
             //enables/disables grid movement
             if(controller1.rightTriggerPressed) {
-                grid = grid;
-                overrideDrivers(drive.grid());
-                //telemetry.addData("Grid Mode", controller1.rightTriggerHeld);
+                grid = !grid;
             }
             telemetry.addData("Grid?", controller1.rightTriggerPressed);
 
             //Driver 1 uses joysticks for movement, duh
             if (!overrideDrivers) {
-                if(grid) {
+                if(!grid) {
                     // Robot-oriented movement unrestricted
                     Vector2D leftInput = controller1.leftStick,
                              rightInput = controller1.rightStick;
@@ -314,46 +312,6 @@ public class MecanumTele extends LinearOpMode {
         }
     }
 
-    /*public void gridM () {
-        private static final int TILE_SIZE = 60;
-        private static final int GRID_SIZE = 6;
-        private int xPos;
-        private int yPos;
-        private int currentTileX;
-        private int currentTileY;
-
-        public gridM() {
-            xPos = 0;
-            yPos = 0;
-            currentTileX = 0;
-            currentTileY = 0;
-        }
-
-        public void moveToTile(int x, int y) {
-            if (x < 0 || x >= GRID_SIZE || y < 0 || y >= GRID_SIZE) {
-                System.out.println("Invalid tile coordinates");
-                return;
-            }
-
-            currentTileX = x;
-            currentTileY = y;
-            xPos = x * TILE_SIZE + TILE_SIZE / 2;
-            yPos = y * TILE_SIZE + TILE_SIZE / 2;
-
-            System.out.println("Robot moved to tile " + x + "," + y);
-            System.out.println("Current position: " + xPos + "," + yPos);
-        }
-
-        public static void main(String[] args) {
-            gridM system = new gridM();
-            system.moveToTile(2, 3);
-            system.moveToTile(5, 5);
-        }
-    }*/
-
-    private void overrideDrivers(Object grid) {
-
-    }
 
     //Setting start position for Tele based on Auto end position
     private Location settingStart(String lString){

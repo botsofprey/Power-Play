@@ -49,6 +49,8 @@ public class threeWheelOdometry {
     public final static double xMult = 202.3/200.,
             yMult = 201.4/200.;
 
+    public final static Location autoStart = new Location(-6.5,13);
+
 
     public threeWheelOdometry(HardwareMap hardwareMap, Location start, LinearOpMode op, MecanumDrive drive) {
         leftVert = hardwareMap.get(DcMotor.class, "leftVert");
@@ -58,8 +60,8 @@ public class threeWheelOdometry {
         meccanumDrive = drive;
 
         //Set start point
-        positionLocation = start;
-        startLoc = start;
+        positionLocation = new Location(start.x, start.y, start.angle);
+        startLoc = new Location(start.x, start.y, start.angle);
 
         this.opMode = op;
 
@@ -76,7 +78,7 @@ public class threeWheelOdometry {
                 dx2 = (currentRightPos - prevRightPos) * CM_PER_TICK,
                 dy = (currentAuxPos - prevAuxPos) * CM_PER_TICK;
 
-        double theta = positionLocation.getRadians()-meccanumDrive.getRadians(),//(dx2-dx1)/(LENGETH_BETWEEN_VERTS),
+        double theta = (dx2-dx1)/(LENGETH_BETWEEN_VERTS),
                 fwd = (dx2+dx1)/2.0,
                 str = dy - (DISTANCE_FROM_MIDPOINT * theta);
 
