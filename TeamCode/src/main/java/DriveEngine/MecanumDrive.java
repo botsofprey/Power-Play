@@ -352,7 +352,42 @@ public class MecanumDrive {
         return null;
     }
 
-    public Object gridM() {
-        return null;
+
+    public void gridM () {
+        final int TILE_SIZE = 60;
+        final int GRID_SIZE = 6;
+        int xPos;
+        int yPos;
+        int currentTileX;
+        int currentTileY;
+
+        gridM();
+        xPos = 0;
+        yPos = 0;
+        currentTileX = 0;
+        currentTileY = 0;
+
+        public void moveCenti() {
+            int x = 0;
+            int y = 0;
+            if (x < 0 || x >= GRID_SIZE || y < 0 || y >= GRID_SIZE) {
+                System.out.println("Invalid tile coordinates");
+                return;
+            }
+
+            currentTileX = x;
+            currentTileY = y;
+            xPos = x * TILE_SIZE + TILE_SIZE / 2;
+            yPos = y * TILE_SIZE + TILE_SIZE / 2;
+
+            System.out.println("Robot moved to tile " + x + "," + y);
+            System.out.println("Current position: " + xPos + "," + yPos);
+        }
+
+    }
+
+    private void moveCenti() {
+
     }
 }
+
