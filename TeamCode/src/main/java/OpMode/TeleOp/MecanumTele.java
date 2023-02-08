@@ -47,7 +47,7 @@ public class MecanumTele extends LinearOpMode {
 
     private ElapsedTime endGameTimer;
     private boolean rumble = false;
-    private Object gridM;
+    private Object gridM = grid;
 
     @Override
     public void runOpMode() {
@@ -123,14 +123,14 @@ public class MecanumTele extends LinearOpMode {
             //enables/disables grid movement
             if(controller1.rightTriggerPressed) {
                 grid = grid;
-                overrideDrivers(drive.grid());
+                // overrideDrivers(drive.grid());
                 //telemetry.addData("Grid Mode", controller1.rightTriggerHeld);
             }
             telemetry.addData("Grid?", controller1.rightTriggerPressed);
 
             //Driver 1 uses joysticks for movement, duh
             if (!overrideDrivers) {
-                if(grid) {
+                if(!grid) {
                     // Robot-oriented movement unrestricted
                     Vector2D leftInput = controller1.leftStick,
                              rightInput = controller1.rightStick;
