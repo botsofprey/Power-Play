@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorImplEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -24,6 +26,8 @@ import java.util.ArrayList;
 public class HardwareMechanisms {
 
     MecanumDrive drive = new MecanumDrive();
+
+    public DistanceSensor DistanceFL, DistanceFR, DistanceBL, DistanceBR;
 
     public DcMotorImplEx lift;
 
@@ -69,6 +73,12 @@ public class HardwareMechanisms {
     public void resetLift() {
         lift.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotorImplEx.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void resetLiftAUTO() {
+        lift.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotorImplEx.RunMode.RUN_WITHOUT_ENCODER);
+        lift.setMode(DcMotorImplEx.RunMode.RUN_TO_POSITION);
     }
 
     /**

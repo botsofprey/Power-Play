@@ -1,11 +1,17 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
+import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants.TRACK_WIDTH;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.ContextWrapper;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
 import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -32,7 +38,6 @@ public class newAutoRight extends LinearOpMode {
     /*
     Type                                       Name                                 Value
      */
-    HardwareMap                         hardwareMap;
     HeightsList                         heightsList = new                   HeightsList();
     Pose2d                                 prevtraj = new                         Pose2d(
                                                                    36 + 6, 12 - 6,
@@ -40,10 +45,10 @@ public class newAutoRight extends LinearOpMode {
                                                                                         );
 
     cameraControl                           autocam = new                 cameraControl();
-    AprilTagDetection                       tagData = new             AprilTagDetection();
     HardwareMechanisms                          mpb = new            HardwareMechanisms();
     CoordinateLocations                      coords = new           CoordinateLocations();
     SampleMecanumDrive                 mecanumDrive;
+    AprilTagDetection                       tagData;
 
     double                               liftHeight =                                   0;
 
@@ -75,8 +80,18 @@ public class newAutoRight extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        StaticImu.imuStatic = 0;
+
+        mpb.init(hardwareMap);
+        mpb.resetLiftAUTO();
 
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
+        mecanumDrive.setPoseEstimate(coords.rightStart);
+
+        aprilTagPipeline = new AprilTagPipelineEXAMPLECOPY(tagsize, fx, fy, cx, cy);
+        autocam.createCameraInstance(hardwareMap, telemetry);
+        autocam.camera.setPipeline(aprilTagPipeline);
+        tagData = new AprilTagDetection();
 
         preload = preloadSETUP();
 
@@ -99,13 +114,13 @@ public class newAutoRight extends LinearOpMode {
             currentDetections = aprilTagPipeline.getLatestDetections();
 
             for (AprilTagDetection tag : currentDetections) {
-                if (tag.id >= 17 && tag.id <= 19) {
+                if (currentDetections.size() != 0 && tag.id >= 17 && tag.id <= 19) {
                     tagOfInterest = tag.id;
                     telemetry.addData("Tag of interest", tagOfInterest);
                     break;
                 }
-                else
-                    telemetry.addLine("No tag found");
+            if (currentDetections.size() == 0)
+                telemetry.addLine("No tag found");
             }
             telemetry.update();
         }
@@ -118,7 +133,7 @@ public class newAutoRight extends LinearOpMode {
             while (!isStopRequested() && mecanumDrive.isBusy());
 
             //getConeAndScore
-            do {
+            /*do {
                 mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
 
                 do {
@@ -139,7 +154,7 @@ public class newAutoRight extends LinearOpMode {
             do {
                 mecanumDrive.update();
             }
-            while (!isStopRequested() && mecanumDrive.isBusy());
+            while (!isStopRequested() && mecanumDrive.isBusy());*/
         }
 
         if (isStopRequested()) {
@@ -154,25 +169,28 @@ public class newAutoRight extends LinearOpMode {
 
 
      */
-    private double toDEG(double angle) {
+    private double toRAD(double angle) {
         return Math.toRadians(angle);
     }
 
     private TrajectorySequence preloadSETUP() {
         return mecanumDrive.trajectorySequenceBuilder(coords.rightStart)
                 .addSpatialMarker(RIGHT_START_VEC, () -> {
-                    mpb.setLift(HIGH_JUNCTION_HEIGHT);
                     mpb.setClaw(CATCH);
+                    mpb.lift.setTargetPosition(HIGH_JUNCTION_HEIGHT);
+                    mpb.lift.setPower(1);
                 })
 
-                .lineToLinearHeading(new Pose2d(-38, START_Y_COORD))
-                .lineToLinearHeading(new Pose2d(-36, 12, toDEG(270)))
+                .lineToLinearHeading(new Pose2d(-36, START_Y_COORD, toRAD(270)))
+                .lineToLinearHeading(new Pose2d(-36, 30, toRAD(270)))
+                .splineToSplineHeading(new Pose2d(-24 - 6, 6, toRAD(270 + 45)), toRAD(270 + 45),
+                        SampleMecanumDrive.getVelocityConstraint(MAX_VEL / 1.35, MAX_ANG_VEL, TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(MAX_ACCEL/ 1.5))
                 .waitSeconds(0.75)
-                .turnDEG(-45)
-                .lineToLinearHeading(new Pose2d(HIGH_JUNCTION_X - 6,
+                /*.lineToLinearHeading(new Pose2d(HIGH_JUNCTION_X - 6,
                         HIGH_JUNCTION_Y + 6,
                         Math.toRadians(270)))
-                .addTemporalMarker(() -> mpb.setClaw(RELEASE))
+                .addTemporalMarker(() -> mpb.setClaw(RELEASE))*/
                 .build();
     }
 
@@ -181,8 +199,8 @@ public class newAutoRight extends LinearOpMode {
                 .addSpatialMarker(new Vector2d(-36, 12), () -> {
                     mpb.setLift((int) (coneheight[i] * 1.5));
                 })
-                .lineToLinearHeading(new Pose2d(-36, 12, toDEG(315)))
-                .addTemporalMarker(() -> {
+                .lineToLinearHeading(new Pose2d(-36, 12, toRAD(315)))
+                /*.addTemporalMarker(() -> {
                 })
                 .turnDEG(-135)
                 .lineToLinearHeading(new Pose2d(-64, 12, toDEG(180)))
@@ -209,27 +227,27 @@ public class newAutoRight extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
                 })
-                .waitSeconds(0.5)
+                .waitSeconds(0.5)*/
                 .build();
     }
 
     private TrajectorySequence park17SETUP() {
         return mecanumDrive.trajectorySequenceBuilder(prevtraj)
-            .lineToLinearHeading(new Pose2d(-36, 12, toDEG(270)))
-            .lineToLinearHeading(new Pose2d(-12, 12, toDEG(270)))
+            .lineToLinearHeading(new Pose2d(-36, 12, toRAD(270)))
+            .lineToLinearHeading(new Pose2d(-12, 12, toRAD(270)))
             .build();
     }
 
     private TrajectorySequence park18SETUP() {
         return mecanumDrive.trajectorySequenceBuilder(prevtraj)
-            .lineToLinearHeading(new Pose2d(-36, 12, toDEG(270)))
+            .lineToLinearHeading(new Pose2d(-36, 12, toRAD(270)))
             .build();
     }
 
     private TrajectorySequence park19SETUP() {
         return mecanumDrive.trajectorySequenceBuilder(prevtraj)
-            .lineToLinearHeading(new Pose2d(-36, 12, toDEG(270)))
-            .lineToLinearHeading(new Pose2d(-60, 12, toDEG(270)))
+            .lineToLinearHeading(new Pose2d(-36, 12, toRAD(270)))
+            .lineToLinearHeading(new Pose2d(-60, 12, toRAD(270)))
             .build();
     }
 }
