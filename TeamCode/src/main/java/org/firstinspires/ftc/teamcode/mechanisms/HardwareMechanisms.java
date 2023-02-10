@@ -60,7 +60,7 @@ public class HardwareMechanisms {
     }
 
     /**
-     * A method used to control the lift using Run To Position
+     * A method used to control the lift using PIDF control
      *
      * @param position The target position
      */

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.vars.HeightsList;
 import org.firstinspires.ftc.teamcode.vars.StaticImu;
 
 /**
- * This is the combination of all of our TeleOp codes into one
+ * This is the combination of all of our TeleOp codes into one and then fixed
  *
  * @author Alex Bryan
  */

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -9,11 +10,13 @@ import org.firstinspires.ftc.teamcode.vars.HeightsList;
 import org.firstinspires.ftc.teamcode.vars.StaticImu;
 
 /**
- * This is the combination of all of our TeleOp codes into one
+ * This is the combination of all of our TeleOp codes into one, now outdated
+ *
  * @author Alex Bryan
  */
+@Disabled
 @TeleOp()
-public class FinalTeleOp extends OpMode {
+public class FormerFinalTeleOp extends OpMode {
     boolean liftCorrection;
     /**
      * A double used to make sure the acceleration isn't too high
@@ -131,9 +134,9 @@ public class FinalTeleOp extends OpMode {
                 targetPositionManualControl += gamepad2.right_trigger * 100;
             } else if (board.getLift() <= heights.highJunction) {
                targetPositionManualControl += (gamepad2.right_trigger - gamepad2.left_trigger) * 100;*/
-                targetPositionManualControl -=gamepad2.left_trigger * 100;
-              //targetPositionManualControl = Math.max(0, targetPositionManualControl);
-              targetPositionManualControl += gamepad2.right_trigger - gamepad2.left_trigger * 100;
+            targetPositionManualControl -= gamepad2.left_trigger * 100;
+            //targetPositionManualControl = Math.max(0, targetPositionManualControl);
+            targetPositionManualControl += gamepad2.right_trigger - gamepad2.left_trigger * 100;
 
             board.setLift(targetPositionManualControl);
 
@@ -148,7 +151,7 @@ public class FinalTeleOp extends OpMode {
             }
             telemetry.addData("lift mode", "manual control");
             telemetry.addData("target position", "n/a");
-            telemetry.addData("is over/undershoot enabled?", liftCorrection ? "yes" : "no" );
+            telemetry.addData("is over/undershoot enabled?", liftCorrection ? "yes" : "no");
         } else { //lift uses preset heights
             if (gamepad2.dpad_up) { //dpad up increases the preset's value
                 if (targetPositionPresetHeights == 0 || targetPositionPresetHeights == heights.groundJunction) {
