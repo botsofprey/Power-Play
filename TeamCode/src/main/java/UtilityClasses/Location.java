@@ -83,10 +83,16 @@ public class Location {
         return distanceBetween(other) < 1 && compareHeading(other, angleOffset);
     }
 
+    public String toString(int decimal){
+        return (Math.round(x * Math.pow(10, decimal)) / Math.pow(10, decimal)) + ", " +
+                (Math.round(y * Math.pow(10, decimal)) / Math.pow(10, decimal)) + ", " +
+                (Math.round(angle * Math.pow(10, decimal)) / Math.pow(10, decimal));
+    }
+
     public String toString(){
-        return Math.round(x) + ", " +
-        Math.round(y) + ", " +
-        Math.round(angle) + ", ";
+        return (Math.round(x * Math.pow(10, 2)) / Math.pow(10, 2)) + ", " +
+                (Math.round(y * Math.pow(10, 2)) / Math.pow(10, 2)) + ", " +
+                (Math.round(angle * Math.pow(10, 2)) / Math.pow(10, 2));
     }
 
     public void add(Location positionLocation) {

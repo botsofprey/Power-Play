@@ -314,7 +314,7 @@ public class MecanumTele extends LinearOpMode {
         }
     }
 
-    /*public void gridM () {
+    /*public static class gridM {
         private static final int TILE_SIZE = 60;
         private static final int GRID_SIZE = 6;
         private int xPos;

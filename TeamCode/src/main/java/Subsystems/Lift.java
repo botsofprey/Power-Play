@@ -11,7 +11,7 @@ import UtilityClasses.Location;
 
 public class Lift {
     private DcMotorEx liftMotor;
-    public Location OFFSET_ON_BOT = new Location(29, 0);
+    public Location OFFSET_ON_BOT = new Location(19, 1);
 
     private boolean braking;
 
@@ -28,11 +28,15 @@ public class Lift {
     public void setPower(double power) {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        if(liftMotor.getCurrentPosition() <= 0 && power < 0){
+            power = 0;
+        }
+
         if(power < 0)
             power /= powerDecrease;
 
         liftMotor.setPower(power);
-        braking = false;
+        braking = power == 0;
     }
 
     public void setPosition(int position, double power) {
@@ -77,7 +81,29 @@ public class Lift {
     // Change target positions
 
     public void coneStack(int coneNum) {
-        liftMotor.setTargetPosition(coneNum*105 + 6);
+        if(coneNum < 1 || coneNum > 5)
+            return;
+
+        int target=0;
+
+        switch(coneNum){
+            case 1:
+                break;
+            case 2:
+                target = 161;
+                break;
+            case 3:
+                target = 288;
+                break;
+            case 4:
+                target = 390;
+                break;
+            case 5:
+                target = 537;
+                break;
+        }
+
+        liftMotor.setTargetPosition(target);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(1);
         braking = false;
@@ -108,8 +134,8 @@ public class Lift {
     public void update() {
         if (limitSwitch.isPressed()) {
             zeroLift();
-            if(liftMotor.getPower() < 0){
-                liftMotor.setPower(0);
+            if(getPower() < 0){
+                setPower(0);
             }
         }
 
