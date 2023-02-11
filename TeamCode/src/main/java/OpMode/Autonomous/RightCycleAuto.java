@@ -320,6 +320,7 @@ public class RightCycleAuto extends LinearOpMode {
         whileLiftBusy();
 
         //Backs away from cone stack before turning
+        drive.setCurrentSpeed(.25);
         odometry.setTargetPoint((tile*2) - 10, 0, 90, true);
         whileMoving(0);
 
@@ -334,6 +335,8 @@ public class RightCycleAuto extends LinearOpMode {
         odometry.setTargetByOffset(lift.OFFSET_ON_BOT, new Location((tile*2.5) - 10,-tile*.5), true);
         System.out.println("Times target offset: 220");
         whileMoving(0);
+
+        drive.setCurrentSpeed(.5);
 
         lift.hjunctionScore();
         System.out.println("time : " + 1);

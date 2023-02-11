@@ -35,7 +35,7 @@ public class threeWheelOdometry {
     public PidController xPID, yPID, headingPID;
     private static double moveK = .125, maintainK = .1875;
     private static double moveI = 0, maintainI =  .005;
-    private static double moveD = 0, maintainD = .25;//0.21875;
+    private static double moveD = 0, maintainD = .625;//0.21875;
     private static double hKP = .325, hDP = 0;
     private final double headingI = 0, maintainHeadingI = 0.0000000001;
 
@@ -72,11 +72,14 @@ public class threeWheelOdometry {
         resetEncoders();
     }
 
+    private int verticalDiff = 0;
     private void calculateChange() {
 
         double dx1 = (currentLeftPos - prevLeftPos) * CM_PER_TICK,
                 dx2 = (currentRightPos - prevRightPos) * CM_PER_TICK,
                 dy = (currentAuxPos - prevAuxPos) * CM_PER_TICK;
+
+        verticalDiff = (int) (Math.abs(dx2/CM_PER_TICK) - Math.abs(dx1/CM_PER_TICK));
 
         double theta = (dx2-dx1)/(LENGETH_BETWEEN_VERTS),
                 fwd = (dx2+dx1)/2.0,
@@ -92,6 +95,10 @@ public class threeWheelOdometry {
         positionLocation.angle = meccanumDrive.getAngle();
         //dx = x change
         //dy = y change
+    }
+
+    public int getVerticalDiff(){
+        return verticalDiff;
     }
 
     //Sets target
@@ -138,13 +145,11 @@ public class threeWheelOdometry {
         this.maintain = maintain;
 
         //Finds angle it needs to turn
-        Location diff = positionLocation.difference(target);
-        double angleTowards = Math.atan2(diff.y, diff.x);
 
         //Finds offset position after turn
         Location posOfOff = new Location(
-                (Math.cos(angleTowards) * offset.x) - (Math.sin(angleTowards) * offset.y),
-                (Math.sin(angleTowards) * offset.x) + (Math.cos(angleTowards) * offset.y));
+                (Math.cos(meccanumDrive.getRadians()) * offset.x) - (Math.sin(meccanumDrive.getRadians()) * offset.y),
+                (Math.sin(meccanumDrive.getRadians()) * offset.x) + (Math.cos(meccanumDrive.getRadians()) * offset.y));
         posOfOff.add(positionLocation);
 
         //Calculates differences of offset and target
@@ -153,7 +158,7 @@ public class threeWheelOdometry {
         //Sets target
         Location tar = new Location(positionLocation.x + targetDiff.x,
                 positionLocation.y + targetDiff.y,
-                Math.toDegrees(angleTowards));
+                meccanumDrive.getAngle());
 
         time++;
         System.out.println("Times target offset: " + time);
@@ -222,14 +227,16 @@ public class threeWheelOdometry {
                 }
 
             }
+
             x = xPID.calculateResponse(distance * Math.cos(h));
             y = yPID.calculateResponse(distance * Math.sin(h));
 
             //x = (1./.44) * (stigmoidController.calculateResponse(x) - .562);
             // y = (1./.44) * (stigmoidController.calculateResponse(y) - .562);
 
-            double length = Math.hypot(x, y);
-            if(length > 1){
+            double length = Math.hypot(x, y),
+                    maxLength = positionLocation.angle <= angleSlowDown ? 1 : .5;
+            if(length > maxLength){
                 x /= length;
                 y /= length;
             }

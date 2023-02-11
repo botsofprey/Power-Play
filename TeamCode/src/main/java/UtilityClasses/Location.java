@@ -100,4 +100,10 @@ public class Location {
         y += positionLocation.y;
         angle += positionLocation.angle;
     }
+
+	public void subtract(Location positionLocation) {
+        x -= positionLocation.x;
+        y -= positionLocation.y;
+        angle -= positionLocation.angle;
+	}
 }
