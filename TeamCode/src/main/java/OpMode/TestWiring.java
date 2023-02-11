@@ -42,6 +42,7 @@ public class TestWiring extends LinearOpMode {
         odometry = new threeWheelOdometry(hardwareMap, new Location(0,0), this, drive);
 
         Controller con = new Controller(gamepad1);
+        predicttedLocation = new Location(0,0,0);
 
         waitForStart();
 
@@ -65,8 +66,8 @@ public class TestWiring extends LinearOpMode {
 
             telemetry.addData("Actual Position", odometry.positionLocation.toString(4));
             telemetry.addData("Guessed Position", predicttedLocation.toString(4));
-            telemetry.addData("back", posOfBack.toString(4));
-            telemetry.addData("side", posOfSide.toString(4));
+           // telemetry.addData("back", posOfBack.toString(4));
+           // telemetry.addData("side", posOfSide.toString(4));
 
             telemetry.update();
         }
@@ -77,14 +78,42 @@ public class TestWiring extends LinearOpMode {
     private void calculatePosition(){
         double back = forward.getDistance(), side = horizontal.getDistance(),
         curRadians = drive.getRadians();
-        posOfBack = new Location((back * Math.cos(curRadians)) - fOffset.x * Math.cos(curRadians),
-                                            (back * Math.sin(curRadians)) - fOffset.y * Math.sin(curRadians));
-        posOfSide = new Location((side * Math.sin(curRadians)) - hOffset.x * Math.sin(curRadians),
-                                    (side * Math.cos(curRadians)) - hOffset.y * Math.cos(curRadians));
+        posOfBack = new Location((back * Math.cos(curRadians)),
+                                            (back * Math.sin(curRadians)));
+        posOfSide = new Location((side * Math.sin(curRadians)),
+                                    (side * Math.cos(curRadians)));
 
         posOfBack.add(-(fOffset.x * Math.cos(curRadians)), -(fOffset.y * Math.sin(curRadians)), 0);
         posOfSide.add(-(hOffset.x * Math.sin(curRadians)), -(hOffset.y * Math.cos(curRadians)), 0);
 
         predicttedLocation = new Location(posOfBack.x + posOfSide.x, posOfSide.y + posOfBack.y);
+    }
+
+    private double currentBack, prevBack;
+    private double currentSide, prevSide;
+    private double currentTheta, prevTheta;
+    private void calculateChange() {
+        prevBack = currentBack;
+        prevSide = currentSide;
+        prevTheta = currentTheta;
+        currentBack = forward.getDistance();
+        currentSide = horizontal.getDistance();
+        currentTheta = drive.getRadians();
+
+        double dx = currentBack - prevBack,
+                dy = currentSide - prevSide,
+                dt = currentTheta - prevTheta;
+
+        double deltaX = (dx * Math.cos(currentTheta)) - (dy * Math.sin(currentTheta)),
+                deltaY = (dy * Math.cos(currentTheta)) + (dx * Math.sin(currentTheta));
+
+        System.out.println("Back guess: " + currentBack + ", " + prevBack);
+        System.out.println("Side guess: " + currentSide + ", " + prevSide);
+        System.out.println("deltas guess: " + deltaX + ", " + deltaY);
+
+        predicttedLocation.add(deltaX, deltaY,0);
+
+        //dx = x change
+        //dy = y change
     }
 }
