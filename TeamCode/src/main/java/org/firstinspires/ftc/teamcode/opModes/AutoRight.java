@@ -46,6 +46,7 @@ public class AutoRight extends OpMode {
     Pose2d prevtraj = new Pose2d(-21.5, 9.5, Math.toRadians(270));
     int coneheight = heights.heights[0];
     int liftHeight = heights.highJunction;
+    double Before, After;
 
     @Override
     public void init() {
@@ -81,7 +82,9 @@ public class AutoRight extends OpMode {
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
                 .setReversed(true)
                 .lineToLinearHeading(new Pose2d(-21.5, 12.5, Math.toRadians(270)))
+                .addTemporalMarker(() -> { Before = mpb.getNormalizedDegrees();})
                 .turnDEG(-90)
+                .addTemporalMarker(() -> { After = mpb.getNormalizedDegrees();})
                 .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     liftHeight = (int) (heights.heights[i] * 1.5);
@@ -172,8 +175,16 @@ public class AutoRight extends OpMode {
         } else {
             telemetry.addLine("Done");
         }
+        mecanumDrive.updatePoseEstimate();
+        mecanumDrive.setPoseEstimate(new Pose2d(
+                mecanumDrive.getPoseEstimate().getX(),
+                mecanumDrive.getPoseEstimate().getY(),
+                Math.toRadians(270 + mpb.getNormalizedDegrees())
+        ));
         telemetry.addData("current position", mecanumDrive.getPoseEstimate());
         telemetry.addData("imu value", mpb.getNormalizedDegrees());
+        telemetry.addData("Before turn", Before);
+        telemetry.addData("After turn", After);
     }
 
     public void stop() {
