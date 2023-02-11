@@ -24,20 +24,13 @@ import java.util.ArrayList;
  */
 public class HardwareMechanisms {
 
-    MecanumDrive drive = new MecanumDrive();
-
+    static public double kp = 0.01, kI = 0, kD = 0.0;
+    static BNO055IMU imu;
     public DistanceSensor DistanceFL, DistanceFR, DistanceBL, DistanceBR;
-
     public DcMotorImplEx lift;
-
     public Servo claw;
 
-    static BNO055IMU imu;
-
-    static public double
-            kp = 0.01,
-            kI = 0,
-            kD = 0;
+    MecanumDrive drive = new MecanumDrive();
     PIDCoefficients coeffs = new PIDCoefficients(kp, kI, kD);
 
     PIDFController liftController = new PIDFController(coeffs);
