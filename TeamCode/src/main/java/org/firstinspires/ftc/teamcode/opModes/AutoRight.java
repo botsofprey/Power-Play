@@ -65,12 +65,10 @@ public class AutoRight extends OpMode {
         mecanumDrive.setPoseEstimate(coordinateLocations.rightStart);
 
         preLoad = mecanumDrive.trajectorySequenceBuilder(coordinateLocations.rightStart)
-                .lineToLinearHeading(new Pose2d(-38, coordinateLocations.leftStart.getY(), Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-38, coordinateLocations.rightStart.getY(), Math.toRadians(270)))
                 .waitSeconds(0.75)
-                .lineToLinearHeading(new Pose2d(-23.5, 12, Math.toRadians(270)))
+//                .lineToLinearHeading(new Pose2d(-38, 12, Math.toRadians(270)))
                 .waitSeconds(0.1)
-                .lineToLinearHeading(new Pose2d(-23.5, 9.25, Math.toRadians(270)))
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
 //                .lineToLinearHeading(new Pose2d(-24, 12, Math.toRadians(270)))
@@ -112,7 +110,7 @@ public class AutoRight extends OpMode {
             mpb.sleep(1000);
             step++;
         } else if (step == 1) {
-            mpb.setLift(heights.highJunction + 300);
+//            mpb.setLift(heights.highJunction + 300);
             mecanumDrive.update();
             if (!mecanumDrive.isBusy()) {
                 prevtraj = preLoad.end();
@@ -128,7 +126,7 @@ public class AutoRight extends OpMode {
             prevtraj = getConeAndScore.end();
             coneheight = heights.heights[i];
             mecanumDrive.update();
-            mpb.setLift(liftHeight);
+//            mpb.setLift(liftHeight);
             if (!mecanumDrive.isBusy()) {
                 i++;
                 if (i == 1) {

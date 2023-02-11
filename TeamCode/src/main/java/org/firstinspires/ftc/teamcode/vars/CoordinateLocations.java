@@ -5,12 +5,10 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 //the coordinate plane is from the red alliance's perspective
 public class CoordinateLocations {
-   //robot starting positions:
-   double startY = 64.5;
 
    //Starting positions for robot
-   public Pose2d leftStart = new Pose2d(40.5, startY, Math.toRadians(270)), //Quadrant 1 and 3 ***was 36***
-                 rightStart = new Pose2d(-31.5, startY, Math.toRadians(270)); //Quadrant 2 and 4
+   public Pose2d leftStart = new Pose2d(40.5, 63.5, Math.toRadians(270)), //Quadrant 1 and 3 ***was 36***
+                 rightStart = new Pose2d(-31, 63.5, Math.toRadians(270)); //Quadrant 2 and 4
 
    //cone stack coordinates:
    public Vector2d leftBlueConeStack  = new Vector2d(66, -12), //Quadrant 1
