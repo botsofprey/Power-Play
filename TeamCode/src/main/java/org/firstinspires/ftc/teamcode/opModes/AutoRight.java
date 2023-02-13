@@ -180,8 +180,19 @@ public class AutoRight extends OpMode {
             if (!mecanumDrive.isBusy()) {
                 i++;
                 if (i == 2) {
+                    mecanumDrive.setPoseEstimate(new Pose2d(
+                            mecanumDrive.getPoseEstimate().getX(),
+                            mecanumDrive.getPoseEstimate().getY(),
+                            Math.toRadians(270 + mpb.getNormalizedDegrees())
+                            ));
                     step++;
                 } else {
+                    mecanumDrive.setPoseEstimate(new Pose2d(
+                            mecanumDrive.getPoseEstimate().getX(),
+                            mecanumDrive.getPoseEstimate().getY(),
+                            Math.toRadians(270 + mpb.getNormalizedDegrees())
+                    ));
+                    prevtraj = mecanumDrive.getPoseEstimate();
                     mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
                 }
             }
