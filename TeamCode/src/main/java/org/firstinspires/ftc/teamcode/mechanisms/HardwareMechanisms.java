@@ -100,7 +100,7 @@ public class HardwareMechanisms {
     }
 
     public double getNormalizedDegrees() {
-        return AngleUnit.normalizeDegrees((getHeading(AngleUnit.RADIANS) * 180) / Math.PI);
+        return AngleUnit.normalizeDegrees(Math.toDegrees(getHeading(AngleUnit.RADIANS)));
     }
 
     public void sleep(long milliseconds) {

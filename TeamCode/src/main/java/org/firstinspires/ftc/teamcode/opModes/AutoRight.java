@@ -48,6 +48,15 @@ public class AutoRight extends OpMode {
     int liftHeight = heights.highJunction;
     double Before, After;
 
+    private void convertToImuHeading() {
+        mecanumDrive.updatePoseEstimate();
+        mecanumDrive.setPoseEstimate(new Pose2d(
+                mecanumDrive.getPoseEstimate().getX(),
+                mecanumDrive.getPoseEstimate().getY(),
+                Math.toRadians(270 + mpb.getNormalizedDegrees())
+        ));
+    }
+
     @Override
     public void init() {
         StaticImu.imuStatic = 0;
@@ -74,6 +83,7 @@ public class AutoRight extends OpMode {
                 .lineToLinearHeading(new Pose2d(-21.5, 15, Math.toRadians(270)))
                 .addTemporalMarker(() -> {
                     liftHeight = heights.highJunction + 300;
+                    convertToImuHeading();
                 })
                 .waitSeconds(1)
                 .lineToLinearHeading(new Pose2d(-21.5, 9.5, Math.toRadians(270)))
@@ -92,11 +102,13 @@ public class AutoRight extends OpMode {
                 .waitSeconds(0.75)
                 .addTemporalMarker(() -> {
                     liftHeight = (coneheight * 2);
+                    convertToImuHeading();
                 })
                 .waitSeconds(0.75)
                 .lineToLinearHeading(new Pose2d(-58.5, 12.5, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     liftHeight = coneheight;
+                    convertToImuHeading();
                 })
                 .waitSeconds(1)
                 .addTemporalMarker(() -> {
@@ -109,6 +121,7 @@ public class AutoRight extends OpMode {
                 .lineToLinearHeading(new Pose2d(-21.5, 12.5, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     liftHeight = heights.highJunction;
+                    convertToImuHeading();
                 })
                 .turnDEG(90)
                 .lineToLinearHeading(new Pose2d(-21.5, 9.5, Math.toRadians(270)))
@@ -165,12 +178,7 @@ public class AutoRight extends OpMode {
             mpb.setClaw(0);
             mpb.sleep(500);
             step++;
-            mecanumDrive.updatePoseEstimate();
-            mecanumDrive.setPoseEstimate(new Pose2d(
-                    mecanumDrive.getPoseEstimate().getX(),
-                    mecanumDrive.getPoseEstimate().getY(),
-                    Math.toRadians(270 + mpb.getNormalizedDegrees())
-            ));
+            convertToImuHeading();
             mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
         } else if (step == 3) {
             prevtraj = getConeAndScore.end();
@@ -180,18 +188,10 @@ public class AutoRight extends OpMode {
             if (!mecanumDrive.isBusy()) {
                 i++;
                 if (i == 2) {
-                    mecanumDrive.setPoseEstimate(new Pose2d(
-                            mecanumDrive.getPoseEstimate().getX(),
-                            mecanumDrive.getPoseEstimate().getY(),
-                            Math.toRadians(270 + mpb.getNormalizedDegrees())
-                    ));
+                    convertToImuHeading();
                     step++;
                 } else {
-                    mecanumDrive.setPoseEstimate(new Pose2d(
-                            mecanumDrive.getPoseEstimate().getX(),
-                            mecanumDrive.getPoseEstimate().getY(),
-                            Math.toRadians(270 + mpb.getNormalizedDegrees())
-                    ));
+                    convertToImuHeading();
                     mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
                 }
                 prevtraj = mecanumDrive.getPoseEstimate();
