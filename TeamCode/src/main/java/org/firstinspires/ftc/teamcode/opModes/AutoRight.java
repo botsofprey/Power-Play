@@ -82,15 +82,41 @@ public class AutoRight extends OpMode {
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
                 .setReversed(true)
                 .lineToLinearHeading(new Pose2d(-21.5, 12.5, Math.toRadians(270)))
-                .addTemporalMarker(() -> { Before = mpb.getNormalizedDegrees();})
-                .turnDEG(-90)
-                .addTemporalMarker(() -> { After = mpb.getNormalizedDegrees();})
-                .waitSeconds(1)
                 .addTemporalMarker(() -> {
-                    liftHeight = (int) (heights.heights[i] * 1.5);
+                    Before = mpb.getNormalizedDegrees();
+                })
+                .turnDEG(-90)
+                .addTemporalMarker(() -> {
+                    After = mpb.getNormalizedDegrees();
                 })
                 .waitSeconds(1)
+                .addTemporalMarker(() -> {
+                    liftHeight = (coneheight * 2);
+                })
+                .waitSeconds(0.75)
                 .lineToLinearHeading(new Pose2d(-58.5, 12.5, Math.toRadians(180)))
+                .addTemporalMarker(() -> {
+                    liftHeight = coneheight;
+                })
+                .waitSeconds(1)
+                .addTemporalMarker(() -> {
+                    mpb.setClaw(0.4);
+                })
+                .waitSeconds(0.75)
+                .addTemporalMarker(() -> {
+                    liftHeight = (coneheight * 2);
+                })
+                .lineToLinearHeading(new Pose2d(-21.5, 12.5, Math.toRadians(180)))
+                .addTemporalMarker(() -> {
+                    liftHeight = heights.highJunction;
+                })
+                .turnDEG(90)
+                .lineToLinearHeading(new Pose2d(-21.5, 9.5, Math.toRadians(270)))
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
+                    mpb.setClaw(0);
+                })
+                .waitSeconds(0.5)
                 .build();
         park19 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-60, 12, Math.toRadians(270))).build();
         park18 = mecanumDrive.trajectoryBuilder(preLoad.end()).lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(270))).build();
@@ -139,6 +165,12 @@ public class AutoRight extends OpMode {
             mpb.setClaw(0);
             mpb.sleep(500);
             step++;
+            mecanumDrive.updatePoseEstimate();
+            mecanumDrive.setPoseEstimate(new Pose2d(
+                    mecanumDrive.getPoseEstimate().getX(),
+                    mecanumDrive.getPoseEstimate().getY(),
+                    Math.toRadians(270 + mpb.getNormalizedDegrees())
+            ));
             mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
         } else if (step == 3) {
             prevtraj = getConeAndScore.end();
@@ -175,14 +207,8 @@ public class AutoRight extends OpMode {
         } else {
             telemetry.addLine("Done");
         }
-        mecanumDrive.updatePoseEstimate();
-        mecanumDrive.setPoseEstimate(new Pose2d(
-                mecanumDrive.getPoseEstimate().getX(),
-                mecanumDrive.getPoseEstimate().getY(),
-                Math.toRadians(270 + mpb.getNormalizedDegrees())
-        ));
         telemetry.addData("current position", mecanumDrive.getPoseEstimate());
-        telemetry.addData("imu value", mpb.getNormalizedDegrees());
+        telemetry.addData("imu value", mpb.getNormalizedDegrees() + 270);
         telemetry.addData("Before turn", Before);
         telemetry.addData("After turn", After);
     }
