@@ -401,7 +401,9 @@ public class threeWheelOdometry {
     }
 
     public boolean atTarget() {
-        return targetLocation == null || positionLocation.distanceBetween(targetLocation) < cmOffset && positionLocation.compareHeading(targetLocation, angleOffset);
+        return targetLocation == null ||
+                positionLocation.distanceBetweenRounded(targetLocation) <= cmOffset
+                        && positionLocation.compareHeadingRounded(targetLocation, angleOffset);
     }
 
     public boolean atTargetAngle(){

@@ -64,6 +64,10 @@ public class Location {
         return Math.abs(location.angle - this.angle) < angleOffset
                 || Math.abs(location.angle - this.angle) > (360 - angleOffset);
     }
+    public boolean compareHeadingRounded(Location location, double angleOffset){
+        return Math.abs(Math.round(location.angle) - Math.round(this.angle)) <= angleOffset ||
+                Math.abs(Math.round(location.angle) - Math.round(this.angle)) >= (360 - angleOffset);
+    }
 
     public double[] toArray(){
         double[] locArray = {
@@ -77,6 +81,11 @@ public class Location {
 
     public double distanceBetween(Location other){
         return Math.sqrt(Math.pow(xDifference(other.x), 2) + Math.pow(yDifference(other.y), 2));
+    }
+
+    public double distanceBetweenRounded(Location other){
+        return Math.sqrt(Math.pow(Math.round(x) - Math.round(other.x), 2)
+                + Math.pow(Math.round(y) - Math.round(other.y), 2));
     }
 
     public boolean equals(Location other, double angleOffset){

@@ -11,7 +11,7 @@ import UtilityClasses.Location;
 
 public class Lift {
     private DcMotorEx liftMotor;
-    public Location OFFSET_ON_BOT = new Location(19, 1);
+    public Location OFFSET_ON_BOT = new Location (23, 1);// new Location(19, 1);
 
     private boolean braking;
 

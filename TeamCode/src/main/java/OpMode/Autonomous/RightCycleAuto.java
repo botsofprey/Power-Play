@@ -275,6 +275,8 @@ public class RightCycleAuto extends LinearOpMode {
     private void whileLiftBusy(){
         ElapsedTime stopTime = new ElapsedTime();
 
+        int prev=0, cur=0;
+
         while(opModeIsActive() && lift.isBusy()) {
             odometry.update();
 
@@ -289,7 +291,7 @@ public class RightCycleAuto extends LinearOpMode {
 
             telemetry.update();
 
-             if (stopTime.seconds() > 3 && lift.closeToTarget()){
+             if (stopTime.seconds() > 7.5 && lift.closeToTarget()){
                 break;
             }
         }

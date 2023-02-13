@@ -50,7 +50,7 @@ public class RightPreloadAuto extends LinearOpMode {
         int parking = 1;
 
         drive = new MecanumDrive(hardwareMap, this, 0);
-        odometry = new threeWheelOdometry(hardwareMap, new Location(-10.5,13.5), this, drive);
+        odometry = new threeWheelOdometry(hardwareMap, threeWheelOdometry.autoStart, this, drive);
 
         ReadWriteFile.writeFile(sideFile, "R");
 
@@ -143,25 +143,27 @@ public class RightPreloadAuto extends LinearOpMode {
                 whileMoving(1);
             }
 
-                odometry.setTargetPoint(61, -61, -45, true);
-                lift.hjunction();
-                whileMoving(0);
-                while (lift.isBusy()) ;
+            odometry.setTargetPoint(61, -61, -45, true);
+            lift.hjunction();
+            whileMoving(0);
+            while (lift.isBusy()) ;
 
-                Location liftOffset = new Location(23, 1);
+            Location liftOffset = new Location(23, 1);
 
-                drive.setCurrentSpeed(.25);
-                odometry.setTargetByOffset(liftOffset, new Location(61 * 1.5, -61 * 1.5), true);
-                System.out.println("Times target offset: 161");
-                whileMoving(0);
+            drive.setCurrentSpeed(.25);
+            odometry.setTargetByOffset(liftOffset, new Location(61 * 1.5, -61 * 1.5), true);
+            System.out.println("Times target offset: 161");
+            whileMoving(0);
 
-                //Scores
-                lift.hjunctionScore();
-                while (lift.isBusy()) ;
+            //Scores
+            lift.hjunctionScore();
+            while (lift.isBusy()) ;
 
-                sleep(500);
-                claw.setPosition(Claw.OPEN_POSITION);
-                sleep(500);
+            sleep(500);
+            claw.setPosition(Claw.OPEN_POSITION);
+            sleep(500);
+
+            break;
         }
 
         //Getting in position to go to cone stack

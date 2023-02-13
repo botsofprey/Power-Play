@@ -46,6 +46,11 @@ public class TestWiring extends LinearOpMode {
 
         waitForStart();
 
+        forward.update();
+        horizontal.update();
+        prevBack = forward.getDistance();
+        prevSide = horizontal.getDistance();
+
         while(opModeIsActive()){
             con.update();
             drive.moveWithPower(
@@ -57,7 +62,7 @@ public class TestWiring extends LinearOpMode {
 
             forward.update();
             horizontal.update();
-            calculatePosition();
+            calculateChange();
             odometry.update();
 
             telemetry.addData("back Distance", forward.getDistance());
@@ -104,14 +109,20 @@ public class TestWiring extends LinearOpMode {
                 dy = currentSide - prevSide,
                 dt = currentTheta - prevTheta;
 
-        double deltaX = (dx * Math.cos(currentTheta)) - (dy * Math.sin(currentTheta)),
-                deltaY = (dy * Math.cos(currentTheta)) + (dx * Math.sin(currentTheta));
+        posOfBack = new Location((dx * Math.cos(currentTheta)),
+                (dx * Math.sin(currentTheta)));
+        posOfSide = new Location((dy * Math.sin(currentTheta)),
+                (dy * Math.cos(currentTheta)));
+
+        posOfBack.add(-(fOffset.x * Math.cos(currentTheta)), -(fOffset.y * Math.sin(currentTheta)), 0);
+        posOfSide.add(-(hOffset.x * Math.sin(currentTheta)), -(hOffset.y * Math.cos(currentTheta)), 0);
 
         System.out.println("Back guess: " + currentBack + ", " + prevBack);
         System.out.println("Side guess: " + currentSide + ", " + prevSide);
-        System.out.println("deltas guess: " + deltaX + ", " + deltaY);
 
-        predicttedLocation.add(deltaX, deltaY,0);
+        posOfBack.add(posOfSide);
+
+        predicttedLocation = posOfBack;
 
         //dx = x change
         //dy = y change
