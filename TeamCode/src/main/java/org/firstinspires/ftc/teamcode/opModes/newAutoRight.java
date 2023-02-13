@@ -40,7 +40,7 @@ public class newAutoRight extends LinearOpMode {
      */
     HeightsList                         heightsList = new                   HeightsList();
     Pose2d                                 prevtraj = new                         Pose2d(
-                                                                   36 + 6, 12 - 6,
+                                                                   -36 + 6, 12 - 6,
                                                                      Math.toRadians(315)
                                                                                         );
 
@@ -133,15 +133,17 @@ public class newAutoRight extends LinearOpMode {
             while (!isStopRequested() && mecanumDrive.isBusy());
 
             //getConeAndScore
-            /*do {
+            do {
                 mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
 
                 do {
                     mecanumDrive.update();
                 }
                 while (!isStopRequested() && mecanumDrive.isBusy());
+
+                i++;
             }
-            while (!isStopRequested() && ++i > 2);
+            while (!isStopRequested() && i > 3);
 
             //park
             if (tagOfInterest == 17)
@@ -154,7 +156,7 @@ public class newAutoRight extends LinearOpMode {
             do {
                 mecanumDrive.update();
             }
-            while (!isStopRequested() && mecanumDrive.isBusy());*/
+            while (!isStopRequested() && mecanumDrive.isBusy());
         }
 
         if (isStopRequested()) {
@@ -175,66 +177,34 @@ public class newAutoRight extends LinearOpMode {
 
     private TrajectorySequence preloadSETUP() {
         return mecanumDrive.trajectorySequenceBuilder(coords.rightStart)
-                .addSpatialMarker(RIGHT_START_VEC, () -> {
-                    mpb.setClaw(CATCH);
-                    mpb.lift.setTargetPosition(HIGH_JUNCTION_HEIGHT);
-                    mpb.lift.setPower(1);
-                })
-
-                .lineToLinearHeading(new Pose2d(-36, START_Y_COORD, toRAD(270)))
-                .lineToLinearHeading(new Pose2d(-36, 30, toRAD(270)))
-                .splineToSplineHeading(new Pose2d(-24 - 6, 6, toRAD(270 + 45)), toRAD(270 + 45),
-                        SampleMecanumDrive.getVelocityConstraint(MAX_VEL / 1.35, MAX_ANG_VEL, TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(MAX_ACCEL/ 1.5))
-                .waitSeconds(0.75)
-                /*.lineToLinearHeading(new Pose2d(HIGH_JUNCTION_X - 6,
-                        HIGH_JUNCTION_Y + 6,
-                        Math.toRadians(270)))
-                .addTemporalMarker(() -> mpb.setClaw(RELEASE))*/
+                .lineToLinearHeading(new Pose2d(-36, 64.5, toRAD(270)))
+                .lineToSplineHeading(new Pose2d(-36, 30, toRAD(270)))
+                .splineToSplineHeading(new Pose2d(-24 - 6, 6, toRAD(270 + 45)), toRAD(270 + 45))
+                .waitSeconds(0.25)
+                .waitSeconds(0.25)
                 .build();
     }
 
     private TrajectorySequence getConeAndScoreSETUP() {
         return mecanumDrive.trajectorySequenceBuilder(prevtraj)
-                .addSpatialMarker(new Vector2d(-36, 12), () -> {
-                    mpb.setLift((int) (coneheight[i] * 1.5));
-                })
-                .lineToLinearHeading(new Pose2d(-36, 12, toRAD(315)))
-                /*.addTemporalMarker(() -> {
-                })
-                .turnDEG(-135)
-                .lineToLinearHeading(new Pose2d(-64, 12, toDEG(180)))
-                .addTemporalMarker(() -> {
-                    mpb.setLift(coneheight[i]);
-                })
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
-                    mpb.setClaw(CATCH);
-                })
-                .addTemporalMarker(() -> {
-                    mpb.setLift((int) (coneheight[i] * 1.5));
-                })
-                .waitSeconds(0.5)
-                .addTemporalMarker(getRuntime(), () -> {
-                    mpb.setLift(HIGH_JUNCTION_HEIGHT);
-                })
-                .lineToLinearHeading(new Pose2d(-36, 12, toDEG(180)))
-                .turnDEG(135)
-                .lineToLinearHeading(new Pose2d(HIGH_JUNCTION_X - 6,
-                        HIGH_JUNCTION_Y + 6,
-                        toDEG(225)))
-                .waitSeconds(0.75)
-                .addTemporalMarker(() -> {
-                    mpb.setClaw(0);
-                })
-                .waitSeconds(0.5)*/
+                .back(4)
+                .splineToLinearHeading(new Pose2d(-36, 12, toRAD(180)), toRAD(180))
+                .lineToSplineHeading(new Pose2d(-64, 12, toRAD(180)))
+                .waitSeconds(0.25)
+                .waitSeconds(0.25)
+                .lineToSplineHeading(new Pose2d(-36, 12, toRAD(180)))
+                .splineToLinearHeading(new Pose2d(-24 - 9, 9, toRAD(270 + 45)), toRAD(270+ 45))
+                .splineToLinearHeading(new Pose2d(-24 - 6, 6, toRAD(270 + 45)), toRAD(270+ 45))
+                .waitSeconds(0.25)
+                .waitSeconds(0.25)
                 .build();
     }
 
     private TrajectorySequence park17SETUP() {
         return mecanumDrive.trajectorySequenceBuilder(prevtraj)
-            .lineToLinearHeading(new Pose2d(-36, 12, toRAD(270)))
-            .lineToLinearHeading(new Pose2d(-12, 12, toRAD(270)))
+            .lineToLinearHeading(new Pose2d(-36, 12, toRAD(270 + 45)))
+            .turn(toRAD(-45))
+            .lineToLinearHeading(new Pose2d(-12,12, toRAD(270)))
             .build();
     }
 

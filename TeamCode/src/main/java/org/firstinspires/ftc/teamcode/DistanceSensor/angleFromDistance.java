@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class angleFromDistance {
 
     //in millimeters
-    public final double DISTANCE_TO_DISTANCE_LENGTH = 0;
+    public final double DISTANCE_TO_DISTANCE_LENGTH = 213;
 
     public DistanceSensor FL, FR, BL, BR;
 
