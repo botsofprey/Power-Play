@@ -78,6 +78,9 @@ public class AutoRight extends OpMode {
                 .lineToLinearHeading(new Pose2d(coordinateLocations.rightStart.getX(), coordinateLocations.rightStart.getY() - 1, Math.toRadians(270)))
                 .lineToLinearHeading(new Pose2d(-12, coordinateLocations.rightStart.getY() - 1, Math.toRadians(270)))
                 .waitSeconds(1)
+                .addTemporalMarker(() -> {
+                    convertToImuHeading();
+                })
                 .lineToLinearHeading(new Pose2d(-12, 15, Math.toRadians(270)))
                 .waitSeconds(1)
                 .lineToLinearHeading(new Pose2d(-21.5, 15, Math.toRadians(270)))
