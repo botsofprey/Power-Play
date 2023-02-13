@@ -179,7 +179,7 @@ public class AutoRight extends OpMode {
             mpb.setLift(liftHeight);
             if (!mecanumDrive.isBusy()) {
                 i++;
-                if (i == 1) {
+                if (i == 2) {
                     step++;
                 } else {
                     mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
