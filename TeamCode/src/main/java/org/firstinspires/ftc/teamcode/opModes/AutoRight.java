@@ -75,9 +75,9 @@ public class AutoRight extends OpMode {
                 .addTemporalMarker(() -> {
                     liftHeight = heights.highJunction + 300;
                 })
-                .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(-21.5, 9.5, Math.toRadians(270)))
                 .waitSeconds(1)
+                .lineToLinearHeading(new Pose2d(-21.5, 9.5, Math.toRadians(270)))
+                .waitSeconds(0.75)
                 .build();
         getConeAndScore = mecanumDrive.trajectorySequenceBuilder(prevtraj)
                 .setReversed(true)
@@ -89,7 +89,7 @@ public class AutoRight extends OpMode {
                 .addTemporalMarker(() -> {
                     After = mpb.getNormalizedDegrees();
                 })
-                .waitSeconds(1)
+                .waitSeconds(0.75)
                 .addTemporalMarker(() -> {
                     liftHeight = (coneheight * 2);
                 })
@@ -184,7 +184,7 @@ public class AutoRight extends OpMode {
                             mecanumDrive.getPoseEstimate().getX(),
                             mecanumDrive.getPoseEstimate().getY(),
                             Math.toRadians(270 + mpb.getNormalizedDegrees())
-                            ));
+                    ));
                     step++;
                 } else {
                     mecanumDrive.setPoseEstimate(new Pose2d(
@@ -192,9 +192,9 @@ public class AutoRight extends OpMode {
                             mecanumDrive.getPoseEstimate().getY(),
                             Math.toRadians(270 + mpb.getNormalizedDegrees())
                     ));
-                    prevtraj = mecanumDrive.getPoseEstimate();
                     mecanumDrive.followTrajectorySequenceAsync(getConeAndScore);
                 }
+                prevtraj = mecanumDrive.getPoseEstimate();
             }
 //        } else if (step == 4) {
 //            if (tagOfInterest == 19) {
