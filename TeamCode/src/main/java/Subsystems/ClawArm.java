@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class ClawArm {
     public static final double UP_POSITION = 1, DOWN_POSITION = 0;
-    private Servo servoLeft, servoRight;
+	private Servo servoLeft, servoRight;
     private Servo servoWrist;
     public ClawArm(HardwareMap hardwareMap) {
          servoLeft = hardwareMap.get(Servo.class, "Left servo");
@@ -22,4 +22,11 @@ public class ClawArm {
         servoWrist.setPosition(position);
     }
 
+    public double getArmPosition(){
+        return servoRight.getPosition();
+    }
+
+    public double getWristPosition(){
+        return servoWrist.getPosition();
+    }
 }
