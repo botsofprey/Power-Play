@@ -131,6 +131,10 @@ public class Lift {
         braking = false;
     }
 
+    public void addToTarget(int addOn){
+        liftMotor.setTargetPosition(liftMotor.getTargetPosition() + addOn);
+    }
+
     public void update() {
         if (limitSwitch.isPressed()) {
             zeroLift();

@@ -25,7 +25,6 @@ public class threeWheelOdometry {
     public Location positionLocation;
     private Location targetLocation;
     private Location start, startLoc;
-
     private DistanceUnit distanceUnit = DistanceUnit.CM;
 
     private boolean moving = false, maintain = false, rotateOnly = false;
@@ -34,8 +33,8 @@ public class threeWheelOdometry {
 
     public PidController xPID, yPID, headingPID;
     private static double moveK = .125, maintainK = .1875;
-    private static double moveI = 0, maintainI =  .005;
-    private static double moveD = 0, maintainD = .625;//0.21875;
+    private static double moveI = 0, maintainI =  .000001;
+    private static double moveD = 0, maintainD = 1.25;//.625;
     private static double hKP = .325, hDP = 0;
     private final double headingI = 0, maintainHeadingI = 0.0000000001;
 
