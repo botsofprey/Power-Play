@@ -274,7 +274,7 @@ public class RightCycleAuto extends LinearOpMode {
 
     private void whileLiftBusy(){
         ElapsedTime stopTime = new ElapsedTime();
-        lift.addToTarget(300);hashCode()
+        lift.addToTarget(300);
 
 
         int prev=0, cur=0;
