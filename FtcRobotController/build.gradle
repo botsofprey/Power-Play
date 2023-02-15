@@ -15,8 +15,8 @@ android {
 
         //multiDexEnabled true
     }
+    compileSdk 33
 
-    compileSdkVersion 29
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
