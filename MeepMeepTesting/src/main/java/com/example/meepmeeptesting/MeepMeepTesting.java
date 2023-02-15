@@ -13,39 +13,32 @@ public class MeepMeepTesting {
                 .setDimensions(13, 16.5)
                 .setConstraints(60, 40, 10, Math.toRadians(180), 10.5553)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-31, 63.5, Math.toRadians(270)))
-                                //preload
-                                .lineToLinearHeading(new  Pose2d(-31, 62.5, Math.toRadians(270)))
-                                .lineToLinearHeading(new Pose2d(-12, 62.5, Math.toRadians(270)))
-                                .waitSeconds(1)
+                        drive.trajectorySequenceBuilder(new Pose2d(40.5, 63.5, Math.toRadians(270)))
+                                .lineToLinearHeading(new Pose2d(40.5, 62.5, Math.toRadians(270)))
+                                .lineToLinearHeading(new Pose2d(12, 62.5, Math.toRadians(270)))
                                 .addTemporalMarker(() -> {
 
                                 })
-                                .lineToLinearHeading(new Pose2d(-12, 11.5, Math.toRadians(270)))
-                                .waitSeconds(1)
-                                .lineToLinearHeading(new Pose2d(-21.5, 11.5, Math.toRadians(270)))
+                                .lineToLinearHeading(new Pose2d(12, 11.5, Math.toRadians(270)))
+                                .lineToLinearHeading(new Pose2d(21.5, 11.5, Math.toRadians(270)))
                                 .addTemporalMarker(() -> {
 
                                 })
-                                .waitSeconds(1)
-                                .lineToLinearHeading(new Pose2d(-21.5, 8.5, Math.toRadians(270)))
-                                .waitSeconds(0.75)
-                               //Get cone and score
+                                .waitSeconds(0.25)
+                                .lineToLinearHeading(new Pose2d(21.5, 8.5, Math.toRadians(270)))
+                                .waitSeconds(0.1)
+                                .addTemporalMarker(() -> {
+
+                                })
+
                 .setReversed(true)
-                .lineToLinearHeading(new Pose2d(-21.5, 11.5, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(21.5, 11.5, Math.toRadians(270)))
+                .waitSeconds(0.1)
                 .addTemporalMarker(() -> {
 
                 })
-                .turn(toRAD(-90))
-                .addTemporalMarker(() -> {
-
-                })
-                .waitSeconds(0.75)
-                .addTemporalMarker(() -> {
-
-                })
-                .waitSeconds(0.75)
-                .lineToLinearHeading(new Pose2d(-60, 11.5, Math.toRadians(180)))
+                .waitSeconds(0.25)
+                .lineToLinearHeading(new Pose2d(58.5, 10.5, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
 
                 })
@@ -53,23 +46,55 @@ public class MeepMeepTesting {
                 .addTemporalMarker(() -> {
 
                 })
-                .waitSeconds(0.75)
+                .waitSeconds(0.25)
                 .addTemporalMarker(() -> {
 
                 })
-                .lineToLinearHeading(new Pose2d(-21.5, 11.5, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(21.5, 11.5, Math.toRadians(270)))
+                .addTemporalMarker(() -> {
+                })
+                .lineToLinearHeading(new Pose2d(21.5, 7, Math.toRadians(270)))
+                .waitSeconds(0.3)
                 .addTemporalMarker(() -> {
 
                 })
-                .turn(toRAD(90))
-                .lineToLinearHeading(new Pose2d(-21.5, 8.5, Math.toRadians(270)))
-                .waitSeconds(0.5)
+                .waitSeconds(0.25)
+
+
                 .addTemporalMarker(() -> {
 
                 })
-                .waitSeconds(0.5)
+                .setReversed(true)
+                .lineToLinearHeading(new Pose2d(21.5, 11.5, Math.toRadians(270)))
+                .addTemporalMarker(() -> {
+
+                })
+                .waitSeconds(0.35)
+                .lineToLinearHeading(new Pose2d(58.5, 10.5, Math.toRadians(180)))
+                .addTemporalMarker(() -> {
+
+                })
+                .waitSeconds(0.25)
+                .addTemporalMarker(() -> {
+
+                })
+                .waitSeconds(0.25)
+                .addTemporalMarker(() -> {
+
+                })
+                .waitSeconds(0.25)
+                .lineToLinearHeading(new Pose2d(21.5, 11, Math.toRadians(270)))
+                .addTemporalMarker(() -> {
+
+                })
+                .lineToLinearHeading(new Pose2d(21.5, 7, Math.toRadians(270)))
+                .waitSeconds(0.25)
+                .addTemporalMarker(() -> {
+
+                })
+                .waitSeconds(0.3)
                 .build()
-                );
+    );
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
