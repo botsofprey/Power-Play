@@ -24,6 +24,7 @@ public class MeepMeepTesting {
         MeepMeep meepMeep = new MeepMeep(800);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+                .setDimensions(13, 16.5)
                 .setConstraints(60, 40, 10, Math.toRadians(180), 10.5553)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-40.5,64.5,270))
@@ -39,7 +40,7 @@ public class MeepMeepTesting {
                                 //getconeandscore
                                 .back(4)
                                 .splineToLinearHeading(new Pose2d(-36, 12, toRAD(180)), toRAD(180))
-                                .lineToSplineHeading(new Pose2d(-64, 12, toRAD(180)))
+                                .lineToSplineHeading(new Pose2d(-60, 12, toRAD(180)))
                                 .waitSeconds(0.25)
                                 .addTemporalMarker(() -> {})
                                 .waitSeconds(0.25)
