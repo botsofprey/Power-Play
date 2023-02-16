@@ -7,6 +7,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class angleFromDistance {
+    public boolean couldfindFR, couldfindBR, couldfindFL, couldfindBL, couldfindwall;
+    public String sideOfInterest;
 
     //in millimeters
     public final double DISTANCE_TO_DISTANCE_LENGTH = 213;
@@ -25,32 +27,39 @@ public class angleFromDistance {
 
     public double getAngleOfRobot() {
 
-       double angle = 0,
+       double angle,
               FLdistance,
               FRdistance,
               BLdistance,
               BRdistance;
-
-       String sideOfInterest;
 
        FLdistance = FL.getDistance(DistanceUnit.MM);
        FRdistance = FL.getDistance(DistanceUnit.MM);
        BLdistance = FL.getDistance(DistanceUnit.MM);
        BRdistance = FL.getDistance(DistanceUnit.MM);
 
-       if (FLdistance == 0 || BLdistance == 0)
+       if (FLdistance > 0)
+           couldfindFL = true;
+       if (FRdistance > 0)
+           couldfindFR = true;
+       if (BLdistance > 0)
+           couldfindBL = true;
+       if (BRdistance > 0)
+           couldfindBR = true;
+
+       if (FLdistance == 0 || BLdistance == 0) {
            sideOfInterest = "Right";
-       else if (FRdistance == 0 || BRdistance == 0)
+       }
+       else if (FRdistance == 0 || BRdistance == 0) {
            sideOfInterest = "Left";
+       }
        else {
-           telem.addLine("Couldn't find a wall.");
            return 1;
        }
 
-       if (sideOfInterest == "Right")
+       if (sideOfInterest.equals("Right"))
            angle = calcAngle(FRdistance, BRdistance);
-       else if (sideOfInterest == "Left")
-           angle = calcAngle(FLdistance, BLdistance);
+       else angle = calcAngle(FLdistance, BLdistance);
 
        return angle;
     }

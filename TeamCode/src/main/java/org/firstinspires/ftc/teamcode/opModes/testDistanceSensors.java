@@ -13,9 +13,17 @@ public class testDistanceSensors extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         angleFromDistance afd = new angleFromDistance(hardwareMap, telemetry);
+        double roboangle;
 
         while(!isStopRequested()) {
-            telemetry.addData("Current Angle:", afd.getAngleOfRobot());
+            roboangle = afd.getAngleOfRobot();
+            telemetry.addData("Current Angle:", roboangle);
+            telemetry.addData("side of interest:", afd.sideOfInterest);
+            telemetry.addData("FL?", afd.couldfindFL);
+            telemetry.addData("BL?", afd.couldfindBL);
+            telemetry.addData("FR?", afd.couldfindFR);
+            telemetry.addData("BR", afd.couldfindBR);
+            telemetry.update();
         }
     }
 }

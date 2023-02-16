@@ -13,12 +13,15 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
 import com.acmerobotics.roadrunner.util.Angle;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.DistanceSensor.angleFromDistance;
 import org.firstinspires.ftc.teamcode.mechanisms.HardwareMechanisms;
 import org.firstinspires.ftc.teamcode.opencvCamera.AprilTagPipelineEXAMPLECOPY;
 import org.firstinspires.ftc.teamcode.opencvCamera.cameraControl;
@@ -38,6 +41,7 @@ public class newAutoRight extends LinearOpMode {
     /*
     Type                                       Name                                 Value
      */
+    angleFromDistance                     distangle;
     HeightsList                         heightsList = new                   HeightsList();
     Pose2d                                 prevtraj = new                         Pose2d(
                                                                    -36 + 6, 12 - 6,
@@ -50,9 +54,11 @@ public class newAutoRight extends LinearOpMode {
     SampleMecanumDrive                 mecanumDrive;
     AprilTagDetection                       tagData;
 
-    double                               liftHeight =                                   0;
+    double                               liftHeight =                                   0,
+                                      actualHeading =                                   0;
 
     int                               tagOfInterest =                                   0,
+                                        heightCount =                                   0,
                                                   i =                                   0;
 
     int[]                                coneheight =                 heightsList.heights;
@@ -86,7 +92,10 @@ public class newAutoRight extends LinearOpMode {
         mpb.resetLiftAUTO();
 
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
-        mecanumDrive.setPoseEstimate(coords.rightStart);
+
+        distangle = new angleFromDistance(hardwareMap, telemetry);
+        actualHeading = distangle.getAngleOfRobot();
+        mecanumDrive.setPoseEstimate(coords.rightStart.plus(new Pose2d(0,0,actualHeading)));
 
         aprilTagPipeline = new AprilTagPipelineEXAMPLECOPY(tagsize, fx, fy, cx, cy);
         autocam.createCameraInstance(hardwareMap, telemetry);
@@ -141,9 +150,9 @@ public class newAutoRight extends LinearOpMode {
                 }
                 while (!isStopRequested() && mecanumDrive.isBusy());
 
-                i++;
+                heightCount++;
             }
-            while (!isStopRequested() && i > 3);
+            while (!isStopRequested() && i++ < 2);
 
             //park
             if (tagOfInterest == 17)
@@ -177,10 +186,23 @@ public class newAutoRight extends LinearOpMode {
 
     private TrajectorySequence preloadSETUP() {
         return mecanumDrive.trajectorySequenceBuilder(coords.rightStart)
+                .addTemporalMarker(() -> {
+                    mpb.claw.setPosition(CATCH);
+                })
+                .addTemporalMarker(1, () -> {
+                    mpb.lift.setTargetPosition(HIGH_JUNCTION_HEIGHT/2);
+                    mpb.lift.setPower(0.5);
+                })
                 .lineToLinearHeading(new Pose2d(-36, 64.5, toRAD(270)))
                 .lineToSplineHeading(new Pose2d(-36, 30, toRAD(270)))
+                .addSpatialMarker(new Vector2d(-36, 30), () -> {
+                    mpb.lift.setTargetPosition(HIGH_JUNCTION_HEIGHT);
+                    mpb.lift.setPower(1);
+                })
                 .splineToSplineHeading(new Pose2d(-24 - 6, 6, toRAD(270 + 45)), toRAD(270 + 45))
-                .waitSeconds(0.25)
+                .addTemporalMarker(() -> {
+                    mpb.claw.setPosition(RELEASE);
+                })
                 .waitSeconds(0.25)
                 .build();
     }
@@ -188,15 +210,30 @@ public class newAutoRight extends LinearOpMode {
     private TrajectorySequence getConeAndScoreSETUP() {
         return mecanumDrive.trajectorySequenceBuilder(prevtraj)
                 .back(4)
+                .addSpatialMarker(new Vector2d(prevtraj.getX() - (4 * (2^(1/2))),
+                                               prevtraj.getY() - (4 * (2^(1/2))) ), () -> {
+                    mpb.lift.setTargetPosition(coneheight[heightCount] + coneheight[4]);
+                    mpb.lift.setPower(1);
+                })
                 .splineToLinearHeading(new Pose2d(-36, 12, toRAD(180)), toRAD(180))
-                .lineToSplineHeading(new Pose2d(-64, 12, toRAD(180)))
+                .lineToSplineHeading(new Pose2d(-60, 12, toRAD(180)))
+                .addSpatialMarker(new Vector2d(-60, 12), () -> {
+                    mpb.lift.setTargetPosition(coneheight[heightCount]);
+                    mpb.lift.setPower(1);
+                })
                 .waitSeconds(0.25)
-                .waitSeconds(0.25)
+                .addTemporalMarker(() -> {
+                    mpb.claw.setPosition(CATCH);
+                    mpb.lift.setTargetPosition(coneheight[heightCount] + coneheight[4]);
+                    mpb.lift.setPower(1);
+                })
+                .addSpatialMarker(new Vector2d(-59, 12), () -> {
+                    mpb.lift.setTargetPosition(HIGH_JUNCTION_HEIGHT);
+                    mpb.lift.setPower(1);
+                })
                 .lineToSplineHeading(new Pose2d(-36, 12, toRAD(180)))
                 .splineToLinearHeading(new Pose2d(-24 - 9, 9, toRAD(270 + 45)), toRAD(270+ 45))
                 .splineToLinearHeading(new Pose2d(-24 - 6, 6, toRAD(270 + 45)), toRAD(270+ 45))
-                .waitSeconds(0.25)
-                .waitSeconds(0.25)
                 .build();
     }
 
