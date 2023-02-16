@@ -65,10 +65,12 @@ public class WobotoTele extends LinearOpMode {
                     arm.setPositionElbow(0);
                     //flips cone as turrent is coming in
                     arm.flipWrist();
+
                 }
 
             } else {
                 lift.brake();
+                arm.setTurrentPower(0);
             }
             telemetry.addData("Lift position", lift.getPositionLeft());
             telemetry.addData("powers", drive.getPowers());
