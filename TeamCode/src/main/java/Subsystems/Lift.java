@@ -1,119 +1,161 @@
 package Subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class Lift {
-    private DcMotorEx liftRight, liftLeft;
+    private DcMotor liftMotorRight, liftMotorLeft;
 
     private boolean braking;
 
+    private TouchSensor limitSwitch;
+
     public Lift(HardwareMap hardwareMap) {
-        liftRight = hardwareMap.get(DcMotorEx.class, "liftRight");
-        liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        liftRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        liftLeft = hardwareMap.get(DcMotorEx.class, "liftLeft");
-        liftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        liftLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        zeroLift();
+        liftMotorRight = hardwareMap.get(DcMotor.class, "liftRight");
+        liftMotorLeft = hardwareMap.get(DcMotor.class, "liftLeft");
+        liftMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        //limitSwitch = hardwareMap.get(TouchSensor.class, "limitSwitch");
+        liftMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        liftMotorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void setPower(double power) {
-        if(power < 0 && liftRight.getCurrentPosition() <= 0 ||
-        power > 0 && liftRight.getCurrentPosition() >= 1971) {
+        if (power < 0 &&
+                (liftMotorRight.getCurrentPosition() <= 5 || liftMotorLeft.getCurrentPosition() <= 5) ||
+                power > 0 &&
+                (liftMotorRight.getCurrentPosition() >= 1971 || liftMotorLeft.getCurrentPosition() >= 1971))
             power = 0;
-            braking = true;
-        }
 
-        liftRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftRight.setPower(power);
-        liftLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftLeft.setPower(power);
+        liftMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotorRight.setPower(power);
+        liftMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotorLeft.setPower(power);
         braking = false;
     }
 
-    public void setTargetPosition(int position, double power) {
-        liftRight.setTargetPosition(position);
-        liftRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftRight.setPower(power);
-        liftLeft.setTargetPosition(position);
-        liftLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftLeft.setPower(power);
+    public void setPosition(int position, double power) {
+        liftMotorRight.setTargetPosition(position);
+        liftMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorRight.setPower(power);
+        liftMotorLeft.setTargetPosition(position);
+        liftMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorLeft.setPower(power);
         braking = false;
     }
 
-    public int getPosition() {
-        return liftRight.getCurrentPosition();
+    public int getPositionRight() {
+        return liftMotorRight.getCurrentPosition();
     }
+    public int getPositionLeft() {
+        return liftMotorLeft.getCurrentPosition();
+    }
+
 
     public void brake() {
         if(!braking) {
-            liftRight.setTargetPosition(liftRight.getCurrentPosition());
-            liftRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            liftRight.setPower(1);
-            liftLeft.setTargetPosition(liftLeft.getCurrentPosition());
-            liftLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            liftLeft.setPower(1);
+            liftMotorRight.setTargetPosition(liftMotorRight.getCurrentPosition());
+            liftMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            liftMotorRight.setPower(1);
             braking = true;
         }
     }
 
     public void zeroLift() {
-        liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     // Change target positions
 
     public void coneStack(int coneNum) {
-        setTargetPosition(coneNum*105 + 6, 1);
+        liftMotorRight.setTargetPosition(coneNum*105 + 6);
+        liftMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorRight.setPower(1);
+        liftMotorLeft.setTargetPosition(coneNum*105 + 6);
+        liftMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorLeft.setPower(1);
+        braking = false;
     }
 
     public void Ground() {
-        setTargetPosition(0, 1);
+        liftMotorRight.setTargetPosition(0);
+        liftMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorRight.setPower(1);
+        liftMotorLeft.setTargetPosition(0);
+        liftMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorLeft.setPower(1);
+        braking = false;
     }
 
     public void ljunction() {
-        setTargetPosition(1400, 1);
+        liftMotorRight.setTargetPosition(1400);
+        liftMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorRight.setPower(1);
+        liftMotorLeft.setTargetPosition(1400);
+        liftMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorLeft.setPower(1);
+        braking = false;
     }
 
     public void mjunction() {
-        setTargetPosition(2280, 1);
+        liftMotorRight.setTargetPosition(2280);
+        liftMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorRight.setPower(1);
+        liftMotorLeft.setTargetPosition(2280);
+        liftMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorLeft.setPower(1);
+        braking = false;
     }
 
     public void hjunction() {
-        setTargetPosition(3300, 1);
+        liftMotorRight.setTargetPosition(3300);
+        liftMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorRight.setPower(1);
+        liftMotorLeft.setTargetPosition(3300);
+        liftMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorLeft.setPower(1);
+        braking = false;
     }
 
     public void hjunctionScore() {
-        setTargetPosition(3000, 1);
+        liftMotorRight.setTargetPosition(3200);
+        liftMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorRight.setPower(1);
+        liftMotorLeft.setTargetPosition(3200);
+        liftMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotorLeft.setPower(1);
+        braking = false;
     }
 
     public void update() {
 
     }
 
-    public boolean isBusy(){
-        return liftRight.isBusy()
-                && Math.abs(liftRight.getTargetPosition()-liftRight.getCurrentPosition()) > 300;
+    public boolean isPressed(){
+        return limitSwitch.isPressed();
     }
 
-    public double getPower() {
-        return liftRight.getPower();
+    public double getTouchValue(){
+        return limitSwitch.getValue();
+    }
+
+    public boolean isBusy(){
+        return liftMotorRight.isBusy()
+                && Math.abs(liftMotorRight.getTargetPosition()-liftMotorRight.getCurrentPosition()) > 300;
+    }
+
+    public double getPowerRight() {
+        return liftMotorRight.getPower();
+    }
+    public double getPowerLeft() {
+        return liftMotorLeft.getPower();
     }
 }

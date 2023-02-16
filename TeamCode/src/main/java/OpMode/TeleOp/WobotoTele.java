@@ -22,8 +22,8 @@ public class WobotoTele extends LinearOpMode {
         drive = new MecanumDrive(hardwareMap, 0);
 
         lift = new Lift(hardwareMap);
-        arm = new ClawArm(hardwareMap);
-        claw = new Claw(hardwareMap);
+        //arm = new ClawArm(hardwareMap);
+        //claw = new Claw(hardwareMap);
 
         Controller con1 = new Controller(gamepad1),
         con2 = new Controller(gamepad2);
@@ -50,28 +50,27 @@ public class WobotoTele extends LinearOpMode {
 
             //Control of lift/turrent
             if(con2.leftTriggerHeld){ //lift down & turrent out
-                if(lift.getPosition() <= 0){
-                    arm.setTurrentPower(con2.leftTrigger*.5);
-                    arm.setPositionElbow(1);
-                }else {
-                    lift.setPower(-con2.leftTrigger*.5);
-                }
+                //if(lift.isPressed()){
+               //     arm.setTurrentPower(con2.leftTrigger*.5);
+                //    arm.setPositionElbow(1);
+              //  }else {
+                    lift.setPower(-con2.leftTrigger);
+               // }
 
-            } else if(con2.rightTriggerHeld){ //lift up & turrent in
-                if(arm.turrentIn()){
-                    lift.setPower(con2.rightTrigger*.5);
-                }else {
-                    arm.setTurrentPower(-con2.rightTrigger*.5);
-                    arm.setPositionElbow(0);
+            } else if(con2.rightTriggerHeld){ //lift up & turret in
+              //  if(arm.turrentIn()){
+                    lift.setPower(con2.rightTrigger);
+              //  }else {
+              //      arm.setTurrentPower(-con2.rightTrigger*.5);
+              //      arm.setPositionElbow(0);
                     //flips cone as turrent is coming in
-                    arm.flipWrist();
-                }
+               //     arm.flipWrist();
+               // }
 
-            } else{
-                arm.setTurrentPower(0);
+            } else {
                 lift.setPower(0);
             }
-
+            telemetry.addData("Lift position", lift.getPositionLeft());
             telemetry.addData("powers", drive.getPowers());
             telemetry.update();
         }
