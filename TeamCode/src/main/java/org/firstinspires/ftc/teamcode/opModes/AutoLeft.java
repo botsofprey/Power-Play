@@ -78,13 +78,13 @@ public class AutoLeft extends OpMode {
                     convertToImuHeading();
                 })
                 .lineToLinearHeading(new Pose2d(12, 11.5, Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(21.5, 11.5, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(24.5, 11.5, Math.toRadians(270)))
                 .addTemporalMarker(() -> {
                     liftHeight = heights.highJunction + 300;
                     convertToImuHeading();
                 })
                 .waitSeconds(0.25)
-                .lineToLinearHeading(new Pose2d(23.5, 8.5, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(24.5, 8.5, Math.toRadians(270)))
                 .waitSeconds(0.1)
                 .addTemporalMarker(() -> {
                     convertToImuHeading();
@@ -99,7 +99,7 @@ public class AutoLeft extends OpMode {
                     convertToImuHeading();
                 })
                 .waitSeconds(0.25)
-                .lineToLinearHeading(new Pose2d(60.5, 10.5, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(60.5, 12.5, Math.toRadians(0)))
                 .addTemporalMarker(() -> {
                     liftHeight = coneheight;
                     convertToImuHeading();
@@ -136,7 +136,7 @@ public class AutoLeft extends OpMode {
                     convertToImuHeading();
                 })
                 .waitSeconds(0.35)
-                .lineToLinearHeading(new Pose2d(60.5, 10.5, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(60.5, 12.5, Math.toRadians(0)))
                 .addTemporalMarker(() -> {
                     liftHeight = coneheight;
                     convertToImuHeading();
