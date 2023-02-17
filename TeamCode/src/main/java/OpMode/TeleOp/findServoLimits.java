@@ -17,8 +17,8 @@ public class findServoLimits extends LinearOpMode {
     public static double b2wrist = 0;
 
     public static double a1claw = 0;
-    public static double a2claw = 0;
-    public static double b1claw = 0;
+    public static double a2claw = 1;
+    public static double b1claw = 1;
     public static double b2claw = 0;
 
     Claw claw;
