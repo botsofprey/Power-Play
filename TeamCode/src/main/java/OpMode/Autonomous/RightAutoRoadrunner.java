@@ -1,8 +1,6 @@
 package OpMode.Autonomous;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -14,7 +12,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.util.AprilTagPipelineExampleCOPY;
+import Subsystems.AprilTagPipelineExampleCOPY;
+import UtilityClasses.cameraControl;
+
 import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ public class RightAutoRoadrunner extends LinearOpMode {
     //private Claw claw;
     private AprilTagDetection tagData;
     private AprilTagPipelineExampleCOPY aprilTagPipeline;
+    private cameraControl camera;
     int tagOfInterest;
 
 
@@ -38,6 +39,8 @@ public class RightAutoRoadrunner extends LinearOpMode {
         //claw = new Claw(hardwareMap);
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        camera.createCameraInstance(hardwareMap, telemetry);
 
         // We want to start the bot at x: 10, y: -8, heading: 90 degrees
         Pose2d startPose = new Pose2d(42, -61.4, Math.toRadians(90));

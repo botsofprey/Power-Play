@@ -4,10 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.util.AprilTagPipelineExampleCOPY;
+import Subsystems.AprilTagPipelineExampleCOPY;
 import org.openftc.apriltag.AprilTagDetection;
-
-import java.util.ArrayList;
 
 import DriveEngine.MecanumDrive;
 import Subsystems.AprilTagCamera;

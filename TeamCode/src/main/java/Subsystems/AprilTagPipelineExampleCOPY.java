@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util;
+package Subsystems;
 
 import org.opencv.calib3d.Calib3d;
 import org.opencv.core.CvType;
@@ -14,7 +14,9 @@ import org.openftc.apriltag.AprilTagDetectorJNI;
 
 import java.util.ArrayList;
 
-public class AprilTagPipelineExampleCOPY extends opencvPipeline{
+import UtilityClasses.opencvPipeline;
+
+public class AprilTagPipelineExampleCOPY extends opencvPipeline {
     private long nativeApriltagPtr;
     private Mat grey = new Mat();
     private ArrayList<AprilTagDetection> detections = new ArrayList<>();
