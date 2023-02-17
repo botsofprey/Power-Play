@@ -108,12 +108,12 @@ public class AutoLeftTwoCones extends OpMode {
                 .addTemporalMarker(() -> {
                     liftHeight = (coneheight * 2);
                 })
-                .lineToLinearHeading(new Pose2d(24, 14, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(24.5, 11.5, Math.toRadians(270)))
                 .addTemporalMarker(() -> {
                     liftHeight = heights.highJunction;
                     convertToImuHeading();
                 })
-                .lineToLinearHeading(new Pose2d(26.5, 7.25, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(26.5, 7.5, Math.toRadians(270)))
                 .waitSeconds(0.3)
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
