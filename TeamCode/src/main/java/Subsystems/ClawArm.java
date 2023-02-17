@@ -11,15 +11,15 @@ public class ClawArm {
 
     private DcMotorEx turrent;
 
-    double servoLeft_MinLimit,
-           servoLeft_MaxLimit,
-           servoRight_MinLimit,
-           servoRight_MaxLimit;
+    double servoLeft_MinLimit =0,
+           servoLeft_MaxLimit=1,
+           servoRight_MinLimit=0,
+           servoRight_MaxLimit=1;
 
     public ClawArm(HardwareMap hardwareMap) {
          servoLeft = hardwareMap.get(Servo.class, "leftArm");
          servoRight = hardwareMap.get(Servo.class, "rightArm");
-         servoWrist = hardwareMap.get(Servo.class, "Wrist");
+         servoWrist = hardwareMap.get(Servo.class, "wrist");
          turrent = hardwareMap.get(DcMotorEx.class, "turrent");
     }
     //this is the claw moving up and down, der
@@ -37,7 +37,7 @@ public class ClawArm {
     }
 
     public void flipWrist(){
-        servoWrist.setPosition(servoWrist.getPosition() != 1 ? 1 : 0);
+        servoWrist.setPosition(servoWrist.getPosition() != UP_POSITION ? UP_POSITION : DOWN_POSITION);
     }
 
     public void setTurrentPower(double power){

@@ -44,8 +44,8 @@ public class findServoLimits extends LinearOpMode {
                 leftArm.setPosition(1);
             if (!gamepad1.a)
                 leftArm.setPosition(0);
-                fullElbowBend(a1wrist, a2wrist, b1wrist, b2wrist);
-                clawOpenClose(a1claw, a2claw, b1claw, b2claw);
+            fullElbowBend(a1wrist, a2wrist, b1wrist, b2wrist);
+            clawOpenClose(a1claw, a2claw, b1claw, b2claw);
             }
         }
     }
