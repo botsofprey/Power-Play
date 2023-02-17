@@ -40,43 +40,38 @@ public class findServoLimits extends LinearOpMode {
         rightClaw = claw.getRight();
 
         while (!isStopRequested()) {
-            if (gamepad1.a)
+            /*if (gamepad1.a)
                 leftArm.setPosition(0);
             if (!gamepad1.a)
                 leftArm.setPosition(1);
             if (gamepad1.b)
                 rightArm.setPosition(1);
             if (!gamepad1.b)
-                rightArm.setPosition(0);
+                rightArm.setPosition(0);*/
+            if (gamepad1.a) {
             fullElbowBend(a1wrist, a2wrist, b1wrist, b2wrist);
-            clawOpenClose(a1claw, a2claw, b1claw, b2claw);
+            clawOpenClose(a1claw, a2claw, b1claw, b2claw);}
             telemetry.addData("A is pressed", gamepad1.a);
             telemetry.addData("servo position:", leftArm.getPosition());
             telemetry.update();
         }
     }
 
-    public void fullElbowBend(double a1, double a2, double b1, double b2) {
-        while (leftArm.getPosition() != b1 && rightArm.getPosition() != a2) {
-            leftArm.setPosition(b1);
-            rightArm.setPosition(a2);
-        }
+    public void fullElbowBend(double a1, double a2, double b1, double b2) throws InterruptedException {
+        leftArm.setPosition(leftArm.getPosition() == b1 ? 0 : b1);
+        rightArm.setPosition(rightArm.getPosition() == a2 ? 0 : a2);
 
-        while (leftArm.getPosition() != a1 && rightArm.getPosition() != b2) {
-            leftArm.setPosition(a1);
-            rightArm.setPosition(b2);
-        }
+        wait(3);
+
+        leftArm.setPosition(leftArm.getPosition() == a1 ? 0 : a1);
+        rightArm.setPosition(leftArm.getPosition() == b2 ? 0 : b2);
     }
 
     public void clawOpenClose(double a1, double a2, double b1, double b2) {
-        while (leftClaw.getPosition() != a1 && rightClaw.getPosition() != a2) {
-            leftClaw.setPosition(a1);
-            rightClaw.setPosition(a2);
-        }
+        leftClaw.setPosition(a1);
+        rightClaw.setPosition(a2);
 
-        while (leftClaw.getPosition() != b1 && rightClaw.getPosition() != b2) {
-            leftClaw.setPosition(b1);
-            rightClaw.setPosition(b2);
-        }
+        leftClaw.setPosition(b1);
+        rightClaw.setPosition(b2);
     }
 }
