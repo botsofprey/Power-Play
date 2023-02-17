@@ -14,7 +14,7 @@ import org.openftc.apriltag.AprilTagDetectorJNI;
 
 import java.util.ArrayList;
 
-public class AprilTagPipelineEXAMPLECOPY extends opencvPipeline{
+public class AprilTagPipelineExampleCOPY extends opencvPipeline{
     private long nativeApriltagPtr;
     private Mat grey = new Mat();
     private ArrayList<AprilTagDetection> detections = new ArrayList<>();
@@ -38,7 +38,7 @@ public class AprilTagPipelineEXAMPLECOPY extends opencvPipeline{
     private boolean needToSetDecimation;
     private final Object decimationSync = new Object();
 
-    public AprilTagPipelineEXAMPLECOPY(double tagsize, double fx, double fy, double cx, double cy)
+    public AprilTagPipelineExampleCOPY(double tagsize, double fx, double fy, double cx, double cy)
     {
         this.tagsize = tagsize;
         this.tagsizeX = tagsize;

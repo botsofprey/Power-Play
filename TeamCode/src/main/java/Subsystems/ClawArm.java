@@ -11,6 +11,11 @@ public class ClawArm {
 
     private DcMotorEx turrent;
 
+    double servoLeft_MinLimit,
+           servoLeft_MaxLimit,
+           servoRight_MinLimit,
+           servoRight_MaxLimit;
+
     public ClawArm(HardwareMap hardwareMap) {
          servoLeft = hardwareMap.get(Servo.class, "leftArm");
          servoRight = hardwareMap.get(Servo.class, "rightArm");
@@ -19,8 +24,8 @@ public class ClawArm {
     }
     //this is the claw moving up and down, der
     public void setPositionElbow(double position) {
-        servoLeft.setPosition(1-(position));
-        servoRight.setPosition(position);
+        servoLeft.setPosition(((1 - position) * servoLeft_MinLimit) + (position * servoLeft_MaxLimit));
+        servoRight.setPosition(((position) * servoRight_MinLimit) + (position * servoRight_MaxLimit));
     }
     public void flipElbow(){
         setPositionElbow(servoRight.getPosition() == 0 ? 1 : 0);

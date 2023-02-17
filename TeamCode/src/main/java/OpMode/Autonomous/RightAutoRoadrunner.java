@@ -14,12 +14,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.util.AprilTagPipelineExampleCOPY;
+import org.openftc.apriltag.AprilTagDetection;
+
+import java.util.ArrayList;
 
 @Autonomous(name = "Right Auto RR", group = "Autonomous")
 public class RightAutoRoadrunner extends LinearOpMode {
     //private Lift lift;
     //private ClawArm clawArm;
     //private Claw claw;
+    private AprilTagDetection tagData;
+    private AprilTagPipelineExampleCOPY aprilTagPipeline;
+    int tagOfInterest;
 
 
     @Override
@@ -43,6 +50,45 @@ public class RightAutoRoadrunner extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(34, -4, Math.toRadians(-15)))
                 .build();
 
-        drive.followTrajectorySequence(ts);
+        TrajectorySequence park17 = drive.trajectorySequenceBuilder(ts.end())
+                .lineToLinearHeading(new Pose2d(36, -12, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(12, -12, Math.toRadians(90)))
+                .build();
+        TrajectorySequence park18 = drive.trajectorySequenceBuilder(ts.end())
+                .lineToLinearHeading(new Pose2d(36, -12, Math.toRadians(90)))
+                .build();
+        TrajectorySequence park19 = drive.trajectorySequenceBuilder(ts.end())
+                .lineToLinearHeading(new Pose2d(36, -12, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(60, -12, Math.toRadians(90)))
+                .build();
+
+        while (!isStarted() && !isStopRequested()) {
+            tagData = null;
+            ArrayList<AprilTagDetection> currentDetections;
+            currentDetections = aprilTagPipeline.getLatestDetections();
+
+            for (AprilTagDetection tag : currentDetections) {
+                if (currentDetections.size() != 0 && tag.id >= 17 && tag.id <= 19) {
+                    tagOfInterest = tag.id;
+                    telemetry.addData("Tag of interest", tagOfInterest);
+                    break;
+                }
+                if (currentDetections.size() == 0)
+                    telemetry.addLine("No tag found");
+            }
+            telemetry.update();
+        }
+        //start
+
+        while(!isStopRequested()) {
+            drive.followTrajectorySequence(ts);
+
+            if (tagOfInterest == 17)
+                drive.followTrajectorySequence(park17);
+            if (tagOfInterest == 18)
+                drive.followTrajectorySequence(park18);
+            if (tagOfInterest == 19)
+                drive.followTrajectorySequence(park19);
+        }
     }
 }

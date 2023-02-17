@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.util.AprilTagPipelineExampleCOPY;
 import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class AutonomousTest2 extends LinearOpMode {
     private MecanumDrive drive;
     private threeWheelOdometry odometry;
     private AprilTagDetection tagData;
+    private AprilTagPipelineExampleCOPY aprilTagPipeline;
+    int tagOfInterest;
 
     private Location[] parkingLocations = {
             new Location(60, -60), //parking spot 1
@@ -103,20 +106,6 @@ public class AutonomousTest2 extends LinearOpMode {
         }
 
         camera.stop();*/
-            tagData = null;
-            ArrayList<AprilTagDetection> currentDetections;
-            currentDetections = aprilTagPipeline.getLatestDetections();
-
-            for (AprilTagDetection tag : currentDetections) {
-                if (currentDetections.size() != 0 && tag.id >= 17 && tag.id <= 19) {
-                    tagOfInterest = tag.id;
-                    telemetry.addData("Tag of interest", tagOfInterest);
-                    break;
-                }
-                if (currentDetections.size() == 0)
-                    telemetry.addLine("No tag found");
-            }
-            telemetry.update();
 
         //Sets target to parking spot
         parking = camera.getParking();
