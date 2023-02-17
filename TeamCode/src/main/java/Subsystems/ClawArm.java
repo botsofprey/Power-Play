@@ -25,7 +25,7 @@ public class ClawArm {
     //this is the claw moving up and down, der
     public void setPositionElbow(double position) {
         servoLeft.setPosition(((1 - position) * servoLeft_MinLimit) + (position * servoLeft_MaxLimit));
-        servoRight.setPosition(((position) * servoRight_MinLimit) + (position * servoRight_MaxLimit));
+        servoRight.setPosition(((1 - position) * servoRight_MinLimit) + (position * servoRight_MaxLimit));
     }
     public void flipElbow(){
         setPositionElbow(servoRight.getPosition() == 0 ? 1 : 0);
@@ -53,5 +53,17 @@ public class ClawArm {
     }
     public double getLeftArmPos(){
         return servoLeft.getPosition();
+    }
+
+    public Servo getServoLeft() {
+        return servoLeft;
+    }
+
+    public Servo getServoRight() {
+        return servoRight;
+    }
+
+    public Servo getServoWrist() {
+        return servoWrist;
     }
 }

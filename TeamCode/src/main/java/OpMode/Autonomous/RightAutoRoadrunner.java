@@ -28,6 +28,8 @@ public class RightAutoRoadrunner extends LinearOpMode {
     private AprilTagPipelineExampleCOPY aprilTagPipeline;
     private cameraControl camera;
     int tagOfInterest;
+    final double tagsize = 0.166,
+    fx = 578.272, fy = 578.272, cx = 402.145, cy = 221.506;
 
 
     @Override
