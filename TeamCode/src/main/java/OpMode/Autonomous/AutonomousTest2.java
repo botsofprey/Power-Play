@@ -19,6 +19,7 @@ public class AutonomousTest2 extends LinearOpMode {
 
     private MecanumDrive drive;
     private threeWheelOdometry odometry;
+    private AprilTagDetection tagData;
 
     private Location[] parkingLocations = {
             new Location(60, -60), //parking spot 1
