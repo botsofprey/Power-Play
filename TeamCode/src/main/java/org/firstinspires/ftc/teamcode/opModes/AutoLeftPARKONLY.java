@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opModes;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -17,7 +18,7 @@ import org.firstinspires.ftc.teamcode.vars.StaticImu;
 import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
-
+@Disabled
 @Autonomous
 public class AutoLeftPARKONLY extends OpMode {
     SampleMecanumDrive mecanumDrive;
