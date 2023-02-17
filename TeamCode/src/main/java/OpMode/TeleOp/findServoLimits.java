@@ -17,8 +17,8 @@ public class findServoLimits extends LinearOpMode {
     public static double b2wrist = 0;
 
     public static double a1claw = 0;
-    public static double a2claw = 0;
-    public static double b1claw = 0;
+    public static double a2claw = 1;
+    public static double b1claw = 1;
     public static double b2claw = 0;
 
     Claw claw;
@@ -41,6 +41,8 @@ public class findServoLimits extends LinearOpMode {
 
         while (!isStopRequested()) {
             if (gamepad1.a) {
+                leftArm.setPosition(-leftArm.getPosition());
+                rightArm.setPosition(-rightArm.getPosition());
                 fullElbowBend(a1wrist, a2wrist, b1wrist, b2wrist);
                 clawOpenClose(a1claw, a2claw, b1claw, b2claw);
             }
