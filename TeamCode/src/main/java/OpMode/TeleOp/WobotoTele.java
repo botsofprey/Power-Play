@@ -52,7 +52,7 @@ public class WobotoTele extends LinearOpMode {
             if(con2.leftTriggerHeld){ //lift down & turrent out
                 if(lift.getPositionLeft() <= 0 || lift.getPositionRight() <= 0){
                     arm.setTurrentPower(con2.leftTrigger*.5);
-                    arm.setPositionElbow(1);
+                    //arm.setPositionElbow(1);
                 }else {
                     lift.setPower(-con2.leftTrigger*.5);
                 }
@@ -62,7 +62,7 @@ public class WobotoTele extends LinearOpMode {
                     lift.setPower(con2.rightTrigger*.5);
                 }else {
                     arm.setTurrentPower(-con2.rightTrigger*.5);
-                    arm.setPositionElbow(0);
+                   // arm.setPositionElbow(0);
                     //flips cone as turrent is coming in
                     arm.flipWrist();
 
@@ -72,9 +72,21 @@ public class WobotoTele extends LinearOpMode {
                 lift.brake();
                 arm.setTurrentPower(0);
             }
+
+            telemetry.addData("right servo", arm.getRightArmPos());
+            telemetry.addData("left servo", arm.getLeftArmPos());
+            telemetry.addLine();
+
             telemetry.addData("Lift position", lift.getPositionLeft());
             telemetry.addData("powers", drive.getPowers());
             telemetry.update();
+
+            if(con2.aPressed){
+                arm.flipElbow();
+            }
+            if(con2.bPressed){
+                claw.setPosition(claw.getPosition() == Claw.CLOSE_POSITION ? Claw.OPEN_POSITION : Claw.CLOSE_POSITION);
+            }
         }
     }
 }

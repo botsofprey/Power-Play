@@ -8,8 +8,8 @@ public class Claw {
     public static final double CLOSE_POSITION = 0.5, OPEN_POSITION = 0;
 
     public Claw(HardwareMap hardwareMap){
-        leftArm = hardwareMap.get(Servo.class, "leftArm");
-        rightArm = hardwareMap.get(Servo.class, "rightArm");
+        leftArm = hardwareMap.get(Servo.class, "leftClaw");
+        rightArm = hardwareMap.get(Servo.class, "rightClaw");
     }
 
     public void setPosition(double position) {
