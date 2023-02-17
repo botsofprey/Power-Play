@@ -51,7 +51,7 @@ public class WobotoTele extends LinearOpMode {
             //Control of lift/turrent
             if(con2.leftTriggerHeld){ //lift down & turrent out
                 if(lift.getPositionLeft() <= 0 || lift.getPositionRight() <= 0){
-                    arm.setTurrentPower(con2.leftTrigger*.5);
+                    arm.setTurrentPower(con2.leftTrigger * 0.5);
                     //arm.setPositionElbow(1);
                 }else {
                     lift.setPower(-con2.leftTrigger*.5);

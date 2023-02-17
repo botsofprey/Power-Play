@@ -1,5 +1,6 @@
 package OpMode.TeleOp;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import Subsystems.Claw;
 import Subsystems.ClawArm;
 
+@Config
 @TeleOp
 public class findServoLimits extends LinearOpMode {
     public static double a1wrist = 0;
@@ -38,9 +40,10 @@ public class findServoLimits extends LinearOpMode {
         rightClaw = claw.getRight();
 
         while (!isStopRequested()) {
-            if (gamepad1.a)
+            if (gamepad1.a) {
                 fullElbowBend(a1wrist, a2wrist, b1wrist, b2wrist);
                 clawOpenClose(a1claw, a2claw, b1claw, b2claw);
+            }
         }
     }
 
