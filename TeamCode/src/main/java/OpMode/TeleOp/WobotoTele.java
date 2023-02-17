@@ -2,6 +2,7 @@ package OpMode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import DriveEngine.MecanumDrive;
 import Subsystems.Claw;
@@ -30,6 +31,8 @@ public class WobotoTele extends LinearOpMode {
 
         waitForStart();
 
+        ElapsedTime endGameTimer = new ElapsedTime();
+
         while(opModeIsActive()){
             con1.update();
             con2.update();
@@ -53,16 +56,21 @@ public class WobotoTele extends LinearOpMode {
                 if(lift.getPositionLeft() <= 0 || lift.getPositionRight() <= 0){
                     arm.setTurrentPower(con2.leftTrigger * 0.5);
                     //arm.setPositionElbow(1);
+                    lift.brake();
                 }else {
                     lift.setPower(-con2.leftTrigger*.5);
+                    arm.setTurrentPower(0);
                 }
 
             } else if(con2.rightTriggerHeld){ //lift up & turret in
                 if(arm.turrentIn()){
                     lift.setPower(con2.rightTrigger*.5);
+                    arm.setTurrentPower(0);
                 }else {
                     arm.setTurrentPower(-con2.rightTrigger*.5);
-                   // arm.setPositionElbow(0);
+                    lift.brake();
+                    //arm.setPositionElbow(0);
+
                     //flips cone as turrent is coming in
                     arm.flipWrist();
 
@@ -85,7 +93,14 @@ public class WobotoTele extends LinearOpMode {
                 arm.flipElbow();
             }
             if(con2.bPressed){
-                claw.setPosition(claw.getPosition() == Claw.CLOSE_POSITION ? Claw.OPEN_POSITION : Claw.CLOSE_POSITION);
+                claw.setPosition(claw.getPosition() == Claw.CLOSE_POSITION
+                        ? Claw.OPEN_POSITION : Claw.CLOSE_POSITION);
+            }
+
+            if(endGameTimer.seconds() >= 90){
+                con1.rumble(3);
+                con2.rumble(3);
+                endGameTimer.reset();
             }
         }
     }

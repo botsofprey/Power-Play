@@ -149,4 +149,9 @@ public class Lift {
     public double getPowerLeft() {
         return liftMotorLeft.getPower();
     }
+
+    @Deprecated
+    public boolean isPressed() {
+        return true;
+    }
 }
