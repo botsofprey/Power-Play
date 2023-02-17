@@ -41,7 +41,7 @@ public class AutoLeftTwoCones extends OpMode {
     cameraControl autocam = new cameraControl();
     HardwareMechanisms mpb = new HardwareMechanisms();
     CoordinateLocations coordinateLocations = new CoordinateLocations();
-    Pose2d prevtraj = new Pose2d(23.5, 7.25, Math.toRadians(270));
+    Pose2d prevtraj = new Pose2d(26, 7.25, Math.toRadians(270));
     int coneheight = heights.heights[0];
     int liftHeight = heights.highJunction;
 
@@ -82,7 +82,7 @@ public class AutoLeftTwoCones extends OpMode {
                     convertToImuHeading();
                 })
                 .waitSeconds(0.25)
-                .lineToLinearHeading(new Pose2d(26.5, 7.5, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(26, 7.5, Math.toRadians(270)))
                 .waitSeconds(0.1)
                 .addTemporalMarker(this::convertToImuHeading)
                 .build();
