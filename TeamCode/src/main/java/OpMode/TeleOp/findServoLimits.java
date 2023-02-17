@@ -12,8 +12,8 @@ import Subsystems.ClawArm;
 @TeleOp
 public class findServoLimits extends LinearOpMode {
     public static double a1wrist = 0;
-    public static double a2wrist = 0;
-    public static double b1wrist = 0;
+    public static double a2wrist = 1;
+    public static double b1wrist = 1;
     public static double b2wrist = 0;
 
     public static double a1claw = 0;
