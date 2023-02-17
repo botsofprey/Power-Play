@@ -63,11 +63,11 @@ public class RightAuto extends LinearOpMode {
         ReadWriteFile.writeFile(sideFile, "R");
 
         lift.setPower(-.25);
-        while(!isStarted() && !isStopRequested() && !lift.isPressed()){
+        while(!isStarted() && !isStopRequested() && !lift.isBusy()){
             updatePosition();
             lift.update();
 
-            telemetry.addData("touch", lift.isPressed());
+            telemetry.addData("touch", lift.isBusy());
             telemetry.update();
         };
         lift.setPower(0);

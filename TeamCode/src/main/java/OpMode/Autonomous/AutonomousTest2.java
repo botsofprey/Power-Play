@@ -59,7 +59,7 @@ public class AutonomousTest2 extends LinearOpMode {
             // telemetry.addData("right", odometry.getCurrentRightPos());
             //telemetry.addData("aux", odometry.getCurrentAuxPos());
             //telemetry.addData("Position", odometry.getLocation());
-            telemetry.addLine();
+            /*telemetry.addLine();
 
 
             con.update();
@@ -97,7 +97,7 @@ public class AutonomousTest2 extends LinearOpMode {
             drive.brake();
         }
 
-        camera.stop();
+        camera.stop();*/
 
         //Sets target to parking spot
         parking = camera.getParking();
@@ -149,6 +149,6 @@ public class AutonomousTest2 extends LinearOpMode {
         while(opModeIsActive() && !odometry.atTarget())
             odometry.update();
 
-
+        }
     }
 }
