@@ -3,14 +3,13 @@ package Subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class Lift {
     private DcMotor liftMotorRight, liftMotorLeft;
 
     private boolean braking;
 
-    private TouchSensor limitSwitch;
+    //private TouchSensor limitSwitch;
 
     public Lift(HardwareMap hardwareMap) {
         liftMotorRight = hardwareMap.get(DcMotor.class, "liftRight");
@@ -30,7 +29,7 @@ public class Lift {
                 (liftMotorRight.getCurrentPosition() <= 5 || liftMotorLeft.getCurrentPosition() <= 5) ||
                 power > 0 &&
                 (liftMotorRight.getCurrentPosition() >= 1971 || liftMotorLeft.getCurrentPosition() >= 1971))
-            power = 0;
+            brake();
 
         liftMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftMotorRight.setPower(power);
@@ -137,14 +136,6 @@ public class Lift {
 
     public void update() {
 
-    }
-
-    public boolean isPressed(){
-        return limitSwitch.isPressed();
-    }
-
-    public double getTouchValue(){
-        return limitSwitch.getValue();
     }
 
     public boolean isBusy(){
