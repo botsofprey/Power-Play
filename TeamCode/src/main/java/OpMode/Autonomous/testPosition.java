@@ -1,6 +1,7 @@
 package OpMode.Autonomous;
 
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -14,7 +15,7 @@ public class testPosition extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         roadRunr = new SampleMecanumDrive(hardwareMap);
-        roadRunr.setPoseEstimate(0,0);
+        roadRunr.setPoseEstimate(new Pose2d(0, 0));
 
         waitForStart();
         if (isStarted()) {

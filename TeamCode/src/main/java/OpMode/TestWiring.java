@@ -37,7 +37,7 @@ public class TestWiring extends LinearOpMode {
             if(con2.aPressed){
                 if(!armUp){
                     arm.setPositionElbow(arm.UP_POSITION);
-                    arm.setPositionWrist(arm.getWristPosition() == 1 ? 0 : 1);
+                    //arm.setPositionWrist(arm.getWristPosition() == 1 ? 0 : 1);
                     armUp = true;
                 } else{
                     arm.setPositionElbow(arm.DOWN_POSITION);
