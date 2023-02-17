@@ -15,25 +15,27 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(40.5, 63.5, Math.toRadians(270)))
                                 //first cone
-                                .splineToLinearHeading(new Pose2d(42, 58.5, toRAD(270)), toRAD(270))
-                                .lineToLinearHeading(new Pose2d(12, 58.5, toRAD(270)))
-                                .addTemporalMarker(()->{})
-                                .lineToLinearHeading(new Pose2d(12, 11.5, toRAD(270)))
-                                .lineToLinearHeading(new Pose2d(24.5, 11.5, Math.toRadians(270)))
-                                .addTemporalMarker(() -> {})
-                                .waitSeconds(0.25)
-                                .lineToLinearHeading(new Pose2d(26.5, 7.5, Math.toRadians(270)))
-                                .waitSeconds(0.1)
-                                .addTemporalMarker(()->{})
-                                //second cone
-                                .setReversed(true)
-                                .lineToLinearHeading(new Pose2d(23.5, 12.5, Math.toRadians(270)))
-                                .waitSeconds(0.1)
+                                .splineToLinearHeading(new Pose2d(12, 58.5, toRAD(270)), toRAD(270))
                                 .addTemporalMarker(() -> {
-
+                                })
+                                .splineToSplineHeading(new Pose2d(12, 11.5, toRAD(270)), toRAD(90))
+                                .splineToLinearHeading(new Pose2d(24.5, 11.5, toRAD(270)), toRAD(0))
+                                .addTemporalMarker(() -> {
                                 })
                                 .waitSeconds(0.25)
-                                .lineToLinearHeading(new Pose2d(63.5, 12, Math.toRadians(0)))
+                                .splineToLinearHeading(new Pose2d(26.5, 7.5, toRAD(270)), toRAD(90))
+                                .waitSeconds(0.1)
+                                .addTemporalMarker(() -> {
+                                })
+                                //second cone
+                                .setReversed(true)
+                                .waitSeconds(0.1)
+                                .addTemporalMarker(() -> {
+                                })
+                                .waitSeconds(0.25)
+                                .lineToLinearHeading(new Pose2d(28, 10, toRAD(270)))
+                                .splineToLinearHeading(new Pose2d(35, 1, toRAD(270)), toRAD(180))
+                                .splineToLinearHeading(new Pose2d(63.5, 12, Math.toRadians(0)), toRAD(0))
                                 .addTemporalMarker(() -> {
 
                                 })
@@ -45,11 +47,10 @@ public class MeepMeepTesting {
                                 .addTemporalMarker(() -> {
 
                                 })
-                                .lineToLinearHeading(new Pose2d(24, 14, Math.toRadians(270)))
+                                .splineToSplineHeading(new Pose2d(22.5, 12.5, toRAD(270)), toRAD(0))
                                 .addTemporalMarker(() -> {
-
                                 })
-                                .lineToLinearHeading(new Pose2d(26.5, 7.25, Math.toRadians(270)))
+                                .splineToLinearHeading(new Pose2d(26.5, 7.25, toRAD(270)), toRAD(0))
                                 .waitSeconds(0.3)
                                 .addTemporalMarker(() -> {
 
@@ -63,6 +64,7 @@ public class MeepMeepTesting {
                 .addEntity(myBot)
                 .start();
     }
+
     private static double toRAD(double deg) {
         return Math.toRadians(deg);
     }
