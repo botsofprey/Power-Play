@@ -41,6 +41,10 @@ public class RightAutoRoadrunner extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         camera.createCameraInstance(hardwareMap, telemetry);
+        aprilTagPipeline = new AprilTagPipelineExampleCOPY(tagsize, fx, fy, cx, cy);
+        camera.createCameraInstance(hardwareMap, telemetry);
+        camera.camera.setPipeline(aprilTagPipeline);
+        tagData = new AprilTagDetection();
 
         // We want to start the bot at x: 10, y: -8, heading: 90 degrees
         Pose2d startPose = new Pose2d(42, -61.4, Math.toRadians(90));
