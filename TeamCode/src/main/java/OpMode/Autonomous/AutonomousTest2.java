@@ -4,6 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.openftc.apriltag.AprilTagDetection;
+
+import java.util.ArrayList;
+
 import DriveEngine.MecanumDrive;
 import Subsystems.AprilTagCamera;
 import Subsystems.threeWheelOdometry;
@@ -15,6 +19,7 @@ public class AutonomousTest2 extends LinearOpMode {
 
     private MecanumDrive drive;
     private threeWheelOdometry odometry;
+    private AprilTagDetection tagData;
 
     private Location[] parkingLocations = {
             new Location(60, -60), //parking spot 1
@@ -59,7 +64,7 @@ public class AutonomousTest2 extends LinearOpMode {
             // telemetry.addData("right", odometry.getCurrentRightPos());
             //telemetry.addData("aux", odometry.getCurrentAuxPos());
             //telemetry.addData("Position", odometry.getLocation());
-            telemetry.addLine();
+            /*telemetry.addLine();
 
 
             con.update();
@@ -97,7 +102,21 @@ public class AutonomousTest2 extends LinearOpMode {
             drive.brake();
         }
 
-        camera.stop();
+        camera.stop();*/
+            tagData = null;
+            ArrayList<AprilTagDetection> currentDetections;
+            currentDetections = aprilTagPipeline.getLatestDetections();
+
+            for (AprilTagDetection tag : currentDetections) {
+                if (currentDetections.size() != 0 && tag.id >= 17 && tag.id <= 19) {
+                    tagOfInterest = tag.id;
+                    telemetry.addData("Tag of interest", tagOfInterest);
+                    break;
+                }
+                if (currentDetections.size() == 0)
+                    telemetry.addLine("No tag found");
+            }
+            telemetry.update();
 
         //Sets target to parking spot
         parking = camera.getParking();
@@ -149,6 +168,6 @@ public class AutonomousTest2 extends LinearOpMode {
         while(opModeIsActive() && !odometry.atTarget())
             odometry.update();
 
-
+        }
     }
 }
