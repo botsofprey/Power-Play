@@ -44,6 +44,10 @@ public class ClawArm {
         turrent.setPower(power);
     }
 
+    public int getTurrentPos(){
+        return turrent.getCurrentPosition();
+    }
+
     public boolean turrentIn(){
         return turrent.getCurrentPosition() <= 5;
     }

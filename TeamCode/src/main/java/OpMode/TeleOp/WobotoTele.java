@@ -89,6 +89,8 @@ public class WobotoTele extends LinearOpMode {
             telemetry.addData("powers", drive.getPowers());
             telemetry.update();
 
+            //suggestion: add button to load cone onto lift, maybe a button to extend clow outwards, auto cycle button?
+
             if(con2.aPressed){
                 arm.flipElbow();
             }

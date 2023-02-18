@@ -3,6 +3,7 @@ package OpMode.Autonomous;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 //import Subsystems.AprilTagCamera;
 //import Subsystems.Claw;
@@ -43,10 +44,12 @@ public class RightAutoRoadrunner extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         camera.createCameraInstance(hardwareMap, telemetry);
-        aprilTagPipeline = new AprilTagPipelineExampleCOPY(tagsize, fx, fy, cx, cy);
+        //aprilTagPipeline = new AprilTagPipelineExampleCOPY(tagsize, fx, fy, cx, cy);
         camera.createCameraInstance(hardwareMap, telemetry);
         camera.camera.setPipeline(aprilTagPipeline);
         tagData = new AprilTagDetection();
+
+        ElapsedTime autoTimer = new ElapsedTime();
 
         // We want to start the bot at x: 10, y: -8, heading: 90 degrees
         Pose2d startPose = new Pose2d(42, -61.4, Math.toRadians(90));
@@ -91,6 +94,18 @@ public class RightAutoRoadrunner extends LinearOpMode {
 
         while(!isStopRequested()) {
             drive.followTrajectorySequence(ts);
+
+            //place preset cone
+
+            //cone cycling
+            int coneStack = 5;
+            while(opModeIsActive() && coneStack > 0 && autoTimer.seconds() < 25){
+                //move arm to cone stack
+                //grab cone based on coneStack integer
+                //place cone onto lift
+                //lift cone onto high junction
+                coneStack -= 1;
+            }
 
             if (tagOfInterest == 17)
                 drive.followTrajectorySequence(park17);
