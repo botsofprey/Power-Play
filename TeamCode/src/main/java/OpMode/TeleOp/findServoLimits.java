@@ -13,12 +13,12 @@ import Subsystems.ClawArm;
 public class findServoLimits extends LinearOpMode {
     public static double a1wrist = 0;
     public static double a2wrist = 0;
-    public static double b1wrist = 0;
-    public static double b2wrist = 0;
+    public static double b1wrist = 1;
+    public static double b2wrist = 1;
 
     public static double a1claw = 0;
-    public static double a2claw = 1;
-    public static double b1claw = 1;
+    public static double a2claw = 0;
+    public static double b1claw = 0;
     public static double b2claw = 0;
 
     Claw claw;
@@ -59,19 +59,21 @@ public class findServoLimits extends LinearOpMode {
 
     public void fullElbowBend(double a1, double a2, double b1, double b2) {
         leftArm.setPosition(leftArm.getPosition() == b1 ? 0 : b1);
-        rightArm.setPosition(rightArm.getPosition() == a2 ? 0 : a2);
+        rightArm.setPosition(rightArm.getPosition() == a2 ? 1 : a2);
 
-        sleep(3000);
+        sleep(1000);
 
-        leftArm.setPosition(leftArm.getPosition() == a1 ? 0 : a1);
+        leftArm.setPosition(leftArm.getPosition() == a1 ? 1 : a1);
         rightArm.setPosition(leftArm.getPosition() == b2 ? 0 : b2);
+
+        sleep(1000);
     }
 
     public void clawOpenClose(double a1, double a2, double b1, double b2) {
-        leftClaw.setPosition(a1);
+        /*leftClaw.setPosition(a1);
         rightClaw.setPosition(a2);
 
         leftClaw.setPosition(b1);
-        rightClaw.setPosition(b2);
+        rightClaw.setPosition(b2);*/
     }
 }
