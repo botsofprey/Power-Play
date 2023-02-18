@@ -39,8 +39,6 @@ public class findServoLimits extends LinearOpMode {
         leftArm = clawArm.getServoLeft();
         rightArm = clawArm.getServoRight();
         wrist = clawArm.getServoWrist();
-        Controller con1 = new Controller(gamepad1),
-        con2 = new Controller(gamepad2);
 
         leftClaw = claw.getLeft();
         rightClaw = claw.getRight();
@@ -54,13 +52,21 @@ public class findServoLimits extends LinearOpMode {
                 rightArm.setPosition(1);
             if (!gamepad1.b)
                 rightArm.setPosition(0);*/
+            /*
             if (gamepad1.a) {
             fullElbowBend(a1arm, a2arm, b1arm, b2arm);
             clawOpenClose(a1claw, a2claw, b1claw, b2claw);
             wristFlip(a1wrist, b1wrist);}
+            */
+            double power = ((gamepad1.right_trigger - gamepad1.left_trigger) * 0.5);
+            if ((clawArm.getTurrentPos() < 1300 && power > 0) || (clawArm.getTurrentPos() > 0 && power < 0)) {
+                clawArm.setTurrentPower(power);
+            } else {
+                clawArm.setTurrentPower(0);
+            }
 
-            clawArm.setTurrentPower((con1.rightTrigger - con1.leftTrigger) * 0.5);
-
+            telemetry.addData("right trigger", gamepad1.right_trigger);
+            telemetry.addData("left trigger", gamepad1.left_trigger);
             telemetry.addData("slide pos", clawArm.getTurrentPos());
             telemetry.addData("A is pressed", gamepad1.a);
             telemetry.addData("servo position:", leftArm.getPosition());

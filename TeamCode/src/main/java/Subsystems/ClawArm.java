@@ -1,5 +1,6 @@
 package Subsystems;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -21,6 +22,8 @@ public class ClawArm {
          servoRight = hardwareMap.get(Servo.class, "rightArm");
          servoWrist = hardwareMap.get(Servo.class, "wrist");
          turrent = hardwareMap.get(DcMotorEx.class, "turrent");
+         turrent.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+         turrent.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     //this is the claw moving up and down, der
     public void setPositionElbow(double position) {
