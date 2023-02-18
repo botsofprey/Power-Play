@@ -49,7 +49,10 @@ public class findServoLimits extends LinearOpMode {
             if (!gamepad1.b)
                 rightArm.setPosition(0);*/
             if (gamepad1.a) {
-            fullElbowBend(a1wrist, a2wrist, b1wrist, b2wrist);
+                leftArm.setPosition(0.5);
+                rightArm.setPosition(0.5);
+            }
+            //fullElbowBend(a1wrist, a2wrist, b1wrist, b2wrist);
             clawOpenClose(a1claw, a2claw, b1claw, b2claw);}
             telemetry.addData("A is pressed", gamepad1.a);
             telemetry.addData("servo position:", leftArm.getPosition());
@@ -70,10 +73,6 @@ public class findServoLimits extends LinearOpMode {
     }
 
     public void clawOpenClose(double a1, double a2, double b1, double b2) {
-        /*leftClaw.setPosition(a1);
-        rightClaw.setPosition(a2);
 
-        leftClaw.setPosition(b1);
-        rightClaw.setPosition(b2);*/
     }
 }
