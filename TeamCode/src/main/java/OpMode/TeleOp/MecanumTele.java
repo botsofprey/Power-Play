@@ -47,7 +47,6 @@ public class MecanumTele extends LinearOpMode {
 
     private ElapsedTime endGameTimer;
     private boolean rumble = false;
-    private Object gridM;
 
     @Override
     public void runOpMode() {
@@ -120,40 +119,22 @@ public class MecanumTele extends LinearOpMode {
 
             telemetry.addData("Slow mode", controller1.leftTriggerHeld);
 
-            //enables/disables grid movement
-            if(controller1.rightTriggerPressed) {
-                grid = grid;
-                overrideDrivers(drive.grid());
-                //telemetry.addData("Grid Mode", controller1.rightTriggerHeld);
-            }
-            telemetry.addData("Grid?", controller1.rightTriggerPressed);
-
             //Driver 1 uses joysticks for movement, duh
             if (!overrideDrivers) {
-                if(grid) {
-                    // Robot-oriented movement unrestricted
-                    Vector2D leftInput = controller1.leftStick,
-                             rightInput = controller1.rightStick;
+                // Robot-oriented movement unrestricted
+                Vector2D leftInput = controller1.leftStick,
+                         rightInput = controller1.rightStick;
 
-                    double newForward = controller1.leftStick.y;
-                    double newRight = controller1.leftStick.x;
-                    double rotate = controller1.rightStick.x;
-                    drive.moveWithPower(
-                            newForward + newRight + rotate,
-                            newForward - newRight + rotate,
-                            newForward + newRight - rotate,
-                            newForward - newRight - rotate
-                    );
-                }else{
-                    // Robot stays in the center of the tile as it moves
-                    drive.grid(controller1.leftStick, odometry.getLocationClass());
-
-
-                    telemetry.addData("Forward", Math.sin(drive.getRadians() * controller1.leftStick.y));
-                    telemetry.addData("Strafe", Math.cos(drive.getRadians() * controller1.leftStick.x));
-                }
-
-                //drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
+                double newForward = controller1.leftStick.y;
+                double newRight = controller1.leftStick.x;
+                double rotate = controller1.rightStick.x;
+                drive.moveWithPower(
+                        newForward + newRight + rotate,
+                        newForward - newRight + rotate,
+                        newForward + newRight - rotate,
+                        newForward - newRight - rotate
+                );
+            //drive.moveTrueNorth(leftInput.y, leftInput.x, rightInput.x);
             }
 
 

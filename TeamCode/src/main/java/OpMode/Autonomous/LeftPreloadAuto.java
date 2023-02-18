@@ -106,21 +106,21 @@ public class LeftPreloadAuto extends LinearOpMode {
         //Resets position and encoders
         odometry.resetEncoders();
         ElapsedTime autoTimer = new ElapsedTime();
-        while(autoTimer.seconds() < 15){
+        while(autoTimer.seconds() < 15) {
             //Close around preset cone
             claw.setPosition(Claw.CLOSE_POSITION);
             sleep(1000);
 
             //If camera is too far away to see qr, robot gets closer
-            if (!camera.tagFound()) {
+            if(!camera.tagFound()){
                 odometry.setTargetPoint(parkingLocations[1]);
 
-                while (!odometry.atTarget() && !camera.tagFound()) {
+                while(!odometry.atTarget() && !camera.tagFound()){
                     odometry.update();
 
                     telemetry.addData("QR Code Found", camera.tagFound());
-                    if (camera.tagFound())
-                        telemetry.addData("Parking Spot", camera.getParking() + 1);
+                    if(camera.tagFound())
+                        telemetry.addData("Parking Spot", camera.getParking()+1);
                     telemetry.update();
                 }
 
@@ -130,7 +130,7 @@ public class LeftPreloadAuto extends LinearOpMode {
                 //Sets target to parking spot
                 parking = camera.getParking();
 
-            } else {
+            }else{
                 //Turns camera off
                 camera.stop();
 
@@ -143,26 +143,31 @@ public class LeftPreloadAuto extends LinearOpMode {
                 whileMoving(1);
             }
 
-            odometry.setTargetPoint(60, 60, 45, true);
+            odometry.setTargetPoint(61, 61, 45, true);
+            lift.hjunction();
             whileMoving(0);
-            while (lift.isBusy() && opModeIsActive()) ;
+            while (lift.isBusy()) ;
+
+            Location liftOffset = new Location(23, 1);
 
             drive.setCurrentSpeed(.25);
-            odometry.setTargetPoint(68, 66, 45, true);
+            odometry.setTargetByOffset(liftOffset, new Location(61 * 1.5, 61 * 1.5), true);
+            System.out.println("Times target offset: 161");
             whileMoving(0);
 
             //Scores
             lift.hjunctionScore();
-            while (lift.isBusy() && opModeIsActive()) ;
+            while (lift.isBusy()) ;
 
             sleep(500);
             claw.setPosition(Claw.OPEN_POSITION);
             sleep(500);
+
+            break;
         }
 
         //Getting in position to go to cone stack
         drive.setCurrentSpeed(.25);
-        //lift.coneStack(5);
         odometry.setTargetPoint(60, 60, 45, true);
         whileMoving(0);
 
@@ -173,166 +178,6 @@ public class LeftPreloadAuto extends LinearOpMode {
 
         while(opModeIsActive()){
             odometry.update();
-            updatePosition();
-        }
-
-        drive.setCurrentSpeed(.5);
-        odometry.rotateToAngle(0);
-        whileRotating(0);
-        while(lift.isBusy() && opModeIsActive());
-
-        odometry.setTargetPoint(120, 60, 0, true);
-        whileMoving(0);
-
-        odometry.rotateToAngle(-90);
-        whileRotating(0);
-
-        //Scoring all cones
-        int times = 0;
-        int coneStack = 5;
-
-        while(opModeIsActive() && times < 5){
-            //Picks up cone
-            lift.coneStack(coneStack);
-            while(lift.isBusy() && opModeIsActive());
-
-            odometry.setTargetPoint(120, -48, -90, true);
-            whileMoving(0);
-
-            claw.setPosition(Claw.CLOSE_POSITION);
-            sleep(1000);
-
-            //Backs away from cone stack before turning
-            odometry.setTargetPoint(120, -30, -90, true);
-            whileMoving(0);
-
-            //Turns toward high junction
-            lift.hjunction();
-            odometry.rotateToAngle(-45);
-            while(!con.aPressed && opModeIsActive()){
-                con.update();
-
-                odometry.update();
-
-                updatePosition();
-
-                telemetry.addData("Target", odometry.getTargetLocation());
-                telemetry.addData("Position", odometry.getLocation());
-
-                telemetry.addData("Powers", drive.getPowers());
-
-                telemetry.update();
-            }
-
-            //Scores
-            odometry.setTargetPoint(120,0,45, true);
-            while(!con.aPressed && opModeIsActive()){
-                con.update();
-
-                odometry.update();
-
-                updatePosition();
-
-                telemetry.addData("Target", odometry.getTargetLocation());
-                telemetry.addData("Position", odometry.getLocation());
-
-                telemetry.addData("Powers", drive.getPowers());
-
-                telemetry.update();
-            }
-
-            lift.hjunctionScore();
-            while(!con.aPressed && opModeIsActive());
-
-            claw.setPosition(Claw.OPEN_POSITION);
-            while(!con.aPressed && opModeIsActive()){
-                con.update();
-
-                odometry.update();
-
-                updatePosition();
-
-                telemetry.addData("Target", odometry.getTargetLocation());
-                telemetry.addData("Position", odometry.getLocation());
-
-                telemetry.addData("Powers", drive.getPowers());
-
-                telemetry.update();
-            }
-
-            odometry.setTargetPoint(120, 0, 45);
-            lift.Ground();
-            while(!con.aPressed && opModeIsActive());
-
-            //Turns to cone stack
-            odometry.rotateToAngle(-90);
-            while(!con.aPressed && opModeIsActive()){
-                con.update();
-
-                odometry.update();
-
-                updatePosition();
-
-                telemetry.addData("Target", odometry.getTargetLocation());
-                telemetry.addData("Position", odometry.getLocation());
-
-                telemetry.addData("Powers", drive.getPowers());
-
-                telemetry.update();
-            }
-
-            times++;
-            coneStack--;
-        }
-
-        lift.Ground();
-        while(!con.aPressed && opModeIsActive()){
-            con.update();
-
-            odometry.update();
-
-            updatePosition();
-
-            telemetry.addData("Target", odometry.getTargetLocation());
-            telemetry.addData("Position", odometry.getLocation());
-
-            telemetry.addData("Powers", drive.getPowers());
-
-            telemetry.update();
-        }
-        odometry.setTargetPoint(60, 0, -90);
-        while(!con.aPressed && opModeIsActive()){
-            con.update();
-
-            odometry.update();
-
-            updatePosition();
-
-            telemetry.addData("Target", odometry.getTargetLocation());
-            telemetry.addData("Position", odometry.getLocation());
-
-            telemetry.addData("Powers", drive.getPowers());
-
-            telemetry.update();
-        }
-
-        odometry.setTargetPoint(parkingLocations[parking]);
-        while(!con.aPressed && opModeIsActive()){
-            con.update();
-
-            odometry.update();
-
-            updatePosition();
-
-            telemetry.addData("Target", odometry.getTargetLocation());
-            telemetry.addData("Position", odometry.getLocation());
-
-            telemetry.addData("Powers", drive.getPowers());
-
-            telemetry.update();
-        }
-
-        while(opModeIsActive()) {
             updatePosition();
         }
     }
