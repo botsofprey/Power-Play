@@ -57,11 +57,11 @@ public class findServoLimits extends LinearOpMode {
         }
     }
 
-    public void fullElbowBend(double a1, double a2, double b1, double b2) throws InterruptedException {
+    public void fullElbowBend(double a1, double a2, double b1, double b2) {
         leftArm.setPosition(leftArm.getPosition() == b1 ? 0 : b1);
         rightArm.setPosition(rightArm.getPosition() == a2 ? 0 : a2);
 
-        wait(3);
+        sleep(3000);
 
         leftArm.setPosition(leftArm.getPosition() == a1 ? 0 : a1);
         rightArm.setPosition(leftArm.getPosition() == b2 ? 0 : b2);
