@@ -68,7 +68,7 @@ public class findServoLimits extends LinearOpMode {
             leftArm.setPosition(leftArm.getPosition() + (rightTrig / 100));
             //fullElbowBend(a1elbow, a2elbow, b1elbow, b2elbow);
             clawOpenClose(a1claw, a2claw, b1claw, b2claw);
-            wristFlip(a1wrist, b1wrist);}
+            wristFlip(a1wrist, b1wrist);
 
             clawArm.setTurrentPower((con1.rightTrigger - con1.leftTrigger) * 0.5);
 

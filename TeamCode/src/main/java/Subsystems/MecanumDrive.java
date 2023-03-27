@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 //import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
-@TeleOp
 public class MecanumDrive {
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
