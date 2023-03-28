@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.opModes
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.teamcode.mechanisms.HardwareMechanisms
 import org.firstinspires.ftc.teamcode.vars.HeightsList
@@ -15,9 +15,8 @@ import kotlin.math.sign
  * this is it in Kotlin
  * @author Alex Bryan
  */
-@Disabled
 @TeleOp
-class FinalTeleOpRewrittenKotlin : OpMode() {
+class FinalTeleOpKotlin : OpMode() {
     /**
      * An var used for tracking the target position of the lift during the preset heights mode, which changes between 0, groundJunction, lowJunction, midJunction, and highJunction
      */
@@ -133,12 +132,15 @@ class FinalTeleOpRewrittenKotlin : OpMode() {
                 changeY = sign(changeY) * limitPowerChange
             }
         }
+
         x = lastX + changeX
-        lastX = x
         rx = lastRx + changeRX
-        lastRx = rx
         y = lastY + changeY
+
+        lastX = x
+        lastRx = rx
         lastY = y
+
         if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
             presetLiftHeightsMode = false
         } else if (gamepad2.dpad_up || gamepad2.dpad_down || gamepad2.dpad_right || gamepad2.dpad_left || gamepad2.right_bumper || gamepad2.left_bumper) {
