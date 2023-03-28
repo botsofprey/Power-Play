@@ -41,7 +41,8 @@ public class AutoRight extends OpMode {
     cameraControl autocam = new cameraControl();
     HardwareMechanisms mpb = new HardwareMechanisms();
     CoordinateLocations coordinateLocations = new CoordinateLocations();
-    Pose2d prevtraj = new Pose2d(-22, 7.5, Math.toRadians(270));
+    Pose2d prevtraj = new Pose2d(-23.5, 7.5, Math.toRadians(270));
+    Pose2d prevtraj2 = new Pose2d(-22, 5.5, Math.toRadians(270));
     int coneheight = heights.heights[0];
     int liftHeight = heights.highJunction;
 
@@ -84,7 +85,7 @@ public class AutoRight extends OpMode {
                     convertToImuHeading();
                 })
                 .waitSeconds(0.25)
-                .lineToLinearHeading(new Pose2d(-22, 7.5, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-23.5, 7.5, Math.toRadians(270)))
                 .waitSeconds(0.1)
                 .addTemporalMarker(() -> {
                     convertToImuHeading();
@@ -99,7 +100,7 @@ public class AutoRight extends OpMode {
                     convertToImuHeading();
                 })
                 .waitSeconds(0.25)
-                .lineToLinearHeading(new Pose2d(-58.5, 8.5, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-58.5, 8.51, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     liftHeight = coneheight;
                     convertToImuHeading();
@@ -117,7 +118,7 @@ public class AutoRight extends OpMode {
                     liftHeight = heights.highJunction;
                     convertToImuHeading();
                 })
-                .lineToLinearHeading(new Pose2d(-21.5, 7.5, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-22, 5.5, Math.toRadians(270)))
                 .waitSeconds(0.3)
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
@@ -125,7 +126,7 @@ public class AutoRight extends OpMode {
                 })
                 .waitSeconds(0.25)
                 .build();
-        getConeAndScore2 = mecanumDrive.trajectorySequenceBuilder(prevtraj)
+        getConeAndScore2 = mecanumDrive.trajectorySequenceBuilder(prevtraj2)
                 .addTemporalMarker(() -> {
                     convertToImuHeading();
                 })
@@ -136,7 +137,7 @@ public class AutoRight extends OpMode {
                     convertToImuHeading();
                 })
                 .waitSeconds(0.35)
-                .lineToLinearHeading(new Pose2d(-58.5, 8.5, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-58.5, 8, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     liftHeight = coneheight;
                     convertToImuHeading();
@@ -150,12 +151,12 @@ public class AutoRight extends OpMode {
                     liftHeight = (coneheight * 3);
                 })
                 .waitSeconds(0.25)
-                .lineToLinearHeading(new Pose2d(-21.5, 11, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-21.5, 10, Math.toRadians(270)))
                 .addTemporalMarker(() -> {
                     liftHeight = heights.highJunction;
                     convertToImuHeading();
                 })
-                .lineToLinearHeading(new Pose2d(-21.5, 7.5, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-22, 5.5, Math.toRadians(270)))
                 .waitSeconds(0.25)
                 .addTemporalMarker(() -> {
                     mpb.setClaw(0);
