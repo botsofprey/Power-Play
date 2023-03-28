@@ -163,19 +163,21 @@ class FinalTeleOpKotlin : OpMode() {
                 targetPositionManualControl.coerceIn(0, heights.highJunction)
             }
             board.setLift(targetPositionManualControl)
-            targetPositionPresetHeights =
-                if (abs(board.getLift() - heights.highJunction) < abs(board.getLift() - heights.midJunction)) {
-                    heights.highJunction
-                } else if (abs(board.getLift() - heights.midJunction) < abs(
-                        board.getLift() - heights.lowJunction
-                    )
-                ) {
-                    heights.midJunction
-                } else if (abs(board.getLift()) < abs(board.getLift())) {
-                    heights.lowJunction
-                } else {
-                    0
-                }
+            targetPositionPresetHeights = if (abs(board.getLift() - heights.highJunction) < abs(
+                    board.getLift() - heights.midJunction
+                )
+            ) {
+                heights.highJunction
+            } else if (abs(board.getLift() - heights.midJunction) < abs(
+                    board.getLift() - heights.lowJunction
+                )
+            ) {
+                heights.midJunction
+            } else if (abs(board.getLift()) < abs(board.getLift())) {
+                heights.lowJunction
+            } else {
+                0
+            }
             telemetry.addData("lift mode", "manual control")
             telemetry.addData("target position", "n/a")
             if (liftCorrection) {
