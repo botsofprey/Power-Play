@@ -45,8 +45,7 @@ public class MecanumDrive {
             DcMotorSimple.Direction.FORWARD
     };
 
-    private double maxSpeed = .8,
-    slowSpeed = .5, currentSpeed;
+    private double maxSpeed = .8, normalSpeed = 0.5, slowSpeed = .25, currentSpeed;
 
     private LinearOpMode mode;
 
@@ -61,18 +60,18 @@ public class MecanumDrive {
     private static final double tile = 2.54 * 24.0;
 
     private int[] startPos = new int[4],
-    endPos = new int[4],
-    distanceTraveled = new int[4];
+            endPos = new int[4],
+            distanceTraveled = new int[4];
 
     private BatteryVoltageSensor batteryVoltageSensor;
 
     // for config file, see RobotConfig.json
     // track width and track length change based on width and length of the robot
     public MecanumDrive(HardwareMap hw, double startAngle /*, String configFileName,
-                        Location startLocation, LinearOpMode m */ ) {
-   //     this(hw, configFileName, startLocation.getAsOldLocation(), m);
+                        Location startLocation, LinearOpMode m */) {
+        //     this(hw, configFileName, startLocation.getAsOldLocation(), m);
 
-        for(int i = 0; i < motors.length; i++){
+        for (int i = 0; i < motors.length; i++) {
             motors[i] = hw.get(DcMotor.class, MOTOR_NAMES[i]);
             motors[i].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             motors[i].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -92,14 +91,15 @@ public class MecanumDrive {
         imu.initialize(parameters);
 
         globalAngle = startAngle;
-        driverAngle=startAngle;
+        driverAngle = startAngle;
 
         currentSpeed = maxSpeed;
 
         batteryVoltageSensor = new BatteryVoltageSensor(hw);
     }
-    public MecanumDrive(HardwareMap hw, LinearOpMode m, double startAngle){
-        for(int i = 0; i < motors.length; i++){
+
+    public MecanumDrive(HardwareMap hw, LinearOpMode m, double startAngle) {
+        for (int i = 0; i < motors.length; i++) {
             motors[i] = hw.get(DcMotor.class, MOTOR_NAMES[i]);
             motors[i].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             motors[i].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -126,49 +126,49 @@ public class MecanumDrive {
         imu.initialize(parameters);
 
         globalAngle = -startAngle;
-        driverAngle=startAngle;
+        driverAngle = startAngle;
 
 
         batteryVoltageSensor = new BatteryVoltageSensor(hw);
     }
 
-    public void moveTrueNorth(double forward, double right, double rotate){
-       Orientation curOrient =
-               imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
+    public void moveTrueNorth(double forward, double right, double rotate) {
+        Orientation curOrient =
+                imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
 
-       double theta = Math.atan2(forward, right);
-       double r = Math.hypot(forward, right);
+        double theta = Math.atan2(forward, right);
+        double r = Math.hypot(forward, right);
 
-       theta = AngleUnit.normalizeRadians(theta-curOrient.firstAngle);
+        theta = AngleUnit.normalizeRadians(theta - curOrient.firstAngle);
 
-       double newForward = r * Math.sin(theta);
-       double newRight = r * Math.cos(theta);
+        double newForward = r * Math.sin(theta);
+        double newRight = r * Math.cos(theta);
 
-       moveWithPower(
+        moveWithPower(
                 newForward + newRight + rotate,
                 newForward - newRight + rotate,
-               newForward + newRight - rotate,
-               newForward - newRight - rotate
-       );
+                newForward + newRight - rotate,
+                newForward - newRight - rotate
+        );
     }
 
 
-    public void gridMovement(@NonNull Vector2D movement, Location current){
+    public void gridMovement(@NonNull Vector2D movement, Location current) {
         double xMovement = 0, yMovement = 0;
 
         telemetry.update();
 
-        if(movement.y > movement.x){
+        if (movement.y > movement.x) {
             xMovement = Math.sin(getRadians()) * movement.y;
 
-           double tileYOffset = (tile * Math.round(current.y/tile)) - current.y;
-           yMovement = stig.calculateResponse(Math.cos(getRadians()) *
-                   tileYOffset) * movement.y;
+            double tileYOffset = (tile * Math.round(current.y / tile)) - current.y;
+            yMovement = stig.calculateResponse(Math.cos(getRadians()) *
+                    tileYOffset) * movement.y;
 
-        } else if(movement.x != 0){
+        } else if (movement.x != 0) {
             yMovement = Math.cos(getRadians()) * movement.x;
 
-            double tileXOffset = (tile * Math.round(current.x/tile)) - current.x;
+            double tileXOffset = (tile * Math.round(current.x / tile)) - current.x;
             xMovement = stig.calculateResponse(Math.sin(getRadians()) *
                     tileXOffset) * movement.x;
         }
@@ -182,19 +182,20 @@ public class MecanumDrive {
     }
 
     StigmoidController stig = new StigmoidController(1, 1, 1);
-    public void grid(Vector2D movement, Location current){
+
+    public void grid(Vector2D movement, Location current) {
         double relXMovement = 0, relYMovement = 0;
 
-        if(Math.round(movement.y) != 0){
+        if (Math.round(movement.y) != 0) {
             relXMovement = Math.sin(getRadians()) * movement.x;
 
-            double tileYOffset = (tile * Math.round(current.y/tile)) - current.y;
+            double tileYOffset = (tile * Math.round(current.y / tile)) - current.y;
             relYMovement = stig.calculateResponse(Math.cos(getRadians()) * tileYOffset) * movement.x;
 
-        } else if(Math.round(movement.x) != 0){
+        } else if (Math.round(movement.x) != 0) {
             relYMovement = Math.cos(getRadians()) * movement.y;
 
-            double tileXOffset = (tile * Math.round(current.y/tile)) - current.y;
+            double tileXOffset = (tile * Math.round(current.y / tile)) - current.y;
             relXMovement = stig.calculateResponse(Math.cos(getRadians()) * tileXOffset) * movement.y;
         }
 
@@ -206,7 +207,7 @@ public class MecanumDrive {
         );
     }
 
-    public void moveWithPower(double fl, double bl, double br, double fr){
+    public void moveWithPower(double fl, double bl, double br, double fr) {
         double scalar = 12.0 / batteryVoltageSensor.getBatteryVoltage();
 
         motors[0].setPower(Range.clip(fl, -1, 1) * currentSpeed * scalar);
@@ -215,14 +216,14 @@ public class MecanumDrive {
         motors[3].setPower(Range.clip(br, -1, 1) * currentSpeed * scalar);
     }
 
-    public void moveWithPower(double power){
+    public void moveWithPower(double power) {
         double scalar = 12.0 / batteryVoltageSensor.getBatteryVoltage();
-        for(DcMotor m : motors){
+        for (DcMotor m : motors) {
             m.setPower(power * currentSpeed * scalar);
         }
     }
 
-    public void rotatewithPower(double left, double right){
+    public void rotatewithPower(double left, double right) {
         motors[0].setPower(left * currentSpeed);
         motors[1].setPower(left * currentSpeed);
         motors[2].setPower(right * currentSpeed);
@@ -234,9 +235,10 @@ public class MecanumDrive {
             RIGHT = "RIGHT",
             FORWARD = "FORWARD",
             BACKWARD = "BACKWARD";
-    public void moveCenti(double centimeters, String direction){
-        for(DcMotor m : motors){
-            m.setTargetPosition((int)(centimeters * TICKS_PER_CENTI) + m.getCurrentPosition());
+
+    public void moveCenti(double centimeters, String direction) {
+        for (DcMotor m : motors) {
+            m.setTargetPosition((int) (centimeters * TICKS_PER_CENTI) + m.getCurrentPosition());
             m.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             m.setPower(.5);
         }
@@ -259,19 +261,18 @@ public class MecanumDrive {
         }
     }
 
-    public double getPower(int index){
+    public double getPower(int index) {
         return motors[index].getPower();
     }
 
-    public String getPowers(){
+    public String getPowers() {
         return motors[0].getPower() + ", " +
                 motors[1].getPower() + ", " +
                 motors[2].getPower() + ", " +
                 motors[3].getPower();
     }
 
-    public double getAngle()
-    {
+    public double getAngle() {
         prevAngle = globalAngle;
         Orientation angles = imu.getAngularOrientation
                 (AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -295,51 +296,63 @@ public class MecanumDrive {
         return -globalAngle;
     }
 
-    public void brake(){
-        for(DcMotor m : motors){
+    public void brake() {
+        for (DcMotor m : motors) {
             m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             m.setPower(0);
         }
     }
 
-    public void slowMode(){
+    public void slowMode() {
         currentSpeed = currentSpeed == slowSpeed ? maxSpeed : slowSpeed;
     }
 
-    public void slowMode(boolean slow){
+    public void setSlowSpeed() {
+        currentSpeed = slowSpeed;
+    }
+
+    public void setNormalSpeed() {
+        currentSpeed = normalSpeed;
+    }
+
+    public void setFastSpeed() {
+        currentSpeed = maxSpeed;
+    }
+
+    public void slowMode(boolean slow) {
         if (slow)
             currentSpeed = slowSpeed;
         else
             currentSpeed = maxSpeed;
     }
 
-    public boolean isBusy(){
+    public boolean isBusy() {
         return motors[0].isBusy();
     }
 
-    public int getPosition(){
+    public int getPosition() {
         return motors[0].getCurrentPosition();
     }
 
-    public int getCurrentPositionMotor(int index){
+    public int getCurrentPositionMotor(int index) {
         return motors[index].getCurrentPosition();
     }
 
-    public void setModes(DcMotor.RunMode mode){
-        for(DcMotor m : motors){
+    public void setModes(DcMotor.RunMode mode) {
+        for (DcMotor m : motors) {
             m.setMode(mode);
         }
     }
 
-    public int getTarget(){
+    public int getTarget() {
         return motors[0].getTargetPosition();
     }
 
 
-    public void rotateToAngle(double angle){
+    public void rotateToAngle(double angle) {
         targetAngle = angle;
         rotating = true;
-        if(targetAngle < getAngle()){
+        if (targetAngle < getAngle()) {
             motors[0].setPower(-1);
             motors[1].setPower(-1);
             motors[2].setPower(1);
@@ -352,11 +365,11 @@ public class MecanumDrive {
         }
     }
 
-    private boolean compare(double a, double b, double diff){
-        return Math.abs(a-b) <= diff;
+    private boolean compare(double a, double b, double diff) {
+        return Math.abs(a - b) <= diff;
     }
 
-    public double getPrevAngle(){
+    public double getPrevAngle() {
         return prevAngle;
     }
 

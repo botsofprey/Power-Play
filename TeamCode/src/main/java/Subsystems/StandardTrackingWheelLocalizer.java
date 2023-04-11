@@ -17,7 +17,7 @@ import DriveEngine.MecanumDrive;
 import OpMode.Autonomous.LeftToLeft;
 import UtilityClasses.Location;
 
-@TeleOp //(name="Auto Test", group = "Autonomous")
+//@TeleOp //(name="Auto Test", group = "Autonomous")
 public abstract class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
     public static double TICKS_PER_REV = 0;
     public static double WHEEL_RADIUS = 2;

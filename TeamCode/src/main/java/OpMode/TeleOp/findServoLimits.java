@@ -70,9 +70,9 @@ public class findServoLimits extends LinearOpMode {
             clawOpenClose(a1claw, a2claw, b1claw, b2claw);
             wristFlip(a1wrist, b1wrist);
 
-            clawArm.setTurrentPower((con1.rightTrigger - con1.leftTrigger) * 0.5);
+            clawArm.setTurretPower((con1.rightTrigger - con1.leftTrigger) * 0.5);
 
-            telemetry.addData("slide pos", clawArm.getTurrentPos());
+            telemetry.addData("slide pos", clawArm.getTurretPos());
             telemetry.addData("A is pressed", gamepad1.a);
             telemetry.addData("servo position:", leftArm.getPosition());
             telemetry.update();
