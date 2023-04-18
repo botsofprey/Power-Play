@@ -23,7 +23,9 @@ public class WobotoTele extends LinearOpMode {
     private ClawArm arm;
     private Claw claw;
     private double elbowPosition = 0.0;  // units are fraction of the servo arm swing [0..1]
+    private double wristPosition = 1.0;  // units are fraction of the servo position [0..1]
     private double elbowVelocity = 0.02;
+    private double wristVelocity = 0.02;
     private double elbowMinSafePosition = ELBOW_SAFE_FOR_LIFT;
     private int turretPositionTics = 0;
     private int turretVelocity = 25;
@@ -118,11 +120,20 @@ public class WobotoTele extends LinearOpMode {
             elbowPosition += elbowVelocity * (con1.rightTrigger - con1.leftTrigger);
             elbowPosition = Math.max(0.0, Math.min(elbowPosition, 1.0));
             // keep arm away from lift
-            if (elbowPosition < elbowMinSafePosition && (lift.getPositionLeft() > 50 || lift.getPositionRight() > 50)) {
+            if (elbowPosition < elbowMinSafePosition && (lift.getPositionLeft() > 50 || lift.getPositionRight() > 50 || turretPositionTics > 50)) {
                 elbowPosition = elbowMinSafePosition;
             }
             arm.setPositionElbow(elbowPosition);
-            arm.setWristPosition(1 - elbowPosition);
+
+            if (con1.yHeld && elbowPosition >= elbowMinSafePosition) {
+                wristPosition = Math.max(0.0, Math.min(wristPosition + wristVelocity, 1.0));
+            } else if (con1.xHeld && elbowPosition >= elbowMinSafePosition) {
+                wristPosition = Math.max(0.0, Math.min(wristPosition - wristVelocity, 1.0));
+            }
+            else if (con1.rightTriggerHeld || con1.leftTriggerHeld) {
+                wristPosition = 1 - elbowPosition;
+            }
+            arm.setWristPosition(wristPosition);
 
             // Control of claw
             if (con1.aPressed) {
@@ -135,6 +146,7 @@ public class WobotoTele extends LinearOpMode {
 
             telemetry.addData("right servo", arm.getRightArmPos());
             telemetry.addData("left servo", arm.getLeftArmPos());
+            telemetry.addData("wrist servo", arm.getServoWrist().getPosition());
             telemetry.addLine();
 
             telemetry.addData("Turret position", arm.getTurretPos());
