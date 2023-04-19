@@ -419,5 +419,16 @@ public class MecanumDrive {
 
         setPowers(frontLeftPower, frontRightPower, backLeftPower, backRightPower);
     }
+    public void driveFieldRelative(double y, double x, double rx) {
+        double theta = Math.atan2(y, x);
+        double r = Math.hypot(y, x);
+        theta = AngleUnit.normalizeRadians(theta - getHeading(AngleUnit.RADIANS));
+        double newY = r * Math.sin(theta);
+        double newX = r * Math.cos(theta);
+        drive(newY, newX, rx);
+    }
+    public int getHeading(AngleUnit angleUnit){
+        return imu.getAngularOrientation(angleUnit);
+    }
 }
 

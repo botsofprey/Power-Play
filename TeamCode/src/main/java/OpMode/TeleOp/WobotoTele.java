@@ -82,13 +82,9 @@ public class WobotoTele extends LinearOpMode {
                 turn = (con1.rightHeld ? 1 : 0) - (con1.leftHeld ? 1 : 0);
             }
 
-            // Robot-oriented movement
-            drive.moveWithPower(
-                    forward + strafe + turn,
-                    forward - strafe + turn,
-                    forward + strafe - turn,
-                    forward - strafe - turn
-            );
+            // Field-oriented movement
+
+            drive.driveFieldRelative(forward, strafe, turn);
 
             // Control of lift
             if (con2.leftTriggerHeld) { // lift down
