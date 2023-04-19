@@ -427,8 +427,9 @@ public class MecanumDrive {
         double newX = r * Math.cos(theta);
         drive(newY, newX, rx);
     }
-    public int getHeading(AngleUnit angleUnit){
-        return imu.getAngularOrientation(angleUnit);
+    public double getHeading(AngleUnit angleUnit) {
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
+        return angles.firstAngle;
     }
 }
 
