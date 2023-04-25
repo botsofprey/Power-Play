@@ -30,6 +30,8 @@ public class WobotoTele extends LinearOpMode {
     private int turretPositionTics = 0;
     private int turretVelocity = 25;
 
+    private double liftSpeedMult = 0.6;
+
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new MecanumDrive(hardwareMap, 0);
@@ -91,18 +93,18 @@ public class WobotoTele extends LinearOpMode {
                 if (lift.getPositionLeft() <= 0 || lift.getPositionRight() <= 0) {
                     lift.brake();
                 } else {
-                    lift.setPower(-con2.leftTrigger * 0.5);
+                    lift.setPower(-con2.leftTrigger * liftSpeedMult);
                 }
             } else if (con2.rightTriggerHeld) { // lift up
                 if (lift.getPositionLeft() >= LIFT_MAX_LEFT || lift.getPositionRight() >= LIFT_MAX_RIGHT) {
                     lift.brake();
                 } else {
-                    lift.setPower(con2.rightTrigger * 0.5);
+                    lift.setPower(con2.rightTrigger * liftSpeedMult);
                 }
             } else if (con1.rightStick.y < 0 && (lift.getPositionLeft() > 0 && lift.getPositionRight() > 0)) {
-                lift.setPower(con1.rightStick.y * 0.5);
+                lift.setPower(con1.rightStick.y * liftSpeedMult);
             } else if (con1.rightStick.y > 0 && (lift.getPositionLeft() < LIFT_MAX_LEFT && lift.getPositionRight() < LIFT_MAX_RIGHT)) {
-                lift.setPower(con1.rightStick.y * 0.5);
+                lift.setPower(con1.rightStick.y * liftSpeedMult);
             } else {
                 lift.brake();
             }
