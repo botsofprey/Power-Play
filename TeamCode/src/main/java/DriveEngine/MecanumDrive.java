@@ -378,6 +378,8 @@ public class MecanumDrive {
     public void setCurrentSpeed(double speed) {
         currentSpeed = speed;
     }
+
+    //the code below is from Alex V2 and adapted from the Till The Wheels Fall Off code
     /**
      * The method used to set the motors' powers, it is used in the drive method and acts as the basis of all of our driving
      *
