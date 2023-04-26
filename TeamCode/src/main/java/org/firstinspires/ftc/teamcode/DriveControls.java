@@ -54,9 +54,9 @@ public class DriveControls {
         double rotX = x * Math.cos(-getAngle(AngleUnit.RADIANS)) - y * Math.sin(-getAngle(AngleUnit.RADIANS));
         double rotY = x * Math.sin(-getAngle(AngleUnit.RADIANS)) + y * Math.cos(-getAngle(AngleUnit.RADIANS));
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        motors[1].setPower((rotY + rotX + rx) / denominator);
-        motors[2].setPower((rotY - rotX + rx) / denominator);
-        motors[3].setPower((rotY - rotX - rx) / denominator);
-        motors[4].setPower((rotY + rotX - rx) / denominator);
+        motors[0].setPower((rotY + rotX + rx) / denominator);
+        motors[1].setPower((rotY - rotX + rx) / denominator);
+        motors[2].setPower((rotY - rotX - rx) / denominator);
+        motors[3].setPower((rotY + rotX - rx) / denominator);
     }
 }
