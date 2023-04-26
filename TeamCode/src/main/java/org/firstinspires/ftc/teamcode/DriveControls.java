@@ -10,21 +10,23 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class DriveControls {
-    IMU imu;
-    private final DcMotor[] motors = new DcMotor[4];
     private static final String[] MOTOR_NAMES = {
             "frontLeftDriveMotor",
             "backLeftDriveMotor",
             "frontRightDriveMotor",
             "backRightDriveMotor"
     };
+    private final DcMotor[] motors = new DcMotor[4];
     private final DcMotorSimple.Direction[] directions = {
             DcMotorSimple.Direction.REVERSE,
             DcMotorSimple.Direction.REVERSE,
             DcMotorSimple.Direction.FORWARD,
             DcMotorSimple.Direction.FORWARD
     };
-    public void getHardware(HardwareMap hw){
+    IMU imu;
+
+    public void getHardware(HardwareMap hw) {
+        imu = hw.get(IMU.class, "imu");
         IMU.Parameters myIMUparameters;
         myIMUparameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
@@ -41,19 +43,20 @@ public class DriveControls {
             motors[i].setDirection(directions[i]);
         }
     }
-public double getAngle(AngleUnit unit){
-    YawPitchRollAngles robotOrientation;
-    robotOrientation = imu.getRobotYawPitchRollAngles();
-        return robotOrientation.getYaw(unit);
-}
 
-public void drive(double y, double x, double rx){
-    double rotX = x * Math.cos(-getAngle(AngleUnit.RADIANS)) - y * Math.sin(-getAngle(AngleUnit.RADIANS));
-    double rotY = x * Math.sin(-getAngle(AngleUnit.RADIANS)) + y * Math.cos(-getAngle(AngleUnit.RADIANS));
-    double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-    motors[1].setPower((rotY + rotX + rx) / denominator);
-    motors[2].setPower((rotY - rotX + rx) / denominator);
-    motors[3].setPower((rotY - rotX - rx) / denominator);
-    motors[4].setPower((rotY + rotX - rx) / denominator);
+    public double getAngle(AngleUnit unit) {
+        YawPitchRollAngles robotOrientation;
+        robotOrientation = imu.getRobotYawPitchRollAngles();
+        return robotOrientation.getYaw(unit);
+    }
+
+    public void drive(double y, double x, double rx) {
+        double rotX = x * Math.cos(-getAngle(AngleUnit.RADIANS)) - y * Math.sin(-getAngle(AngleUnit.RADIANS));
+        double rotY = x * Math.sin(-getAngle(AngleUnit.RADIANS)) + y * Math.cos(-getAngle(AngleUnit.RADIANS));
+        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
+        motors[1].setPower((rotY + rotX + rx) / denominator);
+        motors[2].setPower((rotY - rotX + rx) / denominator);
+        motors[3].setPower((rotY - rotX - rx) / denominator);
+        motors[4].setPower((rotY + rotX - rx) / denominator);
     }
 }
