@@ -12,9 +12,9 @@ public class Drive extends OpMode {
     }
     @Override
     public void loop(){
-        double y = gamepad1.left_stick_y * 0.6;
-        double x = -gamepad1.left_stick_x * 0.6;
-        double rx = gamepad1.right_stick_x * 0.6;
-        controls.driveFieldRelative(y, x, rx);
+        double y = gamepad1.left_stick_y;
+        double x = gamepad1.left_stick_x;
+        double rx = gamepad1.right_stick_x;
+        controls.drive(y, x, rx);
     }
 }

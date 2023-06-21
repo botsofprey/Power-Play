@@ -50,15 +50,13 @@ public class DriveControls {
         return robotOrientation.getYaw(unit);
     }
 
-    public void driveFieldRelative(double y, double x, double rx) {
-        double theta = Math.atan2(y, x);
-        double r = Math.hypot(y, x);
-        theta = AngleUnit.normalizeRadians(theta - getAngle(AngleUnit.RADIANS));
-        double rotY = r * Math.sin(theta);
-        double rotX = r * Math.cos(theta);
-        motors[0].setPower((rotY + rotX + rx));
-        motors[1].setPower((rotY - rotX + rx));
-        motors[2].setPower((rotY - rotX - rx));
-        motors[3].setPower((rotY + rotX - rx));
+    public void drive(double y, double x, double rx) {
+        double rotX = x * Math.cos(-getAngle(AngleUnit.RADIANS)) - y * Math.sin(-getAngle(AngleUnit.RADIANS));
+        double rotY = x * Math.sin(-getAngle(AngleUnit.RADIANS)) + y * Math.cos(-getAngle(AngleUnit.RADIANS));
+        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
+        motors[0].setPower((rotY + rotX + rx) / denominator);
+        motors[1].setPower((rotY - rotX + rx) / denominator);
+        motors[2].setPower((rotY - rotX - rx) / denominator);
+        motors[3].setPower((rotY + rotX - rx) / denominator);
     }
 }
