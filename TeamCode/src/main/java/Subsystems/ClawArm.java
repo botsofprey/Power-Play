@@ -16,7 +16,7 @@ public class ClawArm {
 
     double servoLeft_MinLimit = 0.3,
             servoLeft_MaxLimit = 1,
-            servoRight_MinLimit = 0.75,
+            servoRight_MinLimit = 0.7,
             servoRight_MaxLimit = 0;
 
     public ClawArm(HardwareMap hardwareMap) {
